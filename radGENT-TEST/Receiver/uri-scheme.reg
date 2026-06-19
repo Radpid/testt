@@ -1,0 +1,24 @@
+Windows Registry Editor Version 5.00
+
+; ---------------------------------------------------------------------------
+; Manuelle Registrierung des Custom-URI-Schemas "radgent://" fuer Tests.
+;
+; HINWEIS: Die Receiver-App registriert das Schema beim Start automatisch
+; (siehe Services/UriSchemeRegistrar.cs) - diese Datei ist nur fuer manuelle
+; Tests oder zur Dokumentation gedacht.
+;
+; Bewusst unter HKEY_CURRENT_USER (kein Administrator noetig).
+; Den Pfad unten an die tatsaechliche TextPinMvp.exe anpassen und die
+; Backslashes verdoppeln (\\), wie im Beispiel.
+; ---------------------------------------------------------------------------
+
+[HKEY_CURRENT_USER\Software\Classes\radgent]
+@="URL:radGENT Context Protocol"
+"URL Protocol"=""
+
+[HKEY_CURRENT_USER\Software\Classes\radgent\shell]
+
+[HKEY_CURRENT_USER\Software\Classes\radgent\shell\open]
+
+[HKEY_CURRENT_USER\Software\Classes\radgent\shell\open\command]
+@="\"C:\\Pfad\\zu\\TextPinMvp.exe\" \"%1\""
