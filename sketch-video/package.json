@@ -1,0 +1,13 @@
+{
+  "name": "sketch-video",
+  "private": true,
+  "type": "module",
+  "description": "Vidéos explicatives style sketchnote (darija + allemand) : HTML animé -> MP4",
+  "scripts": {
+    "render": "node engine/render.mjs",
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}

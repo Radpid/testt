@@ -1,0 +1,4 @@
+node_modules/
+videos/*/out/
+videos/*/voice.cut.wav
+__pycache__/

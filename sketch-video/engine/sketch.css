@@ -1,0 +1,133 @@
+/* sketch-video — style "sketchnote" (papier, encre, surligneur jaune) */
+
+@font-face { font-family: "Lalezar"; src: url("fonts/Lalezar-Regular.ttf"); font-display: block; }
+@font-face { font-family: "Kalam"; src: url("fonts/Kalam-Regular.ttf"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Kalam"; src: url("fonts/Kalam-Bold.ttf"); font-weight: 700; font-display: block; }
+@font-face { font-family: "Plex Arabic"; src: url("fonts/IBMPlexSansArabic-Regular.ttf"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Plex Arabic"; src: url("fonts/IBMPlexSansArabic-SemiBold.ttf"); font-weight: 600; font-display: block; }
+
+:root {
+  --paper: #F7F7F1;
+  --dot: #D9D9D1;
+  --ink: #1C1A1C;
+  --muted: #6E6E6A;
+  --hatch: #B9B9B4;
+  --chip: #E9E9E4;
+  --yellow: #F8CE4E;
+  --card: #FCFCF9;
+  /* Kalam en premier : les mots latins (allemand) sont manuscrits,
+     l'arabe retombe automatiquement sur Lalezar / Plex Arabic. */
+  --f-display: "Kalam", "Lalezar", sans-serif;
+  --f-hand: "Kalam", "Plex Arabic", sans-serif;
+  --f-body: "Kalam", "Plex Arabic", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--paper); overflow: hidden; }
+body { color: var(--ink); font-family: var(--f-body); -webkit-font-smoothing: antialiased; }
+
+/* ---------- scène (écran 1080x1920) ---------- */
+#stage {
+  position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+  overflow: hidden; background: var(--paper); transform-origin: 0 0;
+}
+#poster {
+  position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+  transform-origin: 0 0;
+}
+/* grille de points qui suit la caméra, et déborde du poster */
+#poster::before {
+  content: ""; position: absolute; inset: -2400px; z-index: -1;
+  background-image: radial-gradient(circle, var(--dot) 1.6px, transparent 1.9px);
+  background-size: 26px 26px; background-position: 13px 13px;
+}
+#ink { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; pointer-events: none; z-index: 50; }
+
+/* ---------- blocs ---------- */
+.blk { position: absolute; }
+.row { display: flex; align-items: center; gap: 14px; }
+.col { display: flex; flex-direction: column; gap: 10px; }
+.center { text-align: center; justify-content: center; }
+.ar { direction: rtl; unicode-bidi: isolate; }
+.de { direction: ltr; unicode-bidi: isolate; }
+[dir="auto"] { unicode-bidi: plaintext; }
+
+.display { font-family: var(--f-display); font-weight: 700; line-height: 1.15; }
+.hand { font-family: var(--f-hand); font-weight: 700; line-height: 1.2; }
+.body { font-family: var(--f-body); font-weight: 400; color: var(--muted); line-height: 1.35; }
+.ar.display { font-family: "Lalezar", "Kalam", sans-serif; font-weight: 400; }
+.ar.body { font-family: "Plex Arabic", "Kalam", sans-serif; }
+.ar.hand { font-family: "Kalam", "Lalezar", sans-serif; }
+.big { font-size: 64px; }
+.h2 { font-size: 44px; }
+.h3 { font-size: 34px; }
+.txt { font-size: 28px; }
+.small { font-size: 22px; }
+.tiny { font-size: 15px; }
+.muted { color: var(--muted); }
+
+/* surligneur (animé par le runtime via background-size) */
+.hl {
+  background-image: linear-gradient(var(--yellow), var(--yellow));
+  background-repeat: no-repeat; background-size: 100% 62%; background-position: 0 75%;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  padding: 0 .18em; border-radius: .35em;
+}
+.ar .hl, .hl.ar { background-position: 100% 75%; }
+
+/* chip hachurée (comme "NumPy" / "Python") */
+.chip {
+  display: inline-block; padding: 4px 16px 2px; border: 2.5px solid var(--ink); border-radius: 10px;
+  background: repeating-linear-gradient(-45deg, #DADAD4 0 2px, var(--chip) 2px 7px);
+  box-shadow: 3px 4px 0 #BDBDB7; font-family: var(--f-hand); font-weight: 700; white-space: nowrap;
+}
+.chip.yellow { background: var(--yellow); }
+
+/* carte / bulle : le contour est dessiné par rough.js (svg.rough-bg) */
+.card, .bubble { position: relative; padding: 22px 26px; }
+.card > *, .bubble > * { position: relative; z-index: 1; }
+svg.rough-bg { position: absolute; left: 0; top: 0; overflow: visible; z-index: 0; pointer-events: none; }
+
+/* ruban (bannière à bouts hachurés) */
+.ribbon { position: relative; display: inline-block; padding: 8px 64px 6px; text-align: center; white-space: nowrap; }
+.ribbon > span { position: relative; z-index: 1; }
+
+/* mascotte */
+.robot { position: relative; display: inline-block; width: 110px; height: 110px; }
+
+/* radio + annotations */
+.xray { position: relative; line-height: 0; }
+.xray img { display: block; width: 100%; height: auto; border-radius: 6px; filter: contrast(1.05); }
+.xray svg.anno { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+.xray .label { position: absolute; transform: translate(-50%, -50%); line-height: 1.1; white-space: nowrap; }
+.xray .label.boxed { background: var(--card); border: 2px solid var(--ink); border-radius: 8px; padding: 4px 10px 2px; box-shadow: 3px 3px 0 rgba(0,0,0,.35); }
+
+/* éclats autour d'un mot ("Notfall!") */
+.burst { position: relative; display: inline-block; }
+
+/* ---------- sous-titres (espace écran) ---------- */
+#captions { position: absolute; left: 0; right: 0; bottom: 270px; display: flex; justify-content: center; z-index: 100; pointer-events: none; }
+.cap {
+  position: relative; max-width: 900px; padding: 14px 30px 10px; background: #FFFFFF;
+  border: 1.5px solid #E2E2DC; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  font-family: "Kalam", "Plex Arabic", sans-serif; font-weight: 700; font-size: 42px; line-height: 1.35;
+  color: #2A2A2A; text-align: center; unicode-bidi: plaintext;
+}
+.cap::before { /* bout de scotch */
+  content: ""; position: absolute; left: -14px; top: -16px; width: 74px; height: 30px;
+  background: rgba(205, 205, 196, .85); transform: rotate(-14deg); border-radius: 2px;
+}
+
+/* ---------- contrôles de prévisualisation (masqués au rendu) ---------- */
+#controls {
+  position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 12px; align-items: center;
+  padding: 10px 16px; background: rgba(28,26,28,.85); color: #fff; font: 14px system-ui, sans-serif; z-index: 1000;
+}
+#controls input[type=range] { flex: 1; }
+#controls button { font: inherit; padding: 4px 14px; border-radius: 6px; border: 0; cursor: pointer; }
+body.render #controls { display: none; }
+
+/* les groupes SVG animés s'agrandissent depuis leur centre */
+svg [data-at] { transform-box: fill-box; transform-origin: center; }
+/* un bloc positionné peut aussi être une carte, et une carte peut contenir des blocs positionnés */
+.blk.card, .blk.bubble, .card > .blk, .bubble > .blk { position: absolute; }

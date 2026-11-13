@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Pneumothorax – Kenntnisprüfung</title>
+<link rel="stylesheet" href="../../engine/sketch.css">
+<style>
+  /* ajustements propres à cette vidéo */
+  .pt { padding: 16px 20px 14px; }
+  .pt .num { position: absolute; top: -18px; right: 18px; z-index: 2; }
+  .pt .term { font-size: 30px; }
+  .pt .expl { font-size: 23px; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="stage">
+<div id="poster">
+
+  <!-- A. Titre -->
+  <div class="blk col" style="left:220px; top:34px; width:640px; align-items:center; gap:4px" data-focus>
+    <div class="ribbon white" data-at="b4@Pneumothorax" data-anim="pop">
+      <span class="display de" style="font-size:66px"><span data-hl="b4@Pneumothorax+0.35">Pneumothorax</span></span>
+    </div>
+    <div class="body small de" style="margin-top:16px" data-at="prev+0.4">Röntgen-Thorax · Kenntnisprüfung · Radiologie</div>
+  </div>
+
+  <!-- B1. Le prüfer -->
+  <div class="blk row ar" style="left:500px; top:228px; width:545px; gap:18px; align-items:flex-start" data-focus>
+    <div class="col" style="align-items:center; gap:2px">
+      <div class="robot" data-stetho data-at="b2" data-anim="pop"></div>
+      <div class="body tiny de" data-at="prev+0.2">Prüfer</div>
+    </div>
+    <div class="bubble de" data-tail="top" data-tail-x="0.92" data-tail-dx="26" style="margin-top:44px; padding:18px 30px"
+         data-at="b2@Was-0.25" data-anim="draw" data-dur="0.5">
+      <div class="hand h2" data-at="b2@Was" data-anim="write">Was sehen Sie?</div>
+    </div>
+  </div>
+
+  <!-- B2. La punchline -->
+  <div class="blk col ar" style="left:40px; top:252px; width:430px; gap:6px; align-items:flex-start" data-focus>
+    <div class="body h3 ar" data-at="b3" data-anim="write">ما عرفتيهاش؟</div>
+    <div class="display ar" style="font-size:58px" data-at="b3@راك" data-anim="pop" data-underline="b3@فيها">راك مشيتي فيها!</div>
+  </div>
+
+  <!-- C1. La radio -->
+  <div class="blk card" style="left:36px; top:486px; width:630px; padding:20px" data-focus
+       data-at="b1" data-anim="draw" data-dur="0.6">
+    <div class="xray" data-at="b1+0.25" data-anim="fade" data-dur="0.6" data-cam="none">
+      <img src="assets/pneumothorax-cxr.jpg" alt="Röntgen-Thorax pa: Pneumothorax links">
+      <svg class="anno" viewBox="0 0 877 807">
+        <!-- 1. Pleuralinie : flèches vers le bord du poumon collabé -->
+        <g data-rough="arrow" data-from="800,425" data-to="704,438" data-color="yellow" data-width="7" data-at="b6@خيط" data-zoom="1.9"></g>
+        <g data-rough="arrow" data-from="785,548" data-to="676,556" data-color="yellow" data-width="7" data-at="prev+0.25" data-zoom="1.9"></g>
+        <g data-rough="arrow" data-from="755,662" data-to="644,668" data-color="yellow" data-width="7" data-at="prev+0.25" data-zoom="1.9"></g>
+        <!-- 2. pas de vaisseaux en périphérie -->
+        <g data-rough="area" data-points="702,318 782,352 818,470 822,600 795,702 652,702 670,566 692,446"
+           data-fill="rgba(248,206,78,.55)" data-gap="13" data-fill-weight="4" data-at="b8@Lungengefäßzeichnung" data-zoom="1.9"></g>
+        <!-- 3. Mediastinum déplacé vers la droite du patient -->
+        <g data-rough="arrow" data-from="520,470" data-to="330,470" data-bend="0.12" data-color="yellow" data-width="8" data-at="b11@مشى" data-zoom="1.6"></g>
+      </svg>
+      <div class="label boxed hand small de" style="left:85%; top:33%" data-at="b8@الهوا" data-anim="pop">keine Gefäße!</div>
+      <div class="label boxed hand small de" style="left:7%; top:7%" data-at="b9@اليمين" data-anim="pop">R</div>
+      <div class="label boxed hand small de" style="left:79%; top:7%" data-at="b9@اليسار" data-anim="pop" data-circle="b9@المريض">L</div>
+      <div class="label boxed hand small de" style="left:47%; top:66%" data-at="b11@الأخرى" data-anim="pop">Mediastinum ←</div>
+    </div>
+  </div>
+
+  <!-- C2. Les 3 points -->
+  <div class="blk col ar" style="left:688px; top:486px; width:356px; gap:24px" data-focus>
+    <div style="text-align:center"><div class="ribbon" data-at="b4@3" data-anim="pop"><span class="display ar h3">3 حوايج</span></div></div>
+
+    <div class="card pt" data-at="b5" data-anim="draw">
+      <div class="num chip yellow small">1</div>
+      <div class="hand term de" data-at="b5@Pleuralinie" data-anim="write">Pleuralinie</div>
+      <div class="body expl ar" data-at="prev+0.5" data-anim="fade">خيط رقيق أبيض = الطرف ديال الرية</div>
+    </div>
+
+    <div class="card pt" data-at="b7" data-anim="draw">
+      <div class="num chip yellow small">2</div>
+      <div class="hand de" style="font-size:25px" data-at="b7@والو-0.3" data-anim="write">keine Lungengefäßzeichnung</div>
+      <div class="body expl ar" data-at="prev+0.5" data-anim="fade">من برا الخيط: والو، غير الهوا</div>
+    </div>
+
+    <div class="card pt" data-at="b10" data-anim="draw">
+      <div class="num chip yellow small">3</div>
+      <div class="hand term de" data-at="b10@Mediastinum" data-anim="write">Mediastinum?</div>
+      <div class="body expl ar" data-at="prev+0.6" data-anim="fade">واش مشى للجهة الأخرى؟</div>
+    </div>
+  </div>
+
+  <!-- D. Spannungspneumothorax -->
+  <div class="blk card ar" style="left:36px; top:1112px; width:1008px; height:322px; padding:0" data-at="b11@Spannungspneumothorax-0.2" data-anim="draw" data-cam="none">
+    <div class="blk col ar" style="right:24px; top:26px; width:450px; gap:12px; align-items:center" data-focus>
+      <div class="ribbon" data-at="b11@Spannungspneumothorax" data-anim="pop"><span class="hand de" style="font-size:31px">Spannungspneumothorax</span></div>
+      <div class="row ar" style="gap:18px; margin-top:10px">
+        <div class="body h3 ar" data-at="b12@تسناش" data-anim="fade">ما تسناش</div>
+        <div class="chip h3 de" data-at="b12@تسناش+0.25" data-anim="pop" data-strike="b12@Notfall-0.35">Röntgen</div>
+      </div>
+      <div class="burst" style="margin-top:34px" data-at="b12@Notfall" data-anim="pop">
+        <span class="hand de" style="font-size:56px">Notfall!</span>
+      </div>
+    </div>
+    <div class="blk col de" style="left:30px; top:28px; width:470px; gap:10px; align-items:flex-start" data-focus>
+      <div class="hand h3 de" data-at="b13" data-anim="write" data-underline="b13@ICR">Entlastungspunktion</div>
+      <div class="row de" data-at="b13@2." data-anim="slide" style="gap:10px">
+        <span class="chip txt">2. ICR · MCL</span><span class="body small">(Monaldi)</span>
+      </div>
+      <div class="body small ar" data-at="b14" data-anim="fade" style="margin-left:24px">ولا</div>
+      <div class="row de" data-at="b14@4." data-anim="slide" style="gap:10px">
+        <span class="chip txt">4.–5. ICR · vordere AL</span><span class="body small">(Bülau)</span>
+      </div>
+      <div class="row de" data-at="b15@Thoraxdrainage" data-anim="pop" style="gap:12px; margin-top:6px">
+        <span class="hand h3">→</span><span class="chip yellow txt">Thoraxdrainage</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- E. La phrase d'examen -->
+  <div class="blk card" style="left:190px; top:1462px; width:700px; padding:20px 28px 22px" data-focus data-at="b16" data-anim="draw">
+    <div class="row ar" style="gap:14px; margin-bottom:10px">
+      <div class="robot" style="width:62px; height:62px"></div>
+      <div class="display ar" style="font-size:38px">ف الامتحان قول:</div>
+    </div>
+    <div class="hand de" style="font-size:31px; line-height:1.5">
+      <div data-at="b17" data-anim="write">Es zeigt sich eine <span data-hl="b17@Pleuralinie">Pleuralinie</span> <span data-circle="b17@links">links</span></div>
+      <div data-at="b17@ohne" data-anim="wipe" data-dur="1.4">ohne <span data-hl="b17@Lungengefäßzeichnung">Lungengefäßzeichnung</span> peripher davon,</div>
+      <div data-at="b18" data-anim="wipe" data-dur="1.3">vereinbar mit einem <span data-hl="b18@Pneumothorax">Pneumothorax links</span>.</div>
+    </div>
+  </div>
+
+  <!-- F. Appel à l'action -->
+  <div class="blk col ar" style="left:190px; top:1730px; width:700px; gap:8px; align-items:center" data-focus>
+    <div class="ribbon white" data-at="b19" data-anim="pop">
+      <span class="hand de" style="font-size:32px">Röntgen-Thorax · step by step?</span>
+    </div>
+    <div class="row ar" style="gap:16px">
+      <div class="body txt ar" data-at="b20" data-anim="fade">كتب ليا ف الـcomments:</div>
+      <div class="display ar" style="font-size:52px" data-at="b20@بغينا" data-anim="pop"><span data-hl="b20@بغينا+0.3">بغينا!</span></div>
+    </div>
+  </div>
+
+  <!-- crédit de l'image (obligatoire : CC BY-SA 2.5) -->
+  <div class="blk body de" style="left:36px; top:1890px; font-size:14px">
+    Röntgenbild: „Pneumothorax CXR" – Clinical Cases, CC BY-SA 2.5, via Wikimedia Commons (annotiert)
+  </div>
+
+</div>
+</div>
+
+<script>
+  // réglages facultatifs de la caméra / fin
+  window.SV_CONFIG = { maxZoom: 1.85, outroAt: "b20@بغينا+0.4", hold: 1.8 };
+</script>
+<script src="beats.js"></script>
+<script src="timings.js" onerror="void 0"></script>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="../../engine/runtime.js"></script>
+</body>
+</html>
