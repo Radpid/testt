@@ -2,3 +2,8 @@ node_modules/
 videos/*/out/
 videos/*/voice.cut.wav
 __pycache__/
+# voix (enregistrements et voix clonée) : pas dans git
+videos/*/voice*.wav
+videos/*/voice*.m4a
+videos/*/voice*.mp3
+videos/*/*.tts.json

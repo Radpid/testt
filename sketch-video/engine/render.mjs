@@ -6,6 +6,7 @@
  *   node engine/render.mjs videos/pneumothorax --frames 0,4.5,12  -> captures PNG à ces instants (contrôle rapide)
  *   node engine/render.mjs videos/pneumothorax --from 10 --to 20  -> rend seulement un extrait
  *   options : --fps 30  --out chemin.mp4  --crf 18  --sheet (planche-contact toutes les 2 s)
+ *             --safe (affiche les zones cachées par l'interface Instagram, pour contrôle uniquement)
  */
 import { createRequire } from "node:module";
 import { spawn, spawnSync } from "node:child_process";
@@ -43,7 +44,7 @@ const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, de
 page.on("console", (m) => { if ((m.type() === "warning" || m.type() === "error") && !m.text().startsWith("Failed to load resource")) console.log(`[page ${m.type()}] ${m.text()}`); });
 page.on("requestfailed", (r) => { if (!r.url().endsWith("/timings.js")) console.log(`[page] fichier introuvable : ${decodeURIComponent(r.url())}`); });
 page.on("pageerror", (e) => console.log(`[page error] ${e.message}`));
-await page.goto(pathToFileURL(page_).href + "?render=1");
+await page.goto(pathToFileURL(page_).href + "?render=1" + (args.includes("--safe") ? "&safe=1" : ""));
 await page.waitForFunction(() => window.SV && (window.SV.ready || window.SV.error), null, { timeout: 60000 });
 const err = await page.evaluate(() => window.SV.error);
 if (err) { console.error("Erreur dans la page : " + err); await browser.close(); process.exit(1); }
@@ -57,7 +58,7 @@ if (framesArg || flag("sheet")) {
   const files = [];
   for (const t of times) {
     await seek(t);
-    const f = path.join(outDir, `frame_${t.toFixed(2).padStart(6, "0")}.png`);
+    const f = path.join(outDir, `frame_${t.toFixed(2).padStart(6, "0")}${flag("safe") ? "_safe" : ""}.png`);
     await page.screenshot({ path: f });
     files.push(f);
   }

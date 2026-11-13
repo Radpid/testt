@@ -64,6 +64,29 @@ Sur macOS : `brew install node ffmpeg python` puis les deux mêmes commandes.
    ```
    → `videos/<sujet>/out/video.mp4` (environ 2 minutes de calcul pour 1 minute de vidéo).
 
+### Variante : voix clonée ElevenLabs (sans t'enregistrer)
+
+Si ta voix est clonée sur ElevenLabs, l'étape 3–4 devient une seule commande : la voix est générée
+avec le minutage exact de chaque caractère (pas besoin de Whisper).
+
+```bash
+# Windows PowerShell : $env:ELEVENLABS_API_KEY="sk_..."   (ne jamais mettre la clé dans un fichier du dépôt)
+export ELEVENLABS_API_KEY=sk_...
+python tools/tts_elevenlabs.py videos/<sujet> --voice yassine          # modèle eleven_v4 par défaut
+python tools/tts_elevenlabs.py videos/<sujet> --voice yassine --reuse  # réutilise l'audio si le texte n'a pas changé
+```
+
+Dans `beats.js`, écris les nombres en toutes lettres pour la synthèse
+(« zweiter Interkostalraum », « تلاتة ديال الحوايج ») : le poster peut garder « 2. ICR ».
+Le son est compressé et calé à -14 LUFS, comme les Reels.
+
+### Instagram
+
+Dans `index.html` : `window.SV_CONFIG = { preset: "instagram", ... }`. Les sous-titres remontent au-dessus
+de la zone pseudo/légende, la caméra garde le contenu hors de l'en-tête et de la colonne de boutons.
+Pour contrôler : `node engine/render.mjs videos/<sujet> --frames 15,60 --safe` (zones de l'interface en rouge).
+L'image finale (dézoom) reste plein écran comme sur la vidéo de référence : son bas est sous la légende Instagram.
+
 Testé sur l'audio de la vidéo de référence (darija + termes anglais) : écart moyen de 0,12 s entre
 le début réel de chaque phrase et celui calculé, 36 phrases sur 37 à moins de 0,5 s.
 

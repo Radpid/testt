@@ -21,7 +21,10 @@
     <div class="ribbon white" data-at="b4@Pneumothorax" data-anim="pop">
       <span class="display de" style="font-size:66px"><span data-hl="b4@Pneumothorax+0.35">Pneumothorax</span></span>
     </div>
-    <div class="body small de" style="margin-top:16px" data-at="prev+0.4">Röntgen-Thorax · Kenntnisprüfung · Radiologie</div>
+    <div class="row de" style="margin-top:16px; gap:12px" data-at="prev+0.4">
+      <span class="body small">Röntgen-Thorax · Kenntnisprüfung</span>
+      <span class="chip yellow small" style="padding:2px 12px 0">@dr.aguilo</span>
+    </div>
   </div>
 
   <!-- B1. Le prüfer -->
@@ -67,7 +70,7 @@
 
   <!-- C2. Les 3 points -->
   <div class="blk col ar" style="left:688px; top:486px; width:356px; gap:24px" data-focus>
-    <div style="text-align:center"><div class="ribbon" data-at="b4@3" data-anim="pop"><span class="display ar h3">3 حوايج</span></div></div>
+    <div style="text-align:center"><div class="ribbon" data-at="b4@تلاتة" data-anim="pop"><span class="display ar h3">3 حوايج</span></div></div>
 
     <div class="card pt" data-at="b5" data-anim="draw">
       <div class="num chip yellow small">1</div>
@@ -101,12 +104,12 @@
       </div>
     </div>
     <div class="blk col de" style="left:30px; top:28px; width:470px; gap:10px; align-items:flex-start" data-focus>
-      <div class="hand h3 de" data-at="b13" data-anim="write" data-underline="b13@ICR">Entlastungspunktion</div>
-      <div class="row de" data-at="b13@2." data-anim="slide" style="gap:10px">
+      <div class="hand h3 de" data-at="b13" data-anim="write" data-underline="b13@Interkostalraum">Entlastungspunktion</div>
+      <div class="row de" data-at="b13@zweiter" data-anim="slide" style="gap:10px">
         <span class="chip txt">2. ICR · MCL</span><span class="body small">(Monaldi)</span>
       </div>
       <div class="body small ar" data-at="b14" data-anim="fade" style="margin-left:24px">ولا</div>
-      <div class="row de" data-at="b14@4." data-anim="slide" style="gap:10px">
+      <div class="row de" data-at="b14@vierter" data-anim="slide" style="gap:10px">
         <span class="chip txt">4.–5. ICR · vordere AL</span><span class="body small">(Bülau)</span>
       </div>
       <div class="row de" data-at="b15@Thoraxdrainage" data-anim="pop" style="gap:12px; margin-top:6px">
@@ -136,6 +139,7 @@
     <div class="row ar" style="gap:16px">
       <div class="body txt ar" data-at="b20" data-anim="fade">كتب ليا ف الـcomments:</div>
       <div class="display ar" style="font-size:52px" data-at="b20@بغينا" data-anim="pop"><span data-hl="b20@بغينا+0.3">بغينا!</span></div>
+      <div class="chip yellow small de" style="padding:2px 12px 0" data-at="b20@بغينا+0.5" data-anim="pop">@dr.aguilo</div>
     </div>
   </div>
 
@@ -149,7 +153,7 @@
 
 <script>
   // réglages facultatifs de la caméra / fin
-  window.SV_CONFIG = { maxZoom: 1.85, outroAt: "b20@بغينا+0.4", hold: 1.8 };
+  window.SV_CONFIG = { preset: "instagram", maxZoom: 1.85, outroAt: "b20@بغينا+0.4", hold: 2.2 };
 </script>
 <script src="beats.js"></script>
 <script src="timings.js" onerror="void 0"></script>

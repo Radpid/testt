@@ -67,6 +67,20 @@ node engine/render.mjs videos/<sujet>                 # -> out/video.mp4 avec la
 - Ne mets jamais le script complet comme `initial_prompt` de Whisper : il sauterait le début de l'audio.
   L'outil ne passe que les termes latins.
 
+## Voix clonée ElevenLabs (au lieu d'un enregistrement)
+
+```bash
+cd sketch-video
+ELEVENLABS_API_KEY=... python tools/tts_elevenlabs.py videos/<sujet> --voice yassine   # eleven_v4, écrit voice.wav + timings.js
+```
+- La clé vient uniquement de la variable d'environnement : ne l'écris jamais dans un fichier du dépôt ni dans un commit.
+- Écris les nombres en toutes lettres dans `beats.js` (« zweiter Interkostalraum ») ; les cues pointent vers ces mots.
+- `--reuse` évite de repayer des caractères si le texte n'a pas changé.
+- Contrôle : transcris `voice.el.mp3` avec Whisper (arabe, puis les passages allemands en mode `de`)
+  pour vérifier que les termes allemands sont bien prononcés.
+- Pour Instagram : `preset: "instagram"` dans `SV_CONFIG`, puis captures avec `--safe` avant le rendu final.
+  Montre toujours des captures à l'utilisateur avant de rendre la vidéo finale.
+
 ## À ne pas faire
 
 - Ne modifie pas `engine/` pour un besoin propre à une seule vidéo : mets un `<style>` local dans `index.html`.

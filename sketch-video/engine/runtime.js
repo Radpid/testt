@@ -336,6 +336,10 @@
       S.cap.className = "cap";
       S.cap.dir = "auto";
       capWrap.appendChild(S.cap);
+      const cfg = config();
+      capWrap.style.bottom = cfg.captionBottom + "px";
+      capWrap.style.paddingRight = cfg.safeRight + "px";
+      if (/[?&]safe\b/.test(location.search)) showSafeZones(stage, cfg);
 
       S.stage = stage; S.poster = poster;
       SV.duration = S.duration;
@@ -348,10 +352,34 @@
     }
   }
 
+  // calque de contrôle (?safe) : zones cachées par l'interface de la plateforme
+  function showSafeZones(stage, cfg) {
+    const z = (css, label) => {
+      const d = document.createElement("div");
+      d.style.cssText = `position:absolute;z-index:500;background:rgba(220,40,60,.22);border:2px dashed rgba(200,30,50,.8);color:#a01;font:600 22px system-ui;display:flex;align-items:center;justify-content:center;${css}`;
+      d.textContent = label;
+      stage.appendChild(d);
+    };
+    z(`left:0;right:0;top:0;height:${cfg.topReserve - 40}px`, "en-tête plateforme");
+    z(`left:0;right:0;bottom:0;height:${cfg.captionBottom - 50}px`, "pseudo · légende · musique");
+    if (cfg.safeRight) z(`right:0;width:${cfg.safeRight}px;top:${H * 0.5}px;bottom:${cfg.captionBottom - 50}px`, "");
+  }
+
   /* ======================= caméra ======================= */
-  function buildCamera(poster, tm) {
+  // Préréglages de plateforme : zones couvertes par l'interface (px sur 1080x1920)
+  const PRESETS = {
+    default: { captionBottom: 270, captionReserve: 470, topReserve: 90, safeRight: 0 },
+    // Reels : en-tête en haut, pseudo + légende + musique en bas, boutons j'aime/partage à droite
+    instagram: { captionBottom: 440, captionReserve: 640, topReserve: 210, safeRight: 120 },
+  };
+  function config() {
     const cfg = window.SV_CONFIG || {};
-    const capReserve = cfg.captionReserve || 470, topReserve = 90;
+    return Object.assign({}, PRESETS[cfg.preset] || PRESETS.default, cfg);
+  }
+
+  function buildCamera(poster, tm) {
+    const cfg = config();
+    const capReserve = cfg.captionReserve, topReserve = cfg.topReserve;
     const maxZoom = cfg.maxZoom || 1.85;
     const events = [];
     const focusOf = (el) => (el.closest && el.closest("[data-focus]")) || el;
@@ -373,6 +401,7 @@
       }
       let cx = fb.cx;
       if (fb.w > vw) cx = clamp(eb.cx, fb.x + vw / 2 - 20, fb.x + fb.w - vw / 2 + 20);
+      cx += cfg.safeRight / 2 / s; // centre le contenu dans la partie libre de l'écran (hors boutons à droite)
       cx = vw >= W ? W / 2 : clamp(cx, vw / 2 - 30, W - vw / 2 + 30);
       cy = clamp(cy, vh / 2 - 80, H - vh / 2 + capReserve / s);
       return { s, cx, cy, focus: F, eb };
@@ -380,7 +409,7 @@
     const inside = (cam, eb) => {
       const vw = W / cam.s, vh = H / cam.s;
       const x0 = cam.cx - vw / 2, y0 = cam.cy - vh / 2;
-      return eb.x >= x0 + 10 && eb.x + eb.w <= x0 + vw - 10 && eb.y >= y0 + topReserve / cam.s && eb.y + eb.h <= y0 + vh - capReserve / cam.s;
+      return eb.x >= x0 + 10 && eb.x + eb.w <= x0 + vw - 10 - cfg.safeRight / cam.s && eb.y >= y0 + topReserve / cam.s && eb.y + eb.h <= y0 + vh - capReserve / cam.s;
     };
 
     const keys = [];
