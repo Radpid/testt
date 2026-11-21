@@ -1,0 +1,123 @@
+# Série storytelling « cas réels » — bible de la série
+
+Série Instagram de **@dr.aguilo** : chaque épisode raconte une histoire VRAIE, jugée en Allemagne, où un jeune
+médecin (Assistenzarzt, PJler, médecin avec Berufserlaubnis) a été lourdement sanctionné pour une erreur qu'il
+aurait pu éviter s'il avait connu UNE règle. But : protéger les médecins qui arrivent en Allemagne, pas les juger.
+
+Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assistenzarzt » — à confirmer par l'auteur.
+
+## Format fixe
+
+- Reel 1080×1920, 60–90 s, préréglage `instagram` du moteur.
+- Narration en **darija** (voix clonée ElevenLabs « yassine », modèle eleven_v4), répliques des personnages et
+  phrases du tribunal en **allemand** (les vraies citations quand elles existent).
+- Style : univers sketch du moteur (papier pointillé, encre, un seul accent jaune), mais en **scènes animées
+  avec personnages** (pas un poster unique).
+- Éléments récurrents d'un épisode à l'autre :
+  1. ouverture : le dossier « AKTE 0X » qui s'ouvre (tampon du tribunal, année) ;
+  2. narrateur : l'avatar Dr.aguilo apparaît au début et à la fin ;
+  3. **le gel** : au moment de l'erreur, l'image se fige et le narrateur demande « شنو كنتي غادي دير؟ » ;
+  4. la sentence : citation allemande exacte du tribunal ;
+  5. **la carte « القاعدة »** (la règle) : une seule règle, à capturer en écran ;
+  6. fin : « Akte 0X+1 » annoncée + appel à commenter.
+
+## Règles de vérité (non négociables)
+
+- Uniquement des faits publiés : jugement (de préférence), sinon au moins deux médias sérieux concordants.
+- Aucun nom (médecin, soignant, patient, famille), pas de nom d'hôpital ; on cite le tribunal, l'année, la ville.
+- Tout dialogue inventé est signalé à l'écran par l'étiquette « Rekonstruktion » ; les citations réelles sont
+  marquées « Zitat Urteil » / « Zitat Gericht ».
+- Si un fait est incertain, on ne le montre pas (ou on dit « selon la presse »).
+- Dire si le jugement est définitif ou non ; ne jamais présenter un jugement non définitif comme acquis.
+- La mort d'un patient se montre de façon symbolique, jamais choquante. Respect des familles.
+- Légende Instagram : sources (tribunal + date + médias), « Keine Rechtsberatung », « Namen anonymisiert ».
+
+## Épisodes
+
+| # | Titre de travail | Statut |
+|---|---|---|
+| 01 | La seringue blanche (PJler, Bielefeld 2011) | **en production** |
+| 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
+| 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
+| 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) |
+| 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
+
+### 01 — La seringue blanche
+- Faits : 22.08.2011, Kinderklinik d'un hôpital de Bielefeld (NRW). Un étudiant en PJ (29 ans) injecte dans le
+  cathéter central d'un bébé de ~9 mois une seringue non étiquetée de liquide laiteux qu'une infirmière lui a
+  tendue : c'était un antibiotique oral (Cotrimoxazol-Saft). Le bébé meurt (choc anaphylactique selon la presse).
+- Sanction : fahrlässige Tötung. AG Bielefeld 22.10.2012 (10 Ds-16 Js 279/11-1009/12) : 120 Tagessätze.
+  LG Bielefeld 14.08.2013 (appel ; Az. 011 Ns-16 Js 279/11-11/13 selon l'Ärzteblatt) : 90 Tagessätze, 1 800 €.
+- Citation : « Da hätte der Angeklagte zumindest nachfragen müssen. » L'Organisationsverschulden de la clinique
+  « ändere an der strafrechtlichen Verantwortlichkeit des Angeklagten nichts ».
+- Règle : ne jamais injecter ce que tu n'as pas préparé toi-même ou que tu ne peux pas identifier avec certitude.
+- Sources : LTO (lg-bielefeld-urteil-18-Js-279-11…), Ärzteblatt « Das kleinste Rad im Getriebe », Ärzte Zeitung
+  « Fatale falsche Spritze ». Dossier détaillé : `videos/ep01-spritze/recherche.md`.
+
+### 02 — « Il est juste bourré » (À VÉRIFIER avant d'écrire)
+- Selon la presse : Klinikum Friedrichshafen, sept. 2023, Assistenzärztin de 38 ans aux urgences de nuit, patient
+  de 18 ans (> 1,9 ‰) après accident de vélo, observation sans CT ; dégradation vers 3 h, arrêt vers 6 h ; CT :
+  fracture du crâne + hématome ; décès. AG Tettnang (verdict annoncé mai 2026) : 15 mois avec sursis + 20 000 €,
+  Berufsverbot demandé par le parquet et refusé, licenciement. **Non définitif.**
+- Problème : vol.at et Schwäbische se contredisent (heure du décès ; un article parle d'un médicament
+  antihypertenseur). Demander l'Az. et le communiqué à l'AG Tettnang avant le script.
+- Plan B, même thème « escalader » : AG Nürtingen 04.12.2025, 16 Ds 326 Js 130982/23 — hémorragie du post-partum
+  sans transfusion pendant des heures ; Assistenzärztin 6 mois avec sursis, Oberarzt 10 mois (sources secondaires).
+- Sources : schwaebische.de (18-jaehriger-stirbt-vor-gericht…), vol.at (tragoedie-in-klinik-am-bodensee…).
+
+### 03 — Le procès-verbal de la KP
+- Médecin formé en Serbie, Berufserlaubnis 07.09.2022, échec à la Kenntnisprüfung 02.05.2023 ; procès-verbal :
+  allemand limite « vor allem Verständnis », « mögliche Patientengefährdung ». Berufserlaubnis retirée avec effet
+  immédiat le 05.07.2023. VG Augsburg 01.08.2023, Au 8 S 23.1160 (référé rejeté) : « Im Hinblick auf die Schwere
+  der eventuell dann eintretenden Schäden ist das Risiko nicht hinnehmbar. »
+- Parallèle : VG München M 27 SE 23.166 (09.02.2023, trois échecs à la KP, retrait confirmé).
+- Règle : le procès-verbal de la KP part chez l'autorité ; ne passe pas la KP « pour essayer ».
+- Contexte d'actualité : la nouvelle loi fait de la KP directe la règle pour les diplômes hors UE (Bundesrat
+  08.05.2026 ; date d'entrée en vigueur à vérifier : 01.10 ou 01.11.2026 selon les sources).
+- Source : gesetze-bayern.de Y-300-Z-BECKRS-B-2023-N-28014 (et …-2023-N-50729).
+
+### 04 — « Je n'ai rien dit »
+- Hystéroscopie, ~2,5 L d'eau distillée comme liquide de rinçage (sur instruction du Chefarzt selon les parties),
+  passage dans le sang, décès. L'Assistenzärztin (3e année) avait des doutes et s'est tue.
+- OLG Köln 27.01.2025, 5 U 69/24 (définitif) : grober Behandlungsfehler, responsabilité personnelle solidaire.
+  « Auch die Beklagte zu 2) hat gegen die ihr obliegende Remonstrationspflicht verstoßen. »
+- Règle : si un ordre contredit tes bases, tu dois le dire à voix haute (et le documenter).
+- Sources : nrwe.justiz.nrw.de/olgs/koeln/j2025/5_U_69_24_Urteil_20250127.html ; Hessisches Ärzteblatt 05/2026.
+
+### 05 — Le certificat à 14 €
+- ~90 000 AU signées sur la base d'un questionnaire en ligne, sans aucun contact (14 €, PDF avec signature).
+  Approbation retirée sans condamnation pénale : OVG Hamburg 15.12.2022, 3 Bs 78/22 (Leitsatz : l'indignité ne
+  dépend pas de savoir « ob die gravierende Verfehlung auch strafbewehrt … ist »).
+- Angle jeunes médecins : les « petits jobs » de télémédecine qui demandent de signer sans voir le patient.
+- Sources : justiz.hamburg.de …/3bs78-22-data.pdf ; Rheinisches Ärzteblatt 08/2023 ; zm-online.
+
+## Réserve (autres cas trouvés, sources dans l'historique de recherche)
+
+- Gütersloh 2018/2022 : Assistenzarzt d'anesthésie (47 ans), appareil d'anesthésie non vérifié, ado de 14 ans
+  décédé ; 1 an 4 mois avec sursis (Ärzteblatt). Règle : check de l'appareil soi-même.
+- OLG Hamm 20.12.2022, 26 U 46/21 : Assistenzarzt arrivé 3 semaines plus tôt fait l'Aufklärung d'une prothèse de
+  hanche qu'il n'a jamais vue → condamnation de la clinique et de l'Oberarzt. Règle : ne pas faire une Aufklärung
+  sur un geste qu'on ne connaît pas.
+- VG Hannover 08.04.2019, 5 B 7642/18 : traduction « Assistenzarzt » alors que le diplôme géorgien ne permettait
+  qu'un exercice supervisé → Berufserlaubnis retirée.
+- OVG Hamburg 08.10.2021, 3 Bs 217/21 : Approbation retirée (Rücknahme) car l'année d'internat irakienne
+  n'avait jamais été validée.
+- VG Arnsberg 31.08.2023, 7 K 785/22 : troisième échec à la KP = définitif.
+- Bielefeld 2021/2022 : Assistenzärztin, faux Impfpass déposé chez l'employeur → licenciement sans préavis
+  confirmé (presse dpa ; suite pénale inconnue).
+- VG Mainz 20.11.2020, 4 L 789/20.MZ et VG Ansbach 30.07.2021, AN 4 S 21.01357 : médicaments pris au travail /
+  sufentanil → Ruhen der Approbation.
+- LBG für Heilberufe NRW 25.11.2015, 6t A 2679/13.T : comptes rendus opératoires jamais dictés → Verweis + amende.
+- OLG Köln, BGH : Anfängeroperation (VI ZR 230/81), Anfängernarkose (VI ZR 175/92), Übernahmeverschulden
+  (BGH 5 StR 18/10 — affaire sensible, à éviter en storytelling).
+
+## Repères juridiques (à citer correctement)
+
+- **Widerruf** (§ 5 Abs. 2 BÄO) : retrait pour comportement après l'obtention (Unwürdigkeit, Unzuverlässigkeit).
+- **Rücknahme** (§ 5 Abs. 1 BÄO) : annulation car une condition manquait dès le départ (diplôme, déclaration fausse).
+- **Ruhen** (§ 6 BÄO) : suspension temporaire (enquête pénale, santé, langue…).
+- **Berufsverbot** (§ 70 StGB) : prononcé par le juge pénal, 1 à 5 ans ou à vie.
+- Une seule erreur de soin par négligence ne suffit quasiment jamais à un Widerruf (VG Augsburg 01.12.2016,
+  Au 2 K 16.578, a annulé un tel retrait). Les vraies sanctions d'une erreur : condamnation pénale, licenciement,
+  dommages-intérêts.
+- Travailler avec une Berufserlaubnis expirée = exercice illégal de la médecine (§ 5 HeilprG).
