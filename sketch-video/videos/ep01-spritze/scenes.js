@@ -18,8 +18,10 @@
     }
     c.put(P.ivPole({ lineTo: [120, -215] }), 330, 1276, 0.86, 0, parent);
     c.put(P.hospitalBed({ w: 520 }), 110, 1290, 1, 0, parent);
-    c.actor({ x: 400, y: 1302, scale: 0.205, body: "CrossedLegs", hair: "Long", cls: "sil", seed: 3 }, parent);
-    c.put(P.babyBundle({}), 432, 1092, 0.78, -72, parent);
+    if (!o.noPeople) {
+      c.actor({ x: 400, y: 1302, scale: 0.205, body: "CrossedLegs", hair: "Long", cls: "sil", seed: 3 }, parent);
+      c.put(P.babyBundle({}), 432, 1092, 0.78, -72, parent);
+    }
     if (o.cabinet !== false) c.put(P.bedsideCabinet({}), 790, 1290, 0.9, 0, parent);
   }
   function corner(c, sub, ar, at) {
@@ -157,7 +159,7 @@
     /* 6b · STOP : l'image se fige, plan subjectif ------------------------ */
     st.scene({ from: "b13", in: "cut", inDur: 0, build(c) {
       const bg = c.group(); bg.g.setAttribute("class", "faded");
-      room(c, { parent: bg.g, bare: true });
+      room(c, { parent: bg.g, bare: true, noPeople: true });
       c.camera([{ at: "b13", s: 1, cx: 540, cy: 960 }, { at: "b13+0.3", s: 1.06, cx: 560, cy: 940, d: 5, ease: "lin" }]);
       c.put(P.syringe(MILKY), 140, 900, 1.5, -10).slide("b13", 0, 600, 0.55).float(6, 3);
       c.put(`<ellipse cx="314" cy="869" rx="128" ry="84" fill="none" stroke="var(--accent)" stroke-width="7" transform="rotate(-10 314 869)"/>`).wipe("b13@بلاصتو", 0.45).pulse("b13@شنو", 0.9, 0.08, 3);
