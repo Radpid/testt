@@ -25,5 +25,5 @@ P = [
  ("pop", "b17@شي", 0, -14, None, None), ("chime", "b17@السؤال", 0, -14, None, None),
  ("tick", "b18@شكيتي", 0, -11, None, None), ("tick", "b18@سول", 0, -11, None, None), ("tick", "b18@بقيتي", 0, -11, None, None),
  ("whoosh", "b19", -0.05, -15, None, None),
- ("swell", "b19@end+0.15", -0.5, -12, None, None), ("pop", "b19@end+0.9", 0, -13, None, None),
+ ("swell", "b19@end+0.15", -0.5, -12, None, None), ("pop", "b19@end+2.7", 0, -13, None, None),
 ] + [("pop", c, 0, -19, None, None) for c in ["b5", "b6@Oberärztin", "b7@يجرب", "b8@destilliertes", "b9@شكات", "b10@قالت", "b11@تهضر", "b12@دخل", "b13@وقف", "b14@Réanimation", "b15@مسؤولة"]]   # lettres du mot caché

@@ -190,7 +190,7 @@
       k.prop("dock", 420, 1312, 1.4, () => ({ w: 380, h: 180 }));
       k.person(420, 1300, 1.4, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, only: "arms" }, SC.Pose.standDock));
       k.chip("Assistenzärztin", "طبيبة ف طور الاختصاص", 420, 560, 34).pop("b1@الاختصاص", 0.45);
-      k.prop("stamp", 720, 770, 0.6, () => ({ text: "HAFTET PERSÖNLICH", size: 52, rot: -7 })).slam("b2@شخصيا", 0.3, 12);
+      k.prop("stamp", 750, 760, 0.55, () => ({ text: "HAFTET PERSÖNLICH", size: 52, rot: -7 })).slam("b2@شخصيا", 0.3, 12);
       st.flash("b2@شخصيا+0.25", 0.25, 0.4); c.kick("b2@شخصيا+0.25", 0.07);
       // « elle n'a pas décidé… elle s'est tue »
       k.chip("ما قررتش", null, 740, 950, 30).pop("b3@قررت");
@@ -299,9 +299,9 @@
       // flèches de pression vers le bas
       [330, 470, 610].forEach((x, i) => c.put(`<path d="M${x} 420 L${x} 470 M${x - 12} 456 L${x} 470 L${x + 12} 456" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/>`).pop(`b9+${(0.2 + i * 0.1).toFixed(2)}`));
       // l'Oberärztin doute… puis continue
-      k.bubble({ x: 870, y: 640, w: 110, h: 90, tail: [-40, 40], think: true }).pop("b9@شكات").hide("b9@كملات", 0.3);
-      k.title("?", 870, 668, 70).pop("b9@شكات").hide("b9@كملات", 0.3);
-      k.chip("كملات", null, 870, 760, 26).pop("b9@كملات");
+      k.bubble({ x: 800, y: 640, w: 110, h: 90, tail: [-40, 40], think: true }).pop("b9@شكات").hide("b9@كملات", 0.3);
+      k.title("?", 800, 668, 70).pop("b9@شكات").hide("b9@كملات", 0.3);
+      k.chip("كملات", null, 800, 760, 26).pop("b9@كملات");
       // l'Assistenzärztin : rien
       k.title("…", 470, 1010, 90).pop("b10@ما");
       k.chip("الـOberarzt عندو الخبرة", null, 540, 1090, 26).pop("b10@والو");
@@ -403,7 +403,7 @@
       c.write(c.text("„… sowohl einen Oberarzt als auch", 540, 570, 40, "de"), "b15@قالت", 0.7);
       c.write(c.text("einen Assistenzarzt …“", 540, 625, 40, "de"), "b15@قالت+0.7", 0.5);
       k.ar("حتى الـAssistenzärztin عندها واجب", 540, 690, 30, "ar strong").wipe("b15@Assistenzärztin", 0.6, "rtl");
-      k.prop("stamp", 250, 930, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
+      k.prop("stamp", 300, 810, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
       c.kick("b15@شخصيا", 0.06);
     } });
 
@@ -473,13 +473,13 @@
 
     /* ---------- affiche finale + appel à commenter (écrit, pas dit) ---------- */
     st.flash("b19@end+0.15", 0.35, 0.85);
-    st.summary({ at: "b19@end+0.15", in: "cut", dezoomAt: "b19@end+0.5", cols: 5, crop: [230, 1310], top: 330, gap: 10, side: 60,
+    st.summary({ at: "b19@end+0.15", in: "cut", dezoomAt: "b19@end+0.5", cols: 5, crop: [230, 1310], top: 372, gap: 10, side: 60,
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);
-        k.ribbon("AKTE 02 · ما قالت والو", 540, 262, { size: 40, w: 560 });
-        k.chip("@dr.aguilo", null, 135, 262, 22);
-        k.chip("AKTE 03 · قريبا", null, 945, 262, 20, { yellow: true });
+        k.ribbon("AKTE 02 · ما قالت والو", 540, 312, { size: 40, w: 560 });
+        k.chip("@dr.aguilo", null, 160, 312, 22);
+        k.chip("AKTE 03 · قريبا", null, 915, 312, 20, { yellow: true });
         cells.forEach((cell) => {
           const g = el("g");
           el("path", { d: SC.util.rrect(cell.x, cell.y, cell.w, cell.h, 14), fill: "#D2D2CB", transform: "translate(6 8)" }, g);
@@ -490,10 +490,10 @@
       above(c, cells) {
         // appel à commenter (écrit, pas dit) + flèche vers le bouton « commenter » d'Instagram (x≈950, y≈1194)
         const k = kit(c);
-        k.card(110, 960, 760, 300, { seed: 990 }).pop("b19@end+0.9", 0.4);
-        k.ar("ونتا، واش عمرك سكتّي حيت خفتي؟", 490, 1060, 34, "ttl").wipe("b19@end+1.0", 0.6, "rtl");
-        k.ar("كتب ليا فالكومنتير", 490, 1170, 32, "ar strong").wipe("b19@end+1.4", 0.5, "rtl");
-        c.put(`<path d="M780 1150 C 860 1150, 900 1160, 918 1196 M896 1186 L918 1196 L922 1172" stroke="#1C1A1C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).wipe("b19@end+1.6", 0.4);
+        k.card(110, 960, 760, 300, { seed: 990 }).pop("b19@end+2.7", 0.4);
+        k.ar("ونتا، واش عمرك سكتّي حيت خفتي؟", 490, 1060, 34, "ttl").wipe("b19@end+2.8", 0.6, "rtl");
+        k.ar("كتب ليا فالكومنتير", 490, 1170, 32, "ar strong").wipe("b19@end+3.2", 0.5, "rtl");
+        c.put(`<path d="M780 1150 C 860 1150, 900 1160, 918 1196 M896 1186 L918 1196 L922 1172" stroke="#1C1A1C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).wipe("b19@end+3.4", 0.4);
         cells.forEach((cell) => {
           const g = el("g"); const C = SC.util.ctx(g, 950 + cell.i, false, 1);
           SC.util.shape(C, "o", SC.util.rrect(cell.x, cell.y, cell.w, cell.h, 14), {}, { sw: 3 });
