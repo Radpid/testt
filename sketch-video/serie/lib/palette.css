@@ -1,0 +1,35 @@
+/* Palettes de la série — toutes les couleurs des décors/objets (props.js) passent par ces classes.
+ * Choisir la palette avec data-palette="petrol" | "navy" | "salbei" sur un élément parent (html, body, svg…).
+ * Sans attribut : petrol. Pas de jaune surligneur. */
+:root, [data-palette="petrol"] {
+  --ink: #1F1D1E; --paper: #F3EFE6; --white: #FFFFFF;
+  --main: #2E6E73; --main2: #A9CFCB;
+  --accent: #C8553D; --accent2: #F2C5B5;
+  --gray: #8C8A85; --gray2: #DCD7CD;
+  --wood: #B08B63; --wood2: #D9C2A3;
+}
+[data-palette="navy"] {
+  --ink: #1F1D1E; --paper: #F2EEE5; --white: #FFFFFF;
+  --main: #23395B; --main2: #B7C4D6;
+  --accent: #D1453B; --accent2: #F4C9C2;
+  --gray: #8C8A85; --gray2: #D9D5CC;
+  --wood: #A8835E; --wood2: #D8C3A5;
+}
+[data-palette="salbei"] {
+  --ink: #1F1D1E; --paper: #F4F1EA; --white: #FFFFFF;
+  --main: #4F7A63; --main2: #C7D9CC;
+  --accent: #DD7A34; --accent2: #F6D5B8;
+  --gray: #8C8A85; --gray2: #DAD6CC;
+  --wood: #AE8960; --wood2: #D9C4A6;
+}
+.ink      { fill: var(--ink); stroke: none; }
+.f-paper  { fill: var(--paper); }
+.f-white  { fill: var(--white); }
+.f-main   { fill: var(--main); }
+.f-main2  { fill: var(--main2); }
+.f-accent { fill: var(--accent); }
+.f-accent2{ fill: var(--accent2); }
+.f-gray   { fill: var(--gray); }
+.f-gray2  { fill: var(--gray2); }
+.f-wood   { fill: var(--wood); }
+.f-wood2  { fill: var(--wood2); }

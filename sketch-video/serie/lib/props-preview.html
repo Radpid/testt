@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Props — Vorschau</title>
+<link rel="stylesheet" href="palette.css">
+<style>
+  @font-face { font-family: "Kalam"; font-weight: 700; src: url("../../engine/fonts/Kalam-Bold.ttf") format("truetype"); }
+  html, body { margin: 0; background: var(--paper); }
+  svg { display: block; }
+  .cap { font: 500 15px/1 -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--gray); }
+  .head { font: 700 20px/1 -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
+</style>
+</head>
+<body>
+<svg id="stage" xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script src="props.js"></script>
+<script>
+(async function () {
+  const q = new URLSearchParams(location.search);
+  const palette = q.get("palette") || "petrol";
+  const view = q.get("view") || "sheet";          // sheet | room | court | close
+  document.documentElement.dataset.palette = palette;
+  if (q.get("weight")) Props.setWeight(parseFloat(q.get("weight")));
+  const P = Props;
+  const at = (m, x, y, s, r) => `<g transform="translate(${x} ${y})${r ? ` rotate(${r})` : ""}${s && s !== 1 ? ` scale(${s})` : ""}">${m}</g>`;
+  const cap = (t, x, y, a) => `<text class="cap" x="${x}" y="${y}" text-anchor="${a || "start"}">${t}</text>`;
+  let s = `<rect class="f-paper" width="1080" height="1920"/>`;
+
+  if (view === "sheet") {
+    s += `<text class="head" x="28" y="36">props.js · Palette „${palette}“</text>`;
+    // ── Bande 1 : seringues, flacons
+    const k = 0.6;
+    s += at(P.syringe({ liquid: "milky", fill: 0.8, label: "?", tip: "stopper" }), 44, 96, k) + cap("syringe milky · ? · stopper", 30, 144);
+    s += at(P.syringe({ liquid: "clear", fill: 0.6, label: null, tip: "needle" }), 480, 96, k) + cap("syringe clear · needle", 400, 144);
+    s += at(P.syringe({ liquid: "milky", fill: 0.8, push: 0.7, label: "Cotrim", tip: "none" }), 44, 206, k) + cap("syringe push 0.7 · Text", 30, 254);
+    s += at(P.oralSyringe({}), 410, 206, k) + cap("oralSyringe", 400, 254);
+    s += at(P.syringe({ liquid: "none", fill: 0, tip: "none" }), 44, 316, k) + cap("syringe none", 30, 364);
+    s += at(P.catheterLine({ len: 440 }), 410, 316, k) + cap("catheterLine", 400, 364);
+    s += at(P.bottle({}), 800, 330, 0.8) + at(P.vial({}), 915, 330, 0.8) + at(P.bloodTube(), 1010, 330, 0.8);
+    s += cap("bottle · vial · bloodTube", 905, 364, "middle");
+    // ── Bande 2 : chambre
+    s += at(P.hospitalBed({}), 28, 640, 0.6) + cap("hospitalBed", 28, 664);
+    s += at(P.bedsideCabinet({}), 372, 640, 0.6) + cap("bedsideCabinet", 372, 664);
+    s += at(P.ivPole({}), 570, 640, 0.36) + cap("ivPole", 540, 664);
+    s += at(P.babyBundle({}), 720, 520, 1) + cap("babyBundle", 720, 664, "middle");
+    s += at(P.wallClock({ time: "08:45" }), 870, 470, 0.85) + cap("wallClock 08:45", 870, 560, "middle");
+    s += at(P.calendarPage({}), 1000, 520, 0.5) + cap("calendarPage", 1000, 664, "middle");
+    // ── Bande 3 : moniteurs, dessins
+    s += at(P.monitor({ ecg: "normal", t: 0 }), 110, 880, 0.66) + at(P.monitor({ ecg: "alarm", t: 0.3, hr: "198" }), 300, 880, 0.66) + at(P.monitor({ ecg: "flat" }), 490, 880, 0.66);
+    s += cap("monitor normal · alarm · flat", 300, 904, "middle");
+    s += at(P.kidsDrawings(), 720, 790, 0.72) + cap("kidsDrawings", 720, 904, "middle");
+    s += at(P.window(), 965, 780, 0.5) + cap("window", 965, 904, "middle");
+    // ── Bande 4 : portes, tribunal
+    s += at(P.door({}), 28, 1260, 0.43) + cap("door", 28, 1284);
+    s += at(P.courtDoor({}), 190, 1260, 0.4) + cap("courtDoor", 190, 1284);
+    s += at(P.judgeBench({}), 390, 1260, 0.5) + cap("judgeBench", 390, 1284);
+    s += at(P.gavel({ angle: 0 }), 780, 1260, 0.7) + at(P.gavel({ angle: 28, block: false }), 790, 1130, 0.7) + cap("gavel 0° / 28°", 800, 1284, "middle");
+    s += at(P.courtChairs({ n: 2 }), 910, 1260, 0.5) + cap("courtChairs", 910, 1284);
+    // ── Bande 5 : dossier, tampon, bulles
+    s += at(P.akteFolder({ open: 0 }), 110, 1440, 0.4) + at(P.akteFolder({ open: 0.3 }), 300, 1440, 0.4) + at(P.akteFolder({ open: 1 }), 590, 1440, 0.4);
+    s += cap("akteFolder open 0 · 0.3 · 1", 300, 1574, "middle");
+    s += at(P.handsInjecting({ push: 0.3 }), 700, 1335, 0.36) + cap("handsInjecting", 880, 1506, "middle");
+    s += at(P.tag({ text: "laut Urteil" }), 790, 1548, 0.7) + at(P.tag({ text: "Rekonstruktion", kind: "accent" }), 975, 1548, 0.7) + at(P.tag({ text: "Zitat Gericht", kind: "ink" }), 790, 1594, 0.7);
+    s += at(P.handHoldingSyringe({}), 470, 1650, 0.4) + cap("handHoldingSyringe", 580, 1800, "middle");
+    s += at(P.stamp({ text: "Verurteilt", sub: "LG Bielefeld" }), 600, 1856, 0.55) + cap("stamp", 760, 1900, "middle");
+    // ── Bande 6 : bulles, mains, fonds
+    s += at(P.bubble({ w: 300, h: 130, tail: "left" }) + `<text class="ink" x="150" y="78" text-anchor="middle" font-family="Kalam" font-weight="700" font-size="34">Was ist das?</text>`, 30, 1620, 0.7);
+    s += at(P.bubble({ w: 220, h: 110, tail: "down" }), 260, 1620, 0.7);
+    s += at(P.thought({ w: 300, h: 150 }), 30, 1770, 0.7) + at(P.bubble({ w: 220, h: 110, tail: "right" }), 260, 1770, 0.7);
+    s += cap("bubble · thought", 240, 1906, "middle");
+    s += at(P.roomBackdrop({}), 830, 1620, 0.11) + at(P.courtBackdrop({}), 955, 1620, 0.11) + cap("roomBackdrop · courtBackdrop", 950, 1850, "middle");
+  }
+
+  if (view === "room") {
+    const fy = 1380;
+    s += P.roomBackdrop({ floorY: fy });
+    s += at(P.window(), 300, 640, 1);
+    s += at(P.wallClock({ time: "08:45" }), 640, 520, 1);
+    s += at(P.kidsDrawings(), 280, 960, 1);
+    s += at(P.door({}), 720, fy - 34, 1);
+    s += at(P.monitor({ ecg: "normal", t: 0.2, stand: false }), 190, fy - 400, 1);
+    s += at(P.ivPole({ lineTo: [150, -300] }), 80, fy + 30, 1);
+    s += at(P.hospitalBed({}), 60, fy + 150, 1);
+    s += at(P.babyBundle({}), 330, fy - 112, 1, -90);
+    s += at(P.bedsideCabinet({}), 600, fy + 130, 1);
+    s += at(P.bubble({ w: 420, h: 170, tail: "left" }) + `<text class="ink" x="210" y="100" text-anchor="middle" font-family="Kalam" font-weight="700" font-size="44">Wer hat das gespritzt?</text>`, 560, 180, 1);
+    s += at(P.tag({ text: "Rekonstruktion", kind: "accent" }), 180, 120, 1);
+    s += at(P.syringe({ label: "?" }), 250, 1750, 1, -8);
+  }
+
+  if (view === "court") {
+    const fy = 1400;
+    s += P.courtBackdrop({ floorY: fy });
+    s += at(P.courtDoor({}), 600, fy - 40, 0.9);
+    s += at(P.judgeBench({ w: 560 }), 30, fy + 60, 1);
+    s += at(P.gavel({ angle: 22 }), 420, fy - 360, 1);
+    s += at(P.courtChairs({ n: 3 }), 560, fy + 330, 1);
+    s += at(P.akteFolder({ open: 0 }), 260, 380, 0.8, -4);
+    s += at(P.stamp({ text: "Verurteilt", sub: "LG Bielefeld · 2011" }), 330, 520, 1);
+    s += at(P.calendarPage({}), 800, 300, 1);
+    s += at(P.thought({ w: 380, h: 190 }), 600, 520, 1);
+    s += at(P.tag({ text: "laut Urteil" }), 200, 1820, 1) + at(P.tag({ text: "Zitat Gericht", kind: "ink" }), 520, 1820, 1);
+  }
+
+  if (view === "close") {
+    s += at(P.syringe({ liquid: "milky", fill: 0.8, label: "?", tip: "stopper" }), 240, 140, 1);
+    s += at(P.syringe({ liquid: "clear", fill: 0.6, tip: "needle" }), 240, 300, 1);
+    s += at(P.oralSyringe({}), 240, 460, 1);
+    if (P.handHoldingSyringe) s += at(P.handHoldingSyringe({}), 40, 620, 1) + at(P.handHoldingSyringe({ side: "left", syringe: { label: null, liquid: "clear", tip: "needle" } }), 700, 760, 0.7);
+    if (P.handsInjecting) s += at(P.handsInjecting({ push: 0.1 }), 50, 1090, 1);
+    s += at(P.bottle({}), 140, 1880, 1) + at(P.vial({}), 330, 1880, 1) + at(P.bloodTube(), 460, 1880, 1) + at(P.babyBundle({}), 640, 1760, 1);
+    s += at(P.monitor({ ecg: "alarm", t: 0.5 }), 900, 1880, 1);
+    if (P.catheterLine) s += at(P.catheterLine({ len: 500 }), 560, 1560, 1);
+  }
+
+  document.getElementById("stage").innerHTML = s;
+  try { await document.fonts.load('700 30px "Kalam"'); await document.fonts.ready; } catch (e) {}
+  requestAnimationFrame(() => requestAnimationFrame(() => { window.READY = true; }));
+})();
+</script>
+</body>
+</html>

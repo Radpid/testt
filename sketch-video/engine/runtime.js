@@ -456,7 +456,8 @@
   /* Dans une phrase arabe, isole chaque passage latin (allemand) pour que sa ponctuation
      reste du bon côté : "ويقولو ليك: Was sehen Sie?" et non "?Was sehen Sie". */
   const LAT = "A-Za-zÀ-ÖØ-öø-ÿĀ-ž0-9";
-  const LATIN_RUN = new RegExp(`[${LAT}][${LAT} .\\-–·/]*[${LAT}][?!.]*|[${LAT}][?!.]*`, "g");
+  // le point final reste hors de l'îlot latin (fin de la phrase arabe) ; « ? » et « ! » restent avec l'allemand
+  const LATIN_RUN = new RegExp(`[${LAT}][${LAT} .\\-–·/]*[${LAT}][?!]*|[${LAT}][?!]*`, "g");
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   /* Glossaire optionnel (window.GLOSSARY = { "Spritze": "حقنة", … }) : chaque mot allemand des sous-titres
      reçoit sa traduction arabe en petit (ruby), et une phrase entièrement allemande sa traduction en dessous. */

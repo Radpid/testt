@@ -1,0 +1,196 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Akte 01 – Szenen v2</title>
+<link rel="stylesheet" href="../../../serie/lib/palette.css">
+<style>
+  @font-face { font-family: "Kalam"; src: url("../../../engine/fonts/Kalam-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Kalam"; src: url("../../../engine/fonts/Kalam-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Plex Arabic"; src: url("../../../engine/fonts/IBMPlexSansArabic-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Plex Arabic"; src: url("../../../engine/fonts/IBMPlexSansArabic-SemiBold.ttf"); font-weight: 600; }
+  html, body { margin: 0; }
+  #frame { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); --skin: #FFFFFF; }
+  svg#s { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+  /* vêtements colorés des Open Peeps -> palette */
+  .peep { --peep-9FD8E5: var(--main2); --peep-8FA7DF: var(--main2); --peep-4F66AF: var(--main); --peep-FFFFFF: var(--white); }
+  .nurse .peep { --peep-8FA7DF: var(--main); --peep-9FD8E5: var(--main); }
+  .sil { --skin: var(--gray2); --ink: #7B776F; }
+  .faded { filter: grayscale(1) contrast(.75) brightness(1.12); opacity: .5; }
+  .de { font-family: Kalam; font-weight: 700; fill: var(--ink); }
+  .ar { font-family: "Plex Arabic"; font-weight: 400; fill: var(--gray); direction: rtl; }
+  .ar.strong { font-weight: 600; fill: var(--ink); }
+  .on-main { fill: var(--white); }
+  /* sous-titre : comme dans la vidéo (traduction arabe en petit sous les mots allemands) */
+  .cap { position: absolute; left: 70px; width: 940px; box-sizing: border-box; padding: 14px 26px 18px;
+         background: var(--white); border: 3px solid var(--ink); border-radius: 20px;
+         font: 600 42px/1.55 "Plex Arabic", sans-serif; color: var(--ink); text-align: center; direction: rtl; }
+  .cap .lat { font-family: Kalam; font-weight: 700; unicode-bidi: isolate; direction: ltr; }
+  .cap ruby { ruby-position: under; }
+  .cap rt { font: 400 22px/1.2 "Plex Arabic", sans-serif; color: var(--gray); }
+  .cap .tr { display: block; font: 400 27px/1.4 "Plex Arabic", sans-serif; color: var(--gray); }
+</style>
+<script src="../../../serie/lib/peeps-parts.js"></script>
+<script src="../../../serie/lib/peeps.js"></script>
+<script src="../../../serie/lib/props.js"></script>
+<script src="../../../serie/glossaire.js"></script>
+</head><body>
+<div id="frame"><svg id="s" viewBox="0 0 1080 1920"></svg></div>
+<script>
+const q = new URLSearchParams(location.search);
+const frame = document.getElementById("frame"), s = document.getElementById("s");
+frame.dataset.palette = q.get("palette") || "petrol";
+const NS = "http://www.w3.org/2000/svg", P = Props;
+
+function grp(parent, attrs) { const g = document.createElementNS(NS, "g"); for (const k in attrs || {}) g.setAttribute(k, attrs[k]); (parent || s).appendChild(g); return g; }
+function put(markup, x, y, sc = 1, rot = 0, parent) { const g = grp(parent, { transform: `translate(${x} ${y}) rotate(${rot}) scale(${sc})` }); g.innerHTML = markup; return g; }
+function txt(t, x, y, size, cls, anchor = "middle", parent) {
+  const e = document.createElementNS(NS, "text");
+  Object.entries({ x, y, "font-size": size, "text-anchor": anchor, class: cls }).forEach(([k, v]) => e.setAttribute(k, v));
+  e.textContent = t; (parent || s).appendChild(e); return e;
+}
+// terme allemand + traduction arabe en petit dessous
+function de(t, x, y, size, ar, anchor = "middle", parent, cls = "de") {
+  txt(t, x, y, size, cls, anchor, parent);
+  if (ar) txt(ar, x, y + size * 0.85, Math.max(22, Math.round(size * 0.6)), "ar", anchor === "start" ? "end" : anchor === "end" ? "start" : "middle", parent);
+}
+function corner(sub, subAr) {
+  txt("AKTE 01", 64, 250, 34, "de", "start");
+  de(sub, 64, 290, 26, subAr, "start");
+}
+function rect(x, y, w, h, r, fill, stroke = "var(--ink)", sw = 4, parent) {
+  const e = document.createElementNS(NS, "rect");
+  Object.entries({ x, y, width: w, height: h, rx: r, fill, stroke, "stroke-width": sw }).forEach(([k, v]) => e.setAttribute(k, v));
+  (parent || s).appendChild(e); return e;
+}
+const GL = window.GLOSSARY;
+function caption(text, top = 1330) {
+  const d = document.createElement("div"); d.className = "cap"; d.style.top = top + "px";
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+  if (!/[\u0600-\u06FF]/.test(text)) {   // phrase entièrement allemande : traduction complète dessous
+    d.style.direction = "ltr";
+    d.innerHTML = `<span class="lat">${esc(text)}</span><span class="tr" dir="rtl">${esc(GL[text] || "")}</span>`;
+    frame.appendChild(d); return;
+  }
+  d.innerHTML = text.split(/([A-Za-zÀ-ÿ](?:[A-Za-zÀ-ÿ.\- ]*[A-Za-zÀ-ÿ])?[?!]?)/).map((part, i) => {
+    if (i % 2 === 0) return esc(part).replace(/\n/g, "<br>");
+    const g = GL[part] || GL[part.replace(/[.?!]$/, "")];
+    return `<span class="lat">${g ? `<ruby>${esc(part)}<rt>${esc(g)}</rt></ruby>` : esc(part)}</span>`;
+  }).join("");
+  frame.appendChild(d);
+}
+function room(parent, o = {}) {
+  put(P.roomBackdrop({ w: 1080, h: 1920, floorY: 1280 }), 0, 0, 1, 0, parent);
+  put(P.door({ number: "204" }), 14, 1272, 0.84, 0, parent);
+  if (!o.bare) {
+    put(P.wallClock({ time: "08:40", r: 58 }), 440, 420, 1, 0, parent);
+    put(P.kidsDrawings(), 210, 420, 0.66, 0, parent);
+  }
+  put(P.ivPole({ lineTo: [320, -190] }), 150, 1276, 0.86, 0, parent);
+  put(P.hospitalBed({ w: 520 }), 110, 1290, 1, 0, parent);
+}
+function motherBaby(parent) {
+  Peeps.place(parent, { x: 400, y: 1302, scale: 0.205, body: "CrossedLegs", hair: "Long", cls: "sil" });
+  put(P.babyBundle({}), 432, 1092, 0.78, -72, parent);
+}
+
+const frames = {
+  1() {
+    put(P.tag({ text: "Deutschland · 2011", kind: "main" }), 250, 270, 1);
+    txt("ألمانيا · 2011", 250, 330, 28, "ar");
+    put(P.calendarPage({ date: "22.08.2011" }), 870, 330, 0.78, 6);
+    put(P.syringe({ liquid: "milky", fill: 0.85, label: "?", tip: "stopper" }), 150, 760, 1.55, -8);
+    put(P.stamp({ text: "SCHULDIG", sub: "fahrlässige Tötung", rot: -7 }), 540, 1080, 1.35);
+    txt("مُدان · القتل غير العمدي", 540, 1215, 34, "ar");
+    caption("ف ألمانيا، هاد الـSpritze قتلات Bébé.");
+  },
+  2() {
+    room(s);
+    motherBaby(s);
+    const nurse = grp(s, { class: "nurse" });
+    Peeps.place(nurse, { x: 985, y: 1300, scale: 0.205, body: "DocProtectiveClothe", hair: "Bun", face: "Explaining", flip: true });
+    put(P.bedsideCabinet({}), 790, 1290, 0.9);
+    put(P.syringe({ liquid: "milky", fill: 0.85, label: "?", tip: "stopper" }), 838, 1006, 0.27, 0);
+    Peeps.place(s, { x: 680, y: 1318, scale: 0.21, body: "Doc", hair: "ShortVolumed", face: "Serious", flip: true });
+    corner("Zimmer 204 · 22.08.2011", "الغرفة 204");
+    // la phrase de l'infirmière, dite à la mère
+    put(P.bubble({ w: 500, h: 190, tail: "right" }), 520, 470, 1);
+    txt("Hier ist das orale", 770, 548, 40, "de");
+    txt("Antibiotikum.", 770, 596, 40, "de");
+    txt("ها هو المضاد الحيوي ديال الفم", 770, 640, 26, "ar");
+    put(P.tag({ text: "laut Urteil", kind: "main" }), 640, 440, 0.9);
+    txt("حسب الحكم", 755, 448, 24, "ar", "end");
+    // il lui tourne le dos
+    de("kein Blickkontakt", 470, 640, 32, "ما تشافوش");
+    const arrow = document.createElementNS(NS, "path");
+    Object.entries({ d: "M600 650 Q 650 660 668 740", fill: "none", stroke: "var(--accent)", "stroke-width": 5, "stroke-linecap": "round", "stroke-dasharray": "2 12" }).forEach(([k, v]) => arrow.setAttribute(k, v));
+    s.appendChild(arrow);
+    caption("و هو مدير ظهرو، حطات الفرملية Spritze\nحدا الـBébé…");
+  },
+  3() {
+    const bg = grp(s, { class: "faded" });
+    room(bg, { bare: true });
+    motherBaby(bg);
+    put(P.bedsideCabinet({}), 790, 1290, 0.9, 0, bg);
+    put(P.handHoldingSyringe({ side: "right", syringe: { liquid: "milky", fill: 0.85, label: "?", tip: "stopper" } }), 150, 860, 1.25, -10);
+    de("Du bist dran.", 330, 700, 38, "دابا نتا لي ف بلاصتو");
+    put(P.thought({ w: 360, h: 160 }), 70, 320, 1);
+    txt("Refobacin?", 250, 418, 50, "de");
+    put(P.tag({ text: "Rekonstruktion", kind: "accent" }), 250, 292, 0.85);
+    txt("مشهد تمثيلي", 400, 300, 24, "ar", "end");
+    rect(24, 24, 1032, 1872, 34, "none", "var(--accent)", 18);
+    put(P.stamp({ text: "STOP", rot: 8 }), 800, 470, 1.5);
+    // les deux choix
+    const card = (y, letter, word, ar, fill, cls) => {
+      rect(650, y, 340, 150, 22, fill, "var(--ink)", 4);
+      txt(letter, 700, y + 100, 74, "de " + cls);
+      txt(word, 850, y + 72, 40, "de " + cls);
+      txt(ar, 850, y + 120, 32, "ar " + cls);
+    };
+    card(930, "A", "Spritzen", "ينجيكتيها", "var(--white)", "");
+    card(1105, "B", "Nachfragen", "يسول", "var(--main)", "on-main");
+    caption("STOP. لو كنتي ف بلاصتو،\nشنو غادي دير؟");
+  },
+  4() {
+    put(P.courtBackdrop({ w: 1080, h: 1920, floorY: 1280, panelTop: 640 }), 0, 0);
+    Peeps.place(s, { x: 540, y: 1160, scale: 0.4, body: "Turtleneck", hair: "GrayShort", face: "Serious", accessory: "GlassRound" });
+    put(P.judgeBench({ w: 760, h: 360, label: "Landgericht Bielefeld" }), 160, 1290);
+    put(P.gavel({ angle: 0 }), 830, 930, 0.55);
+    corner("LG Bielefeld · 14.08.2013", "حكم نهائي");
+    rect(64, 354, 952, 300, 26, "var(--white)", "var(--ink)", 4);
+    put(P.tag({ text: "Zitat Gericht", kind: "ink" }), 230, 354, 0.9);
+    txt("كلام المحكمة", 392, 366, 26, "ar", "end");
+    txt("„Da hätte der Angeklagte", 540, 444, 52, "de");
+    const t1 = txt("zumindest ", 0, 524, 52, "de", "start"), t2 = txt("nachfragen", 0, 524, 52, "de", "start");
+    const w1 = t1.getComputedTextLength(), w2 = t2.getComputedTextLength(), x0 = 540 - (w1 + w2) / 2;
+    t1.setAttribute("x", x0 - 8); t2.setAttribute("x", x0 + w1 + 8);
+    s.insertBefore(rect(x0 + w1, 485, w2 + 16, 52, 10, "var(--accent2)", "none", 0), t1);
+    txt("müssen.“", 540, 599, 52, "de");
+    txt("كان خاص المتهم على الأقل يسول", 540, 638, 28, "ar");
+    caption("Da hätte der Angeklagte zumindest nachfragen müssen.");
+  },
+  5() {
+    corner("Die Regel", "القاعدة");
+    ["Was", "ist", "da", "drin?"].forEach((w, i) => {
+      rect(70 + i * 240, 330, 220, 110, 18, i === 3 ? "var(--main)" : "var(--white)", "var(--ink)", 4);
+      txt(w, 180 + i * 240, 405, 56, "de" + (i === 3 ? " on-main" : ""));
+    });
+    txt("شنو كاين فيها؟", 540, 495, 38, "ar strong");
+    put(P.syringe({ liquid: "milky", fill: 0.85, label: "ORAL", tip: "stopper" }), 270, 600, 1.0);
+    de("Cotrim-K Saft · oral", 540, 690, 28, "شراب ديال الفم");
+    rect(70, 760, 940, 520, 28, "var(--white)", "var(--ink)", 4);
+    txt("القاعدة", 540, 850, 62, "ar strong");
+    [["1", "Selbst aufgezogen?", "عمرتيها بيدك؟"], ["2", "Beschriftet?", "مكتوب عليها؟"], ["3", "i.v. oder oral?", "للعرق ولا للفم؟"]].forEach(([n, d, a], i) => {
+      const y = 935 + i * 88;
+      const c = document.createElementNS(NS, "circle");
+      Object.entries({ cx: 145, cy: y - 14, r: 30, fill: "var(--main)", stroke: "var(--ink)", "stroke-width": 4 }).forEach(([k, v]) => c.setAttribute(k, v)); s.appendChild(c);
+      txt(n, 145, y, 36, "de on-main");
+      txt(d, 200, y, 44, "de", "start");
+      txt(a, 975, y, 32, "ar", "start");
+    });
+    rect(110, 1160, 860, 100, 16, "var(--accent2)", "none", 0);
+    txt("Nein? → nicht spritzen. Nachfragen.", 540, 1202, 38, "de");
+    txt("لا؟ ← ما تنجيكتيهاش. سول.", 540, 1244, 26, "ar");
+    caption("ما عمرتيهاش بيدك؟ ما مكتوب عليها والو؟\nما تدخلهاش. سول.", 1340);
+  },
+};
+document.fonts.ready.then(() => { frames[q.get("f") || "1"](); window.READY = true; });
+</script>
+</body></html>
