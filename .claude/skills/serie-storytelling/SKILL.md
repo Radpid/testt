@@ -146,5 +146,6 @@ Instagram affiche la vidéo 1080×1920 à 0,942× de sa hauteur et **rogne ~50 p
 
 ## Clé ElevenLabs
 
-Fournie par l'auteur pour la session : la garder hors du dépôt (scratchpad, chmod 600), ne jamais la committer,
-la supprimer à la fin et lui rappeler de la régénérer.
+Fournie par l'auteur (dans le chat, ou variable `ELEVENLABS_API_KEY` de l'environnement) : la garder hors du dépôt
+(scratchpad, chmod 600), ne jamais la committer ni l'afficher. **Ne la supprimer que lorsque l'auteur le dit**
+(consigne explicite du 21/11/2026), puis lui rappeler de la régénérer.
