@@ -87,6 +87,9 @@ videos/epNN-<mot>/
 - **Zooms** : l'auteur VEUT des zooms forts (×1,3 à ×1,7) sur des sujets complets et soignés (étiquette de la
   seringue, carte, mère + Bébé, injection avec le Bébé entier, Bébé bleu + moniteur). Jamais un personnage, une
   bulle, une carte ou un titre coupé. Titres de scène (rubans) et textes importants pendant un zoom → `c.hud`.
+- **Étiquettes (chips) avec arabe dessous** : jamais sur un visage ni une tête — les placer AU-DESSUS des têtes
+  (tête en y ≈ sol − 416 × échelle) avec leur ligne arabe comprise ; rien qui traverse la barre du mot caché
+  (retour de l'auteur sur AKTE 02, scène du bloc).
 - **Lieu = carte** : dès qu'une ville est nommée, carte de l'Allemagne au trait (`DE` + `geo(lon, lat)` dans
   story.js d'AKTE 01), Berlin en repère, épingle jaune qui tombe + onde, plan serré sur la carte puis recul.
 - **Arabe** ≥ 40 px, gras, encre (pas gris), révélé de droite à gauche (`.wipe(at, 0.7, "rtl")`) ; arabe sous

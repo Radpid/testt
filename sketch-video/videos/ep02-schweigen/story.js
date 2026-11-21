@@ -232,7 +232,7 @@
       el("circle", { cx: 0, cy: -48, r: 9, fill: "#FFFFFF", stroke: INK, "stroke-width": 3 }, pin);
       c.node(pin).slide("b5+0.15", 0, -160, 0.4, "back");
       k.chip("Köln", "المحكمة", bx - 150, by - 40, 34, { yellow: true }).pop("b5+0.45");
-      k.chip("2016 · echter Fall", "قصة حقيقية", 600, 520, 32).pop("b5+0.3");
+      k.chip("2016 · echter Fall", "قصة حقيقية", 600, 470, 32).pop("b5+0.3");
     } });
 
     /* 3b · la patiente, l'examen --------------------------------------------------------- */
@@ -253,13 +253,13 @@
       const k = kit(c); k.bg();
       c.camera([{ at: "b6", s: 1.25, cx: 420, cy: 900 }, { at: "b7", s: 1.0, cx: 560, cy: 900, d: 0.8 }, { at: "b7@جراحي", s: 1, cx: 540, cy: 900, d: 0.6 }]);
       // lampe de bloc
-      c.put(`<g><path d="M540 360 L540 440" stroke="${INK}" stroke-width="5"/><ellipse cx="540" cy="470" rx="130" ry="40" fill="#F3F3EE" stroke="${INK}" stroke-width="4"/><ellipse cx="540" cy="470" rx="80" ry="22" fill="#FFF6D6" stroke="${INK}" stroke-width="2.5"/></g>`).fade("b6", 0.3);
+      c.put(`<g><path d="M540 462 L540 477" stroke="${INK}" stroke-width="5"/><ellipse cx="540" cy="507" rx="120" ry="36" fill="#F3F3EE" stroke="${INK}" stroke-width="4"/><ellipse cx="540" cy="507" rx="74" ry="20" fill="#FFF6D6" stroke="${INK}" stroke-width="2.5"/></g>`).fade("b6", 0.3);
       k.ground(540, 1300, 940);
       k.person(220, 1300, 1.25, () => Object.assign({ outfit: "coat", hair: "bun", badge: "OÄ", seed: 31, facing: 1, expr: "focused" }, SC.Pose.stand));
       k.person(450, 1300, 1.2, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, facing: 1, expr: "neutral" }, SC.Pose.stand));
-      k.chip("Oberärztin", "الطبيبة المسؤولة", 230, 640, 30).pop("b6@Oberärztin").hide("b7@آخر", 0.3);
-      k.chip("seit 1 Monat", "عاد شهر", 230, 760, 30, { yellow: true }).pop("b6@شهر").wobble("b6@شهر+0.4", 0.5, 6).hide("b7@آخر", 0.3);
-      k.chip("Assistenzärztin", "ف طور الاختصاص", 460, 900, 28).pop("b6@Assistenzärztin").hide("b7@آخر", 0.3);
+      k.chip("Oberärztin", "الطبيبة المسؤولة", 200, 545, 30).pop("b6@Oberärztin").hide("b7@آخر", 0.3);
+      k.chip("seit 1 Monat", "عاد شهر", 200, 645, 30, { yellow: true }).pop("b6@شهر").wobble("b6@شهر+0.4", 0.5, 6).hide("b7@آخر", 0.3);
+      k.chip("Assistenzärztin", "ف طور الاختصاص", 500, 690, 28).pop("b6@Assistenzärztin").hide("b7@آخر", 0.3);
       const dk = k.walker({ at: "b7", dur: 1.0, x0: 1200, x1: 800, y: 1300, s: 1.25, outfit: "oberarzt", seed: 13, expr: "calm", after: () => Object.assign({}, SC.Pose.holdObject, { facing: -1, expr: "calm" }) });
       const dv = el("g"); device(dv);
       c.node(dv).on((t, s) => { s.x += lerp(1200, 800, clamp((t - T("b7")) / 1.0, 0, 1)) - 230; s.y += 1100; s.s *= 0.6; }).fade("b7", 0.2);
