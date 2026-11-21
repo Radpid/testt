@@ -99,6 +99,23 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   5. Re-transcrire le résultat (Scribe) → `beats.js` (une phrase = un beat) + `timings.js` (mots horodatés).
   6. Bruitages discrets ElevenLabs `sound-generation` (tampon, porte de cellule, alarme, flatline, marteau)
      mixés 10–20 dB sous la voix, calés sur les repères. Max 4 requêtes ElevenLabs en parallèle.
+- **Reprises de l'auteur** : il renvoie de courtes prises pour corriger une phrase ou ajouter un mot oublié.
+  Transcrire chaque prise (Scribe), décider où elle remplace / complète le texte, et monter par phrase
+  avec plusieurs sources (`videos/ep01-spritze/montage_voix.py` : `BEATS = [("b8", [("t7", [...]), ("raw", [90])])]`).
+  Isoler chaque source AVANT le montage (Audio Isolation sur l'enregistrement complet et sur chaque prise).
+- **Rythme** (demande de l'auteur : « beaucoup plus rapide ») : pauses ≤ 0,3 s dans une phrase, 0,14–0,32 s
+  entre phrases, 0,24–0,42 s entre scènes, puis `atempo=1.12` (hauteur conservée). Transitions 0,35 s (`whip`).
+- **Sous-titres karaoké** (`SV_CONFIG.captions = "karaoke"`) : pages de ≤ 6 mots, gros texte (62 px, Plex Arabic Bold),
+  mots à venir en filigrane, chaque mot rebondit quand il est dit, mot en cours surligné en jaune ; ne jamais couper
+  « La | seringue ». `captionBottom: 320` pour utiliser le bas de l'écran.
+- **Cadrage** : `Stage.create(sv, { view: { s: 1.1, oy: 20, breathe: 0.05 } })` (tout plus grand, poussée lente
+  continue) + `c.kick(repère, 0.05–0.08)` sur chaque mot fort. Arabe des scènes ≥ 40 px, gras, encre (pas gris),
+  révélé de droite à gauche (`.wipe(at, 0.7, "rtl")`).
+- **Son « voice-off »** (`videos/ep01-spritze/son/`) : voix isolée + EQ/compression ; musique ElevenLabs Music
+  composée par sections calées sur l'histoire (`musique_plan.json` : accroche, mystère, hôpital, erreur, urgence,
+  silence, tribunal, leçon), ~ -25 dBFS et -7 dB de ducking quand la voix parle ; ~70 bruitages ElevenLabs décrits
+  comme une petite histoire (`bruitages_prompts.tsv`) et placés sur les mots (`plan_bruitages.py`, `mixage.py`).
+  Mixage final −14 LUFS, crête −1 dB.
 - **Vérité** : si l'enregistrement contient une approximation (date, ce que les parents voulaient…), la corriger
   à l'écran et le signaler à l'auteur ; ne jamais montrer une peine qui n'a pas été prononcée.
 - **Clé ElevenLabs** : fournie par l'auteur pour la session uniquement ; la garder hors du dépôt (scratchpad, chmod 600),

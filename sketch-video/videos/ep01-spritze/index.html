@@ -14,8 +14,8 @@
   .ttl { font-family: Lalezar; fill: var(--ink); direction: rtl; }
   .ar.on-main { fill: #fff; }
   .de.light { font-weight: 400; }
-  .ar { font-family: "Plex Arabic"; font-weight: 400; fill: var(--gray); direction: rtl; }
-  .ar.strong { font-weight: 600; fill: var(--ink); }
+  .ar { font-family: "Plex Arabic"; font-weight: 600; fill: #4A4843; direction: rtl; }
+  .ar.strong { font-weight: 700; fill: var(--ink); }
   .on-main { fill: var(--white); }
   .accent { fill: var(--accent); }
   /* vêtements colorés des Open Peeps -> palette */
@@ -23,15 +23,21 @@
   .nurse .peep { --peep-8FA7DF: var(--main); --peep-9FD8E5: var(--main); }
   .sil { --skin: var(--gray2); --ink: #7B776F; }
   .faded { filter: grayscale(1) contrast(.75) brightness(1.12); opacity: .45; }
-  /* sous-titres au style de la référence (étiquette blanche + bout de scotch), en plus grand et plus lisible */
-  #captions { padding: 0 30px; }
-  .cap { background: #FFFFFF; border: 3px solid var(--ink); border-radius: 12px; box-shadow: 5px 7px 0 rgba(28,26,28,.18);
-         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 600; font-size: 50px; line-height: 1.45;
-         color: var(--ink); padding: 14px 30px 16px; max-width: 960px; }
-  .cap::before { display: block; left: -16px; top: -18px; width: 86px; height: 32px; background: rgba(190,190,182,.9); }
-  .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; background: linear-gradient(transparent 52%, rgba(248,206,78,.9) 52%, rgba(248,206,78,.9) 92%, transparent 92%); padding: 0 4px; }
-  .cap rt { font-size: 23px; font-weight: 600; color: var(--gray); }
-  .cap .cap-tr { font-size: 32px; font-weight: 600; color: var(--gray); }
+  /* sous-titres « karaoké » : étiquette blanche + scotch (référence), gros texte, chaque mot surgit au rythme de la voix */
+  #captions { padding: 0 24px; }
+  .cap { background: #FFFFFF; border: 3.5px solid var(--ink); border-radius: 14px; box-shadow: 6px 8px 0 rgba(28,26,28,.2);
+         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 62px; line-height: 1.42;
+         color: var(--ink); padding: 10px 30px 14px; max-width: 1000px; transform-origin: 50% 100%; }
+  .cap::before { display: block; left: -18px; top: -20px; width: 96px; height: 34px; background: rgba(190,190,182,.92); }
+  .cap .kline { display: block; }
+  .cap .w { display: inline-block; padding: 0 4px; border-radius: 10px; transform-origin: 50% 85%; }
+  .cap .w.on { background: linear-gradient(transparent 14%, rgba(248,206,78,.95) 14%, rgba(248,206,78,.95) 94%, transparent 94%); }
+  .cap .lat { font-family: Kalam; font-weight: 700; background: linear-gradient(transparent 56%, rgba(248,206,78,.55) 56%, rgba(248,206,78,.55) 92%, transparent 92%); padding: 0 2px; }
+  .cap .w.on .lat { background: none; }
+  .cap rt { font-size: 27px; font-weight: 700; color: #4A4843; font-family: "Plex Arabic", sans-serif; }
+  .cap .cap-tr { font-size: 36px; font-weight: 700; color: #4A4843; margin-top: 2px; }
+  /* sous-titres classiques (secours) */
+  .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -39,7 +45,7 @@
 
 <script>
   // Reel Instagram, animation par scènes (serie/lib/stage.js)
-  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 3.0 };
+  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 3.0, captions: "karaoke", captionBottom: 320 };
 </script>
 <script src="beats.js"></script>
 <script src="timings.js" onerror="void 0"></script>

@@ -71,6 +71,8 @@ window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   "nicht spritzen": "ما تنجيكتيهاش",
   "spritzen": "ينجيكتي",
   "kein Blickkontakt": "ما تشافوش",
+  "Intensivstation": "العناية المركزة",
+  "Tötung": "القتل",
   // phrases entières (sous-titres en allemand)
   "Hier ist das orale Antibiotikum.": "ها هو المضاد الحيوي ديال الفم.",
   "Da hätte der Angeklagte zumindest nachfragen müssen.": "كان خاص المتهم على الأقل يسول.",

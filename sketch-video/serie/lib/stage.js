@@ -203,7 +203,7 @@
   class Scene {
     constructor(stage, def) {
       this.stage = stage; this.def = def;
-      this.nodes = []; this.every = []; this.shakes = []; this.cams = [];
+      this.nodes = []; this.every = []; this.shakes = []; this.cams = []; this.kicks = [];
       this.layer = el("g", { class: "scene" }, stage.root);
       this.cam = el("g", {}, this.layer);
       this.hud = el("g", {}, this.layer);   // textes fixes à l'écran (hors caméra)
@@ -215,6 +215,16 @@
     // caméra : keys [{at, s, cx, cy, d, ease}]
     camera(keys) { this.cams = keys.map((k) => Object.assign({ d: 0.9, ease: "inOut" }, k, { a: this.T(k.at) })); return this; }
     shake(at, amp = 12, dur = 0.4) { this.shakes.push({ a: typeof at === "number" ? at : this.T(at), amp, d: dur }); return this; }
+    // « coup de zoom » sur un mot fort : zoom rapide de +amt puis retour en douceur
+    kick(at, amt = 0.07, dur = 0.55) { this.kicks.push({ a: typeof at === "number" ? at : this.T(at), amt, d: dur }); return this; }
+    kickAt(t) {
+      let k = 1;
+      for (const q of this.kicks) {
+        const p = prog(t, q.a, q.d);
+        if (p > 0 && p < 1) k *= 1 + q.amt * (p < 0.18 ? E.out(p / 0.18) : 1 - E.inOut((p - 0.18) / 0.82));
+      }
+      return k;
+    }
     camAt(t) {
       const ks = this.cams;
       if (!ks.length) return { s: 1, cx: W / 2, cy: H / 2 };
@@ -262,7 +272,7 @@
       t.textContent = str;
       const tr = ar === undefined ? Stage.gloss(str) : ar;
       if (tr) {
-        const a = el("text", { x, y: y + size * 0.92, "font-size": size >= 30 ? Math.max(22, Math.round(size * 0.58)) : Math.max(11, Math.round(size * 0.68)), "text-anchor": anchor === "start" ? "end" : anchor === "end" ? "start" : "middle", class: "ar" }, g);
+        const a = el("text", { x, y: y + size * 0.92, "font-size": size >= 30 ? Math.max(26, Math.round(size * 0.7)) : Math.max(13, Math.round(size * 0.75)), "text-anchor": anchor === "start" ? "end" : anchor === "end" ? "start" : "middle", class: "ar strong" }, g);
         a.textContent = tr;
       }
       const n = this.node(g, parent); n.textEl = t; return n;
@@ -321,6 +331,8 @@
       this.flashR = el("rect", { x: 0, y: 0, width: W, height: H, fill: "#fff", opacity: 0 }, this.fx);
       this.vigR = el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#vig)", opacity: 0 }, this.fx);
       this.flashes = []; this.vigs = [];
+      // cadrage global : agrandit toutes les scènes (s), les descend (oy) et les pousse lentement (breathe)
+      this.view = Object.assign({ s: 1, oy: 0, breathe: 0 }, (opts && opts.view) || {});
       sv.hooks.push((t) => this.update(t));
     }
     // cue du moteur, avec un ou plusieurs décalages : "b9@Refobacin+0.3+0.15"
@@ -356,7 +368,7 @@
         return { sc, i, x, y, w: cw, h: ch, k };
       });
       const ref = {};
-      const sum = this.scene({ from: o.at, in: "fade", inDur: 0.45, build(c) {
+      const sum = this.scene({ from: o.at, in: o.in || "fade", inDur: o.in === "cut" ? 0 : 0.45, view: false, build(c) {
         const host = [];
         if (o.below) o.below(c, cells);
         cells.forEach((cell) => {
@@ -410,13 +422,21 @@
           case "zoom": op = p; tr = `translate(${W / 2} ${H / 2}) scale(${1.18 - 0.18 * p}) translate(${-W / 2} ${-H / 2})`; break;
           case "iris": clip = p < 1 ? `circle(${(p * 120).toFixed(2)}% at 50% 45%)` : ""; break;
           case "wipe": clip = p < 1 ? `inset(0 ${((1 - p) * 100).toFixed(2)}% 0 0)` : ""; break;
+          case "whip": tr = `translate(${((1 - p) * W * 0.85).toFixed(1)} 0) rotate(${((1 - p) * 3).toFixed(2)} ${W / 2} ${H / 2})`; op = Math.min(1, p * 2.5); break;
+          case "whipUp": tr = `translate(0 ${((1 - p) * H * 0.5).toFixed(1)})`; op = Math.min(1, p * 2.5); break;
           default: break; // cut
         }
         sc.layer.setAttribute("transform", tr);
         sc.layer.style.opacity = op;
         sc.layer.style.clipPath = clip;
         const c = sc.camAt(t);
-        sc.cam.setAttribute("transform", `translate(${(W / 2 - c.cx * c.s).toFixed(2)} ${(H / 2 - c.cy * c.s).toFixed(2)}) scale(${c.s.toFixed(4)})`);
+        let cs = c.s, oy = 0;
+        if (sc.def.view !== false) {
+          const V = this.view, life = isFinite(sc.end) ? Math.max(1, sc.end - sc.start) : 4;
+          cs *= V.s * (1 + V.breathe * E.inOut(clamp((t - sc.start) / life, 0, 1))) * sc.kickAt(t);
+          oy = V.oy;
+        }
+        sc.cam.setAttribute("transform", `translate(${(W / 2 - c.cx * cs).toFixed(2)} ${(H / 2 + oy - c.cy * cs).toFixed(2)}) scale(${cs.toFixed(4)})`);
         for (const f of sc.every) f(t, t - sc.start);
         for (const n of sc.nodes) n.apply(t);
       }

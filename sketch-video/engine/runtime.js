@@ -515,6 +515,74 @@
   }
   SV.bidiHTML = bidiHTML;
 
+  /* Sous-titres « karaoké » (SV_CONFIG.captions = "karaoke") : la phrase est coupée en pages courtes,
+     chaque mot surgit quand il est prononcé, le mot en cours est surligné en jaune. */
+  const LATSEG = new RegExp(`[${LAT}][${LAT}\\-'’]*[?!]*`, "g");
+  function capPages(b) {
+    if (b._pages) return b._pages;
+    const toks = (b.cap || b.text).split(/\s+/).filter(Boolean), W = b.words || [];
+    if (W.length !== toks.length) return (b._pages = null);
+    const pages = []; let cur = [], len = 0;
+    toks.forEach((tk, i) => {
+      cur.push(i); len += tk.length + 1;
+      const brk = /[،,.:؛?؟!]$/.test(tk), nx = toks[i + 1] || "";
+      const isLat = (x) => x && !/[؀-ۿ]/.test(x);
+      const glue = (isLat(tk) && isLat(nx) && !brk) || /^(La|Le|Les|der|die|das|Da|في|من|ديال|الـ)$/.test(tk);
+      if (!glue && ((len >= 22 && brk) || len >= 30 || cur.length >= 6)) { pages.push(cur); cur = []; len = 0; }
+    });
+    if (cur.length) { if (cur.length === 1 && pages.length && toks[cur[0]].length < 9) pages[pages.length - 1].push(...cur); else pages.push(cur); }
+    return (b._pages = pages.map((ix) => ({ ix, toks, start: W[ix[0]][0], end: W[ix[ix.length - 1]][1] })));
+  }
+  function tokHTML(tk, i, j) {
+    const g2 = j != null ? null : null;
+    if (!/[؀-ۿ]/.test(tk) || !new RegExp(`[${LAT}]`).test(tk)) {
+      if (!new RegExp(`[${LAT}]`).test(tk)) return `<span class="w" data-i="${i}">${esc(tk)}</span>`;
+    }
+    let out = "", last = 0;
+    for (const m of tk.matchAll(LATSEG)) {
+      out += esc(tk.slice(last, m.index));
+      const core = m[0].replace(/[?!]+$/, ""), g = gloss(core), tail = m[0].slice(core.length);
+      out += `<span class="lat" dir="ltr">${ruby(core, g)}${esc(tail)}</span>`;
+      last = m.index + m[0].length;
+    }
+    out += esc(tk.slice(last));
+    return `<span class="w" data-i="${i}">${out}</span>`;
+  }
+  function pageHTML(pg, b) {
+    const toks = pg.toks, arabic = /[؀-ۿ]/.test(toks.join(" "));
+    const body = pg.ix.map((i) => tokHTML(toks[i], i)).join(" ");
+    let tr = "";
+    if (!arabic) { const g = gloss((b.cap || b.text)); if (g) tr = `<span class="cap-tr" dir="rtl">${esc(g)}</span>`; }
+    return `<div class="kline" dir="${arabic ? "rtl" : "ltr"}">${body}</div>${tr}`;
+  }
+  function karaoke(t, cur) {
+    const pages = capPages(cur);
+    if (!pages) return false;
+    let k = 0;
+    for (let i = 0; i < pages.length; i++) if (t >= pages[i].start - 0.08) k = i;
+    const pg = pages[k], key = cur.id + ":" + k;
+    if (S.capKey !== key) {
+      S.capKey = key; S.capText = null;
+      S.cap.innerHTML = pageHTML(pg, cur);
+      S.capSpans = [...S.cap.querySelectorAll(".w")].map((el) => ({ el, i: +el.dataset.i }));
+      S.cap.style.rotate = ((k + cur.id.length) % 2 ? 1 : -1) * 0.8 + "deg";
+    }
+    const W = cur.words;
+    const pin = prog(t, pg.start - 0.08, 0.16);
+    S.cap.style.opacity = clamp(pin * 2, 0, 1);
+    S.cap.style.scale = String(0.86 + 0.14 * E.back(pin));
+    for (const { el, i } of S.capSpans) {
+      const [ws, we] = W[i], p = prog(t, ws - 0.04, 0.22);
+      // mot pas encore dit : en filigrane ; dit : surgit (petit rebond) puis reste à l'encre
+      el.style.opacity = (0.22 + 0.78 * clamp(p * 2.5, 0, 1)).toFixed(3);
+      el.style.translate = `0 ${(p > 0 && p < 1 ? -Math.sin(p * Math.PI) * 12 : 0).toFixed(1)}px`;
+      el.style.scale = String(p > 0 && p < 1 ? 1 + 0.16 * Math.sin(p * Math.PI) : 1);
+      const nx = W[i + 1] ? W[i + 1][0] - 0.03 : we + 0.25;
+      el.classList.toggle("on", t >= ws - 0.03 && t < Math.min(we + 0.12, nx));
+    }
+    return true;
+  }
+
   /* ======================= seek ======================= */
   function setDash(root, p) {
     root.querySelectorAll("path").forEach((path) => {
@@ -580,7 +648,10 @@
       const end = next ? Math.min(next.start, b.end + 0.6) : b.end + 0.25;
       if (t >= b.start && t < end) { cur = b; break; }
     }
-    if (cur) {
+    if (cur && config().captions === "karaoke" && karaoke(t, cur)) {
+      /* rendu karaoké fait */
+    } else if (cur) {
+      S.capKey = null;
       const txt = cur.cap || cur.text;
       if (S.capText !== txt) { S.capText = txt; S.cap.innerHTML = bidiHTML(txt); }
       const p = prog(t, cur.start, 0.15);
