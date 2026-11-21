@@ -251,7 +251,7 @@
     /* 4 · le bloc : l'Oberärztin (1 mois), l'Assistenzärztin, Dr. K. et son appareil ----- */
     st.scene({ from: "b6", in: "wipe", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b6", s: 1.25, cx: 420, cy: 900 }, { at: "b7", s: 1.08, cx: 600, cy: 900, d: 0.8 }, { at: "b7@جراحي", s: 1, cx: 540, cy: 900, d: 0.6 }]);
+      c.camera([{ at: "b6", s: 1.25, cx: 420, cy: 900 }, { at: "b7", s: 1.0, cx: 560, cy: 900, d: 0.8 }, { at: "b7@جراحي", s: 1, cx: 540, cy: 900, d: 0.6 }]);
       // lampe de bloc
       c.put(`<g><path d="M540 360 L540 440" stroke="${INK}" stroke-width="5"/><ellipse cx="540" cy="470" rx="130" ry="40" fill="#F3F3EE" stroke="${INK}" stroke-width="4"/><ellipse cx="540" cy="470" rx="80" ry="22" fill="#FFF6D6" stroke="${INK}" stroke-width="2.5"/></g>`).fade("b6", 0.3);
       k.ground(540, 1300, 940);
@@ -329,7 +329,7 @@
         c.text(`${L} ·`, x - 62, 1094, 56, "de").pop(`b11@تهضر+${(i * 0.15).toFixed(2)}`);
         k.ar(txt, x + 42, 1094, 40, "ttl").pop(`b11@تهضر+${(0.05 + i * 0.15).toFixed(2)}`);
       });
-      k.ar("كتب A ولا B فالكومنتير 👇", 540, 1200, 34, "ar strong").wipe(a + 0.3, 0.6, "rtl");
+      k.chip("كتب A ولا B فالكومنتير 👇", null, 540, 1232, 28, { yellow: true }).pop(a + 0.3);
       // minuterie circulaire
       const tr = c.put(`<circle cx="0" cy="0" r="46" fill="#fff" stroke="${INK}" stroke-width="4"/><path d="" fill="none" stroke="#F8CE4E" stroke-width="12" stroke-linecap="round"/>`, 540, 640, 1);
       const t0 = T("b11@end"), t1 = T("b12") - 0.1;
@@ -403,7 +403,7 @@
       c.write(c.text("„… sowohl einen Oberarzt als auch", 540, 570, 40, "de"), "b15@قالت", 0.7);
       c.write(c.text("einen Assistenzarzt …“", 540, 625, 40, "de"), "b15@قالت+0.7", 0.5);
       k.ar("حتى الـAssistenzärztin عندها واجب", 540, 690, 30, "ar strong").wipe("b15@Assistenzärztin", 0.6, "rtl");
-      k.prop("stamp", 300, 860, 0.6, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
+      k.prop("stamp", 310, 830, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
       c.kick("b15@شخصيا", 0.06);
     } });
 
