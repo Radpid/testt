@@ -25,17 +25,17 @@
   .faded { filter: grayscale(1) contrast(.75) brightness(1.12); opacity: .45; }
   /* sous-titres « karaoké » : étiquette blanche + scotch (référence), gros texte, chaque mot surgit au rythme de la voix */
   #captions { padding: 0 24px; }
-  .cap { background: #FFFFFF; border: 3.5px solid var(--ink); border-radius: 14px; box-shadow: 6px 8px 0 rgba(28,26,28,.2);
-         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 62px; line-height: 1.42;
-         color: var(--ink); padding: 10px 30px 14px; max-width: 1000px; transform-origin: 50% 100%; }
+  .cap { background: #FFFFFF; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 7px 9px 0 rgba(28,26,28,.2);
+         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 76px; line-height: 1.38;
+         color: var(--ink); padding: 8px 34px 14px; max-width: 920px; transform-origin: 50% 100%; text-align: center; }
   .cap::before { display: block; left: -18px; top: -20px; width: 96px; height: 34px; background: rgba(190,190,182,.92); }
   .cap .kline { display: block; }
   .cap .w { display: inline-block; padding: 0 4px; border-radius: 10px; transform-origin: 50% 85%; }
   .cap .w.on { background: linear-gradient(transparent 14%, rgba(248,206,78,.95) 14%, rgba(248,206,78,.95) 94%, transparent 94%); }
   .cap .lat { font-family: Kalam; font-weight: 700; background: linear-gradient(transparent 56%, rgba(248,206,78,.55) 56%, rgba(248,206,78,.55) 92%, transparent 92%); padding: 0 2px; }
   .cap .w.on .lat { background: none; }
-  .cap rt { font-size: 27px; font-weight: 700; color: #4A4843; font-family: "Plex Arabic", sans-serif; }
-  .cap .cap-tr { font-size: 36px; font-weight: 700; color: #4A4843; margin-top: 2px; }
+  .cap rt { font-size: 30px; font-weight: 700; color: #4A4843; font-family: "Plex Arabic", sans-serif; }
+  .cap .cap-tr { font-size: 40px; font-weight: 700; color: #4A4843; margin-top: 2px; }
   /* sous-titres classiques (secours) */
   .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
   /* logo @dr.aguilo (coin haut droit, sous l'en-tête Instagram) */
@@ -56,7 +56,7 @@
 
 <script>
   // Reel Instagram, animation par scènes (serie/lib/stage.js)
-  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 1.6, captions: "karaoke", captionBottom: 320 };
+  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 1.6, captions: "karaoke", captionBottom: 280, capSafeRight: 0, capChars: 24, capWords: 5 };
 </script>
 <script src="beats.js"></script>
 <script src="timings.js" onerror="void 0"></script>

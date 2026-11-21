@@ -338,7 +338,7 @@
       capWrap.appendChild(S.cap);
       const cfg = config();
       capWrap.style.bottom = cfg.captionBottom + "px";
-      capWrap.style.paddingRight = cfg.safeRight + "px";
+      capWrap.style.paddingRight = (cfg.capSafeRight != null ? cfg.capSafeRight : cfg.safeRight) + "px";
       if (/[?&]safe\b/.test(location.search)) showSafeZones(stage, cfg);
 
       S.stage = stage; S.poster = poster;
@@ -528,7 +528,8 @@
       const brk = /[،,.:؛?؟!]$/.test(tk), nx = toks[i + 1] || "";
       const isLat = (x) => x && !/[؀-ۿ]/.test(x);
       const glue = (isLat(tk) && isLat(nx) && !brk) || /^(La|Le|Les|der|die|das|Da|في|من|ديال|الـ)$/.test(tk);
-      if (!glue && ((len >= 22 && brk) || len >= 30 || cur.length >= 6)) { pages.push(cur); cur = []; len = 0; }
+      const C = config(), MAXC = C.capChars || 30, MAXW = C.capWords || 6;
+      if (!glue && ((len >= MAXC * 0.72 && brk) || len >= MAXC || cur.length >= MAXW)) { pages.push(cur); cur = []; len = 0; }
     });
     if (cur.length) { if (cur.length === 1 && pages.length && toks[cur[0]].length < 9) pages[pages.length - 1].push(...cur); else pages.push(cur); }
     return (b._pages = pages.map((ix) => ({ ix, toks, start: W[ix[0]][0], end: W[ix[ix.length - 1]][1] })));
