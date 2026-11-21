@@ -77,8 +77,6 @@ window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   "Wasser": "ماء",
   "Remonstrationspflicht": "واجب الاعتراض",
   "Hämolyse": "تكسر كريات الدم الحمراء",
-  "OLG Köln": "محكمة الاستئناف ف كولن",
-  "OLG": "محكمة الاستئناف",
   "Intensivstation": "العناية المركزة",
   "Tötung": "القتل",
   // phrases entières (sous-titres en allemand)

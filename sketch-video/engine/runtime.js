@@ -525,7 +525,10 @@
     if (W.length !== toks.length) return (b._pages = null);
     const pages = []; let cur = [], len = 0;
     toks.forEach((tk, i) => {
-      cur.push(i); len += tk.length + 1;
+      const add = tk.length + 1 + (new RegExp(`[${LAT}]`).test(tk) ? 5 : 0);   // mot latin (+ sa traduction dessous) : plus large
+      const C0 = config();
+      if (cur.length && len + add > (C0.capChars || 30) + 4 && !/^(La|Le|Les|der|die|das|Da)$/.test(toks[i - 1] || "")) { pages.push(cur); cur = []; len = 0; }   // coupe AVANT un mot trop long
+      cur.push(i); len += add;
       const brk = /[،,.:؛?؟!]$/.test(tk), nx = toks[i + 1] || "";
       const isLat = (x) => x && !/[؀-ۿ]/.test(x);
       const glue = (isLat(tk) && isLat(nx) && !brk) || /^(La|Le|Les|der|die|das|Da|في|من|ديال|الـ)$/.test(tk);
@@ -554,7 +557,11 @@
   }
   function pageHTML(pg, b) {
     const toks = pg.toks, arabic = /[؀-ۿ]/.test(toks.join(" "));
-    const body = pg.ix.map((i) => tokHTML(toks[i], i)).join(" ");
+    const isLatTok = (x) => !/[؀-ۿ]/.test(x) && new RegExp(`[${LAT}]`).test(x);
+    let body = "", grp = [];
+    const flush = () => { if (grp.length) { body += (body ? " " : "") + (arabic && grp.length > 1 ? `<span class="latgrp" dir="ltr">${grp.join(" ")}</span>` : grp.join(" ")); grp = []; } };
+    pg.ix.forEach((i) => { const h = tokHTML(toks[i], i); if (arabic && isLatTok(toks[i])) grp.push(h); else { flush(); body += (body ? " " : "") + h; } });
+    flush();
     let tr = "";
     if (!arabic && config().capTr !== false) { const g = gloss((b.cap || b.text)); if (g) tr = `<span class="cap-tr" dir="rtl">${esc(g)}</span>`; }
     return `<div class="kline" dir="${arabic ? "rtl" : "ltr"}">${body}</div>${tr}`;

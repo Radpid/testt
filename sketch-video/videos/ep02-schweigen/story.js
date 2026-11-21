@@ -190,13 +190,13 @@
       k.prop("dock", 420, 1312, 1.4, () => ({ w: 380, h: 180 }));
       k.person(420, 1300, 1.4, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, only: "arms" }, SC.Pose.standDock));
       k.chip("Assistenzärztin", "طبيبة ف طور الاختصاص", 420, 560, 34).pop("b1@الاختصاص", 0.45);
-      k.prop("stamp", 700, 700, 0.6, () => ({ text: "HAFTET PERSÖNLICH", size: 52, rot: -7 })).slam("b2@شخصيا", 0.3, 12);
+      k.prop("stamp", 720, 770, 0.6, () => ({ text: "HAFTET PERSÖNLICH", size: 52, rot: -7 })).slam("b2@شخصيا", 0.3, 12);
       st.flash("b2@شخصيا+0.25", 0.25, 0.4); c.kick("b2@شخصيا+0.25", 0.07);
       // « elle n'a pas décidé… elle s'est tue »
-      k.chip("ما قررتش", null, 740, 900, 30).pop("b3@قررت");
+      k.chip("ما قررتش", null, 740, 950, 30).pop("b3@قررت");
       const z = el("g"); zipper(z); const zn = c.node(z).pop("b3@سكتات", 0.4);
       zn.on((t, s) => { const m = mouthOf(doc, 420, 1300, 1.4); if (m) { s.x += m[0]; s.y += m[1]; } });
-      k.bubble({ x: 230, y: 620, w: 170, h: 110, tail: [70, 70], text: "…", size: 64 }).pop("b3@سكتات+0.15");
+      k.bubble({ x: 200, y: 760, w: 150, h: 100, tail: [90, 30], text: "…", size: 60 }).pop("b3@سكتات+0.15");
       c.kick("b3@سكتات", 0.06);
     } });
 
@@ -242,7 +242,7 @@
       k.ground(300, 1300, 380);
       k.person(320, 1300, 1.3, () => Object.assign({ outfit: "mother", seed: 41 }, SC.Pose.stand)).fade("b5@جات", 0.3);
       k.chip("Patientin · 40+", "مرا ف الأربعينات", 330, 520, 32).pop("b5@جات+0.1");
-      k.chip("Gebärmutter", "الرحم", 880, 700, 26).pop("b5@الفحص+0.3");
+      k.chip("Gebärmutter", "الرحم", 540, 1000, 26).pop("b5@الفحص+0.3");
       const a = T("b5@الفحص");
       c.sk((g, p) => uterus(g, p), (t) => ({ cam: Math.round(E.out(prog(t, a, 0.9)) * 20) / 20, fill: Math.round(E.inOut(prog(t, a + 0.6, 0.9)) * 10) / 10 }), 720, 820, 0.85).fade("b5@الفحص", 0.3);
       k.chip("Hysteroskopie", "كاميرا صغيرة للرحم", 720, 520, 34, { yellow: true }).pop("b5@Hysteroskopie");
@@ -283,7 +283,7 @@
       const a = T("b7@end") + 0.3, d = Math.max(0.9, T("b8") - a);
       ["3", "2", "1"].forEach((n, i) => k.title(n, 540, 760, 160).on((t, s) => { const p = (t - a) / (d / 3) - i; s.o *= p >= 0 && p < 1 ? 1 : 0; s.s *= p >= 0 && p < 1 ? 1 + 0.25 * (1 - Math.min(1, p * 3)) : 1; }));
       // la réponse : c'est l'eau distillée qu'ils ont utilisée
-      k.marker(780, 1080, 150, 70).wipe("b8@destilliertes", 0.35);
+      c.put(`<ellipse cx="780" cy="1080" rx="92" ry="190" fill="none" stroke="#F8CE4E" stroke-width="12"/><ellipse cx="780" cy="1080" rx="98" ry="196" fill="none" stroke="#1C1A1C" stroke-width="3"/>`).wipe("b8@destilliertes", 0.35, "down");
       k.title("✗", 780, 860, 120).pop("b8@المقطر").on((t, s) => { s.o *= 1; });
       k.chip("خطير", null, 780, 930, 30, { yellow: true }).pop("b8@المقطر+0.1");
       k.title("✓", 300, 860, 90).pop("b8@المقطر+0.35"); k.title("✓", 540, 860, 90).pop("b8@المقطر+0.45");
@@ -320,12 +320,12 @@
       const k = kit(c); k.bg();
       c.camera([{ at: "b11", s: 1.0, cx: 540, cy: 900 }]);
       k.ground(540, 1300, 500);
-      k.person(540, 1300, 1.2, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, expr: "unsure" }, SC.Pose.stand));
+      k.person(540, 1300, 1.05, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, expr: "unsure" }, SC.Pose.stand));
       k.prop("stamp", 790, 520, 0.85, () => ({ text: "STOP", size: 84, rot: 8 })).slam("b11", 0.28, 14);
       st.flash("b11", 0.3, 0.8);
       const a = T("b11@تهضر");
-      [["A", "نسكت", 310, 0], ["B", "نسول", 750, 1]].forEach(([L, txt, x, i]) => {
-        k.card(x - 125, 1010, 250, 130, { seed: 820 + i, yellow: i === 1 }).pop(`b11@تهضر+${(i * 0.15).toFixed(2)}`);
+      [["A", "نسكت", 295, 0], ["B", "نسول", 785, 1]].forEach(([L, txt, x, i]) => {
+        k.card(x - 115, 1010, 230, 130, { seed: 820 + i, yellow: i === 1 }).pop(`b11@تهضر+${(i * 0.15).toFixed(2)}`);
         c.text(`${L} ·`, x - 62, 1094, 56, "de").pop(`b11@تهضر+${(i * 0.15).toFixed(2)}`);
         k.ar(txt, x + 42, 1094, 40, "ttl").pop(`b11@تهضر+${(0.05 + i * 0.15).toFixed(2)}`);
       });
@@ -366,7 +366,7 @@
       const a = T("b14"), cnt = c.text("00:00", 540, 1150, 120, "de");
       cnt.fade(a, 0.2).on((t) => { const m = Math.round(25 * 60 * E.out(prog(t, a + 0.1, 1.8))); const s = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; if (cnt.textEl.textContent !== s) cnt.textEl.textContent = s; });
       k.chip("Réanimation", "25 دقيقة", 540, 1250, 30).pop(a + 0.3);
-      k.ar("ما فاقتش", 540, 1040, 52, "ttl").wipe("b14@فاقتش", 0.6, "rtl");
+      k.ar("ما فاقتش", 540, 975, 52, "ttl").wipe("b14@فاقتش", 0.6, "rtl");
     } });
 
     /* 9b · le silence : elle est morte le lendemain (aucune voix) --------------------------- */
@@ -403,7 +403,7 @@
       c.write(c.text("„… sowohl einen Oberarzt als auch", 540, 570, 40, "de"), "b15@قالت", 0.7);
       c.write(c.text("einen Assistenzarzt …“", 540, 625, 40, "de"), "b15@قالت+0.7", 0.5);
       k.ar("حتى الـAssistenzärztin عندها واجب", 540, 690, 30, "ar strong").wipe("b15@Assistenzärztin", 0.6, "rtl");
-      k.prop("stamp", 310, 830, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
+      k.prop("stamp", 250, 930, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 50, rot: -8 })).slam("b15@مسؤولة", 0.3, 10);
       c.kick("b15@شخصيا", 0.06);
     } });
 
