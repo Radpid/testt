@@ -41,6 +41,7 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
 | 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) |
 | 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
+| — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
 
 ### 01 — La seringue blanche
 - Faits : 22.08.2011, Kinderklinik d'un hôpital de Bielefeld (NRW). Un étudiant en PJ (29 ans) injecte dans le
