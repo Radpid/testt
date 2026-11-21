@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>SketchCast — test de style</title>
+<style>
+  @font-face { font-family: "Kalam"; font-weight: 400; src: url("../../engine/fonts/Kalam-Regular.ttf") format("truetype"); }
+  @font-face { font-family: "Kalam"; font-weight: 700; src: url("../../engine/fonts/Kalam-Bold.ttf") format("truetype"); }
+  @font-face { font-family: "Lalezar"; font-weight: 400; src: url("../../engine/fonts/Lalezar-Regular.ttf") format("truetype"); }
+  html, body { margin: 0; background: #F7F7F1; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg id="stage" xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="sketch-cast.js"></script>
+<script>
+(async function () {
+  const S = SketchCast, { el, text, stroke, ctx } = S.util, P = S.Pose;
+  const svg = document.getElementById("stage");
+  const view = new URLSearchParams(location.search).get("view") || "sheet";
+  await Promise.all([document.fonts.load('700 40px "Kalam"'), document.fonts.load('400 40px "Kalam"'), document.fonts.load('400 40px "Lalezar"', "مُدان")]).catch(() => {});
+  S.paper(svg, 1080, 1920);
+
+  // place un dessin : fn(g) -> résultat ; (x,y) origine, s échelle, r rotation
+  function put(fn, x, y, s, r) {
+    const g = el("g", { transform: `translate(${x} ${y})${r ? ` rotate(${r})` : ""}${s && s !== 1 ? ` scale(${s})` : ""}` }, svg);
+    const out = fn(g) || {};
+    out.g = g;
+    out.at = (pt) => [x + pt[0] * (s || 1), y + pt[1] * (s || 1)];
+    return out;
+  }
+  const cap = (t, x, y, size, fill) => text(svg, t, x, y, size || 22, { weight: 400, fill: fill || "#55554F" });
+  const who = (o, pose, extra) => Object.assign({}, pose || P.stand, o, extra);
+
+  if (view === "sheet") {
+    text(svg, "AKTE 01 · le casting", 540, 70, 46);
+    // ── rangée 1 : le casting
+    const y1 = 500, k = 0.86;
+    const cast = [
+      ["le PJ", { outfit: "coat", expr: "neutral", seed: 1 }],
+      ["l'infirmière", { outfit: "scrubs", expr: "calm", seed: 2 }],
+      ["l'Oberarzt", { outfit: "oberarzt", expr: "focused", seed: 3 }],
+      ["le juge", { outfit: "robe", expr: "focused", seed: 4, brows: [-2, -2, 0] }],
+      ["la mère + bébé", Object.assign({}, P.carryBaby, { outfit: "mother", seed: 5, baby: true })],
+      ["le père", { outfit: "civil", seed: 6 }],
+      ["la mère", { outfit: "mother", seed: 7 }],
+    ];
+    cast.forEach((c, i) => {
+      const x = 92 + i * 149;
+      put((g) => S.ground(g, { w: 120, seed: 70 + i }), x, y1 + 2, 1);
+      put((g) => S.person(g, who(c[1], c[1].armL ? {} : P.stand)), x, y1, k);
+      cap(c[0], x, y1 + 44, 21);
+    });
+    // ── rangée 2 : expressions
+    const y2 = 900, k2 = 0.74;
+    ["neutral", "calm", "focused", "unsure", "shock", "sad", "talk", "blink"].forEach((e, i) => {
+      const x = 76 + i * 132;
+      put((g) => S.person(g, who({ outfit: "coat", expr: e, seed: 1 })), x, y2, k2);
+      cap(e, x, y2 + 40, 21);
+    });
+    // ── rangée 3 : marche + course
+    const y3 = 1310, k3 = 0.8;
+    [0, 0.25, 0.5, 0.75].forEach((ph, i) => {
+      const x = 110 + i * 170;
+      put((g) => S.ground(g, { w: 130, seed: 80 + i }), x, y3 + 2, 1);
+      put((g) => S.person(g, who({ outfit: "coat", seed: 1 }, P.walk(ph))), x, y3, k3);
+      cap("walk " + ph, x, y3 + 40, 20);
+    });
+    [0.25, 0.5].forEach((ph, i) => {
+      const x = 790 + i * 190;
+      put((g) => S.ground(g, { w: 130, seed: 90 + i }), x, y3 + 2, 1);
+      put((g) => S.person(g, who({ outfit: i ? "oberarzt" : "scrubs", seed: 2 + i, expr: "shock", emph: false }, P.run(ph))), x, y3, k3);
+      cap("run " + ph, x, y3 + 40, 20);
+    });
+    // ── rangée 4 : poses
+    const y4 = 1740, k4 = 0.78;
+    const poses = [
+      ["holdObject", { outfit: "coat", expr: "unsure", seed: 1 }, P.holdObject],
+      ["leanOverCrib", { outfit: "scrubs", expr: "focused", seed: 2 }, P.leanOverCrib],
+      ["handsOnHead", { outfit: "coat", expr: "shock", seed: 1 }, P.handsOnHead],
+      ["point", { outfit: "oberarzt", expr: "talk", seed: 3 }, P.point],
+      ["sitBench", { outfit: "coat", expr: "sad", seed: 1 }, P.sitBench],
+      ["standDock", { outfit: "coat", expr: "sad", seed: 1 }, P.standDock],
+      ["back", { outfit: "coat", seed: 1, view: "back" }, P.stand],
+    ];
+    poses.forEach((c, i) => {
+      const x = [80, 215, 400, 545, 720, 870, 1010][i];
+      const r = put((g) => S.person(g, who(c[1], c[2])), x, y4, k4);
+      if (c[0] === "holdObject") { const h = r.at(r.handR); put((g) => S.syringe(g, { label: "?" }), h[0] + 2, h[1] - 16, 0.3, -90); }
+      if (c[0] === "sitBench") { const h = r.at(r.hip); stroke(ctx(svg, 9), "bench", `M${h[0] - 50} ${h[1] + 22} L${h[0] + 50} ${h[1] + 22} M${h[0] - 40} ${h[1] + 22} L${h[0] - 40} ${y4} M${h[0] + 36} ${h[1] + 22} L${h[0] + 36} ${y4}`, { sw: 3 }); }
+      if (c[0] === "standDock") { put((g) => S.dock(g, { w: 130 }), x, y4, k4); put((g) => S.person(g, who(c[1], c[2], { only: "arms" })), x, y4, k4); }
+      cap(c[0], x, y4 + 40, 20);
+    });
+    // ── accessoires
+    put((g) => S.syringe(g, { label: "?", push: 0.2 }), 180, 1845, 0.55);
+    put((g) => S.baby(g, {}), 470, 1880, 0.7);
+    put((g) => S.baby(g, { state: "blue" }), 680, 1880, 0.7);
+    put((g) => S.stamp(g, { size: 44 }), 910, 1850, 1);
+  }
+
+  if (view === "scene1") {
+    // LE HOOK : le jeune médecin au banc des accusés
+    put((g) => S.ribbon(g, { w: 380, h: 128, text: "مُدان", size: 100, rtl: true }), 400, 250, 1);
+    const X = 380, Y = 1250, K = 1.8, LW = 0.82;
+    put((g) => S.ground(g, { w: 800, seed: 72 }), 480, Y + 4, 1);
+    const me = who({ outfit: "coat", expr: "sad", seed: 1, look: [-0.2, 0.8], headTilt: 6, stetho: false, lw: LW }, P.standDock);
+    put((g) => S.person(g, me), X, Y, K);
+    put((g) => S.dock(g, { w: 260, lw: LW }), X, Y, K);
+    put((g) => S.person(g, Object.assign({ only: "arms" }, me)), X, Y, K);
+    put((g) => S.stamp(g, { text: "SCHULDIG", sub: "§ 222 StGB", size: 68, rot: -10 }), 730, 560, 1);
+  }
+
+  if (view === "scene2") {
+    // LA DÉCOMPENSATION
+    const tg = el("g", { transform: "translate(290 240)" }, svg);
+    S.marker(tg, { w: 330, h: 104, rot: -2 });
+    text(tg, "08:46", 0, 36, 104);
+    const Y = 1250;
+    put((g) => S.ground(g, { w: 900, seed: 73 }), 500, Y + 4, 1);
+    const CX = 480, CK = 1.4;
+    const mo = put((g) => S.monitor(g, { ecg: "alarm", t: 0.3, hr: "!" }), 640, 560, 1.0);
+    const cb = put((g) => S.crib(g, { w: 320, part: "back" }), CX, Y, CK);
+    const bed = cb.at(cb.bed);
+    const bb = put((g) => S.baby(g, { state: "blue", flip: true }), bed[0] + 10, bed[1] + 2, 1.3);
+    // câble moniteur -> thorax
+    const ch = bb.at(bb.chest);
+    stroke(ctx(svg, 5), "cable", `M${ch[0]} ${ch[1]} C ${ch[0] + 10} ${ch[1] - 160}, 600 ${ch[1] - 120}, 610 668`, { sw: 2.2, r: 0.8, stroke: "#55554F" });
+    put((g) => S.crib(g, { w: 320, part: "front" }), CX, Y, CK);
+    put((g) => S.person(g, who({ outfit: "scrubs", expr: "shock", seed: 2 }, P.leanOverCrib)), 170, Y, 1.45);
+    put((g) => S.person(g, who({ outfit: "oberarzt", expr: "shock", seed: 3, facing: -1, emph: false }, P.run(0.3))), 850, Y, 1.12);
+  }
+
+  window.READY = true;
+})();
+</script>
+</body>
+</html>
