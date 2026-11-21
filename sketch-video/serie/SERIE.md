@@ -44,7 +44,7 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | 01 | La seringue blanche (PJler, Bielefeld 2011) | **publié (nov. 2026)** — 1 min 32 ; ~11,7 k vues, 224 j'aime, 116 partages au 1er relevé — `videos/ep01-spritze/` (modèle) |
 | 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
-| 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) — **recommandé comme AKTE 02** |
+| 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | **AKTE 02 en cours** — jugement lu en entier, script donné à l'auteur — `videos/ep02-schweigen/` |
 | 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
 | — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
 
@@ -92,9 +92,12 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 - Source : gesetze-bayern.de Y-300-Z-BECKRS-B-2023-N-28014 (et …-2023-N-50729).
 
 ### 04 — « Je n'ai rien dit »
-- Hystéroscopie, ~2,5 L d'eau distillée comme liquide de rinçage (sur instruction du Chefarzt selon les parties),
-  passage dans le sang, décès. L'Assistenzärztin (3e année) avait des doutes et s'est tue.
-- OLG Köln 27.01.2025, 5 U 69/24 (définitif) : grober Behandlungsfehler, responsabilité personnelle solidaire.
+- Hystéroscopie ambulatoire (2016), ~2,5 L d'eau distillée comme liquide de rinçage ; l'hystéroscope opératoire servait
+  à « essayer l'appareil » pour un autre Oberarzt (Dr. K.). Opérée par une Oberärztin (depuis 1 mois) et une
+  Assistenzärztin, qui n'a rien dit « wegen der Hierarchie » tout en sachant que l'Oberärztin ne l'avait jamais fait.
+  Arrêt cardiaque 11:30, décès 24 h plus tard. Dossier : `videos/ep02-schweigen/recherche.md`.
+- OLG Köln 27.01.2025, 5 U 69/24 (Revision nicht zugelassen ; rechtskraft NON confirmée) : responsabilité
+  personnelle solidaire de l'Assistenzärztin (faute non grave pour elle, grave pour l'Oberärztin).
   « Auch die Beklagte zu 2) hat gegen die ihr obliegende Remonstrationspflicht verstoßen. »
 - Règle : si un ordre contredit tes bases, tu dois le dire à voix haute (et le documenter).
 - Sources : nrwe.justiz.nrw.de/olgs/koeln/j2025/5_U_69_24_Urteil_20250127.html ; Hessisches Ärzteblatt 05/2026.
