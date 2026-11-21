@@ -262,7 +262,7 @@
       t.textContent = str;
       const tr = ar === undefined ? Stage.gloss(str) : ar;
       if (tr) {
-        const a = el("text", { x, y: y + size * 0.86, "font-size": Math.max(22, Math.round(size * 0.58)), "text-anchor": anchor === "start" ? "end" : anchor === "end" ? "start" : "middle", class: "ar" }, g);
+        const a = el("text", { x, y: y + size * 0.92, "font-size": size >= 30 ? Math.max(22, Math.round(size * 0.58)) : Math.max(11, Math.round(size * 0.68)), "text-anchor": anchor === "start" ? "end" : anchor === "end" ? "start" : "middle", class: "ar" }, g);
         a.textContent = tr;
       }
       const n = this.node(g, parent); n.textEl = t; return n;
