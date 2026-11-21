@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transfusionsfehler — une erreur, toute une chaîne</title>
+  <link rel="stylesheet" href="../../engine/sketch.css">
+  <style>
+    :root { --paper:#f7f6ee; --dot:#deddd3; --ink:#242521; --yellow:#f8ce4e; }
+    body { background:#e5e4dc; }
+    #stage { background:var(--paper); }
+    #poster::before { background-size:28px 28px; opacity:.65; }
+    .sans { font-family:"Plex Arabic",sans-serif; }
+    .latin { direction:ltr; unicode-bidi:isolate; }
+    .eyebrow { font-family:"Plex Arabic",sans-serif; font-size:17px; font-weight:600; letter-spacing:2.4px; }
+    .micro { font:400 17px/1.5 "Plex Arabic",sans-serif; color:#73756c; }
+    .chapter { font:600 18px "Plex Arabic",sans-serif; letter-spacing:2px; }
+    .chapter .number { display:inline-flex; align-items:center; justify-content:center; width:37px; height:37px; border:1.8px solid var(--ink); border-radius:50%; margin-right:12px; background:var(--yellow); letter-spacing:0; }
+    .ar-note { font:400 30px/1.45 "Lalezar",sans-serif; direction:rtl; }
+    .scribble { font-family:"Kalam",cursive; font-weight:700; }
+    .rule { border-top:1px solid #bdbeb3; height:1px; }
+    .type { font:600 58px/1 "Plex Arabic",sans-serif; letter-spacing:-2px; }
+    .type small { font-size:34px; font-weight:400; letter-spacing:0; }
+    .art { width:100%; height:100%; overflow:visible; }
+    .paper-tag { background:var(--paper); border-left:3px solid var(--yellow); padding:3px 0 2px 13px; }
+    .fault { width:300px; height:370px; text-align:center; }
+    .fault svg { width:280px; height:235px; }
+    .fault h3 { font:700 29px/1.2 "Kalam",cursive; margin:3px 0 9px; }
+    .fault p { font:400 22px/1.5 "Plex Arabic",sans-serif; margin:0; }
+    .fault .ar-note { font:400 26px/1.5 "Lalezar",sans-serif; margin-top:4px; }
+    .verdict { font:600 57px/1.1 "Plex Arabic",sans-serif; letter-spacing:-1.5px; }
+    .law { font:400 23px/1.4 "Plex Arabic",sans-serif; margin-top:12px; }
+    .caption-sub { font:400 24px/1.5 "Plex Arabic",sans-serif; }
+    .stamp { border:2px solid var(--ink); border-radius:4px; padding:5px 11px; transform:rotate(-4deg); }
+    #captions .cap { font-size:36px; max-width:870px; border:0; border-radius:3px; box-shadow:0 7px 22px #24252115; padding:16px 27px 12px; }
+    #captions .cap::before { background:#f8ce4eaa; }
+    #review-label { position:fixed; right:20px; top:16px; padding:7px 12px; font:12px system-ui; color:#44463f; border:1px solid #bbbdaf; border-radius:20px; background:#f7f6eecf; z-index:200; }
+    body.render #review-label { display:none; }
+    #poster-switch { position:fixed; left:18px; top:16px; padding:9px 16px; background:#242521; color:#fff; border:0; border-radius:20px; z-index:201; cursor:pointer; font:12px system-ui; }
+    body.render #poster-switch { display:none; }
+    body.poster-view #captions,body.poster-view #controls { visibility:hidden; }
+    .schematic { font:400 15px "Plex Arabic",sans-serif; fill:#777a6f; }
+  </style>
+</head>
+<body>
+<div id="review-label">MAQUETTE · sans voix · minutage provisoire</div>
+<button id="poster-switch" type="button">Voir le poster complet</button>
+<div id="stage"><main id="poster" aria-label="Affaire de transfusion de Cologne : faits, défaillances et jugement">
+
+  <div class="blk eyebrow latin" style="left:58px;top:45px" data-at="b1@كولن" data-anim="fade" data-cam="none">KÖLN / EIN REALER FALL</div>
+  <div class="blk eyebrow latin" style="right:58px;top:45px" data-at="b2@الحكاية" data-anim="fade" data-cam="none">MEDIZIN × VERANTWORTUNG</div>
+
+  <header class="blk" style="left:58px;top:102px;width:580px;height:195px" data-focus>
+    <div class="sans latin" style="font-size:68px;font-weight:600;line-height:1.12;letter-spacing:-2px" data-at="b1@غلطة" data-anim="wipe">Eine tödliche</div>
+    <div class="scribble latin" style="font-size:72px;line-height:1.3;letter-spacing:-2px" data-at="b1@بوفاة" data-anim="wipe"><span data-hl="b1@مريض" data-cam="none">Verwechslung.</span></div>
+  </header>
+  <div class="blk ar" style="left:675px;top:123px;width:340px;height:156px;text-align:right" data-at="b2@ماشي" data-anim="slide" data-cam="none">
+    <div style="font:400 47px/1.25 Lalezar">غلطة فـالدم…</div>
+    <div style="font:400 33px/1.5 Lalezar;color:#75776d">ولكن القصة أكبر.</div>
+    <svg width="170" height="35" style="margin-top:5px" viewBox="0 0 170 35" aria-hidden="true"><path d="M167 8Q91 32 7 17M7 17l20-9M7 17l20 13" fill="none" stroke="#242521" stroke-width="2.5" stroke-linecap="round"/></svg>
+  </div>
+  <div class="blk rule" style="left:58px;top:301px;width:964px" data-at="b3@المريض" data-anim="wipe" data-cam="none"></div>
+
+  <!-- ACTE 1 : objets dessinés, trajet réel de la poche vers le patient. -->
+  <div class="blk chapter latin" style="left:58px;top:328px" data-at="b3@المريض" data-anim="fade" data-cam="none"><span class="number">01</span>DIE VERWECHSLUNG</div>
+  <div class="blk ar-note" style="right:59px;top:331px" data-at="b4@وتعطاتو" data-anim="wipe" data-cam="none">الدم ما كانش متوافق.</div>
+
+  <section id="patient-focus" class="blk" style="left:58px;top:394px;width:440px;height:345px" data-focus>
+    <div class="micro latin" data-at="b3@Blutgruppe" data-anim="write">PATIENT</div>
+    <div class="type latin" style="margin-top:12px" data-at="b3@null" data-anim="pop">0 <small>Rh+</small></div>
+    <svg id="patient-art" class="art" style="position:absolute;left:0;top:117px;width:440px;height:210px" viewBox="0 0 440 210" aria-label="Patient dans un lit, schéma original"></svg>
+  </section>
+
+  <section id="bag-focus" class="blk" style="left:642px;top:393px;width:380px;height:367px" data-focus>
+    <div class="micro latin" data-at="b4@Konserve" data-anim="write">KONSERVE</div>
+    <div class="type latin" style="margin-top:12px" data-at="b4@A" data-anim="pop">A <small>Rh+</small></div>
+    <svg id="bag-art" class="art" style="position:absolute;left:15px;top:106px;width:355px;height:245px" viewBox="0 0 355 245" aria-label="Deux poches semblables et leur document d'accompagnement, schéma"></svg>
+    <div class="paper-tag latin" style="position:absolute;left:157px;top:306px;width:220px" data-at="b6@المرافقة" data-anim="slide">
+      <div class="micro" style="font-size:16px">Blutgruppe nur auf</div><div class="scribble" style="font-size:23px">dem Begleitpapier</div>
+    </div>
+  </section>
+
+  <div class="blk" style="left:360px;top:470px;width:500px;height:270px;pointer-events:none" data-focus>
+    <svg id="tube-art" class="art" viewBox="0 0 500 270" aria-label="Trajet de la transfusion incompatible"></svg>
+    <div class="latin scribble" style="position:absolute;left:160px;top:30px;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:57px;line-height:1" data-at="b7@Verwechslung" data-anim="pop" data-circle="b7@توفى" data-cam="none">≠</div>
+    <div class="latin micro" style="position:absolute;left:120px;top:118px;font-size:18px" data-at="b7@Verwechslung+0.6" data-anim="write" data-cam="none">AB0-inkompatibel</div>
+  </div>
+
+  <div class="blk" style="left:74px;top:767px;width:918px;height:58px" data-at="b7@توفى" data-anim="fade" data-cam="none">
+    <div class="latin sans" style="display:flex;align-items:center;gap:23px;font-size:21px">
+      <span class="scribble" style="font-size:23px">Transfusion</span><span style="color:#a2a493">⟶</span><span>Reaktion</span><span style="color:#a2a493">⟶</span><span class="scribble" style="font-size:25px;border-bottom:4px solid #f8ce4e">Tod des Patienten</span>
+    </div>
+    <div class="micro latin" style="margin-top:9px;font-size:14px">Schematische Illustration · Blutgruppen als erklärende Beschriftung</div>
+  </div>
+
+  <!-- ACTE 2 : les trois barrières défaillantes, lues de droite à gauche. -->
+  <div class="blk rule" style="left:58px;top:850px;width:964px" data-at="b8@نفهمو" data-anim="wipe" data-cam="none"></div>
+  <div class="blk chapter latin" style="left:58px;top:874px" data-at="b8@نرجعو" data-anim="fade" data-cam="none"><span class="number">02</span>DIE FEHLERKETTE</div>
+  <div class="blk ar-note" style="right:59px;top:877px" data-at="b8@للور" data-anim="wipe" data-cam="none">نرجعو للور…</div>
+
+  <section class="blk fault" style="left:716px;top:931px" data-focus>
+    <svg id="fatigue-art" viewBox="0 0 300 235" aria-label="Horloge de garde et barrière défaillante"></svg>
+    <h3 class="latin" data-at="b9@ساعة" data-anim="write">Überlastung</h3>
+    <p class="latin" data-at="b9@تلاتة" data-anim="fade"><strong style="font-size:29px" data-at="b9@وستين" data-anim="count" data-to="63">63</strong> h / Woche</p>
+    <p class="latin" data-at="b10@Notdienst" data-anim="slide">danach &gt;12 h Notdienst</p>
+    <div class="ar-note" data-at="b10@تناش" data-anim="wipe" data-cam="none">عياء فوق عياء.</div>
+  </section>
+  <section class="blk fault" style="left:390px;top:931px" data-focus>
+    <svg id="training-art" viewBox="0 0 300 235" aria-label="Manuel de formation non suivie et barrière défaillante"></svg>
+    <h3 class="latin" data-at="b11@التكوين" data-anim="write">Keine Schulung</h3>
+    <p class="latin" data-at="b11@Transfusion" data-anim="slide">Transfusionsschulung</p>
+    <div class="ar-note" data-at="b11@دارتش" data-anim="wipe" data-cam="none">التكوين ما تدارش.</div>
+  </section>
+  <section class="blk fault" style="left:64px;top:931px" data-focus>
+    <svg id="organisation-art" viewBox="0 0 300 235" aria-label="Hôpital, distribution simultanée et barrière défaillante"></svg>
+    <h3 class="latin" data-at="b13@Organisationsverschulden" data-anim="write">Organisation</h3>
+    <p class="latin" data-at="b14@إدارة" data-anim="fade">2 Konserven gleichzeitig</p>
+    <div class="ar-note" data-at="b14@السبيطار" data-anim="wipe" data-cam="none">حتى التنظيم مسؤول.</div>
+  </section>
+  <svg id="chain-art" class="blk" style="left:54px;top:1050px;width:970px;height:140px;overflow:visible;pointer-events:none" viewBox="0 0 970 140" aria-label="Trajet à travers les failles des trois barrières"></svg>
+  <div class="blk micro latin" style="left:58px;top:1323px;font-size:15px" data-at="b14@المسؤولية" data-anim="fade" data-cam="none">Barrierenmodell — vereinfachte Visualisierung der im Urteil beschriebenen Mängel.</div>
+
+  <!-- ACTE 3 : deux décisions distinctes, pas de confusion avec un acquittement. -->
+  <div class="blk rule" style="left:58px;top:1362px;width:964px" data-at="b15@والحكم" data-anim="wipe" data-cam="none"></div>
+  <div class="blk chapter latin" style="left:58px;top:1387px" data-at="b15@والحكم" data-anim="fade" data-cam="none"><span class="number">03</span>DAS URTEIL</div>
+  <div class="blk micro latin" style="right:59px;top:1394px" data-at="b15@والحكم" data-anim="write" data-cam="none">AMTSGERICHT KÖLN · 16.05.2012</div>
+
+  <section class="blk" style="left:75px;top:1452px;width:610px;height:220px" data-focus>
+    <div class="verdict latin" data-at="b15@fahrlässige" data-anim="wipe">Schuldig.</div>
+    <div class="law latin" data-at="b15@Tötung" data-anim="write">§ 222 StGB · fahrlässige Tötung</div>
+    <div class="verdict latin" style="margin-top:28px" data-at="b17@Absehen" data-anim="wipe"><span data-hl="b17@Strafe" data-cam="none">Keine Strafe.</span></div>
+    <div class="law latin" data-at="b17@von" data-anim="write">§ 60 StGB · Absehen von Strafe</div>
+  </section>
+  <section class="blk" style="left:700px;top:1455px;width:310px;height:226px" data-focus>
+    <svg id="justice-art" class="art" viewBox="0 0 310 226" aria-label="Palais de justice et balance dessinés"></svg>
+    <div class="stamp latin scribble" style="position:absolute;left:83px;top:178px;font-size:20px" data-at="b16@إدانة" data-anim="pop">KEIN FREISPRUCH</div>
+  </section>
+
+  <div class="blk" style="left:75px;top:1701px;width:925px;height:66px" data-focus>
+    <div class="caption-sub latin" data-at="b18@محدود" data-anim="fade">Geringe persönliche Vorwerfbarkeit.</div>
+    <div class="caption-sub latin" data-at="b19@النفسية" data-anim="fade">Schwere psychische Folgen für die Ärztin.</div>
+  </div>
+
+  <footer class="blk" style="left:58px;top:1801px;width:964px;height:110px" data-focus>
+    <div class="latin sans" style="font-size:32px;font-weight:600;letter-spacing:-.6px" data-at="b20@الخلاصة" data-anim="wipe"><span data-hl="b21@نظام" data-cam="none">Sicherheit braucht ein System.</span></div>
+    <div class="ar-note" style="position:absolute;right:0;top:49px;font-size:27px" data-at="b21@كيحمي" data-anim="wipe">نظام كيحمي المريض والطبيب.</div>
+    <div class="micro latin" style="margin-top:19px;font-size:14px;line-height:1.6" data-at="b20@الخلاصة" data-anim="fade" data-cam="none">Quelle: AG Köln, 613 Ls 3/12 · IWW, Abrufnr. 130955<br>iww.de/quellenmaterial/id/91519 · Zusammenfassung eines historischen Einzelfalls</div>
+  </footer>
+
+</main></div>
+<script>
+  window.SV_CONFIG = { preset:"instagram", maxZoom:1.85, outroAt:"b21@نظام", outroDur:2.5, hold:4.5 };
+</script>
+<script src="beats.js"></script>
+<script src="preview-timings.js"></script>
+<script src="timings.js" onerror="void 0"></script>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="assets/illustrations.js"></script>
+<script src="../../engine/runtime.js"></script>
+<script src="motion.js"></script>
+</body>
+</html>
