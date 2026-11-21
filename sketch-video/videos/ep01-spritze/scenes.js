@@ -145,9 +145,9 @@
     st.scene({ from: "b12", in: "cut", inDur: 0, build(c) {
       room(c);
       c.camera([{ at: "b12", s: 2.3, cx: 880, cy: 1000 }, { at: "b12+0.1", s: 2.6, cx: 880, cy: 985, d: 3.5, ease: "lin" }]);
-      c.put(P.syringe(MILKY), 838, 1006, 0.27).hide("b12@شافها", 0.12);
-      c.put(P.handHoldingSyringe({ side: "right", syringe: MILKY }), 838, 1006, 0.27)
-        .slide("b12@شافها", 0, 160, 0.35).move("b12@خاطرو", 0, -110, 0.9);
+      c.put(`<ellipse cx="910" cy="1006" rx="92" ry="32" fill="none" stroke="var(--accent)" stroke-width="5"/>`).wipe("b12@شافها", 0.4).hide("b12@خاطرو", 0.3);
+      c.put(P.syringe(MILKY), 838, 1006, 0.27).pulse("b12@شافها", 0.7, 0.1, 2)
+        .move("b12@خاطرو", 0, -110, 0.9).rotateTo("b12@خاطرو", -12, 0.9);
       c.put(P.thought({ w: 380, h: 170 }), 80, 330, 1, 0, c.hud).pop("b12@خاطرو");
       c.text("Refobacin?", 270, 432, 50, "de", "middle", c.hud).pop("b12@خاطرو+0.1");
       c.put(P.tag({ text: "Rekonstruktion", kind: "accent" }), 250, 300, 0.85, 0, c.hud).fade("b12@خاطرو");
@@ -159,12 +159,13 @@
       const bg = c.group(); bg.g.setAttribute("class", "faded");
       room(c, { parent: bg.g, bare: true });
       c.camera([{ at: "b13", s: 1, cx: 540, cy: 960 }, { at: "b13+0.3", s: 1.06, cx: 560, cy: 940, d: 5, ease: "lin" }]);
-      c.put(P.handHoldingSyringe({ side: "right", syringe: MILKY }), 150, 860, 1.25, -10).slide("b13", 0, 700, 0.55);
+      c.put(P.syringe(MILKY), 140, 900, 1.5, -10).slide("b13", 0, 600, 0.55).float(6, 3);
+      c.put(`<ellipse cx="314" cy="869" rx="128" ry="84" fill="none" stroke="var(--accent)" stroke-width="7" transform="rotate(-10 314 869)"/>`).wipe("b13@بلاصتو", 0.45).pulse("b13@شنو", 0.9, 0.08, 3);
       c.put(`<rect x="24" y="24" width="1032" height="1872" rx="34" fill="none" stroke="var(--accent)" stroke-width="18"/>`, 0, 0, 1, 0, c.hud).fade("b13", 0.15);
       c.put(P.stamp({ text: "STOP", rot: 8 }), 800, 470, 1.5, 0, c.hud).slam("b13+0.05");
       c.put(P.thought({ w: 360, h: 160 }), 70, 300, 1, 0, c.hud).pop("b13+0.4");
       c.text("Refobacin?", 250, 400, 50, "de", "middle", c.hud).pop("b13+0.5");
-      c.de("Du bist dran.", 800, 670, 40, "دابا نتا لي ف بلاصتو", "middle", c.hud).fade("b13@بلاصتو");
+      c.de("Du bist dran.", 800, 622, 40, "دابا نتا لي ف بلاصتو", "middle", c.hud).fade("b13@بلاصتو");
       const card = (y, letter, word, ar, fill, cls, at) => {
         const g = c.group(c.hud);
         Stage.el("rect", { x: 650, y, width: 340, height: 150, rx: 22, fill, stroke: "var(--ink)", "stroke-width": 4 }, g.g);
@@ -180,16 +181,24 @@
 
     /* 7 · Le geste : injection ------------------------------------------ */
     st.scene({ from: "b14", in: "zoom", inDur: 0.5, build(c) {
-      c.put(`<circle cx="560" cy="880" r="520" fill="var(--white)"/>`);
-      c.camera([{ at: "b14", s: 1.05, cx: 540, cy: 900 }, { at: "b14@دفعها", s: 1.28, cx: 660, cy: 880, d: 2.2 }, { at: "b15", s: 1, cx: 540, cy: 960, d: 0.9 }]);
+      c.put(`<circle cx="560" cy="880" r="520" fill="var(--main2)" fill-opacity=".45"/>`);
+      c.camera([{ at: "b14", s: 1.05, cx: 540, cy: 860 }, { at: "b14@دفعها", s: 1.25, cx: 560, cy: 840, d: 2 }, { at: "b15", s: 1, cx: 540, cy: 960, d: 0.9 }]);
       const a = T("b14@دفعها"), b = Math.max(a + 1.2, T("b14@end"));
-      c.dyn((t) => P.handsInjecting({ push: Math.round(E.inOut(prog(t, a, b - a)) * 60) / 60, fill: 0.45, label: "?", liquid: "milky" }), 50, 700, 1);
+      const X = 300, Y = 820, K = 1.25;
+      const push = (t) => Math.round(E.inOut(prog(t, a, b - a)) * 60) / 60;
+      // cathéter (part vers la gauche, vers le Bébé) puis seringue branchée dessus
+      c.put(P.catheterLine({ len: 520 }), X + 12, Y, -1);
+      c.de("Broviac-Katheter", 160, 800, 34, "قسطرة مركزية", "middle", c.hud).fade("b14@Katheter");
+      c.dyn((t) => P.syringe({ liquid: "milky", fill: 0.85, push: push(t), label: "?", tip: "none" }), X, Y, K);
+      // flèche qui pousse le piston
+      c.put(`<path d="M0 0 h70 M0 0 l22 -18 M0 0 l22 18" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" fill="none"/>`)
+        .on((t, st) => { const stop = 48 + 200 * 0.85 * (1 - push(t)); st.x += X + K * (stop + 300); st.y += Y; st.o *= t >= a - 0.2 && t < b + 0.4 ? 1 : 0; });
       // gouttes blanches qui partent dans le cathéter
-      const path = P.catheterPath({ len: 424 }).points.map(([x, y]) => [x + 586, y + 700]);
-      path.push([1180, path[path.length - 1][1]]);
-      for (let i = 0; i < 12; i++) {
-        c.put(`<circle cx="0" cy="0" r="8" fill="#fff" stroke="var(--ink)" stroke-width="3"/>`).on((t, s) => {
-          const q = prog(t, a + i * 0.12, 1.6);
+      const path = P.catheterPath({ len: 520 }).points.map(([x, y]) => [X + 12 - x, Y - y]);
+      path.unshift([X - 4, Y]);
+      for (let i = 0; i < 14; i++) {
+        c.put(`<circle cx="0" cy="0" r="10" fill="#fff" stroke="var(--ink)" stroke-width="3"/>`).on((t, s) => {
+          const q = prog(t, a + i * 0.14, 2.6);
           s.o *= q > 0 && q < 1 ? 1 : 0;
           const [x, y] = along(path, E.inOut(q)); s.x += x; s.y += y;
         });
