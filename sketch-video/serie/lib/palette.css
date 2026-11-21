@@ -33,3 +33,6 @@
 .f-gray2  { fill: var(--gray2); }
 .f-wood   { fill: var(--wood); }
 .f-wood2  { fill: var(--wood2); }
+/* Peau cyanosée du bébé (baby({state:"blue"})) : teinte fixe, identique dans toutes les palettes. */
+.f-cyan   { fill: #B9CCE0; }
+.f-cyan2  { fill: #6F86A8; }

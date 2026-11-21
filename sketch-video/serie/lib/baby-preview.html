@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Baby — Vorschau</title>
+<link rel="stylesheet" href="palette.css">
+<style>
+  @font-face { font-family: "Kalam"; font-weight: 700; src: url("../../engine/fonts/Kalam-Bold.ttf") format("truetype"); }
+  html, body { margin: 0; background: var(--paper); }
+  svg { display: block; }
+  .cap { font: 500 15px/1 -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--gray); }
+  .head { font: 700 20px/1 -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
+  .ph { fill: var(--gray2); stroke: var(--ink); stroke-width: 5; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<svg id="stage" xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script src="props.js"></script>
+<script>
+(async function () {
+  const q = new URLSearchParams(location.search);
+  document.documentElement.dataset.palette = q.get("palette") || "petrol";
+  if (q.get("weight")) Props.setWeight(parseFloat(q.get("weight")));
+  const P = Props;
+  const at = (m, x, y, s, r) => `<g transform="translate(${x} ${y})${r ? ` rotate(${r})` : ""}${s && s !== 1 ? ` scale(${s})` : ""}">${m}</g>`;
+  const cap = (t, x, y, a) => `<text class="cap" x="${x}" y="${y}" text-anchor="${a || "middle"}">${t}</text>`;
+  // silhouette de remplacement (personnage ≈ 600 px de haut, pieds en (0,0))
+  const person = `<path class="ph" d="M-70 0L-78 -300C-120 -330 -112 -440 -60 -456L60 -456C112 -440 120 -330 78 -300L70 0Z"/><circle class="ph" cx="0" cy="-520" r="62"/>`;
+  let s = `<rect class="f-paper" width="1080" height="1920"/>`;
+  s += `<text class="head" x="28" y="36">baby() · crib() · dock() · prisonBars() · ambuBag() · icuSign()</text>`;
+
+  // ── 1 : couché, grand
+  const L = [[{}, "lying · closed · calm"], [{ eyes: "open" }, "lying · open"], [{ state: "blue" }, "lying · blue"]];
+  L.forEach(([o, t], i) => { const x = 185 + i * 355; s += at(P.baby(Object.assign({ pose: "lying" }, o)), x, 250, 1) + cap(t, x, 278); });
+  // ── 2 : porté, grand
+  const H = [[{ eyes: "open" }, "held · open"], [{}, "held · closed"], [{ state: "blue" }, "held · blue"], [{ eyes: "half", mouth: "open", blanket: true }, "held · half · mouth open · blanket"]];
+  H.forEach(([o, t], i) => { const x = 140 + i * 265; s += at(P.baby(Object.assign({ pose: "held" }, o)), x, 590, 1) + cap(t, x, 668); });
+  // ── 3 : petits (0.35)
+  let x = 80;
+  L.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "lying" }, o)), x, 760, 0.35); x += 130; });
+  s += at(P.baby({ pose: "lying", eyes: "half", mouth: "open" }), x, 760, 0.35); x += 120;
+  H.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "held" }, o)), x, 746, 0.35); x += 90; });
+  s += at(P.baby({ pose: "lying", line: false, ecg: false, blanket: false }), 960, 760, 0.6);
+  s += cap("× 0.35", 400, 800) + cap("sans couverture/ligne × 0.6", 960, 800);
+
+  // ── 4 : lit à barreaux
+  const C = P.CRIB;
+  s += at(P.crib({ part: "back" }) + at(P.baby({ pose: "lying" }), 230, C.mattressTop, 1) + P.crib({ part: "front", rail: 1 }), 40, 1220, 1) + cap("crib rail 1 + baby", 270, 1248);
+  s += at(P.crib({ part: "back" }) + at(P.baby({ pose: "lying", state: "blue" }), 230, C.mattressTop, 1) + P.crib({ part: "front", rail: 0 }), 560, 1220, 1) + cap("crib rail 0 + baby blue", 790, 1248);
+
+  // ── 5 : banc des accusés, barreaux
+  s += at(at(person, 210, -20, 1) + P.dock({}), 30, 1880, 0.9) + cap("dock (h 300)", 220, 1906);
+  s += at(P.prisonBars({ part: "back" }) + at(person, 200, -10, 0.95) + P.prisonBars({ part: "front" }), 450, 1880, 0.9) + cap("prisonBars back + front", 630, 1906);
+  s += at(P.icuSign({}), 940, 1350, 0.45) + cap("icuSign", 950, 1392);
+  s += at(P.ambuBag(), 880, 1520, 0.7) + cap("ambuBag", 950, 1548);
+  s += at(P.crib({ rail: 0.5 }), 860, 1720, 0.4) + cap("crib rail .5", 950, 1742);
+  s += at(person + at(P.prisonBars({ w: 260, h: 640, frame: false }), -130, 20, 1), 950, 1880, 0.2) + cap("frame:false", 950, 1906);
+
+  document.getElementById("stage").innerHTML = s;
+  try { await document.fonts.load('700 30px "Kalam"'); await document.fonts.ready; } catch (e) {}
+  requestAnimationFrame(() => requestAnimationFrame(() => { window.READY = true; }));
+})();
+</script>
+</body>
+</html>

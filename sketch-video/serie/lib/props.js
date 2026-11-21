@@ -916,6 +916,246 @@
     return s;
   });
 
+  /* ═════════════════════════ 17. BÉBÉ (personnage) ═════════════════════════ */
+  /* Tête de bébé en coordonnées « tête » : centre (0,0), droite, de trois quarts vers la droite.
+   * Crâne x −66 → 62, y −63 → 58 (boucle de cheveux jusqu'à y ≈ −84). Yeux : (−3, 9) et (37, 9). */
+  function babyHead(o) {
+    const blue = o.state === "blue";
+    const skin = blue ? "f-cyan" : "f-white";
+    const eyes = blue ? "closed" : (o.eyes || "closed");
+    const mouth = o.mouth || "calm";
+    let s = "";
+    // crâne large + joue ronde + petit menton
+    s += S("M2 -63C38 -65 61 -38 59 -9C59 -1 64 5 64 18C64 39 45 55 21 57C5 59 -14 56 -28 47C-37 41 -43 35 -47 27C-63 15 -68 -8 -63 -25C-56 -49 -30 -63 2 -63Z", skin);
+    // oreille
+    s += S("M-36 9C-38 -3 -55 -4 -57 10C-58 24 -44 31 -37 22C-35 18 -35 13 -36 9Z", skin, W2(), { seed: 2 });
+    s += O("M-47 8C-42 9 -41 15 -44 19", W3(), { seed: 2 });
+    // joues
+    if (!blue) s += F(ell(48, 29, 9, 6), "f-accent2", { wob: 0.3 }) + F(ell(-17, 31, 10, 6.5), "f-accent2", { wob: 0.3 });
+    // sourcils (deux petites marques)
+    s += G(O("M-10 -8C-6 -11 1 -11 5 -9", W3(), { seed: 4 }) + O("M32 -9C36 -11 41 -11 45 -8", W3(), { seed: 5 }), eyes === "half" ? "translate(0 -4)" : "");
+    // yeux
+    for (const [ex, sd] of [[-3, 1], [37, 2]]) {
+      if (eyes === "closed") {
+        s += O(`M${ex - 8} 7C${ex - 4} 15 ${ex + 5} 15 ${ex + 8} 7`, W2(), { seed: sd, taper: 0.8 });
+      } else {
+        s += F(ell(ex, 9, 6, 7.5), "ink", { wob: 0.3 }) + F(ell(ex + 2, 6, 2, 2), "f-white", { wob: 0 });
+        if (eyes === "half") {
+          s += F(rr(ex - 9, 0, 18, 7, 2), skin, { wob: 0 });
+          s += O(`M${ex - 9} 8C${ex - 5} 4 ${ex + 5} 4 ${ex + 9} 8`, W2(), { seed: sd, taper: 0.9 });
+        }
+      }
+    }
+    // nez minuscule
+    s += O("M20 18C25 19 25 26 19 25", W3(), { seed: 3 });
+    // bouche
+    if (blue) s += S("M11 39C14 34 26 34 29 39C26 45 14 45 11 39Z", "f-cyan2", W3(), { wob: 0.4 });
+    else if (mouth === "open") s += S("M12 36C15 33 25 33 28 36C28 47 12 47 12 36Z", "f-accent", W3(), { wob: 0.4 });
+    else s += O("M12 37C16 43 24 43 28 37", W2(), { seed: 6, taper: 0.8 });
+    // une boucle de cheveux + deux mèches
+    s += O("M-4 -60C-12 -80 14 -88 15 -72C15 -62 2 -64 5 -72", W2(), { seed: 7 });
+    s += O("M-20 -58C-22 -66 -18 -72 -12 -74", W3(), { seed: 8 }) + O("M20 -60C24 -66 30 -68 34 -66", W3(), { seed: 9 });
+    return s;
+  }
+  const babyFist = (x, y, skin, sd, r) => S(ell(x, y, r || 13, (r || 13) - 1.5), skin, W(), { seed: sd });
+  // tubulure fine (cathéter central) : boudin blanc au contour fin
+  const babyTube = (d) => sausage(d, 5 * K + 1, "f-white", { w: W3(), tp: 1, wob: 0.3 });
+  const electrode = (x, y, wire, sd) => (wire ? O(wire, W3() * 0.85, { seed: sd, taper: 1 }) : "") +
+    S(ell(x, y, 7.5, 7.5), "f-white", W3(), { seed: sd, wob: 0.4 }) + F(ell(x, y, 2.3, 2.3), "ink", { wob: 0 });
+
+  /* Repères du bébé (coordonnées locales de baby()) — Props.babyGeom(pose) :
+   *   lying : { size:[300,150], head:[-88,-64], lineStart:[-3,-76], lineEnd:[110,-81], mouth:[-52,-39], chest:[0,-70] }
+   *   held  : { size:[180,280], head:[-2,-172], lineStart:[-14,-94], lineEnd:[-44,-12], mouth:[16,-135], chest:[0,-80] } */
+  const BABY = {
+    lying: { size: [300, 150], head: [-88, -64], headRot: -28, lineStart: [-3, -76], lineEnd: [110, -81], mouth: [-52, -39], chest: [0, -70] },
+    held: { size: [180, 280], head: [-2, -172], headRot: 5, lineStart: [-14, -94], lineEnd: [-44, -12], mouth: [16, -135], chest: [0, -80] },
+  };
+  function babyGeom(pose) { return BABY[pose === "held" ? "held" : "lying"]; }
+
+  /* baby({pose:"lying"|"held", state:"normal"|"blue", eyes:"closed"|"open"|"half", mouth:"calm"|"open",
+   *       line:true, ecg:true, blanket:(lying:true | held:false)})
+   * Nourrisson de 10 mois, body (f-main2), petits poings sans doigts, une boucle de cheveux.
+   * state:"blue" = cyanose : peau .f-cyan, lèvres .f-cyan2, yeux fermés d'office, pas de joues roses.
+   * line:true = cathéter central (Broviac) : pansement sur le haut du thorax + tubulure fine + embout ;
+   * ecg:true = deux électrodes collées avec un bout de fil.
+   *
+   * pose "lying" — couché sur le dos, tête à GAUCHE, visage de trois quarts vers le haut.
+   *   Taille ≈ 300 × 150 (x −152 → 150, y −148 → 0). Ancre : (0,0) = milieu du bébé SUR le matelas (y = 0 = drap).
+   *   Tête : centre (−88, −64), penchée de −28°. Couverture : x 26 → 150. Bouche ≈ (−52, −39).
+   *   CATHÉTER : sort du thorax en (−3, −76) [lineStart] ; l'embout dessiné finit en (110, −81) [lineEnd] :
+   *   y raccorder catheterLine()/une tubulure. Avec line:false rien n'est dessiné : partir de lineStart.
+   * pose "held" — assis/redressé, légèrement penché, à poser sur l'avant-bras d'un adulte (adulte à gauche ;
+   *   pour l'inverse : scale(−1,1)). Taille ≈ 180 × 280 (x −84 → 95, y −258 → +22).
+   *   Ancre : (0,0) = dessous des fesses (là où passe l'avant-bras). Tête : centre (−2, −172). Jambes repliées, pieds jusqu'à y = +22.
+   *   CATHÉTER : sort en (−14, −94) [lineStart], embout en (−44, −12) [lineEnd].
+   *   En "blue", le bras de devant pend (poing en (62, −53)) et la tête tombe un peu plus (+9°).
+   *   blanket:true (held) ajoute un lange drapé derrière le bébé (jusqu'à y = +68).
+   * Mêmes repères par code : Props.babyGeom("lying"|"held"). */
+  const baby = memo("baby", (o) => {
+    const held = o.pose === "held", blue = o.state === "blue";
+    const skin = blue ? "f-cyan" : "f-white";
+    const g = BABY[held ? "held" : "lying"];
+    const head = G(babyHead(o), `translate(${g.head[0]} ${g.head[1]}) rotate(${g.headRot + (held && blue ? 9 : 0)})`);
+    const line = o.line !== false, ecg = o.ecg !== false;
+    let s = "";
+    if (!held) {
+      // tronc (body)
+      s += S("M-58 -20C-60 -62 -36 -90 0 -92C24 -93 46 -90 66 -80L74 0L-48 0C-54 -6 -57 -12 -58 -20Z", "f-main2");
+      // couverture : ventre, jambes, petite bosse des pieds
+      if (o.blanket !== false) {
+        s += S("M34 -92C52 -98 70 -92 88 -78C100 -68 110 -64 118 -68C130 -76 144 -66 148 -48C152 -30 152 -14 148 -1C110 3 70 1 32 0C24 -28 24 -64 34 -92Z", "f-accent2");
+        s += S("M34 -92C41 -95 49 -95 57 -93C49 -64 49 -30 56 1L32 0C24 -28 24 -64 34 -92Z", "f-white", W2(), { seed: 2 });
+        s += O("M76 -44C92 -34 108 -36 124 -46", W3(), { seed: 2 }) + O("M96 -16C108 -12 122 -14 134 -22", W3(), { seed: 3 });
+      } else {
+        s += sausage("M48 -30C64 -60 92 -62 106 -36", 38, "f-main2", { seed: 5 }) + S("M94 -30C94 -46 130 -48 134 -28C136 -10 96 -8 94 -30Z", "f-main2", W(), { seed: 5 });
+      }
+      if (ecg) s += electrode(16, -64, "M16 -64C20 -60 25 -58 31 -58", 1);
+      s += head;
+      // bras de devant, détendu : le poing repose sur le drap devant le ventre
+      s += sausage("M-28 -52C-20 -30 2 -18 30 -17", 28, "f-main2", { seed: 4 }) + babyFist(39, -16, skin, 4);
+      if (line) {
+        s += S(rr(-12, -84, 18, 15, 5), "f-white", W3(), { seed: 6, wob: 0.5 });
+        s += babyTube("M-3 -76C8 -96 40 -104 66 -92C78 -86 86 -81 98 -81");
+        s += S(rr(94, -87, 16, 12, 3), "f-main", W3(), { seed: 7, wob: 0.4 });
+      }
+    } else {
+      // couverture drapée derrière / sous le bébé
+      if (o.blanket === true) {
+        s += S("M-48 -116C-72 -84 -84 -30 -80 18C-78 40 -70 58 -58 68C-44 52 -22 46 0 42C30 38 58 30 70 12C84 -20 76 -72 54 -112Z", "f-accent2");
+        s += O("M-72 -10C-70 16 -66 36 -58 52", W3(), { seed: 2 }) + O("M-58 68C-50 60 -44 56 -36 52", W3(), { seed: 3 });
+      }
+      // bras du fond (côté adulte)
+      s += sausage("M-34 -108C-52 -100 -62 -84 -62 -66", 28, "f-main2", { seed: 3 }) + babyFist(-62, -58, skin, 3);
+      // jambes potelées, pieds dans le pyjama
+      s += sausage("M-18 -22C-36 -32 -56 -24 -60 -6", 36, "f-main2", { seed: 4 }) + S(ell(-63, 4, 18, 16), "f-main2", W(), { seed: 4 });
+      s += sausage("M20 -24C40 -36 64 -28 70 -8", 36, "f-main2", { seed: 5 }) + S(ell(74, 2, 18, 16), "f-main2", W(), { seed: 5 });
+      // tronc en poire
+      s += S("M-32 -132C-50 -110 -58 -60 -54 -28C-50 -4 -26 4 2 4C30 4 52 -4 56 -28C60 -62 50 -110 32 -132Z", "f-main2");
+      s += O("M-22 -8C-8 -2 12 -2 26 -8", W3(), { seed: 6 });
+      s += F(ell(-8, 2, 2.4, 2.4), "ink", { wob: 0 }) + F(ell(8, 2, 2.4, 2.4), "ink", { wob: 0 });
+      if (ecg) s += electrode(18, -88, "M18 -88C28 -84 38 -80 48 -80", 1) + electrode(-30, -62, "M-30 -62C-38 -58 -46 -56 -55 -56", 2);
+      s += head;
+      // bras de devant, levé vers la joue
+      if (blue) s += sausage("M30 -108C50 -102 62 -84 62 -62", 28, "f-main2", { seed: 6 }) + babyFist(62, -53, skin, 6);
+      else s += sausage("M30 -108C52 -110 68 -120 76 -134", 28, "f-main2", { seed: 6 }) + babyFist(79, -142, skin, 6);
+      if (line) {
+        s += S(rr(-23, -102, 18, 15, 5), "f-white", W3(), { seed: 6, wob: 0.5 });
+        s += babyTube("M-14 -94C-22 -72 -2 -56 -12 -38C-18 -26 -30 -18 -38 -15");
+        s += S(rr(-50, -19, 14, 12, 3), "f-main", W3(), { seed: 7, wob: 0.4 });
+      }
+    }
+    return s;
+  });
+
+  /* ═════════════════════════ 18. LIT À BARREAUX (Gitterbett) ═════════════════════════ */
+  /* crib({w:460, rail:1, part:"all"|"back"|"front"}) — lit d'enfant d'hôpital en métal, vue de côté, à roulettes.
+   * Taille w × 362. Ancre : bas-gauche au sol (0,0).
+   * DESSUS DU MATELAS (drap) : y = −172, de x = 28 à w − 28 -> poser baby({pose:"lying"}) en (w/2, −172).
+   * HAUT DE LA BARRIÈRE : y = −332 (rail:1, relevée) ; rail:0 = barrière baissée, haut à y = −202.
+   *   (hauteur de barrière au-dessus du matelas : 160 px relevée, 30 px baissée). Montants : sommet y = −362.
+   * part:"back" = montants, sommier, matelas, roues ; part:"front" = barrière avant seule (barreaux) :
+   * dessiner back, puis le bébé, puis front. "all" = les deux (bébé à dessiner par-dessus). */
+  const CRIB = { mattressTop: -172, mattressX0: 28, railTop: -332, railTopDown: -202, postTop: -362 };
+  const crib = memo("crib", (o) => {
+    const w = o.w || 460, part = o.part || "all";
+    const rail = o.rail != null ? clamp(o.rail, 0, 1) : 1;
+    let s = "";
+    if (part !== "front") {
+      for (const x of [22, w - 22]) s += S(ell(x, -15, 15, 15), "ink", 2, { seed: x }) + F(ell(x, -15, 5, 5), "f-gray2");
+      s += S(rr(30, -84, w - 60, 11, 5), "f-gray2", W2());
+      s += S(rr(8, -362, 24, 336, [12, 12, 4, 4]), "f-white") + S(rr(w - 32, -362, 24, 336, [12, 12, 4, 4]), "f-white", 0, { seed: 3 });
+      s += S(rr(20, -138, w - 40, 20, 5), "f-gray");
+      s += S(rr(28, -172, w - 56, 36, 11), "f-white");
+      s += O(ln(40, -150, w - 40, -150), W3(), { c: "f-gray2", wob: 0.5 });
+    }
+    if (part !== "back") {
+      const top = -332 + (1 - rail) * 130, bot = top + 184;
+      let r = "";
+      const n = Math.max(3, Math.round((w - 80) / 56));
+      for (let k = 1; k < n; k++) {
+        const x = 34 + ((w - 68) * k) / n;
+        r += S(rr(x - 3.5, top + 8, 7, bot - top - 6, 2), "f-white", W3(), { seed: k, wob: 0.5 });
+      }
+      r += S(rr(26, top, w - 52, 15, 7), "f-main") + S(rr(26, bot, w - 52, 12, 6), "f-white", W2(), { seed: 2 });
+      s += r;
+    }
+    return s;
+  });
+
+  /* ═════════════════════════ 19. BANC DES ACCUSÉS (Anklagebank) ═════════════════════════ */
+  /* dock({w:420, h:300}) — banc des accusés : panneau de bois bas vu de face, main courante, dossier du banc derrière.
+   * Taille w × h (+ dossier du banc qui dépasse de 0 px : il est sous le bord). Ancre : bas-gauche au sol (0,0).
+   * BORD SUPÉRIEUR (main courante) : y = −h (−300), de x = −8 à w + 8. Dessiner l'accusé AVANT dock(),
+   * pieds au sol vers y ≈ −20 : il dépasse à partir de la taille. */
+  const dock = memo("dock", (o) => {
+    const w = o.w || 420, h = o.h || 300;
+    let s = S(pg([[14, 0], [14, -h + 18, 2], [w - 14, -h + 18, 2], [w - 14, 0]]), "f-wood2");
+    const n = w > 520 ? 3 : 2, gap = 20, pw = (w - 28 - gap * (n + 1)) / n;
+    for (let k = 0; k < n; k++) s += S(rr(14 + gap + k * (pw + gap), -h + 50, pw, h - 50 - 58, 5), "f-wood", W2(), { seed: k });
+    s += S(pg([[4, 0], [4, -32, 5], [w - 4, -32, 5], [w - 4, 0]]), "f-wood");
+    s += S(rr(0, -h + 8, 26, h - 8, 4), "f-wood") + S(rr(w - 26, -h + 8, 26, h - 8, 4), "f-wood", 0, { seed: 4 });
+    s += S(rr(-8, -h, w + 16, 26, 9), "f-wood");
+    s += O(ln(8, -h + 13, w - 8, -h + 13), W3(), { c: "f-wood2", wob: 0.5 });
+    return s;
+  });
+
+  /* ═════════════════════════ 20. BARREAUX ═════════════════════════ */
+  /* prisonBars({w:400, h:620, part:"all"|"back"|"front", frame:true})
+   * Fenêtre/porte de cellule : cadre + barreaux verticaux + une traverse. Taille w × h. Ancre : bas-gauche (0,0).
+   * part:"back"  = fond de la cellule (aplat gray2, sans trait) ;
+   * part:"front" = barreaux + traverse + cadre -> dessiner back, le personnage, puis front.
+   * frame:false  = barreaux seuls (calque à poser sur une image). Cadre : 22 px ; barreaux : tous les ~64 px. */
+  const prisonBars = memo("prisonBars", (o) => {
+    const w = o.w || 400, h = o.h || 620, part = o.part || "all", t = 22;
+    let s = "";
+    if (part !== "front") s += F(rr(4, -h + 4, w - 8, h - 8, 2), "f-gray2", { wob: 0.5 });
+    if (part !== "back") {
+      const n = Math.max(2, Math.round((w - 2 * t) / 64));
+      for (let k = 1; k < n; k++) {
+        const x = t + ((w - 2 * t) * k) / n;
+        s += S(rr(x - 6.5, -h + 6, 13, h - 12, 3), "f-gray", W2(), { seed: k, wob: 0.8 });
+      }
+      s += S(rr(8, -h * 0.56 - 9, w - 16, 18, 4), "f-gray", W2(), { seed: 9 });
+      if (o.frame !== false) {
+        s += S(rr(0, -h, t, h, 3), "f-gray") + S(rr(w - t, -h, t, h, 3), "f-gray", 0, { seed: 2 });
+        s += S(rr(0, -h, w, t, 3), "f-gray", 0, { seed: 3 }) + S(rr(0, -t, w, t, 3), "f-gray", 0, { seed: 4 });
+      }
+    }
+    return s;
+  });
+
+  /* ═════════════════════════ 21. RÉANIMATION ═════════════════════════ */
+  /* ambuBag() — ballon de ventilation manuelle pour nourrisson, avec masque. Taille ≈ 250 × 150.
+   * Ancre : centre du bourrelet du masque (0,0) = à poser sur le nez/la bouche (masque vers le bas).
+   * Masque : x −38 → 38, y −48 → 9 ; valve : (0, −74) ; ballon : x 22 → 196, y −132 → −44 ; à tenir vers (110, −88). */
+  const ambuBag = memo("ambuBag", () => {
+    let s = "";
+    s += S(rr(196, -98, 26, 20, 4), "f-white", W2());
+    s += S("M24 -88C40 -138 150 -140 190 -104C200 -95 200 -81 190 -72C150 -36 40 -40 24 -88Z", "f-main2");
+    s += O("M70 -124C62 -100 62 -78 70 -54", W3()) + O("M110 -130C104 -104 104 -76 110 -48", W3(), { seed: 2 }) + O("M150 -122C146 -102 146 -78 150 -56", W3(), { seed: 3 });
+    s += S(rr(-9, -64, 18, 20, 3), "f-white", W2());
+    s += S(rr(-18, -104, 46, 42, 9), "f-main");
+    s += O(ln(-6, -92, 14, -92), W3(), { c: "f-main2" });
+    s += S("M-30 -4C-28 -32 -12 -48 0 -48C12 -48 28 -32 30 -4Z", "f-white");
+    s += S("M-38 -1C-38 -12 38 -12 38 -1C38 10 -38 10 -38 -1Z", "f-gray2", W2());
+    return s;
+  });
+
+  /* icuSign({text:"K1 · Intensivstation", hang:true}) — panneau d'aile d'hôpital suspendu au plafond.
+   * Taille ≈ (largeur selon le texte, min 300) × 88 (+ 70 px de suspentes). Ancre : centre du panneau (0,0).
+   * Largeur : Props.icuSignWidth(text). */
+  function icuSignWidth(text) { return Math.max(300, Math.round(String(text != null ? text : "K1 · Intensivstation").length * 21 + 90)); }
+  const icuSign = memo("icuSign", (o) => {
+    const text = o.text != null ? o.text : "K1 · Intensivstation";
+    const w = icuSignWidth(text), h = 88;
+    let s = "";
+    if (o.hang !== false) s += O(ln(-w / 2 + 40, -h / 2 - 70, -w / 2 + 40, -h / 2), W2(), { taper: 1 }) + O(ln(w / 2 - 40, -h / 2 - 70, w / 2 - 40, -h / 2), W2(), { taper: 1, seed: 2 });
+    s += S(rr(-w / 2, -h / 2, w, h, 10), "f-main");
+    s += O(rr(-w / 2 + 9, -h / 2 + 9, w - 18, h - 18, 5), W3(), { c: "f-main2", wob: 0.5 });
+    s += T(text, 0, 14, 40, { c: "f-white" });
+    return s;
+  });
+
   global.Props = {
     syringe, oralSyringe, syringeGeom, SYRINGE: SYR,
     bottle, vial, bloodTube,
@@ -926,6 +1166,7 @@
     bubble, thought, tag, tagWidth,
     catheterLine, catheterPath, handHoldingSyringe, handsInjecting,
     roomBackdrop, courtBackdrop,
+    baby, babyGeom, crib, CRIB, dock, prisonBars, ambuBag, icuSign, icuSignWidth,
     setWeight(k) { K = k || 1; cache.clear(); },
     FONT,
   };
