@@ -273,6 +273,18 @@
       return this.node(g, parent);
     }
     tick(fn) { this.every.push(fn); return this; }
+    // dessin « au trait » (SketchCast / Cast) redessiné quand ses paramètres changent :
+    //   c.sk((g, p) => SketchCast.person(g, p), (t) => ({…params}), x, y, s)
+    sk(draw, paramsFn, x = 0, y = 0, s = 1, rot = 0, parent) {
+      const inner = el("g", { transform: `translate(${x} ${y}) rotate(${rot}) scale(${s})` });
+      const n = this.node(inner, parent);
+      let last = null;
+      const redraw = (t) => { const p = paramsFn(t); const k = JSON.stringify(p); if (k !== last) { last = k; while (inner.firstChild) inner.removeChild(inner.firstChild); n.out = draw(inner, p) || null; } };
+      n.add((t) => redraw(t));
+      redraw(-1);
+      n.inner = inner;
+      return n;
+    }
     // groupe découpé (écran partagé…) : les enfants restent animables
     clipped(x, y, w, h, parent) {
       const id = "clip" + Math.random().toString(36).slice(2, 9);
@@ -343,8 +355,10 @@
         const x = W - o.side - cw - col * (cw + 20), y = o.top + row * (ch + o.gap);
         return { sc, i, x, y, w: cw, h: ch, k };
       });
+      const ref = {};
       const sum = this.scene({ from: o.at, in: "fade", inDur: 0.45, build(c) {
         const host = [];
+        if (o.below) o.below(c, cells);
         cells.forEach((cell) => {
           const id = "sumclip" + cell.i;
           const cp = el("clipPath", { id }, stage.defs);
@@ -353,8 +367,8 @@
           const inner = el("g", { transform: `translate(${cell.x} ${cell.y - o.crop[0] * cell.k}) scale(${cell.k})` }, holder);
           host.push(inner);
         });
-        sum._host = host;
-        if (o.decorate) o.decorate(c, cells);
+        ref.host = host;
+        if (o.above) o.above(c, cells);
         const last = cells[cells.length - 1];
         const lk = 1 / last.k, lcx = last.x + last.w / 2, lcy = last.y - o.crop[0] * last.k + (H / 2) * last.k;
         c.camera([{ at: o.at, s: lk, cx: lcx, cy: lcy }, { at: o.dezoomAt || o.at + 0.6, s: 1, cx: W / 2, cy: H / 2, d: o.dezoomDur }]);
@@ -367,7 +381,7 @@
           const d0 = sc.layer.style.display; sc.layer.style.display = "";
           for (const f of sc.every) f(t, t - sc.start);
           for (const n of sc.nodes) n.apply(t);
-          sum._host[i].innerHTML = sc.cam.innerHTML + sc.hud.innerHTML;
+          ref.host[i].innerHTML = sc.cam.innerHTML + sc.hud.innerHTML;
           sc.layer.style.display = d0;
         });
       };
