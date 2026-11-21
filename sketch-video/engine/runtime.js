@@ -342,6 +342,9 @@
       if (/[?&]safe\b/.test(location.search)) showSafeZones(stage, cfg);
 
       S.stage = stage; S.poster = poster;
+      SV.cue = (str) => parseCue(str, 0, tm);
+      SV.hooks = SV.hooks || [];
+      if (typeof window.SV_BUILD === "function") await window.SV_BUILD(SV);
       SV.duration = S.duration;
       fitStage();
       SV.seek(0);
@@ -379,6 +382,15 @@
 
   function buildCamera(poster, tm) {
     const cfg = config();
+    if (cfg.mode === "scenes") {
+      // les scènes gèrent leur propre caméra (serie/lib/stage.js) : poster fixe
+      const id = { s: 1, cx: W / 2, cy: H / 2 };
+      S.keys = [{ a: -1, d: 0.001, to: id, from: id }];
+      S.outroA = Infinity;
+      const last = tm.beats[tm.beats.length - 1];
+      S.duration = Math.max((last ? last.end : 0) + (cfg.hold != null ? cfg.hold : 2.5), tm.audioDuration);
+      return;
+    }
     const capReserve = cfg.captionReserve, topReserve = cfg.topReserve;
     const maxZoom = cfg.maxZoom || 1.85;
     const events = [];
@@ -492,7 +504,7 @@
   function bidiHTML(text) {
     if (!/[؀-ۿ]/.test(text)) {
       const tr = gloss(text);
-      return esc(text) + (tr ? `<span class="cap-tr" dir="rtl">${esc(tr)}</span>` : "");
+      return `<span dir="ltr" style="unicode-bidi:isolate">${esc(text)}</span>` + (tr ? `<span class="cap-tr" dir="rtl">${esc(tr)}</span>` : "");
     }
     let out = "", last = 0;
     for (const m of text.matchAll(LATIN_RUN)) {
@@ -575,6 +587,7 @@
       S.cap.style.opacity = p;
       S.cap.style.translate = `0 ${(1 - p) * 8}px`;
     } else S.cap.style.opacity = 0;
+    for (const f of SV.hooks || []) f(t);
     if (S.onTime) S.onTime(t, cur);
   };
 

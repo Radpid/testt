@@ -134,5 +134,5 @@ svg [data-at] { transform-box: fill-box; transform-origin: center; }
 
 /* traductions arabes des mots allemands dans les sous-titres (glossaire) */
 .cap ruby { ruby-position: under; }
-.cap rt { font-family: "Plex Arabic", sans-serif; font-size: 0.46em; font-weight: 400; color: var(--muted); line-height: 1.1; }
+.cap rt { ruby-align: center; white-space: nowrap; font-family: "Plex Arabic", sans-serif; font-size: 0.46em; font-weight: 400; color: var(--muted); line-height: 1.1; }
 .cap .cap-tr { display: block; font-family: "Plex Arabic", sans-serif; font-size: 0.62em; font-weight: 400; color: var(--muted); margin-top: 6px; }

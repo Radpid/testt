@@ -65,7 +65,6 @@ window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   "Was ist da drin?": "شنو كاين فيها؟",
   "nachfragen": "سول",
   "Nachfragen": "سول",
-  "Spritzen?": "ينجيكتيها؟",
   "Selbst aufgezogen?": "عمرتيها بيدك؟",
   "Beschriftet?": "مكتوب عليها؟",
   "i.v. oder oral?": "للعرق ولا للفم؟",

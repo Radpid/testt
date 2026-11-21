@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" data-palette="petrol">
+<head>
+<meta charset="utf-8">
+<title>AKTE 01 – Die weiße Spritze</title>
+<link rel="stylesheet" href="../../engine/sketch.css">
+<link rel="stylesheet" href="../../serie/lib/palette.css">
+<style>
+  /* série AKTE : fond uni de la palette, pas de grille de points */
+  #stage, #poster { background: var(--paper); }
+  #poster::before { display: none; }
+  #stage { --skin: #FFFFFF; }
+  .de { font-family: Kalam; font-weight: 700; fill: var(--ink); }
+  .de.light { font-weight: 400; }
+  .ar { font-family: "Plex Arabic"; font-weight: 400; fill: var(--gray); direction: rtl; }
+  .ar.strong { font-weight: 600; fill: var(--ink); }
+  .on-main { fill: var(--white); }
+  .accent { fill: var(--accent); }
+  /* vêtements colorés des Open Peeps -> palette */
+  .peep { --peep-9FD8E5: var(--main2); --peep-8FA7DF: var(--main2); --peep-4F66AF: var(--main); --peep-FFFFFF: var(--white); }
+  .nurse .peep { --peep-8FA7DF: var(--main); --peep-9FD8E5: var(--main); }
+  .sil { --skin: var(--gray2); --ink: #7B776F; }
+  .faded { filter: grayscale(1) contrast(.75) brightness(1.12); opacity: .45; }
+  /* sous-titres de la série */
+  .cap { background: var(--white); border: 3px solid var(--ink); border-radius: 20px; box-shadow: none;
+         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 600; font-size: 42px; line-height: 1.55;
+         color: var(--ink); padding: 12px 28px 16px; max-width: 940px; }
+  .cap::before { display: none; }
+  .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
+  .cap rt { font-size: 22px; color: var(--gray); }
+</style>
+</head>
+<body>
+<div id="stage"><div id="poster"></div></div>
+
+<script>
+  // Reel Instagram, animation par scènes (serie/lib/stage.js)
+  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 3.0 };
+</script>
+<script src="beats.js"></script>
+<script src="timings.js" onerror="void 0"></script>
+<script src="../../serie/glossaire.js"></script>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="../../serie/lib/peeps-parts.js"></script>
+<script src="../../serie/lib/peeps.js"></script>
+<script src="../../serie/lib/props.js"></script>
+<script src="../../serie/lib/stage.js"></script>
+<script src="scenes.js"></script>
+<script src="../../engine/runtime.js"></script>
+</body>
+</html>
