@@ -82,7 +82,7 @@ EXTRA = {"b17": 4.4, "b12": 0.3}   # b17 : scène muette « مات الـBébé 
 RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
 TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
 XF = 0.02
-PAUSE_BEFORE = {("raw", 228): 0.42}   # « Approbation، | ما تحيداتش ليه » : respiration naturelle
+PAUSE_BEFORE = {("raw", 228): 0.42, ("raw", 47): 0.62}   # 47 : après « في بيلفيلد » (carte de l'Allemagne)   # « Approbation، | ما تحيداتش ليه » : respiration naturelle
 
 def quietest(A, t0, t1, win=0.03):
     if t1 - t0 < 0.012: return (t0 + t1) / 2

@@ -12,6 +12,7 @@ P = [
  ("pop", "b4@جملة", 0, -16, None, None), ("pop", "b4@جملة+0.12", 0, -16, None, None), ("pop", "b4@جملة+0.24", 0, -16, None, None), ("pop", "b4@جملة+0.36", 0, -16, None, None),
  ("whoosh", "b5", -0.1, -16, None, None),
  ("ward", "b5", 0, -27, 1.5, 15.0),
+ ("pop", "b5@بيلفيلد+0.4", 0, -9, None, None), ("whoosh", "b5@واحد-0.1", 0, -18, None, None),   # épingle sur la carte, puis recul caméra
  ("pop", "b5@عشر", 0, -15, None, None), ("pop", "b5@سرطان", 0, -14, None, None),
  ("whoosh", "b6", -0.1, -17, None, None), ("steps", "b6", 0.05, -15, 0.4, 1.6),
  ("pop", "b6@طالب", 0, -15, None, None), ("pop", "b6@سيمانة", 0, -15, None, None),

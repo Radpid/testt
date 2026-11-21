@@ -128,17 +128,45 @@
       k.ar("جملة وحدة… غادي تشوفها ف اللخر", 540, 1200, 40).wipe("b4@واحدة", 0.7, "rtl");
     } });
 
-    /* 4 · Bielefeld, le Bébé --------------------------------------------------- */
+    /* 4 · Bielefeld, le Bébé : d'abord la carte de l'Allemagne, puis la mère et le Bébé ---- */
+    // contour simplifié de l'Allemagne (lon, lat), projeté à plat autour de (10,5° E ; 51,2° N)
+    const DE = [[8.6,54.9],[9.4,54.8],[10.0,54.5],[10.9,54.05],[11.6,54.15],[12.3,54.3],[13.0,54.45],[13.6,54.6],[14.2,53.9],
+      [14.4,53.3],[14.6,52.6],[14.7,51.8],[15.0,51.1],[14.3,50.9],[13.5,50.6],[12.6,50.4],[12.1,50.3],[12.5,49.8],[13.0,49.3],
+      [13.8,48.8],[13.4,48.3],[13.0,47.6],[12.2,47.6],[11.3,47.4],[10.5,47.5],[9.7,47.6],[8.6,47.6],[7.6,47.6],[7.6,48.1],
+      [8.2,48.97],[7.0,49.1],[6.4,49.5],[6.1,50.1],[6.0,50.8],[6.1,51.2],[5.9,51.8],[6.8,52.1],[7.0,52.6],[7.2,53.2],
+      [7.0,53.6],[8.0,53.7],[8.5,53.5],[8.9,53.9],[8.8,54.3]];
+    const MX = 790, MY = 690, KM = 51;                                     // centre de la carte, px par degré
+    const geo = (lon, lat) => [MX + (lon - 10.5) * 0.626 * KM, MY - (lat - 51.2) * KM];
     st.scene({ from: "b5", in: "iris", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b5", s: 1.45, cx: 430, cy: 900 }, { at: "b5@عشر-0.4", s: 1, cx: 540, cy: 900, d: 1 }]);
+      c.camera([{ at: "b5", s: 1.7, cx: 720, cy: 690 }, { at: "b5@واحد-0.1", s: 1, cx: 540, cy: 900, d: 0.8 }]);
       k.ribbon("Bielefeld · 2011", 540, 355, { size: 64, parent: c.hud }).wipe("b5", 0.5);
       k.ar("ألمانيا · قسم سرطان الأطفال", 540, 472, 34, "ar strong", c.hud).wipe("b5+0.3", 0.7, "rtl");
+      // la carte
+      const map = el("g"); const C = SC.util.ctx(map, 4242, false, 1);
+      el("path", { d: "M" + DE.map((p) => geo(...p).map((v) => v + 7).join(" ")).join(" L") + " Z", fill: "#D2D2CB" }, map);   // ombre
+      SC.util.shape(C, "de", "M" + DE.map((p) => geo(...p).join(" ")).join(" L") + " Z", SC.MAT.grey, { sw: 3.2 });
+      const [bx, by] = geo(8.53, 52.02), [lx, ly] = geo(13.4, 52.52);
+      el("circle", { cx: lx, cy: ly, r: 7, fill: "#1C1A1C" }, map);
+      SC.util.text(map, "Berlin", lx, ly - 16, 24, { fill: "#55524B" });
+      SC.util.text(map, "Deutschland", MX + 5, MY + 150, 30, { fill: "#55524B" });
+      c.node(map).fade("b5", 0.3);
+      // l'épingle tombe sur Bielefeld
+      const pin = el("g", { transform: `translate(${bx} ${by})` }); const P = SC.util.ctx(pin, 77, false, 1);
+      el("ellipse", { cx: 0, cy: 2, rx: 14, ry: 5, fill: "rgba(28,26,28,.25)" }, pin);
+      SC.util.shape(P, "pin", "M0 0 C-6 -14 -24 -30 -24 -48 A24 24 0 1 1 24 -48 C24 -30 6 -14 0 0 Z", SC.MAT.yellow, { sw: 3 });
+      el("circle", { cx: 0, cy: -48, r: 9, fill: "#FFFFFF", stroke: "#1C1A1C", "stroke-width": 3 }, pin);
+      c.node(pin).slide("b5@بيلفيلد", 0, -160, 0.45, "back").wobble("b5@بيلفيلد+0.45", 0.5, 6);
+      const ring = c.put(`<circle cx="${bx}" cy="${by}" r="18" fill="none" stroke="#1C1A1C" stroke-width="3"/>`);
+      ring.on((t, s) => { const q = prog(t, T("b5@بيلفيلد") + 0.45, 0.7); s.o *= q > 0 && q < 1 ? 1 - q : 0; s.s *= 1 + 2.2 * q; });
+      k.chip("Bielefeld", "بيلفيلد", bx - 150, by - 50, 34, { yellow: true }).pop("b5@بيلفيلد+0.3");
+      c.kick("b5@بيلفيلد+0.45", 0.05);
+      // la chambre
       k.cast("bed", { x: 90, y: 1250, w: 520 });
       k.ground(540, 1252, 900);
-      k.person(420, 1250, 1.35, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby)).fade("b5+0.2");
-      k.chip("10 Monate", "عشرة د الشهور", 800, 620, 40).pop("b5@عشر");
-      k.chip("Leukämie", "سرطان الدم", 800, 800, 40, { yellow: true }).pop("b5@سرطان").pulse("b5@سرطان+0.5", 0.6, 0.08, 2);
+      k.person(420, 1250, 1.35, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby)).fade("b5@واحد", 0.5);
+      k.chip("10 Monate", "عشرة د الشهور", 820, 975, 40).pop("b5@عشر");
+      k.chip("Leukämie", "سرطان الدم", 820, 1128, 40, { yellow: true }).pop("b5@سرطان").pulse("b5@سرطان+0.5", 0.6, 0.08, 2);
       c.kick("b5@سرطان", 0.05);
     } });
 

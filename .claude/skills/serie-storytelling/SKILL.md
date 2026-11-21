@@ -106,6 +106,9 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   Les reprises n'ont PAS le même son (AKTE 01 : +6 à +10 dB de graves, −6 à −20 dB d'aigus, +6 à +10 dB de niveau) :
   les égaliser sur l'original (EQ d'appariement par 1/6 d'octave + même niveau RMS, `match()` dans montage_voix.py),
   puis vérifier l'écart par bandes (≤ ±3–4 dB). Laisser une respiration (~0,3 s) aux raccords en milieu de phrase.
+- **Lieu = carte** (exigence de l'auteur) : dès qu'une ville allemande est nommée, carte de l'Allemagne au trait
+  (contour `DE` + `geo(lon, lat)` dans story.js d'AKTE 01), Berlin en repère, épingle jaune qui tombe sur la ville,
+  plan serré sur la carte puis recul ; laisser une respiration (~0,45 s) après le nom de la ville.
 - **Logo** : pastille `@dr.aguilo` (coin haut droit, sous l'en-tête Instagram), masquée sur l'affiche finale.
 - **Cadrage** : l'auteur VEUT des zooms forts (×1,3 à ×1,55), mais chacun cadre un sujet complet et soigné
   (étiquette de la seringue, mère + Bébé, injection avec le Bébé entier, Bébé bleu + moniteur…) : jamais un
