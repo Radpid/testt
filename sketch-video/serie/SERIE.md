@@ -41,12 +41,18 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 
 | # | Titre de travail | Statut |
 |---|---|---|
-| 01 | La seringue blanche (PJler, Bielefeld 2011) | **rendu final v1 (voix de l'auteur), en validation** — `videos/ep01-spritze/` |
+| 01 | La seringue blanche (PJler, Bielefeld 2011) | **publié (nov. 2026)** — 1 min 32 ; ~11,7 k vues, 224 j'aime, 116 partages au 1er relevé — `videos/ep01-spritze/` (modèle) |
 | 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
-| 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) |
+| 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) — **recommandé comme AKTE 02** |
 | 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
 | — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
+
+### Leçons d'AKTE 01 (à appliquer dès AKTE 02)
+- Instagram rogne ~50 px de chaque côté sur iPhone : logo et étiquettes coupés à droite → tout le contenu important
+  entre x 90 et 990, rien dans la colonne de boutons (x > 915, y 980–1650). Voir le skill, § Zones Instagram.
+- L'auteur enregistre lui-même ; reprises à égaliser sur l'original ; montage par phrase ; ×1,3 ; pas de coupe de
+  contenu sans son accord ; une carte de l'Allemagne dès qu'une ville est nommée ; la mort en scène muette.
 
 ### 01 — La seringue blanche
 - Faits (vérifiés dans les deux jugements) : 22.08.2011, oncologie pédiatrique d'un hôpital de Bielefeld (NRW).

@@ -26,8 +26,8 @@
   /* sous-titres « karaoké » : étiquette blanche + scotch (référence), gros texte, chaque mot surgit au rythme de la voix */
   #captions { padding: 0 24px; }
   .cap { background: #FFFFFF; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 7px 9px 0 rgba(28,26,28,.2);
-         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 70px; line-height: 1.36;
-         color: var(--ink); padding: 6px 30px 12px; max-width: 900px; transform-origin: 50% 100%; text-align: center; }
+         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 62px; line-height: 1.36;
+         color: var(--ink); padding: 6px 28px 12px; max-width: 720px; transform-origin: 50% 100%; text-align: center; }
   .cap::before { display: block; left: -18px; top: -20px; width: 96px; height: 34px; background: rgba(190,190,182,.92); }
   .cap .kline { display: block; }
   .cap .w { display: inline-block; padding: 0 4px; border-radius: 10px; transform-origin: 50% 85%; }
@@ -38,8 +38,8 @@
   .cap .cap-tr { font-size: 40px; font-weight: 700; color: #4A4843; margin-top: 2px; }
   /* sous-titres classiques (secours) */
   .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
-  /* logo @dr.aguilo (coin haut droit, sous l'en-tête Instagram) */
-  #brand { position: absolute; right: 30px; top: 222px; z-index: 120; display: flex; align-items: center; gap: 10px;
+  /* logo @dr.aguilo : à 100 px du bord droit (Instagram rogne ~50 px de chaque côté), sous la barre d'état */
+  #brand { position: absolute; right: 100px; top: 222px; z-index: 120; display: flex; align-items: center; gap: 10px;
            background: #FFFFFF; border: 3px solid var(--ink); border-radius: 40px; padding: 3px 14px 3px 5px;
            box-shadow: 4px 5px 0 rgba(28,26,28,.18); pointer-events: none; opacity: 0; }
   #brand svg { width: 36px; height: 36px; }
@@ -56,7 +56,7 @@
 
 <script>
   // Reel Instagram, animation par scènes (serie/lib/stage.js)
-  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 1.6, captions: "karaoke", captionBottom: 440, capSafeRight: 0, capChars: 18, capWords: 4, capTr: false };
+  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 1.6, captions: "karaoke", captionBottom: 320, capSafeRight: 0, capChars: 15, capWords: 4, capTr: false };
 </script>
 <script src="beats.js"></script>
 <script src="timings.js" onerror="void 0"></script>

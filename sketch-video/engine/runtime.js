@@ -373,7 +373,8 @@
   const PRESETS = {
     default: { captionBottom: 270, captionReserve: 470, topReserve: 90, safeRight: 0 },
     // Reels : en-tête en haut, pseudo + légende + musique en bas, boutons j'aime/partage à droite
-    instagram: { captionBottom: 440, captionReserve: 640, topReserve: 210, safeRight: 120 },
+    // mesuré sur un Reel publié (iPhone) : ~50 px rognés de chaque côté, boutons x>915 (y 980-1650), pseudo/légende y>1650
+    instagram: { captionBottom: 320, captionReserve: 640, topReserve: 250, safeRight: 165 },
   };
   function config() {
     const cfg = window.SV_CONFIG || {};
