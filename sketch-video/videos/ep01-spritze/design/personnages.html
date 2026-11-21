@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Akte 01 – Figuren</title>
+<link rel="stylesheet" href="common.css">
+<script src="../../../engine/vendor/rough.js"></script>
+<script src="../../../serie/lib/cast.js"></script>
+</head><body>
+<svg class="frame" id="s" viewBox="0 0 1080 1920"></svg>
+<script>
+document.fonts.ready.then(() => {
+  const s = document.getElementById("s"), K = Cast;
+  K.text(s, "AKTE 01 · Die Figuren", 540, 110, 62);
+  K.text(s, "Planche de validation — style et poses", 540, 160, 28, { weight: 400 });
+
+  // rangée 1 : l'étudiant (face, dos), l'infirmière
+  K.person(s, { x: 190, y: 830, outfit: "coat", hair: "short", stetho: true, badge: "PJ", seed: 11 });
+  K.person(s, { x: 520, y: 830, outfit: "coat", hair: "short", view: "back", armR: [14, -40], seed: 12 });
+  K.person(s, { x: 850, y: 830, outfit: "scrubs", hair: "bun", facing: -1, armR: [30, -70], mouth: "talk", seed: 13 });
+  K.text(s, "Der PJler", 190, 900, 34); K.text(s, "(von hinten)", 520, 900, 30, { weight: 400 });
+  K.text(s, "Die Pflegekraft", 850, 900, 34);
+
+  // rangée 2 : la mère assise avec le bébé, le juge, les parents
+  K.bed(s, { x: 30, y: 1430, w: 440 });
+  K.person(s, { x: 250, y: 1430, scale: 0.95, silhouette: true, hair: "long", legs: "sit", seatY: -200, armL: [8, -100], armR: [8, -100], seed: 14 });
+  K.babyBundle(s, { x: 262, y: 1172, scale: 0.78, rot: -6 });
+  K.text(s, "Die Mutter + Baby", 250, 1500, 34);
+  K.person(s, { x: 690, y: 1430, scale: 0.9, outfit: "robe", hair: "gray", glasses: true, legs: "sit", seatY: -150, armL: [10, -70], armR: [10, -70], brows: "focus", mouth: "flat", seed: 15 });
+  K.bench(s, { x: 540, y: 1430, w: 300, h: 270 });
+  K.gavel(s, { x: 780, y: 1150, rot: -20, scale: 0.7 });
+  K.text(s, "Der Richter", 690, 1500, 34);
+  K.person(s, { x: 925, y: 1430, scale: 0.62, silhouette: true, hair: "short", view: "back", legs: "walk", step: 12, seed: 16 });
+  K.person(s, { x: 1010, y: 1430, scale: 0.58, silhouette: true, hair: "long", view: "back", legs: "walk", step: -12, seed: 17 });
+  K.text(s, "Die Eltern", 968, 1500, 30);
+
+  // rangée 3 : expressions de l'étudiant (bustes)
+  const defs = K.el("defs", {}, s);
+  const cp = K.el("clipPath", { id: "bust" }, defs);
+  K.el("rect", { x: -120, y: -600, width: 240, height: 290 }, cp);
+  const ex = [["neutral", "closed", "open", "ruhig"], ["focus", "flat", "open", "konzentriert"], ["worried", "frown", "open", "unsicher"], ["shock", "o", "wide", "Schock"], ["sad", "frown", "closed", "Reue"]];
+  ex.forEach(([b, m, e, label], i) => {
+    const x = 118 + i * 211, g = K.group(s, { transform: `translate(${x},1990) scale(0.8)`, "clip-path": "url(#bust)" });
+    K.person(g, { outfit: "coat", hair: "short", brows: b, mouth: m, eyes: e, bust: true, noShadow: true, seed: 30 + i });
+    K.text(s, label, x, 1780, 28, { weight: 400 });
+  });
+  window.READY = true;
+});
+</script>
+</body></html>

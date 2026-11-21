@@ -19,8 +19,9 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
   avec personnages** (pas un poster unique).
 - Éléments récurrents d'un épisode à l'autre :
   1. ouverture : le dossier « AKTE 0X » qui s'ouvre (tampon du tribunal, année) ;
-  2. narrateur : l'avatar Dr.aguilo apparaît au début et à la fin ;
-  3. **le gel** : au moment de l'erreur, l'image se fige et le narrateur demande « شنو كنتي غادي دير؟ » ;
+  2. narrateur : uniquement la voix (pas d'avatar, choix de l'auteur) ; « @dr.aguilo » en petit à la fin ;
+  3. **le gel** : au moment de l'erreur, l'image se fige (tampon « STOP », cadre jaune) et le narrateur demande
+     « شنو كنتي غادي دير؟ » ;
   4. la sentence : citation allemande exacte du tribunal ;
   5. **la carte « القاعدة »** (la règle) : une seule règle, à capturer en écran ;
   6. fin : « Akte 0X+1 » annoncée + appel à commenter.

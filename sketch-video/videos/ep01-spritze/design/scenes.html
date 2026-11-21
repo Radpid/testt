@@ -1,0 +1,154 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Akte 01 – Szenen</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  .faded { filter: grayscale(1) contrast(0.7) brightness(1.08); opacity: 0.55; }
+</style>
+<script src="../../../engine/vendor/rough.js"></script>
+<script src="../../../serie/lib/cast.js"></script>
+</head><body>
+<svg class="frame" id="s" viewBox="0 0 1080 1920"></svg>
+<script>
+/* Images clés pour valider le style (une scène = ?f=N). Zones Instagram : contenu utile entre y 220 et 1300,
+   sous-titres vers y 1400, x < 960. */
+const K = Cast, C = K.C, s = document.getElementById("s");
+const AR = "'Plex Arabic', sans-serif";
+
+function caption(lines) {
+  const g = K.group(s), h = 70 + (lines.length - 1) * 62, y0 = 1460 - h;
+  const w = 940;
+  const rc = rough.svg(s);
+  const box = rc.path(K.rr(70, y0, w, h, 16), { stroke: C.ink, strokeWidth: 2.4, roughness: 0.9, fill: C.white, fillStyle: "solid", seed: 5 });
+  g.appendChild(box);
+  g.appendChild(rc.rectangle(470, y0 - 16, 140, 32, { stroke: "none", fill: "rgba(248,206,78,0.75)", fillStyle: "solid", seed: 6 }));
+  lines.forEach((t, i) => K.text(g, t, 540, y0 + 48 + i * 62, 42, { font: AR, weight: 600, dir: "rtl" }));
+}
+function corner(n) {
+  K.text(s, "AKTE 01", 70, 250, 30, { anchor: "start" });
+  K.text(s, n, 70, 284, 22, { anchor: "start", weight: 400 });
+}
+function room(g, opts) {
+  opts = opts || {};
+  K.floor(g, { y: 1250 });
+  K.door(g, { x: 40, y: 1250, w: 170, h: 470, label: "204" });
+  if (!opts.bare) {
+    K.clock(g, { x: 330, y: 400, r: 52, time: opts.time || "08:40" });
+    K.doodle(g, { x: 560, y: 420, kind: "sun", s: 0.85 });
+    K.doodle(g, { x: 680, y: 470, kind: "house", s: 0.75 });
+    K.monitor(g, { x: 770, y: 330, w: 200, h: 140, hr: "142" });
+  }
+  K.ivPole(g, { x: 300, y: 1250, h: 520 });
+  K.bed(g, { x: 260, y: 1250, w: 430 });
+  K.cabinet(g, { x: 720, y: 1250 });
+}
+function motherAndBaby(g) {
+  K.person(g, { x: 480, y: 1250, scale: 0.95, silhouette: true, hair: "long", legs: "sit", seatY: -200, armL: [8, -100], armR: [8, -100], seed: 14 });
+  K.babyBundle(g, { x: 492, y: 992, scale: 0.78, rot: -6 });
+  // la ligne du cathéter, du bébé vers la perfusion
+  const rc = rough.svg(s);
+  g.appendChild(rc.curve([[430, 990], [380, 900], [320, 820], [300, 760]], { stroke: C.ink, strokeWidth: 2, roughness: 0.6, seed: 9 }));
+}
+
+const frames = {
+  1() { // accroche
+    K.germany(s, { x: 760, y: 230, s: 0.95 });
+    K.text(s, "Deutschland · 2011", 830, 480, 26, { weight: 400 });
+    K.syringe(s, { x: 330, y: 760, rot: -10, scale: 2.1, kind: "milky" });
+    const rc = rough.svg(s);
+    s.appendChild(rc.ellipse(985, 650, 22, 30, { stroke: C.ink, strokeWidth: 2, fill: C.white, fillStyle: "solid", roughness: 0.6, seed: 3 }));
+    K.stamp(s, { x: 540, y: 1100, text: "SCHULDIG", sub: "fahrlässige Tötung", w: 600, h: 190 });
+    corner("Die weiße Spritze");
+    caption(["ف ألمانيا، هاد الـSpritze قتلات بيبي."]);
+  },
+  2() { // chambre 204 : la seringue est posée
+    corner("Zimmer 204 · 22.08.2011");
+    const g = K.group(s);
+    room(g);
+    motherAndBaby(g);
+    K.syringe(g, { x: 742, y: 1008, rot: 0, scale: 0.42, kind: "milky" });
+    K.person(g, { x: 950, y: 1250, scale: 0.98, outfit: "scrubs", hair: "bun", facing: -1, armR: [52, -40], mouth: "talk", look: 4, seed: 13 });
+    K.person(g, { x: 170, y: 1290, scale: 1.08, outfit: "coat", hair: "short", view: "back", armR: [58, -40], seed: 12 });
+    K.bubble(s, { x: 760, y: 600, w: 470, h: 110, tail: [130, 80], text: "Hier ist das orale Antibiotikum.", size: 32 });
+    K.tag(s, { x: 528, y: 520, text: "laut Urteil" });
+    // regard : elle parle à la mère, pas à lui
+    const rc = rough.svg(s);
+    s.appendChild(rc.curve([[860, 820], [700, 760], [560, 800]], { stroke: C.yellow, strokeWidth: 5, roughness: 0.8, strokeLineDash: [14, 10], seed: 21 }));
+    K.text(s, "kein Blickkontakt", 330, 600, 30);
+    K.text(s, "مدير ظهرو", 330, 640, 28, { font: AR, weight: 400, dir: "rtl" });
+    s.appendChild(rc.curve([[300, 660], [250, 720], [220, 780]], { stroke: C.ink, strokeWidth: 2.4, roughness: 0.8, seed: 22 }));
+    caption(["و هو مدير ظهرو، حطات الفرملية", "Spritze حدا البيبي…"]);
+  },
+  3() { // image figée
+    const bg = K.group(s, { class: "faded" });
+    room(bg, { bare: true });
+    motherAndBaby(bg);
+    const st = K.person(s, { x: 330, y: 1290, scale: 1.3, outfit: "coat", hair: "short", stetho: true, badge: "PJ", armR: [28, -112], brows: "focus", mouth: "flat", look: 6, seed: 40 });
+    const h = st.hands.R.hand, hx = 330 + h[0] * 1.3, hy = 1290 + h[1] * 1.3;
+    K.syringe(s, { x: hx - 84, y: hy - 4, rot: -14, scale: 0.72, kind: "milky" });
+    K.bubble(s, { x: 250, y: 390, w: 310, h: 110, think: true, text: "Refobacin?", size: 40 });
+    K.tag(s, { x: 96, y: 290, text: "Rekonstruktion" });
+    const rc = rough.svg(s);
+    s.appendChild(rc.rectangle(26, 26, 1028, 1868, { stroke: C.yellow, strokeWidth: 16, roughness: 1.2, seed: 31 }));
+    K.stamp(s, { x: 770, y: 600, text: "STOP", rot: 6, w: 360, h: 160 });
+    const card = (y, letter, de, ar, fill) => {
+      const g = K.group(s, { transform: `translate(620,${y})` });
+      g.appendChild(rc.path(K.rr(0, 0, 300, 150, 18), { stroke: C.ink, strokeWidth: 2.8, roughness: 1, fill, fillStyle: "solid", seed: y }));
+      K.text(g, letter, 50, 98, 72);
+      K.text(g, de, 190, 70, 38);
+      K.text(g, ar, 190, 118, 30, { font: AR, weight: 400, dir: "rtl" });
+    };
+    card(1010, "A", "Spritzen", "يدفعها", C.white);
+    card(1180, "B", "Nachfragen", "يسول", C.yellow);
+    caption(["STOP. لو كنتي ف بلاصتو،", "شنو غادي دير؟"]);
+  },
+  4() { // tribunal
+    corner("Landgericht Bielefeld · 14.08.2013");
+    const rc = rough.svg(s);
+    for (let i = 0; i < 5; i++) s.appendChild(rc.rectangle(90 + i * 185, 640, 160, 420, { stroke: C.hatch, strokeWidth: 2, roughness: 1, seed: 50 + i }));
+    K.person(s, { x: 540, y: 1250, scale: 1.3, outfit: "robe", hair: "gray", glasses: true, legs: "sit", seatY: -150, armL: [12, -70], armR: [12, -70], brows: "focus", mouth: "talk", seed: 15 });
+    K.bench(s, { x: 150, y: 1250, w: 780, h: 330, label: "Landgericht Bielefeld" });
+    K.gavel(s, { x: 840, y: 905, rot: -20, scale: 0.8 });
+    // la citation
+    s.appendChild(rc.path(K.rr(80, 330, 920, 320, 22), { stroke: C.ink, strokeWidth: 2.8, roughness: 1, fill: C.white, fillStyle: "solid", seed: 60 }));
+    K.tag(s, { x: 110, y: 312, text: "Zitat Gericht" });
+    K.text(s, "„Da hätte der Angeklagte", 540, 425, 52);
+    const t1 = K.text(s, "zumindest ", 0, 515, 52, { anchor: "start" }), t2 = K.text(s, "nachfragen", 0, 515, 52, { anchor: "start" });
+    const w1 = t1.getComputedTextLength(), w2 = t2.getComputedTextLength(), x0 = 540 - (w1 + w2) / 2;
+    t1.setAttribute("x", x0); t2.setAttribute("x", x0 + w1);
+    s.insertBefore(rc.rectangle(x0 + w1 - 6, 476, w2 + 12, 52, { stroke: "none", fill: "rgba(248,206,78,0.9)", fillStyle: "solid", seed: 61 }), t1);
+    K.text(s, "müssen.“", 540, 600, 52);
+    caption(["كان خاصو على الأقل يسول."]);
+    K.text(s, "fahrlässige Tötung = قتل بلا قصد", 540, 1300, 30, { weight: 400 });
+  },
+  5() { // la règle
+    corner("Die Regel");
+    const rc = rough.svg(s);
+    ["Was", "ist", "da", "drin?"].forEach((w, i) => {
+      s.appendChild(rc.rectangle(90 + i * 230, 320, 200, 110, { stroke: C.ink, strokeWidth: 2.8, roughness: 1, fill: i === 3 ? C.yellow : C.white, fillStyle: "solid", seed: 70 + i }));
+      K.text(s, w, 190 + i * 230, 395, 54);
+    });
+    K.text(s, "شنو كاين فيها؟", 540, 480, 36, { font: AR, weight: 600, dir: "rtl" });
+    K.syringe(s, { x: 300, y: 575, rot: 0, scale: 1.4, kind: "milky", label: "ORAL", question: false });
+    K.text(s, "Cotrim-K Saft", 510, 655, 30, { weight: 400 });
+    s.appendChild(rc.path(K.rr(90, 710, 900, 510, 26), { stroke: C.ink, strokeWidth: 3, roughness: 1, fill: C.white, fillStyle: "solid", seed: 80 }));
+    K.text(s, "القاعدة", 540, 790, 66, { font: "Lalezar", weight: 400, dir: "rtl" });
+    const items = [["1", "Selbst aufgezogen?", "عمرتيها بيدك؟"], ["2", "Beschriftet?", "مكتوب عليها؟"], ["3", "i.v. oder oral?", "للعرق ولا للفم؟"]];
+    items.forEach(([n, de, ar], i) => {
+      const y = 880 + i * 92;
+      s.appendChild(rc.circle(160, y - 14, 54, { stroke: C.ink, strokeWidth: 2.4, roughness: 0.8, fill: C.yellow, fillStyle: "solid", seed: 90 + i }));
+      K.text(s, n, 160, y + 2, 34);
+      K.text(s, de, 210, y + 2, 42, { anchor: "start" });
+      K.text(s, ar, 960, y + 2, 32, { font: AR, weight: 400, anchor: "start", dir: "rtl" });
+    });
+    K.text(s, "Nein? → nicht spritzen. Nachfragen.", 540, 1170, 40);
+    caption(["ما عمرتيهاش بيدك؟ ما مكتوب عليها والو؟", "ما تدخلهاش. سول."]);
+  },
+};
+
+document.fonts.ready.then(() => {
+  const f = new URLSearchParams(location.search).get("f") || "1";
+  frames[f]();
+  window.READY = true;
+});
+</script>
+</body></html>

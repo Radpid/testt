@@ -1,0 +1,12 @@
+@font-face { font-family: "Kalam"; src: url("../../../engine/fonts/Kalam-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Kalam"; src: url("../../../engine/fonts/Kalam-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Plex Arabic"; src: url("../../../engine/fonts/IBMPlexSansArabic-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Plex Arabic"; src: url("../../../engine/fonts/IBMPlexSansArabic-SemiBold.ttf"); font-weight: 600; }
+@font-face { font-family: "Lalezar"; src: url("../../../engine/fonts/Lalezar-Regular.ttf"); }
+html, body { margin: 0; background: #F7F7F1; }
+svg.frame {
+  display: block; width: 1080px; height: 1920px;
+  background-color: #F7F7F1;
+  background-image: radial-gradient(#D9D9D1 1.6px, transparent 1.8px);
+  background-size: 36px 36px;
+}

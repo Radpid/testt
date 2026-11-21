@@ -23,7 +23,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
 
 ## 2 · Le dossier — 0:07–0:11
 - **On voit** : le tampon devient la couverture d'un dossier « AKTE 01 · Bielefeld · 2011 » qui s'ouvre.
-  L'avatar **Dr.aguilo** entre en bas à gauche, doigt levé. Sous lui, **4 cases vides** : _ _ _ _
+  Sous le titre, **4 cases vides** apparaissent : _ _ _ _
 - **Voix** : « القصة حقيقية. و غادي تشوف بلي كان كافي يقول غير أربع كلمات. »
 - **Son** : papier, souffle.
 
@@ -60,7 +60,8 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
 ## 6 · Le gel — 0:36–0:44
 - **On voit** : l'étudiant revient avec le tube étiqueté, voit la seringue ; bulle de pensée « Refobacin? »
   (« Rekonstruktion »). Il la prend. **Tout se fige** : l'image se désature, seule la seringue reste en couleur,
-  les traits tremblent légèrement. Dr.aguilo entre dans l'image figée. Deux cartes apparaissent :
+  les traits tremblent légèrement. Un grand « STOP » est tamponné, un cadre jaune entoure l'image, et deux cartes
+  apparaissent :
   « **A** · Spritzen » / « **B** · Nachfragen ».
 - **Voix** :
   - « رجع، شافها، و قال ف خاطرو: هادي هي الـRefobacin. »
@@ -115,7 +116,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
 - **Son** : quatre « tocs » (un par mot), stylo qui écrit.
 
 ## 11 · Fin — 1:24–1:30
-- **On voit** : Dr.aguilo à côté de la carte, puis un nouveau dossier « AKTE 02 · bald » glisse sur la table.
+- **On voit** : la carte reste, puis un nouveau dossier « AKTE 02 · bald » glisse sur la table.
   Petite ligne en bas : « Quelle: AG Bielefeld 22.10.2012 · LG Bielefeld 14.08.2013 (rechtskräftig) ·
   Namen anonymisiert · Szenen nachgestellt ». Chip « @dr.aguilo ».
 - **Voix** :
@@ -125,7 +126,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
 
 ## À dessiner (étape 3)
 
-- **Personnages** : Dr.aguilo (avatar narrateur), l'étudiant en PJ, l'infirmière, la mère (silhouette),
+- **Personnages** (pas d'avatar du narrateur : la voix suffit) : l'étudiant en PJ, l'infirmière, la mère (silhouette),
   le bébé (seulement un paquet de couvertures et une petite main), le juge, les parents (silhouettes).
 - **Décors** : bureau avec dossier AKTE, couloir K8, chambre 204 (lit, table de chevet, plateau, pied à perfusion,
   moniteur), horloge et moniteur de réanimation, salle d'audience, carte « القاعدة ».
