@@ -5,9 +5,15 @@
   "description": "Vidéos explicatives style sketchnote (darija + allemand) : HTML animé -> MP4",
   "scripts": {
     "render": "node engine/render.mjs",
-    "postinstall": "playwright install chromium"
+    "postinstall": "playwright install chromium",
+    "build:peeps": "node serie/tools/build-peeps.cjs"
   },
   "dependencies": {
     "playwright": "^1.56.0"
+  },
+  "devDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-peeps": "0.1.10"
   }
 }

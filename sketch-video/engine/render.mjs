@@ -39,7 +39,12 @@ if (spawnSync(ffmpegBin, ["-version"]).status !== 0) { console.error("ffmpeg int
 
 const launchOpts = {};
 if (process.env.CHROMIUM_PATH) launchOpts.executablePath = process.env.CHROMIUM_PATH;
-const browser = await chromium.launch(launchOpts);
+// si la version locale de Playwright n'a pas son navigateur, on prend le Chromium déjà installé
+const browser = await chromium.launch(launchOpts).catch((e) => {
+  const fallback = "/opt/pw-browsers/chromium";
+  if (fs.existsSync(fallback)) return chromium.launch({ ...launchOpts, executablePath: fallback });
+  throw e;
+});
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 page.on("console", (m) => { if ((m.type() === "warning" || m.type() === "error") && !m.text().startsWith("Failed to load resource")) console.log(`[page ${m.type()}] ${m.text()}`); });
 page.on("requestfailed", (r) => { if (!r.url().endsWith("/timings.js")) console.log(`[page] fichier introuvable : ${decodeURIComponent(r.url())}`); });

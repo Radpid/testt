@@ -458,11 +458,38 @@
   const LAT = "A-Za-zÀ-ÖØ-öø-ÿĀ-ž0-9";
   const LATIN_RUN = new RegExp(`[${LAT}][${LAT} .\\-–·/]*[${LAT}][?!.]*|[${LAT}][?!.]*`, "g");
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  /* Glossaire optionnel (window.GLOSSARY = { "Spritze": "حقنة", … }) : chaque mot allemand des sous-titres
+     reçoit sa traduction arabe en petit (ruby), et une phrase entièrement allemande sa traduction en dessous. */
+  const normKey = (t) => t.toLowerCase().replace(/[„“"«».,;:!?()]/g, "").replace(/\s+/g, " ").trim();
+  let GL = null;
+  function gloss(term) {
+    if (!window.GLOSSARY) return null;
+    if (!GL) { GL = {}; for (const k in window.GLOSSARY) GL[normKey(k)] = window.GLOSSARY[k]; }
+    return GL[normKey(term)] || null;
+  }
+  const ruby = (t, g) => g ? `<ruby>${esc(t)}<rt>${esc(g)}</rt></ruby>` : esc(t);
+  function glossRun(run) {
+    const whole = gloss(run);
+    if (whole) return ruby(run, whole);
+    // sinon mot par mot (en gardant les groupes de 2 mots connus, ex. « fahrlässige Tötung »)
+    const ws = run.split(/(\s+)/);
+    let out = "";
+    for (let i = 0; i < ws.length; i++) {
+      if (/^\s+$/.test(ws[i])) { out += ws[i]; continue; }
+      const two = i + 2 < ws.length ? ws[i] + " " + ws[i + 2] : null;
+      if (two && gloss(two)) { out += ruby(two, gloss(two)); i += 2; continue; }
+      out += ruby(ws[i], gloss(ws[i]));
+    }
+    return out;
+  }
   function bidiHTML(text) {
-    if (!/[؀-ۿ]/.test(text)) return esc(text);
+    if (!/[؀-ۿ]/.test(text)) {
+      const tr = gloss(text);
+      return esc(text) + (tr ? `<span class="cap-tr" dir="rtl">${esc(tr)}</span>` : "");
+    }
     let out = "", last = 0;
     for (const m of text.matchAll(LATIN_RUN)) {
-      out += esc(text.slice(last, m.index)) + `<span dir="ltr" style="unicode-bidi:isolate">${esc(m[0])}</span>`;
+      out += esc(text.slice(last, m.index)) + `<span dir="ltr" style="unicode-bidi:isolate">${glossRun(m[0])}</span>`;
       last = m.index + m[0].length;
     }
     return out + esc(text.slice(last));

@@ -131,3 +131,8 @@ body.render #controls { display: none; }
 svg [data-at] { transform-box: fill-box; transform-origin: center; }
 /* un bloc positionné peut aussi être une carte, et une carte peut contenir des blocs positionnés */
 .blk.card, .blk.bubble, .card > .blk, .bubble > .blk { position: absolute; }
+
+/* traductions arabes des mots allemands dans les sous-titres (glossaire) */
+.cap ruby { ruby-position: under; }
+.cap rt { font-family: "Plex Arabic", sans-serif; font-size: 0.46em; font-weight: 400; color: var(--muted); line-height: 1.1; }
+.cap .cap-tr { display: block; font-family: "Plex Arabic", sans-serif; font-size: 0.62em; font-weight: 400; color: var(--muted); margin-top: 6px; }

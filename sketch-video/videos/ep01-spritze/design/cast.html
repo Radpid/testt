@@ -1,0 +1,58 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Akte 01 – Besetzung (Open Peeps)</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  /* palette provisoire (petrol) si palette.css n'existe pas encore */
+  :root { --ink:#1F1D1E; --paper:#F3EFE6; --skin:#FFFFFF; --main:#2E6E73; --main2:#A9CFCB; --accent:#C8553D; --accent2:#F2C5B5; --gray:#8C8A85; --gray2:#DCD7CD; }
+  svg.frame { background-color: var(--paper); background-image: none; }
+  .peep { --peep-9FD8E5: var(--main2); --peep-8FA7DF: var(--main2); --peep-4F66AF: var(--main); --peep-FFFFFF: var(--skin); }
+  .sil { --skin: var(--gray2); --ink: #6F6C66; }
+  text { font-family: Kalam; font-weight: 700; fill: var(--ink); }
+  .ar { font-family: "Plex Arabic"; font-weight: 400; fill: var(--gray); }
+</style>
+<link rel="stylesheet" href="../../../serie/lib/palette.css" onerror="this.remove()">
+<script src="../../../serie/lib/peeps-parts.js"></script>
+<script src="../../../serie/lib/peeps.js"></script>
+</head><body>
+<div id="pal"><svg class="frame" id="s" viewBox="0 0 1080 1920"></svg></div>
+<script>
+const s = document.getElementById("s"), NS = "http://www.w3.org/2000/svg";
+const q = new URLSearchParams(location.search);
+if (q.get("palette")) document.getElementById("pal").dataset.palette = q.get("palette");
+function t(txt, x, y, size, cls, anchor) {
+  const e = document.createElementNS(NS, "text");
+  e.setAttribute("x", x); e.setAttribute("y", y); e.setAttribute("font-size", size); e.setAttribute("text-anchor", anchor || "middle");
+  if (cls) e.setAttribute("class", cls); e.textContent = txt; s.appendChild(e); return e;
+}
+function label(de, ar, x, y) { t(de, x, y, 32); t(ar, x, y + 34, 24, "ar"); }
+document.fonts.ready.then(() => {
+  t("AKTE 01 · Die Figuren", 540, 100, 58);
+  t("الشخصيات", 540, 148, 30, "ar");
+  const SC = 0.21;
+  // l'étudiant (PJ), l'infirmière, le juge
+  Peeps.place(s, { x: 200, y: 820, scale: SC, body: "Doc", hair: "ShortVolumed", face: "Calm" });
+  label("Der PJler", "الطالب ف آخر عام", 200, 870);
+  Peeps.place(s, { x: 540, y: 820, scale: SC, body: "DocProtectiveClothe", hair: "Bun", face: "Explaining", flip: true });
+  label("Die Pflegekraft", "الممرضة", 540, 870);
+  Peeps.place(s, { x: 870, y: 820, scale: SC, body: "BlazerPantsBW", hair: "GrayShort", face: "Serious", accessory: "GlassRound" });
+  label("Der Richter", "القاضي", 870, 870);
+  // la mère (silhouette) et les parents
+  Peeps.place(s, { x: 230, y: 1380, scale: SC, body: "CrossedLegs", hair: "Long", cls: "sil" });
+  label("Die Mutter", "الأم", 230, 1430);
+  Peeps.place(s, { x: 640, y: 1380, scale: SC, body: "WalkingBW", hair: "Short", cls: "sil", flip: true });
+  Peeps.place(s, { x: 820, y: 1380, scale: SC * 0.95, body: "WalkingWB", hair: "Long", cls: "sil", flip: true });
+  label("Die Eltern", "الوالدين", 730, 1430);
+  // expressions de l'étudiant
+  const ex = [["Calm", "ruhig", "هادئ"], ["Serious", "konzentriert", "مركز"], ["Concerned", "unsicher", "متردد"], ["Fear", "Schock", "مصدوم"], ["Solemn", "Reue", "ندمان"]];
+  const defs = document.createElementNS(NS, "defs"); s.appendChild(defs);
+  defs.innerHTML = '<clipPath id="bust"><rect x="-110" y="-600" width="220" height="250"/></clipPath>';
+  ex.forEach(([f, de, ar], i) => {
+    const x = 118 + i * 211;
+    const g = document.createElementNS(NS, "g"); g.setAttribute("clip-path", "url(#bust)"); g.setAttribute("transform", `translate(${x},2120)`); s.appendChild(g);
+    Peeps.place(g, { x: 0, y: 0, scale: SC, body: "Doc", hair: "ShortVolumed", face: f });
+    t(de, x, 1790, 26); t(ar, x, 1822, 22, "ar");
+  });
+  window.READY = true;
+});
+</script>
+</body></html>

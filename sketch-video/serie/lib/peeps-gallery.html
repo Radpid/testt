@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Open Peeps – galerie</title>
+<style>
+  :root { --ink:#1F1D1E; --skin:#FFFFFF; --peep-9FD8E5:#A9CFCB; --peep-8FA7DF:#A9CFCB; --peep-4F66AF:#2E6E73; --peep-FFFFFF:#FFFFFF; }
+  body { margin:0; background:#F3EFE6; font:14px sans-serif; }
+  svg { display:block; width:1080px; height:1920px; }
+</style>
+<script src="peeps-parts.js"></script>
+<script src="peeps.js"></script>
+</head><body>
+<svg id="s" viewBox="0 0 1080 1920"></svg>
+<script>
+// ?set=standing|sitting|bust|faces|hairs : planche de choix
+const s = document.getElementById("s"), q = new URLSearchParams(location.search), set = q.get("set") || "standing";
+const NS = "http://www.w3.org/2000/svg";
+const label = (t, x, y) => { const e = document.createElementNS(NS, "text"); e.setAttribute("x", x); e.setAttribute("y", y); e.setAttribute("text-anchor", "middle"); e.setAttribute("font-size", "15"); e.textContent = t; s.appendChild(e); };
+if (["standing", "sitting", "bust"].includes(set)) {
+  const bodies = Peeps.list("body").filter((b) => Peeps.kind(b) === set);
+  const cols = 6, cw = 180, rh = set === "bust" ? 300 : 470;
+  bodies.forEach((b, i) => {
+    const x = 90 + (i % cols) * cw, y = 40 + Math.floor(i / cols) * rh + rh - 40;
+    Peeps.place(s, { x, y, scale: set === "bust" ? 0.22 : 0.16, body: b, hair: "ShortVolumed", face: "Calm" });
+    label(b, x, y + 22);
+  });
+} else if (set === "faces") {
+  Peeps.list("face").forEach((f, i) => {
+    const x = 90 + (i % 6) * 180, y = 60 + Math.floor(i / 6) * 300 + 250;
+    Peeps.place(s, { x, y, scale: 0.2, body: "Shirt", hair: "ShortVolumed", face: f });
+    label(f, x, y + 22);
+  });
+} else {
+  Peeps.list("hair").forEach((h, i) => {
+    const x = 70 + (i % 8) * 134, y = 40 + Math.floor(i / 8) * 280 + 240;
+    Peeps.place(s, { x, y, scale: 0.15, body: "Shirt", hair: h, face: "Calm" });
+    label(h, x, y + 20);
+  });
+}
+window.READY = true;
+</script>
+</body></html>
