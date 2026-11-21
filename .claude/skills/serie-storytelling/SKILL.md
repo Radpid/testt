@@ -58,20 +58,43 @@ Accroche (1 ligne) · résumé en 2 phrases · la règle · « Quellen: <tribuna
 « Namen anonymisiert · Szenen teilweise nachgestellt · Keine Rechtsberatung » · hashtags
 (#Kenntnisprüfung #Approbation #Assistenzarzt #ArztInDeutschland #طبيب_في_ألمانيا).
 
-## Production (style validé par l'auteur pour AKTE 01)
+## Production (pipeline validé sur AKTE 01, novembre 2026)
 
-- **Personnages** : Open Peeps (CC0) via `serie/lib/peeps.js` + `peeps-parts.js` (généré par `npm run build:peeps`).
-  Étudiant = corps `Doc`, coiffure `ShortVolumed` ; infirmière = `DocProtectiveClothe` + `Bun` (classe `nurse`) ;
-  juge = buste `Turtleneck` + `GrayShort` + `GlassRound` ; proches = silhouettes grises sans visage (classe `sil`).
-- **Décors et objets** : `serie/lib/props.js` (dessinés par Fable dans le style Open Peeps). Aperçu :
-  `serie/lib/props-preview.html`.
-- **Couleurs** : `serie/lib/palette.css`, palette **petrol** (choix de l'auteur). Jamais de jaune surligneur.
-- **Animation** : `serie/lib/stage.js` (scènes, transitions, caméra avec zooms et secousses, personnages qui marchent,
-  clignent, parlent, changent d'expression ; objets redessinés selon le temps). Un épisode = `index.html` (moteur en
-  `mode: "scenes"`) + `beats.js` + `scenes.js` (voir `videos/ep01-spritze/` comme modèle).
-- **Arabe sous chaque mot allemand** : `serie/glossaire.js` (sous-titres automatiques) et `c.de(texte, x, y, taille)`
-  dans les scènes. L'auteur écrit « Bébé » (pas بيبي) et « ينجيكتيها » pour « spritzen ».
-- **Pas de chevauchement** : zone utile y 210–1300, x < 960 pour le texte ; vérifier avec
-  `node engine/render.mjs videos/<ep> --sheet` puis `--frames …` sur chaque scène, avant tout rendu final.
-- **Voix** : l'auteur enregistre lui-même (la darija écrite par Claude sonne « IA ») ; transcription → `beats.js`,
-  alignement, puis éventuellement ElevenLabs Speech-to-Speech avec son clone. Bruitages au mixage final.
+Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.js` + `story.js`).
+
+- **Style « référence »** : tout au trait (rough.js, hachures grises), papier uni, **jaune surligneur** (#F8CE4E),
+  `data-palette="reference"`. Les essais Open Peeps / palette petrol / « board » ont été abandonnés par l'auteur.
+- **Personnages** : `serie/lib/sketch-cast.js` (dessinés par Fable). `SketchCast.person(g, params)` : tenues
+  `coat` (étudiant, badge PJ), `scrubs` (infirmière), `oberarzt`, `robe` (juge), `civil`, `mother` (silhouette sans visage) ;
+  membres libres (`armL/armR`, `legL/legR`, `torsoLean`, `headTilt`, `view: front|side|back`, `expr`, `talk`) et poses
+  `SketchCast.Pose` (stand, walk, run, point, holdObject, carryBaby, leanOverCrib, handsOnHead, standDock…).
+  Mains en moufle, **jamais de doigts**. Bébé : `SketchCast.baby` (`state: "normal" | "blue"`).
+  Objets : syringe, crib, monitor (`hr` = "!", "" ou "0" — jamais de chiffres inventés), dock, stamp, ribbon, marker…
+- **Animation** : `serie/lib/stage.js`. Une scène plein écran par idée, caméra par scène (zoom avant/arrière,
+  panoramique), transitions (cut, fade, slideLeft/Up, zoom, iris, wipe), `c.shake`, `st.flash`, `st.vignette`,
+  `c.sk(dessin, paramsFn)` pour redessiner un personnage qui bouge, `walker` pour les entrées/sorties.
+  Fin : `st.summary(...)` = affiche-résumé de toutes les scènes + dézoom (comme la vidéo de référence).
+- **Repères** : chaque animation se cale sur un mot de la voix (`"b7@الدم"`, `"b21@end"`, `"b4@جملة+0.2"`).
+  Vérifier qu'aucun repère ne manque : `node <scratchpad>/beattimes.mjs videos/<ep>/index.html` (erreur sinon).
+- **Arabe sous chaque mot allemand** : `serie/glossaire.js` (sous-titres, sensible à la casse) et `k.chip(de, ar)` /
+  `c.de(texte, x, y, taille, ar)` dans les scènes. L'auteur écrit « Bébé » (pas بيبي) et « ينجيكتيها » pour « spritzen ».
+- **Pas de chevauchement** : zone utile y 210–1300 (sous-titres dessous), texte à x < 960 ; quand la caméra
+  panoramique, masquer (`.hide`) ce qui sortirait à moitié du cadre. Contrôle : `--frames t1,t2,…` sur chaque scène
+  (planche contact), puis rendu final.
+- **Voix = l'auteur** (la darija écrite par Claude sonne « IA ») :
+  1. Il enregistre à partir du script (il change souvent le texte : c'est SON texte qui fait foi).
+  2. ElevenLabs Scribe (`scribe_v2`, horodatage par mot) → transcription ; retirer hésitations, répétitions,
+     consignes parlées (« juste le silence » = mettre un vrai silence).
+  3. Montage par liste de mots (EDL) : pauses ≤ 0,22 s dans une phrase, 0,34 s entre phrases, 0,55 s entre scènes,
+     silence volontaire après la mort (≈ 1,7 s).
+  4. **Audio Isolation** ElevenLabs (garde SA voix, enlève l'écho/le bruit) puis mastering ffmpeg :
+     `highpass=75, lowpass=15000, EQ +1,5 dB@160, +2,2 dB@3,2 kHz, −1,5 dB@7,2 kHz, deesser, compresseur 3:1`,
+     puis gain vers −14 LUFS et `alimiter` 0,84. Le Speech-to-Speech avec le clone est une alternative
+     (son plus « studio » mais la darija devient moins intelligible : à proposer, pas à imposer).
+  5. Re-transcrire le résultat (Scribe) → `beats.js` (une phrase = un beat) + `timings.js` (mots horodatés).
+  6. Bruitages discrets ElevenLabs `sound-generation` (tampon, porte de cellule, alarme, flatline, marteau)
+     mixés 10–20 dB sous la voix, calés sur les repères. Max 4 requêtes ElevenLabs en parallèle.
+- **Vérité** : si l'enregistrement contient une approximation (date, ce que les parents voulaient…), la corriger
+  à l'écran et le signaler à l'auteur ; ne jamais montrer une peine qui n'a pas été prononcée.
+- **Clé ElevenLabs** : fournie par l'auteur pour la session uniquement ; la garder hors du dépôt (scratchpad, chmod 600),
+  la supprimer à la fin et lui rappeler de la régénérer.

@@ -41,7 +41,7 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 
 | # | Titre de travail | Statut |
 |---|---|---|
-| 01 | La seringue blanche (PJler, Bielefeld 2011) | **en production** — scénario : `videos/ep01-spritze/scenario.md` |
+| 01 | La seringue blanche (PJler, Bielefeld 2011) | **rendu final v1 (voix de l'auteur), en validation** — `videos/ep01-spritze/` |
 | 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
 | 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) |

@@ -97,14 +97,14 @@
       c.camera([{ at: "b2", s: 1, cx: 540, cy: 900 }, { at: "b2+0.2", s: 1.08, cx: 540, cy: 880, d: 3, ease: "lin" }]);
       k.ribbon("حتى 5 سنين ف الحبس", 540, 330, { size: 70 }).wipe("b2", 0.6, "rtl");
       k.ground(540, 1250, 640);
-      k.person(540, 1250, 1.4, (t) => Object.assign({ outfit: "coat", seed: 7, expr: t > T("b2@للحبس") ? "shock" : "sad" }, t > T("b2@للحبس") ? SC.Pose.handsOnHead : SC.Pose.stand));
+      k.person(540, 1250, 1.4, (t) => Object.assign({ outfit: "coat", seed: 7, expr: t > T("b2@الحبس") ? "shock" : "sad" }, t > T("b2@الحبس") ? SC.Pose.handsOnHead : SC.Pose.stand));
       // barreaux dessinés à la main, qui descendent
       const bars = el("g");
       const C = SC.util.ctx(bars, 77, false, 1);
       SC.util.shape(C, "frame", SC.util.rrect(250, 520, 580, 740, 10), {}, { sw: 6 });
       for (let i = 1; i < 8; i++) SC.util.shape(C, "bar" + i, SC.util.rrect(250 + i * 72 - 7, 526, 14, 728, 6), SC.MAT.mid, { sw: 2.4 });
       SC.util.shape(C, "cross", SC.util.rrect(256, 760, 568, 16, 6), SC.MAT.mid, { sw: 2.4 });
-      c.node(bars).wipe("b2@للحبس", 0.7, "down");
+      c.node(bars).wipe("b2@الحبس", 0.7, "down");
       k.chip("§ 222 StGB · bis zu 5 Jahre Haft", "القانون: حتى 5 سنين حبس", 540, 470, 34).pop("b2@خمس");
     } });
 
@@ -116,22 +116,23 @@
       k.prop("syringe", 560, 680, 2.2, () => MILKY, -8).slide("b3@Spritze", 700, 0, 0.7).float(5, 3.2);
       k.marker(368, 700, 230, 120, -8).wipe("b3@مكتوب", 0.4).on((t, s) => { s.o *= 0.55; });
       for (let i = 0; i < 4; i++) {
-        k.card(90 + i * 230, 960, 200, 150, { seed: 300 + i }).pop(`b4@أربع+${(i * 0.12).toFixed(2)}`);
-        k.title("?", 190 + i * 230, 1068, 96).pop(`b4@أربع+${(i * 0.12 + 0.08).toFixed(2)}`);
+        k.card(90 + i * 230, 960, 200, 150, { seed: 300 + i }).pop(`b4@جملة+${(i * 0.12).toFixed(2)}`);
+        k.title("?", 190 + i * 230, 1068, 96).pop(`b4@جملة+${(i * 0.12 + 0.08).toFixed(2)}`);
       }
-      k.ar("أربع كلمات… غادي تشوفهم ف اللخر", 540, 1200, 40).fade("b4@كلمات");
+      k.chip("Echter Fall", "قصة حقيقية", 540, 470, 44, { yellow: true }).pop("b4@حقيقية");
+      k.ar("جملة وحدة… غادي تشوفها ف اللخر", 540, 1200, 40).fade("b4@واحدة");
     } });
 
     /* 4 · Bielefeld, le Bébé --------------------------------------------------- */
     st.scene({ from: "b5", in: "iris", inDur: 0.7, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b5", s: 1.45, cx: 430, cy: 880 }, { at: "b5@عشرة-0.4", s: 1, cx: 540, cy: 900, d: 1 }]);
+      c.camera([{ at: "b5", s: 1.45, cx: 430, cy: 880 }, { at: "b5@عشر-0.4", s: 1, cx: 540, cy: 900, d: 1 }]);
       k.ribbon("Bielefeld · 2011", 540, 320, { size: 64 }).wipe("b5", 0.5);
       k.ar("ألمانيا · قسم سرطان الأطفال", 540, 430, 34).fade("b5+0.3");
       k.cast("bed", { x: 90, y: 1250, w: 520 });
       k.ground(540, 1252, 900);
       k.person(420, 1250, 1.35, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby)).fade("b5+0.2");
-      k.chip("10 Monate", "عشرة د الشهور", 800, 620, 40).pop("b5@عشرة");
+      k.chip("10 Monate", "عشرة د الشهور", 800, 620, 40).pop("b5@عشر");
       k.chip("Leukämie", "سرطان الدم", 800, 800, 40, { yellow: true }).pop("b5@سرطان");
     } });
 
@@ -152,33 +153,35 @@
       c.camera([{ at: "b7", s: 1.3, cx: 360, cy: 860 }, { at: "b8", s: 1.3, cx: 720, cy: 860, d: 1 }, { at: "b8@Refobacin", s: 1, cx: 540, cy: 900, d: 0.9 }]);
       k.ground(540, 1250, 980);
       k.person(250, 1250, 1.3, (t) => Object.assign({ outfit: "scrubs", seed: 11, facing: 1, expr: "talk", talk: t >= T("b7") && t < T("b7@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0 }, SC.Pose.point));
-      k.bubble({ x: 340, y: 470, w: 380, h: 150, tail: [-120, 70], text: "", size: 44 }).pop("b7+0.2");
-      c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").pop("b7@الدم");
+      k.bubble({ x: 340, y: 470, w: 380, h: 150, tail: [-120, 70], text: "", size: 44 }).pop("b7@غير").hide("b8", 0.3);
+      c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").pop("b7@ياخد").hide("b8", 0.3);
+      k.bubble({ x: 340, y: 470, w: 380, h: 150, tail: [-120, 70], text: "", size: 44 }).fade("b8@Refobacin", 0.5);
+      c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").fade("b8@Refobacin", 0.5);
       k.person(830, 1250, 1.3, (t) => Object.assign({ outfit: "coat", seed: 7, facing: -1, expr: t > T("b8@Refobacin") ? "calm" : "focused" }, SC.Pose.stand));
       k.bubble({ x: 760, y: 700, w: 430, h: 200, tail: [80, 60], think: true }).pop("b8+0.2");
       c.de("Blut", 650, 700, 44, "الدم").pop("b8@فهم");
-      k.title("+", 712, 712, 50).pop("b8@يعطيه");
+      k.title("+", 712, 712, 50).pop("b8@يعطي");
       k.marker(840, 690, 210, 60).wipe("b8@Refobacin", 0.4);
-      c.de("Refobacin", 840, 700, 44, "دوا ف العرق").pop("b8@يعطيه");
+      c.de("Refobacin", 840, 700, 44, "دوا ف العرق").pop("b8@يعطي");
     } });
 
     /* 7 · la seringue posée ---------------------------------------------------- */
     st.scene({ from: "b9", in: "fade", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b9", s: 1, cx: 540, cy: 900 }, { at: "b10", s: 1.25, cx: 640, cy: 800, d: 0.9 }]);
+      c.camera([{ at: "b9", s: 1, cx: 540, cy: 900 }, { at: "b10", s: 1.08, cx: 565, cy: 830, d: 0.9 }]);
       k.ground(540, 1250, 1000);
-      k.person(170, 1250, 1.1, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby));
+      k.person(200, 1250, 1.1, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby));
       k.person(420, 1250, 1.2, () => Object.assign({ outfit: "coat", seed: 7, view: "back" }, SC.Pose.stand, { view: "back" }));
       k.cast("cabinet", { x: 600, y: 1250 });
       k.walker({ at: "b9", dur: 1.6, x0: 1250, x1: 900, y: 1250, s: 1.2, outfit: "scrubs", seed: 11, expr: "neutral",
         after: (t) => (t >= T("b10") ? Object.assign({}, SC.Pose.point, { expr: "talk", talk: t < T("b10@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0, facing: -1 }) : Object.assign({}, SC.Pose.stand, { facing: -1 })) });
-      k.prop("syringe", 700, 1000, 0.45, () => MILKY).slide("b9@حطات", 0, -60, 0.4);
-      k.chip("kein Blickkontakt", "ما تشافوش", 420, 520, 34).pop("b9@ظهرو").hide("b10", 0.3);
-      k.bubble({ x: 640, y: 500, w: 560, h: 200, tail: [180, 90] }).pop("b10");
-      c.text("Hier ist das orale", 640, 480, 44, "de").pop("b10+0.1");
-      c.text("Antibiotikum.", 640, 532, 44, "de").pop("b10+0.25");
-      k.ar("ها هو المضاد الحيوي ديال الفم", 640, 650, 30).fade("b10+0.4");
-      k.chip("laut Urteil", "حسب الحكم", 210, 400, 30).pop("b10+0.5");
+      k.prop("syringe", 700, 1000, 0.45, () => MILKY).slide("b9@حطت", 0, -60, 0.4);
+      k.chip("kein Blickkontakt", "ما تشافوش", 420, 520, 34).pop("b9@ضهرو").hide("b10", 0.3);
+      k.bubble({ x: 640, y: 500, w: 560, h: 250, tail: [180, 90] }).pop("b10");
+      c.text("Hier ist das orale", 640, 452, 44, "de").pop("b10+0.1");
+      c.text("Antibiotikum.", 640, 504, 44, "de").pop("b10+0.25");
+      k.ar("ها هو المضاد الحيوي ديال الفم", 640, 568, 30).fade("b10+0.4");
+      k.chip("laut Urteil", "حسب الحكم", 880, 300, 30).pop("b10+0.5");
     } });
 
     /* 8 · STOP ----------------------------------------------------------------- */
@@ -199,13 +202,13 @@
     /* 9 · l'injection, dans la chambre ----------------------------------------- */
     st.scene({ from: "b13", in: "fade", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b13", s: 1.25, cx: 520, cy: 980 }, { at: "b13@دفعها", s: 1.7, cx: 500, cy: 1020, d: 1 }, { at: "b13@sirop", s: 1.25, cx: 520, cy: 980, d: 0.8 }]);
+      c.camera([{ at: "b13", s: 1.25, cx: 520, cy: 980 }, { at: "b13@injecta", s: 1.7, cx: 500, cy: 1020, d: 1 }, { at: "b14@sirop", s: 1.25, cx: 520, cy: 980, d: 0.8 }]);
       k.ground(540, 1252, 980);
       k.prop("crib", 330, 1250, 1.2, () => ({ w: 380, part: "back" }));
       const bb = k.baby(300, 1250 - 150 * 1.2, 1.2, () => ({ pose: "lying", state: "normal", eyes: "closed" }));
       k.prop("crib", 330, 1250, 1.2, () => ({ w: 380, part: "front" }));
       const stu = k.person(760, 1250, 1.3, (t) => Object.assign({ outfit: "coat", seed: 7, facing: -1, expr: "focused" }, SC.Pose.leanOverCrib));
-      const a = T("b13@دفعها");
+      const a = T("b13@injecta");
       const syr = k.prop("syringe", 0, 0, 0.62, (t) => ({ milky: true, label: null, push: Math.round(E.inOut(prog(t, a, 1.3)) * 30) / 30 }), 180)
         .on((t, s) => { const h = stu.out && (stu.out.handR || stu.out.handL); if (h) { s.x += 760 + h[0] * 1.3; s.y += 1250 + h[1] * 1.3; } });
       // ligne vers la poitrine du Bébé + gouttes blanches
@@ -224,117 +227,120 @@
           d.g.firstChild.setAttribute("transform", `translate(${x} ${y})`); d.g.firstChild.style.display = on ? "" : "none";
         });
       });
-      k.chip("oral ≠ i.v.", "ديال الفم ≠ ديال العرق", 540, 420, 56, { yellow: true, parent: c.hud }).pop("b13@الفم");
+      k.chip("oral ≠ i.v.", "ديال الفم ≠ ديال العرق", 540, 420, 56, { yellow: true, parent: c.hud }).pop("b14@الفم");
     } });
 
     /* 10 · le Bébé décompense --------------------------------------------------- */
-    st.scene({ from: "b14", in: "cut", inDur: 0, build(c) {
+    st.scene({ from: "b15", in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg();
-      const blue = T("b14@زرق");
-      c.camera([{ at: "b14", s: 1, cx: 540, cy: 900 }, { at: "b14@زرق-0.2", s: 1.6, cx: 360, cy: 980, d: 0.6 }, { at: "b15", s: 1, cx: 540, cy: 900, d: 0.7 }]);
-      k.marker(540, 330, 360, 120).wipe("b14@زرق", 0.4);
-      k.title("08:46", 540, 370, 110).pop("b14@زرق");
-      k.ar("الـBébé ولى زرق، و كيتنفس بالجهد", 540, 470, 36, "ar strong").fade("b14@زرق+0.3");
+      const blue = T("b15@أزرق");
+      c.camera([{ at: "b15", s: 1, cx: 540, cy: 900 }, { at: "b15@أزرق-0.2", s: 1.6, cx: 360, cy: 980, d: 0.6 }, { at: "b16", s: 1, cx: 540, cy: 900, d: 0.7 }]);
+      k.marker(540, 330, 360, 120).wipe("b15@أزرق", 0.4);
+      k.title("08:46", 540, 370, 110).pop("b15@أزرق");
+      k.ar("الـBébé ولى زرق، و ما كيتنفسش مزيان", 540, 470, 36, "ar strong").fade("b15@أزرق+0.3");
       k.ground(540, 1252, 1000);
-      k.prop("monitor", 150, 760, 0.85, (t) => ({ ecg: t >= blue ? "alarm" : "normal", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= blue ? "!" : "", stand: 420 })).pulse("b14@زرق", 0.8, 0.06, 3);
+      k.prop("monitor", 150, 760, 0.85, (t) => ({ ecg: t >= blue ? "alarm" : "normal", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= blue ? "!" : "", stand: 420 })).pulse("b15@أزرق", 0.8, 0.06, 3);
       k.prop("crib", 440, 1250, 1.2, () => ({ w: 380, part: "back" }));
       k.baby(410, 1250 - 180, 1.2, (t) => ({ pose: "lying", state: t >= blue ? "blue" : "normal", eyes: "closed" }));
       k.prop("crib", 440, 1250, 1.2, () => ({ w: 380, part: "front" }));
-      k.walker({ at: "b14@الفرملية", dur: 1.2, x0: 1250, x1: 820, y: 1250, s: 1.25, outfit: "scrubs", seed: 11,
+      k.walker({ at: "b15@فرملية", dur: 1.2, x0: 1250, x1: 820, y: 1250, s: 1.25, outfit: "scrubs", seed: 11,
         after: (t) => Object.assign({}, t >= blue ? SC.Pose.leanOverCrib : SC.Pose.stand, { facing: -1, expr: t >= blue ? "shock" : "neutral" }) });
-      k.walker({ at: "b15@جريين", dur: 1.0, x0: 1300, x1: 980, y: 1250, s: 1.2, outfit: "oberarzt", seed: 13, run: true, expr: "shock",
+      k.walker({ at: "b16@كيجريو", dur: 1.0, x0: 1300, x1: 980, y: 1250, s: 1.2, outfit: "oberarzt", seed: 13, run: true, expr: "shock",
         after: () => Object.assign({}, SC.Pose.point, { facing: -1, expr: "focused" }) });
-      k.chip("Oberarzt", "الطبيب المسؤول", 900, 620, 34).pop("b15@جريين+0.8");
-      st.vignette("b14@زرق", 2.2, 3);
-      c.shake("b15@جريين", 8, 0.5);
+      k.chip("Oberarzt", "الطبيب المسؤول", 900, 620, 34).pop("b16@كيجريو+0.8");
+      st.vignette("b15@أزرق", 2.2, 3);
+      c.shake("b16@كيجريو", 8, 0.5);
     } });
 
     /* 11 · réanimation ---------------------------------------------------------- */
-    st.scene({ from: "b16", in: "fade", inDur: 0.6, build(c) {
+    st.scene({ from: "b17", in: "fade", inDur: 0.6, build(c) {
       const k = kit(c); k.bg();
-      const r0 = T("b16"), flat = T("b16@بقاش");
-      c.camera([{ at: "b16", s: 1, cx: 540, cy: 900 }, { at: "b16+0.2", s: 1.1, cx: 540, cy: 880, d: 3, ease: "lin" }]);
-      k.chip("K1 · Intensivstation", "قسم الإنعاش", 540, 330, 46).pop("b15@Intensivstation-0.2");
+      const r0 = T("b17"), flat = T("b17@بقاش");
+      c.camera([{ at: "b17", s: 1, cx: 540, cy: 900 }, { at: "b17+0.2", s: 1.1, cx: 540, cy: 880, d: 3, ease: "lin" }]);
+      k.chip("K1 · Intensivstation", "قسم الإنعاش", 540, 330, 46).pop("b16@Intensivstation-0.2");
       const hm = (t) => { const m = Math.round(lerp(8 * 60 + 55, 12 * 60 + 28, E.inOut(prog(t, r0, Math.max(1, flat - r0))))); return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; };
       c.sk((g, p) => K.clock(g, { x: 0, y: 0, r: 120, time: p.time, label: false }), (t) => ({ time: hm(t) }), 300, 720, 1);
       const dg = c.text("08:55", 300, 930, 80, "de");
       dg.on((t) => { const s = hm(t); if (dg.textEl.textContent !== s) dg.textEl.textContent = s; });
       k.prop("monitor", 760, 720, 0.85, (t) => ({ ecg: t >= flat ? "flat" : "alarm", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= flat ? "0" : "!" }));
-      k.chip("Reanimation · 3,5 h", "الإنعاش · 3 سوايع و نص", 540, 1120, 46).pop("b16@Reanimation");
+      k.chip("Reanimation · 3,5 h", "الإنعاش · 3 سوايع و نص", 540, 1120, 46).pop("b17@Réanimation");
       c.put(`<rect x="-200" y="-200" width="1480" height="2400" fill="#F7F7F1"/>`).on((t, s) => { s.o *= 0.86 * E.inOut(prog(t, flat + 0.4, 1.2)); });
       k.title("12:28", 540, 860, 150).fade(flat + 0.9, 0.8);
     } });
 
     /* 12 · le lendemain --------------------------------------------------------- */
-    st.scene({ from: "b17", in: "slideUp", inDur: 0.5, build(c) {
+    st.scene({ from: "b18", in: "slideUp", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
-      k.card(380, 260, 320, 300, { seed: 812 }).pop("b17", 0.5);
-      k.title("23", 540, 460, 150).pop("b17+0.1");
-      c.text("August 2011", 540, 530, 36, "de").pop("b17+0.15");
-      k.ar("النهار لي من موراه", 540, 640, 40, "ar strong").fade("b17+0.3");
+      k.card(380, 260, 320, 300, { seed: 812 }).pop("b18", 0.5);
+      k.title("23", 540, 460, 150).pop("b18+0.1");
+      c.text("August 2011", 540, 530, 36, "de").pop("b18+0.15");
+      k.ar("النهار لي من موراه", 540, 640, 40, "ar strong").fade("b18+0.3");
       k.prop("syringe", 540, 820, 1.3, () => ({ milky: false, label: null }));
-      c.put(`<path d="M300 740 L780 900 M300 900 L780 740" stroke="#1d1d1b" stroke-width="12" stroke-linecap="round" fill="none"/>`).wipe("b17@بدل", 0.4);
-      k.prop("syringe", 540, 1060, 1.3, () => ({ milky: false, label: "ORAL" })).slide("b17@الفم", -900, 0, 0.6);
-      k.marker(540, 1060, 120, 50).fade("b17@الفم+0.5").on((t, s) => { s.o *= 0.6; });
-      k.chip("Oralspritze", "حقنة ديال الفم", 540, 1200, 40, { yellow: true }).pop("b17@كاملين");
+      c.put(`<path d="M300 740 L780 900 M300 900 L780 740" stroke="#1d1d1b" stroke-width="12" stroke-linecap="round" fill="none"/>`).wipe("b18@بدل", 0.4);
+      k.prop("syringe", 540, 1060, 1.3, () => ({ milky: false, label: "ORAL" })).slide("b18@الفم", -900, 0, 0.6);
+      k.marker(540, 1060, 120, 50).fade("b18@الفم+0.5").on((t, s) => { s.o *= 0.6; });
+      k.chip("Oralspritze", "حقنة ديال الفم", 540, 1200, 40, { yellow: true }).pop("b18@كاملين");
     } });
 
     /* 13 · le tribunal ---------------------------------------------------------- */
-    st.scene({ from: "b18", in: "wipe", inDur: 0.6, build(c) {
+    st.scene({ from: "b19", in: "wipe", inDur: 0.6, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b18", s: 1, cx: 540, cy: 900 }, { at: "b19", s: 1.15, cx: 540, cy: 820, d: 0.9 }]);
-      const strike = T("b18@fahrlässige");
-      k.person(540, 1250, 1.35, (t) => Object.assign({ outfit: "robe", seed: 17, expr: t >= T("b19") && t < T("b19@end") ? "talk" : "focused", talk: t >= T("b19") && t < T("b19@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0 }, SC.Pose.standDock));
+      c.camera([{ at: "b19", s: 1, cx: 540, cy: 900 }, { at: "b21", s: 1.15, cx: 540, cy: 820, d: 0.9 }]);
+      const strike = T("b19@fahrlässige");
+      k.person(540, 1250, 1.35, (t) => Object.assign({ outfit: "robe", seed: 17, expr: t >= T("b21") && t < T("b21@end") ? "talk" : "focused", talk: t >= T("b21") && t < T("b21@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0 }, SC.Pose.standDock));
       k.prop("dock", 540, 1262, 1.35, () => ({ w: 600, h: 188, seed: 44 }));
       k.person(540, 1250, 1.35, () => Object.assign({ outfit: "robe", seed: 17, only: "arms" }, SC.Pose.standDock));
       c.sk((g, p) => K.gavel(g, { x: 0, y: 0, rot: p.ang - 20, scale: 1.1 }), (t) => ({ ang: Math.round(t < strike - 0.4 ? 0 : t < strike ? -35 * E.out(prog(t, strike - 0.4, 0.3)) : -35 * (1 - E.in(prog(t, strike, 0.12)))) }), 820, 980, 1);
       c.shake(strike + 0.12, 10, 0.4);
-      k.chip("fahrlässige Tötung · 2012", "القتل غير العمدي · المحكمة الابتدائية", 540, 340, 42).pop(strike).hide("b19", 0.3);
-      k.card(70, 250, 940, 380, { seed: 913 }).pop("b19", 0.4);
-      const d19 = Math.max(1.5, T("b19@end") - T("b19"));
-      c.write(c.text("„Da hätte der Angeklagte", 540, 360, 60, "de"), "b19", d19 * 0.4);
-      k.marker(690, 432, 300, 70).wipe("b19@nachfragen", 0.4);
-      c.write(c.text("zumindest nachfragen", 540, 452, 60, "de"), `b19+${(d19 * 0.4).toFixed(2)}`, d19 * 0.35);
-      c.write(c.text("müssen.“", 540, 544, 60, "de"), `b19+${(d19 * 0.75).toFixed(2)}`, d19 * 0.2);
-      k.ar("كان خاص المتهم على الأقل يسول", 540, 604, 34, "ar strong").fade("b19@end");
+      k.chip("fahrlässige Tötung · 2012", "القتل غير العمدي · المحكمة الابتدائية", 540, 340, 42).pop(strike).hide("b21", 0.3);
+      k.card(70, 250, 940, 380, { seed: 913 }).pop("b21", 0.4);
+      const d19 = Math.max(1.5, T("b21@end") - T("b21"));
+      c.write(c.text("„Da hätte der Angeklagte", 540, 360, 60, "de"), "b21", d19 * 0.4);
+      k.marker(690, 432, 300, 70).wipe("b21@nachfragen", 0.4);
+      c.write(c.text("zumindest nachfragen", 540, 452, 60, "de"), `b21+${(d19 * 0.4).toFixed(2)}`, d19 * 0.35);
+      c.write(c.text("müssen.“", 540, 544, 60, "de"), `b21+${(d19 * 0.75).toFixed(2)}`, d19 * 0.2);
+      k.ar("كان خاص المتهم على الأقل يسول", 540, 604, 34, "ar strong").fade("b21@end");
     } });
 
     /* 14 · les parents, la licence ---------------------------------------------- */
-    st.scene({ from: "b20", in: "fade", inDur: 0.5, build(c) {
+    st.scene({ from: "b22", in: "fade", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b20", s: 1.25, cx: 360, cy: 860 }, { at: "b21", s: 1.25, cx: 720, cy: 860, d: 1.1 }]);
+      c.camera([{ at: "b22", s: 1.25, cx: 360, cy: 860 }, { at: "b23", s: 1.25, cx: 720, cy: 860, d: 1.1 }]);
       k.ground(540, 1252, 1000);
       k.cast("door", { x: 40, y: 1250, w: 240, h: 520, label: "" });
-      k.walker({ at: "b20@خرجو", dur: 2.2, x0: 560, x1: 170, y: 1250, s: 1.1, outfit: "civil", seed: 31 }).hide("b20@خرجو+2.2", 0.4);
-      k.walker({ at: "b20@خرجو+0.3", dur: 2.2, x0: 660, x1: 200, y: 1250, s: 1.05, outfit: "mother", seed: 32 }).hide("b20@خرجو+2.5", 0.4);
-      k.ar("كانو باغيين الحبس", 360, 470, 50, "ttl").fade("b20@باغيين");
-      k.person(760, 1250, 1.25, () => Object.assign({ outfit: "coat", seed: 7, expr: "sad", badge: false }, SC.Pose.stand)).fade("b21");
-      k.chip("Approbation ✓", "رخصة الطب · خداها", 760, 420, 44, { yellow: true }).pop("b21@خداها");
-      k.chip("Bundeszentralregister", "مسجل ف السجل العدلي", 760, 600, 36).pop("b21@مسجل");
+      k.walker({ at: "b22@خرجو", dur: 2.2, x0: 560, x1: 170, y: 1250, s: 1.1, outfit: "civil", seed: 31 }).hide("b22@خرجو+2.2", 0.4);
+      k.walker({ at: "b22@خرجو+0.3", dur: 2.2, x0: 660, x1: 200, y: 1250, s: 1.05, outfit: "mother", seed: 32 }).hide("b22@خرجو+2.5", 0.4);
+      k.ar("كانو باغيين الحبس", 360, 470, 50, "ttl").fade("b22@باغيين").hide("b23", 0.3);
+      k.person(760, 1250, 1.25, () => Object.assign({ outfit: "coat", seed: 7, expr: "sad", badge: false }, SC.Pose.stand)).fade("b23");
+      k.chip("Approbation ✓", "رخصة الطب · ما تحيداتش ليه", 760, 420, 44, { yellow: true }).pop("b23@تحيداتش");
+      k.chip("Bundeszentralregister", "مسجل ف السجل العدلي", 760, 600, 36).pop("b23@مسجل");
     } });
 
     /* 15 · la règle -------------------------------------------------------------- */
-    st.scene({ from: "b22", in: "fade", inDur: 0.5, build(c) {
+    st.scene({ from: "b24", in: "fade", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
+      c.camera([{ at: "b24", s: 1.1, cx: 540, cy: 560 }, { at: "b26", s: 1, cx: 540, cy: 900, d: 0.9 }]);
       ["Was", "ist", "da", "drin?"].forEach((w, i) => {
-        const at = `b22@${w.replace("?", "")}`;
-        k.card(70 + i * 240, 280, 220, 140, { seed: 500 + i, yellow: i === 3 }).pop(at);
+        const at = `b25@${w.replace("?", "")}`, pre = `b24+${(0.3 + i * 0.15).toFixed(2)}`;
+        k.card(70 + i * 240, 280, 220, 140, { seed: 500 + i, yellow: i === 3 }).pop(pre);
+        k.title("?", 180 + i * 240, 385, 84).pop(pre).hide(at, 0.15);
         c.text(w, 180 + i * 240, 375, 64, "de").pop(at);
       });
-      k.ar("شنو كاين فيها؟", 540, 500, 48, "ar strong").fade("b22@drin+0.2");
-      [["Selbst aufgezogen?", "عمرتيها بيدك؟", "b23@عمرتيهاش"], ["Beschriftet?", "مكتوب عليها؟", "b23@مكتوب"], ["Nein? → nachfragen!", "لا؟ ← سول!", "b23@سول"]].forEach(([d, a, at], i) => {
-        const y = 640 + i * 150;
+      k.ar("جملة وحدة…", 540, 500, 48, "ar strong").fade("b24@واحدة").hide("b25", 0.3);
+      k.ar("شنو كاين فيها؟", 540, 500, 48, "ar strong").fade("b25@drin+0.2");
+      [["Selbst aufgezogen?", "عمرتيها بيدك؟", "b26@عمرتيهاش"], ["Beschriftet?", "مكتوب عليها؟", "b26@مكتوب"], ["Nein? → nachfragen!", "لا؟ ← سول!", "b27@تسول"], ["Erst dann spritzen.", "عاد ديك الساعة تحقن", "b27@تحقن"]].forEach(([d, a, at], i) => {
+        const y = 600 + i * 124;
         k.card(100, y - 62, 76, 76, { seed: 600 + i, yellow: true }).pop(at);
         c.text(String(i + 1), 138, y, 48, "de").pop(at);
         c.text(d, 210, y - 6, 54, "de", "start").slide(at, 40, 0, 0.35);
         c.text(a, 210, y + 44, 34, "ar", "end").fade(at + "+0.15");
       });
-      k.ribbon("Fragen ist erlaubt.", 540, 1130, { size: 58 }).wipe("b24@السؤال", 0.5);
-      k.ar("السؤال عمرو ما كان عيب", 540, 1250, 40, "ar strong").fade("b24@السؤال+0.2");
+      k.ribbon("Fragen ist erlaubt.", 540, 1150, { size: 58 }).wipe("b28@السؤال", 0.5);
+      k.ar("السؤال عمرو ما كان عيب", 540, 1262, 40, "ar strong").fade("b28@السؤال+0.2");
     } });
 
     /* affiche-résumé finale --------------------------------------------------- */
-    st.summary({ at: "b24@comments+0.2", dezoomAt: "b24@comments+0.8", cols: 3, crop: [230, 1310], top: 120, gap: 10, side: 16,
+    st.summary({ at: "b29@ديالك", dezoomAt: "b29@ديالك+0.6", cols: 3, crop: [230, 1310], top: 120, gap: 10, side: 16,
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);
