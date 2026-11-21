@@ -179,14 +179,14 @@
       [7.0,53.6],[8.0,53.7],[8.5,53.5],[8.9,53.9],[8.8,54.3]];
 
 
-    const mouthOf = (n, x0, y0, s) => { const h = n.out && n.out.head; return h ? [x0 + h[0] * s, y0 + (h[1] + 30) * s] : null; };
+    const mouthOf = (n, x0, y0, s) => { const h = n.out && n.out.head; return h ? [x0 + h[0] * s, y0 + (h[1] + 39) * s] : null; };   // bouche dessinée à +36 sous le centre de la tête
 
     /* 1 · l'accroche : elle est jugée responsable ------------------------------------ */
     st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg();
       c.camera([{ at: 0, s: 1.5, cx: 430, cy: 960 }, { at: "b2@قالت", s: 1, cx: 540, cy: 900, d: 1 }]);
       k.ground(420, 1300, 640);
-      const doc = k.person(420, 1300, 1.4, (t) => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, expr: t > T("b2@مسؤولة") ? "sad" : "unsure" }, SC.Pose.standDock));
+      const doc = k.person(420, 1300, 1.4, (t) => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, expr: t > T("b2@مسؤولة") ? "sad" : "unsure" }, SC.Pose.standDock, t >= T("b3@سكتات") + 0.12 ? { mouth: "zip" } : {}));   // mouth "zip" = pas de bouche dessinée, la fermeture éclair la remplace
       k.prop("dock", 420, 1312, 1.4, () => ({ w: 380, h: 180 }));
       k.person(420, 1300, 1.4, () => Object.assign({ outfit: "coat", hair: "long", badge: "AÄ", seed: 23, only: "arms" }, SC.Pose.standDock));
       k.chip("Assistenzärztin", "طبيبة ف طور الاختصاص", 420, 560, 34).pop("b1@الاختصاص", 0.45);
@@ -195,7 +195,7 @@
       // « elle n'a pas décidé… elle s'est tue »
       k.chip("ما قررتش", null, 740, 950, 30).pop("b3@قررت");
       const z = el("g"); zipper(z); const zn = c.node(z).pop("b3@سكتات", 0.4);
-      zn.on((t, s) => { const m = mouthOf(doc, 420, 1300, 1.4); if (m) { s.x += m[0]; s.y += m[1]; } });
+      zn.on((t, s) => { const m = mouthOf(doc, 420, 1300, 1.4); if (m) { s.x += m[0]; s.y += m[1]; s.s *= 1.25; s.r += 4; } });
       k.bubble({ x: 200, y: 760, w: 150, h: 100, tail: [90, 30], text: "…", size: 60 }).pop("b3@سكتات+0.15");
       c.kick("b3@سكتات", 0.06);
     } });
