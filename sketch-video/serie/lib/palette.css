@@ -36,3 +36,12 @@
 /* Peau cyanosée du bébé (baby({state:"blue"})) : teinte fixe, identique dans toutes les palettes. */
 .f-cyan   { fill: #B9CCE0; }
 .f-cyan2  { fill: #6F86A8; }
+
+/* Palette « reference » : exactement le style de la vidéo de référence (papier, encre, gris hachuré, jaune surligneur) */
+[data-palette="reference"] {
+  --ink: #1C1A1C; --paper: #F7F7F1; --white: #FFFFFF; --card: #FCFCF9;
+  --main: #1C1A1C; --main2: #F8CE4E;
+  --accent: #1C1A1C; --accent2: #F8CE4E;
+  --gray: #8A8A85; --gray2: #D9D9D1; --hatch: #9A9A94; --dot: #D9D9D1;
+  --wood: #C9B79C; --wood2: #E6DCCB; --yellow: #F8CE4E;
+}

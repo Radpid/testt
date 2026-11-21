@@ -327,6 +327,53 @@
     }
     flash(at, dur = 0.35, strength = 0.9) { this.flashes.push({ a: this.T(at), d: dur, k: strength }); return this; }
     vignette(at, dur = 1, pulses = 3) { this.vigs.push({ a: this.T(at), d: dur, n: pulses }); return this; }
+    /* Affiche-résumé finale (signature de la vidéo de référence) : chaque scène est figée à sa fin, rangée en
+     * vignettes numérotées (lecture de droite à gauche), puis la caméra part de la dernière vignette (qui remplit
+     * l'écran, comme la dernière scène) et recule jusqu'à l'affiche entière.
+     *   st.summary({ at, dezoomAt, cols: 3, crop: [y0, y1], decorate(c, cells) {…} })
+     */
+    summary(o) {
+      o = Object.assign({ cols: 3, crop: [170, 1310], top: 118, gap: 10, side: 16, dezoomDur: 2.2 }, o);
+      const scenes = this.scenes.slice();
+      const stage = this;
+      const cw = (W - 2 * o.side - (o.cols - 1) * 20) / o.cols;
+      const k = cw / W, ch = (o.crop[1] - o.crop[0]) * k;
+      const cells = scenes.map((sc, i) => {
+        const col = i % o.cols, row = Math.floor(i / o.cols);
+        const x = W - o.side - cw - col * (cw + 20), y = o.top + row * (ch + o.gap);
+        return { sc, i, x, y, w: cw, h: ch, k };
+      });
+      const sum = this.scene({ from: o.at, in: "fade", inDur: 0.45, build(c) {
+        const host = [];
+        cells.forEach((cell) => {
+          const id = "sumclip" + cell.i;
+          const cp = el("clipPath", { id }, stage.defs);
+          el("rect", { x: cell.x, y: cell.y, width: cell.w, height: cell.h, rx: 14 }, cp);
+          const holder = el("g", { "clip-path": `url(#${id})` }, c.cam);
+          const inner = el("g", { transform: `translate(${cell.x} ${cell.y - o.crop[0] * cell.k}) scale(${cell.k})` }, holder);
+          host.push(inner);
+        });
+        sum._host = host;
+        if (o.decorate) o.decorate(c, cells);
+        const last = cells[cells.length - 1];
+        const lk = 1 / last.k, lcx = last.x + last.w / 2, lcy = last.y - o.crop[0] * last.k + (H / 2) * last.k;
+        c.camera([{ at: o.at, s: lk, cx: lcx, cy: lcy }, { at: o.dezoomAt || o.at + 0.6, s: 1, cx: W / 2, cy: H / 2, d: o.dezoomDur }]);
+      } });
+      // vignettes figées : calculées à la première image où l'affiche est visible
+      const freezeAll = () => {
+        if (sum._frozen) return; sum._frozen = true;
+        cells.forEach((cell, i) => {
+          const sc = cell.sc, t = Math.min(sc.end - 0.05, (o.freezeAt && o.freezeAt[i] != null) ? stage.T(o.freezeAt[i]) : sc.end - 0.05);
+          const d0 = sc.layer.style.display; sc.layer.style.display = "";
+          for (const f of sc.every) f(t, t - sc.start);
+          for (const n of sc.nodes) n.apply(t);
+          sum._host[i].innerHTML = sc.cam.innerHTML + sc.hud.innerHTML;
+          sc.layer.style.display = d0;
+        });
+      };
+      sum.every.unshift(() => freezeAll());
+      return sum;
+    }
     finish(extraHold) {
       this.scenes.sort((a, b) => a.start - b.start);
       this.scenes.forEach((sc, i) => { const nx = this.scenes[i + 1]; sc.end = nx ? nx.start + nx.inDur : Infinity; });
