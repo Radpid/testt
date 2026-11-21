@@ -54,10 +54,10 @@ BEATS = [   # AKTE 02 — version ~1 min : phrases gardées de l'enregistrement 
   ("b15", [("raw", R(212, 222))]), ("b16", [("raw", R(223, 227))]), ("b17", [("raw", R(228, 238))]),
   ("b18", [("raw", R(264, 278))]), ("b19", [("raw", R(279, 283))]),   # (coupé : appel à commenter → écrit à la fin)
 ]
-FIX = {("raw", k): v for k, v in {5: "ألمانيا،", 59: "Hysteroskopie.", 201: "Réanimation،", 203: "رجع،", 213: "2025،",
+FIX = {("raw", k): v for k, v in {20: "قررت.", 5: "ألمانيا،", 59: "Hysteroskopie.", 201: "Réanimation،", 203: "رجع،", 213: "2025،",
        108: "Wasser،", 177: "Hämolyse."}.items()}
 SCENE_START = {"b4", "b5", "b6", "b7", "b11", "b12", "b13", "b15", "b18"}
-EXTRA = {"b14": 4.4}   # scène muette après « ما فاقتش »
+EXTRA = {"b7": 2.0, "b10": 1.2, "b11": 2.0, "b14": 4.4}   # jeux : quiz des flacons, message effacé, sondage A/B ; scène muette
 RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
 TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
 XF = 0.02
@@ -144,7 +144,7 @@ for bid, parts in BEATS:
             else: toks.append([text, s0, e0])
     merged = []
     for t in toks:
-        if merged and merged[-1][0] == "الـ": merged[-1] = ["الـ" + t[0], merged[-1][1], t[2]]
+        if merged and merged[-1][0].endswith("ـ"): merged[-1] = [merged[-1][0] + t[0], merged[-1][1], t[2]]   # « الـ », « والـ », « للـ » collés au mot suivant
         else: merged.append(t)
     out_beats.append({"id": bid, "text": " ".join(x[0] for x in merged), "words": [[round(x[1], 3), round(x[2], 3)] for x in merged],
                       "start": round(merged[0][1], 3), "end": round(merged[-1][2], 3)})
