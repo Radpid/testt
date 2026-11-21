@@ -14,9 +14,36 @@ def load(path):
 def words_of(js):
     return [w for w in json.load(open(js))["words"] if w.get("type") != "spacing"]
 
-SRC = {"raw": (load(os.path.join(D, "raw.iso.mp3")), words_of(os.path.join(D, "../voice_in/scribe_scribe_v2.json")))}
+# --- égalisation d'appariement : les reprises (micro plus proche, autre réglage) prennent le timbre de l'original
+def speech_of(a, ws):
+    return np.concatenate([a[int(w["start"] * SR):int(w["end"] * SR)] for w in ws if w.get("type", "word") == "word"])
+NF = 4096; FQ = np.fft.rfftfreq(NF, 1 / SR)
+def psd(x):
+    win = np.hanning(NF); P = np.zeros(NF // 2 + 1); k = 0
+    for i in range(0, len(x) - NF, NF // 2): P += np.abs(np.fft.rfft(x[i:i + NF] * win)) ** 2; k += 1
+    return P / max(k, 1)
+def smooth_oct(P, frac=6):
+    out = np.empty_like(P)
+    for i, f in enumerate(FQ):
+        if f < 20: out[i] = P[i]; continue
+        lo, hi = f * 2 ** (-1 / (2 * frac)), f * 2 ** (1 / (2 * frac))
+        out[i] = P[(FQ >= lo) & (FQ <= hi)].mean()
+    return out
+def match(x, ws, ref_psd, ref_rms):
+    g = 10 * np.log10(ref_psd / (smooth_oct(psd(speech_of(x, ws))) + 1e-20) + 1e-20)
+    ref = g[(FQ >= 800) & (FQ <= 2500)].mean(); g -= ref               # on ne touche qu'au timbre ici
+    g = np.clip(g, -14, 9); g[FQ < 60] = -14; g[FQ > 15000] = np.minimum(g[FQ > 15000], 6)
+    h = np.fft.irfft(10 ** (g / 20), NF); h = np.roll(h, NF // 2) * np.hanning(NF)   # FIR phase linéaire
+    L = len(x) + NF; nfft = 1 << (L - 1).bit_length()
+    y = np.fft.irfft(np.fft.rfft(x, nfft) * np.fft.rfft(h, nfft), nfft)[NF // 2: NF // 2 + len(x)].astype(np.float32)
+    y *= ref_rms / (np.sqrt(np.mean(speech_of(y, ws) ** 2)) + 1e-12)   # même niveau que l'original
+    return y
+raw_a, raw_w = load(os.path.join(D, "raw.iso.mp3")), words_of(os.path.join(D, "../voice_in/scribe_scribe_v2.json"))
+raw_sp = speech_of(raw_a, raw_w); REF_PSD = smooth_oct(psd(raw_sp)); REF_RMS = float(np.sqrt(np.mean(raw_sp ** 2)))
+SRC = {"raw": (raw_a, raw_w)}
 for n in (6, 7, 9, 10, 11, 12):
-    SRC[f"t{n}"] = (load(os.path.join(D, f"take{n}.iso.mp3")), words_of(os.path.join(D, f"take{n}.scribe.json")))
+    wt = words_of(os.path.join(D, f"take{n}.scribe.json"))
+    SRC[f"t{n}"] = (match(load(os.path.join(D, f"take{n}.iso.mp3")), wt, REF_PSD, REF_RMS), wt)
 SRC["raw"][1][103]["start"] = 61.02     # « Hier » : Scribe y avait collé la pause (inutilisé ici, gardé pour mémoire)
 
 R = lambda a, b: list(range(a, b + 1))
@@ -55,6 +82,7 @@ EXTRA = {"b17": 4.4, "b12": 0.3}   # b17 : scène muette « مات الـBébé 
 RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
 TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
 XF = 0.02
+PAUSE_BEFORE = {("raw", 228): 0.42}   # « Approbation، | ما تحيداتش ليه » : respiration naturelle
 
 def quietest(A, t0, t1, win=0.03):
     if t1 - t0 < 0.012: return (t0 + t1) / 2
@@ -89,6 +117,7 @@ for k in range(1, len(seq)):
         pieces.append((cur[0], cur[1], c, fill_before)); cur, fill_before = (q["src"], c), lo - gap
         continue
     target = hi if contiguous else TARGET[q["kind"]] + extra
+    target = max(target, PAUSE_BEFORE.get((q["src"], q["i"]), 0))
     Wp, Wq = SRC[p["src"]][1], SRC[q["src"]][1]
     nxt_after = Wp[p["i"] + 1]["start"] if p["i"] + 1 < len(Wp) else wp["end"] + 0.4
     prv_before = Wq[q["i"] - 1]["end"] if q["i"] > 0 else max(0, wq["start"] - 0.4)

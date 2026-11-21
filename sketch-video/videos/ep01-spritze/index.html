@@ -38,10 +38,21 @@
   .cap .cap-tr { font-size: 36px; font-weight: 700; color: #4A4843; margin-top: 2px; }
   /* sous-titres classiques (secours) */
   .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
+  /* logo @dr.aguilo (coin haut droit, sous l'en-tête Instagram) */
+  #brand { position: absolute; right: 30px; top: 218px; z-index: 120; display: flex; align-items: center; gap: 10px;
+           background: #FFFFFF; border: 3px solid var(--ink); border-radius: 40px; padding: 4px 18px 4px 6px;
+           box-shadow: 4px 5px 0 rgba(28,26,28,.18); pointer-events: none; opacity: 0; }
+  #brand svg { width: 46px; height: 46px; }
+  #brand span { font-family: Kalam; font-weight: 700; font-size: 32px; color: var(--ink); line-height: 1;
+                background: linear-gradient(transparent 58%, rgba(248,206,78,.9) 58%, rgba(248,206,78,.9) 92%, transparent 92%); }
 </style>
 </head>
 <body>
-<div id="stage"><div id="poster"></div></div>
+<div id="stage"><div id="poster"></div>
+  <div id="brand"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="#F8CE4E" stroke="#1C1A1C" stroke-width="3"/>
+    <path d="M7 25 h8 l3 -8 l5 16 l4 -12 l3 4 h9" fill="none" stroke="#1C1A1C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>@dr.aguilo</span></div>
+</div>
 
 <script>
   // Reel Instagram, animation par scènes (serie/lib/stage.js)

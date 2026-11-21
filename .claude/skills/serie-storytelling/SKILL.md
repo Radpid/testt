@@ -103,6 +103,13 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   Transcrire chaque prise (Scribe), décider où elle remplace / complète le texte, et monter par phrase
   avec plusieurs sources (`videos/ep01-spritze/montage_voix.py` : `BEATS = [("b8", [("t7", [...]), ("raw", [90])])]`).
   Isoler chaque source AVANT le montage (Audio Isolation sur l'enregistrement complet et sur chaque prise).
+  Les reprises n'ont PAS le même son (AKTE 01 : +6 à +10 dB de graves, −6 à −20 dB d'aigus, +6 à +10 dB de niveau) :
+  les égaliser sur l'original (EQ d'appariement par 1/6 d'octave + même niveau RMS, `match()` dans montage_voix.py),
+  puis vérifier l'écart par bandes (≤ ±3–4 dB). Laisser une respiration (~0,3 s) aux raccords en milieu de phrase.
+- **Logo** : pastille `@dr.aguilo` (coin haut droit, sous l'en-tête Instagram), masquée sur l'affiche finale.
+- **Cadrage** : jamais de zoom qui coupe un personnage, une bulle ou une carte (zoom max ≈ ×1,35 en gros plan,
+  ×1,1 en plan normal) ; vérifier chaque scène sur la planche contact.
+- **Livrer aussi la description Instagram** (`instagram.md`, modèle ci-dessus).
 - **Durée** : l'auteur veut court MAIS refuse qu'on supprime des scènes ou des phrases (AKTE 01). Garder tout son
   texte, accélérer à ×1,3 (vérifié : aussi intelligible que ×1,12 au contrôle Scribe), pauses très serrées.
   Ne couper du contenu que s'il le demande explicitement.
@@ -113,7 +120,7 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
 - **Sous-titres karaoké** (`SV_CONFIG.captions = "karaoke"`) : pages de ≤ 6 mots, gros texte (62 px, Plex Arabic Bold),
   mots à venir en filigrane, chaque mot rebondit quand il est dit, mot en cours surligné en jaune ; ne jamais couper
   « La | seringue ». `captionBottom: 320` pour utiliser le bas de l'écran.
-- **Cadrage** : `Stage.create(sv, { view: { s: 1.1, oy: 20, breathe: 0.05 } })` (tout plus grand, poussée lente
+- **Cadrage** : `Stage.create(sv, { view: { s: 1.06, oy: 20, breathe: 0.035 } })` (tout plus grand, poussée lente
   continue) + `c.kick(repère, 0.05–0.08)` sur chaque mot fort. Arabe des scènes ≥ 40 px, gras, encre (pas gris),
   révélé de droite à gauche (`.wipe(at, 0.7, "rtl")`).
 - **Son « voice-off »** (`videos/ep01-spritze/son/`) : voix isolée + EQ/compression ; musique ElevenLabs Music

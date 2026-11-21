@@ -1,5 +1,5 @@
 // AKTE 01 — texte EXACT de la voix de l'auteur (enregistrement principal + 6 reprises), hésitations retirées.
-// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage edl5, tempo x1.3).
+// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage edl6, tempo x1.3).
 window.BEATS = [
   ["b1", "طبيب شاب في ألمانيا تحكم عليه بالقتل غير العمدي،"],
   ["b2", "وكان ممكن يدخل الحبس حتى الخمس سنين."],
