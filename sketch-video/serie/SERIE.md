@@ -9,6 +9,10 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 ## Format fixe
 
 - Reel 1080×1920, 60–90 s, préréglage `instagram` du moteur.
+- **Public : grand public** (parents, patients, étudiants, médecins), pas seulement les médecins. On dit dès la
+  1re phrase que ça se passe **en Allemagne** ; chaque terme allemand est traduit à l'écran et expliqué une fois à l'oral.
+- **Texte parlé écrit par l'auteur** : Claude donne un guide (idée de chaque scène + mots exacts), l'auteur
+  enregistre avec ses mots, puis transcription → `beats.js`. (La darija écrite par Claude sonne « IA ».)
 - Narration en **darija** (voix clonée ElevenLabs « yassine », modèle eleven_v4), répliques des personnages et
   phrases du tribunal en **allemand** (les vraies citations quand elles existent).
 - Style : univers sketch du moteur (papier pointillé, encre, un seul accent jaune), mais en **scènes animées
