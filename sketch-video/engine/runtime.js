@@ -527,10 +527,13 @@
     toks.forEach((tk, i) => {
       const add = tk.length + 1 + (new RegExp(`[${LAT}]`).test(tk) ? 5 : 0);   // mot latin (+ sa traduction dessous) : plus large
       const C0 = config();
-      if (cur.length && len + add > (C0.capChars || 30) + 4 && !/^(La|Le|Les|der|die|das|Da)$/.test(toks[i - 1] || "")) { pages.push(cur); cur = []; len = 0; }   // coupe AVANT un mot trop long
+      const noP = (x) => (x || "").replace(/[،؛؟]/g, "");
+      const latPrev = toks[i - 1] && !/[؀-ۿ]/.test(noP(toks[i - 1])) && new RegExp(`[${LAT}]`).test(toks[i - 1]) && !/[،,.:؛?؟!]$/.test(toks[i - 1]);
+      const latCur = !/[؀-ۿ]/.test(noP(tk)) && new RegExp(`[${LAT}]`).test(tk);
+      if (cur.length && len + add > (C0.capChars || 30) + 4 && !(latPrev && latCur) && !/^(La|Le|Les|der|die|das|Da)$/.test(toks[i - 1] || "")) { pages.push(cur); cur = []; len = 0; }   // coupe AVANT un mot trop long
       cur.push(i); len += add;
       const brk = /[،,.:؛?؟!]$/.test(tk), nx = toks[i + 1] || "";
-      const isLat = (x) => x && !/[؀-ۿ]/.test(x);
+      const isLat = (x) => x && !/[؀-ۿ]/.test(x.replace(/[،؛؟]/g, ""));
       const glue = (isLat(tk) && isLat(nx) && !brk) || /^(La|Le|Les|der|die|das|Da|في|من|ديال|الـ)$/.test(tk);
       const C = config(), MAXC = C.capChars || 30, MAXW = C.capWords || 6;
       if (!glue && ((len >= MAXC * 0.72 && brk) || len >= MAXC || cur.length >= MAXW)) { pages.push(cur); cur = []; len = 0; }
@@ -538,15 +541,14 @@
     if (cur.length) { if (cur.length === 1 && pages.length && toks[cur[0]].length < 5) pages[pages.length - 1].push(...cur); else pages.push(cur); }
     return (b._pages = pages.map((ix) => ({ ix, toks, start: W[ix[0]][0], end: W[ix[ix.length - 1]][1] })));
   }
-  function tokHTML(tk, i, j) {
-    const g2 = j != null ? null : null;
+  function tokHTML(tk, i, noGloss) {
     if (!/[؀-ۿ]/.test(tk) || !new RegExp(`[${LAT}]`).test(tk)) {
       if (!new RegExp(`[${LAT}]`).test(tk)) return `<span class="w" data-i="${i}">${esc(tk)}</span>`;
     }
     let out = "", last = 0;
     for (const m of tk.matchAll(LATSEG)) {
       out += esc(tk.slice(last, m.index));
-      const core = m[0].replace(/[?!]+$/, ""), g = gloss(core), tail = m[0].slice(core.length);
+      const core = m[0].replace(/[?!]+$/, ""), g = noGloss ? null : gloss(core), tail = m[0].slice(core.length);
       // le surligneur ne couvre que le mot allemand (.rb) ; la traduction arabe (rt) reste dessous, sur fond blanc
       const base = `<span class="rb">${esc(core)}</span>`;
       out += `<span class="lat" dir="ltr">${g ? `<ruby>${base}<rt>${esc(g)}</rt></ruby>` : base}${esc(tail)}</span>`;
@@ -557,10 +559,20 @@
   }
   function pageHTML(pg, b) {
     const toks = pg.toks, arabic = /[؀-ۿ]/.test(toks.join(" "));
-    const isLatTok = (x) => !/[؀-ۿ]/.test(x) && new RegExp(`[${LAT}]`).test(x);
+    const isLatTok = (x) => !/[؀-ۿ]/.test(x.replace(/[،؛؟]/g, "")) && new RegExp(`[${LAT}]`).test(x);
     let body = "", grp = [];
-    const flush = () => { if (grp.length) { body += (body ? " " : "") + (arabic && grp.length > 1 ? `<span class="latgrp" dir="ltr">${grp.join(" ")}</span>` : grp.join(" ")); grp = []; } };
-    pg.ix.forEach((i) => { const h = tokHTML(toks[i], i); if (arabic && isLatTok(toks[i])) grp.push(h); else { flush(); body += (body ? " " : "") + h; } });
+    let gi = [];
+    const flush = () => {
+      if (!grp.length) return;
+      let h;
+      if (arabic && grp.length > 1) {
+        const phrase = gi.map((i) => toks[i].replace(/[،؛؟]/g, "")).join(" ").replace(/[,.:?!]+$/, ""), g = gloss(phrase);
+        h = g ? `<ruby class="grp"><span class="latgrp" dir="ltr">${gi.map((i) => tokHTML(toks[i], i, true)).join(" ")}</span><rt>${esc(g)}</rt></ruby>`
+              : `<span class="latgrp" dir="ltr">${grp.join(" ")}</span>`;
+      } else h = grp.join(" ");
+      body += (body ? " " : "") + h; grp = []; gi = [];
+    };
+    pg.ix.forEach((i) => { const h = tokHTML(toks[i], i); if (arabic && isLatTok(toks[i])) { grp.push(h); gi.push(i); } else { flush(); body += (body ? " " : "") + h; } });
     flush();
     let tr = "";
     if (!arabic && config().capTr !== false) { const g = gloss((b.cap || b.text)); if (g) tr = `<span class="cap-tr" dir="rtl">${esc(g)}</span>`; }

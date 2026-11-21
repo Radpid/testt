@@ -284,8 +284,8 @@
       ["3", "2", "1"].forEach((n, i) => k.title(n, 540, 760, 160).on((t, s) => { const p = (t - a) / (d / 3) - i; s.o *= p >= 0 && p < 1 ? 1 : 0; s.s *= p >= 0 && p < 1 ? 1 + 0.25 * (1 - Math.min(1, p * 3)) : 1; }));
       // la réponse : c'est l'eau distillée qu'ils ont utilisée
       c.put(`<ellipse cx="780" cy="1080" rx="92" ry="190" fill="none" stroke="#F8CE4E" stroke-width="12"/><ellipse cx="780" cy="1080" rx="98" ry="196" fill="none" stroke="#1C1A1C" stroke-width="3"/>`).wipe("b8@destilliertes", 0.35, "down");
-      k.title("✗", 780, 860, 120).pop("b8@المقطر").on((t, s) => { s.o *= 1; });
-      k.chip("خطير", null, 780, 930, 30, { yellow: true }).pop("b8@المقطر+0.1");
+      k.title("✗", 780, 880, 110).pop("b8@المقطر").on((t, s) => { s.o *= 1; });
+      k.chip("خطير", null, 780, 760, 30, { yellow: true }).pop("b8@المقطر+0.1");
       k.title("✓", 300, 860, 90).pop("b8@المقطر+0.35"); k.title("✓", 540, 860, 90).pop("b8@المقطر+0.45");
       c.kick("b8@destilliertes", 0.06); st.flash("b8@المقطر", 0.25, 0.35);
     } });
