@@ -57,3 +57,21 @@ Puis : liste des personnages, des décors et des objets à dessiner ; points à 
 Accroche (1 ligne) · résumé en 2 phrases · la règle · « Quellen: <tribunal, date, Az.> ; <média, date> » ·
 « Namen anonymisiert · Szenen teilweise nachgestellt · Keine Rechtsberatung » · hashtags
 (#Kenntnisprüfung #Approbation #Assistenzarzt #ArztInDeutschland #طبيب_في_ألمانيا).
+
+## Production (style validé par l'auteur pour AKTE 01)
+
+- **Personnages** : Open Peeps (CC0) via `serie/lib/peeps.js` + `peeps-parts.js` (généré par `npm run build:peeps`).
+  Étudiant = corps `Doc`, coiffure `ShortVolumed` ; infirmière = `DocProtectiveClothe` + `Bun` (classe `nurse`) ;
+  juge = buste `Turtleneck` + `GrayShort` + `GlassRound` ; proches = silhouettes grises sans visage (classe `sil`).
+- **Décors et objets** : `serie/lib/props.js` (dessinés par Fable dans le style Open Peeps). Aperçu :
+  `serie/lib/props-preview.html`.
+- **Couleurs** : `serie/lib/palette.css`, palette **petrol** (choix de l'auteur). Jamais de jaune surligneur.
+- **Animation** : `serie/lib/stage.js` (scènes, transitions, caméra avec zooms et secousses, personnages qui marchent,
+  clignent, parlent, changent d'expression ; objets redessinés selon le temps). Un épisode = `index.html` (moteur en
+  `mode: "scenes"`) + `beats.js` + `scenes.js` (voir `videos/ep01-spritze/` comme modèle).
+- **Arabe sous chaque mot allemand** : `serie/glossaire.js` (sous-titres automatiques) et `c.de(texte, x, y, taille)`
+  dans les scènes. L'auteur écrit « Bébé » (pas بيبي) et « ينجيكتيها » pour « spritzen ».
+- **Pas de chevauchement** : zone utile y 210–1300, x < 960 pour le texte ; vérifier avec
+  `node engine/render.mjs videos/<ep> --sheet` puis `--frames …` sur chaque scène, avant tout rendu final.
+- **Voix** : l'auteur enregistre lui-même (la darija écrite par Claude sonne « IA ») ; transcription → `beats.js`,
+  alignement, puis éventuellement ElevenLabs Speech-to-Speech avec son clone. Bruitages au mixage final.
