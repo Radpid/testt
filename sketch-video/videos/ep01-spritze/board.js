@@ -38,7 +38,7 @@
 
       /* 1 · condamné ------------------------------------------------------------ */
       focus(1, 0, { d: 0.001 });
-      put(P.stamp({ text: "SCHULDIG", sub: "fahrlässige Tötung", rot: -5 }), 1, 168, 54, 0.4).slam("b1@تحكم", 0.3, 10);
+      put(P.stamp({ text: "SCHULDIG", sub: "fahrlässige Tötung", rot: -5 }), 1, 150, 56, 0.27).slam("b1@تحكم", 0.3, 10);
       ar(1, "مُدان · القتل غير العمدي", 168, 104, 17).fade("b1@تحكم+0.4");
       actor(1, 168, 326, { scale: 0.066, body: "Doc", hair: "ShortVolumed", face: "Solemn", seed: 101 }).fade(0.1, 0.5);
       put(P.dock({ w: 260, h: 104 }), 1, 38, 334, 1).slide(0.2, 0, 60, 0.6);
@@ -79,7 +79,8 @@
       /* 5 · l'étudiant arrive --------------------------------------------------- */
       focus(5, "b6");
       U.ribbon(c, "الطالب", ...A(5, 168, 50), 160, 30).wipe("b6", 0.5, "rtl");
-      actor(5, -40, 330, { scale: 0.072, body: "Doc", hair: "ShortVolumed", face: "Calm", seed: 105 }).walk("b6", pan(5).x + 110, 1.6);
+      const in5 = c.clipped(pan(5).x + 3, pan(5).y + 3, PW - 6, PH - 6);
+      actor(5, -60, 330, { scale: 0.072, body: "Doc", hair: "ShortVolumed", face: "Calm", seed: 105 }, in5).walk("b6", pan(5).x + 110, 1.6);
       chip(5, "PJ · 29 Jahre", "آخر عام ف الطب", 250, 130, 18).pop("b6@طالب");
       chip(5, "1 Woche", "عاد سيمانة", 250, 220, 18, "accent").pop("b6@سيمانة");
 
@@ -101,7 +102,7 @@
 
       /* 7 · la seringue posée -------------------------------------------------- */
       focus(7, "b9");
-      const nurse7 = c.group(); nurse7.g.setAttribute("class", "nurse");
+      const nurse7 = c.group(c.clipped(pan(7).x + 3, pan(7).y + 3, PW - 6, PH - 6)); nurse7.g.setAttribute("class", "nurse");
       actor(7, 400, 330, { scale: 0.07, body: "DocProtectiveClothe", hair: "Bun", face: "Calm", flip: true, seed: 108 }, nurse7.g)
         .walk("b9", pan(7).x + 278, 1.3).face("b10", "Explaining").talk("b10", "b10@end");
       put(P.bedsideCabinet({}), 7, 150, 330, 0.36);
@@ -150,9 +151,13 @@
       focus(10, "b14");
       const blue = T("b14@زرق");
       c.dyn((t) => P.monitor({ ecg: t >= blue ? "alarm" : "normal", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= blue ? String(Math.round(lerp(142, 198, prog(t, blue, 1.4)))) : "142", stand: true }), ...A(10, 52, 336), 0.34);
-      const nurse10 = c.group(); nurse10.g.setAttribute("class", "nurse");
-      actor(10, 380, 330, { scale: 0.072, body: "DocProtectiveClothe", hair: "Bun", face: "Calm", flip: true, seed: 112 }, nurse10.g).walk("b14@الفرملية", pan(10).x + 292, 1.0).face(blue, "Fear");
-      actor(10, 400, 330, { scale: 0.072, body: "Doc", hair: "GrayShort", face: "Serious", flip: true, seed: 113 }).walk("b15@جريين", pan(10).x + 236, 0.7);
+      const in10 = c.clipped(pan(10).x + 3, pan(10).y + 3, PW - 6, PH - 6);
+      const nurse10 = c.group(in10); nurse10.g.setAttribute("class", "nurse");
+      // l'infirmière trouve le Bébé, puis sort chercher l'équipe ; l'Oberarzt arrive en courant à sa place
+      actor(10, 380, 330, { scale: 0.072, body: "DocProtectiveClothe", hair: "Bun", face: "Calm", flip: true, seed: 112 }, nurse10.g)
+        .walk("b14@الفرملية", pan(10).x + 296, 1.0).face(blue, "Fear").turn("b15", false).walk("b15+0.1", pan(10).x + 420, 0.7);
+      actor(10, 420, 330, { scale: 0.072, body: "Doc", hair: "GrayShort", face: "Serious", flip: true, seed: 113 }, in10).walk("b15@جريين", pan(10).x + 296, 0.7);
+      chip(10, "Oberarzt", "الطبيب المسؤول", 196, 120, 15, "main").pop("b15@جريين+0.6");
       put(P.crib({ w: 300, part: "back", rail: 0 }), 10, 104, 334, 0.55);
       put(P.baby({ pose: "lying", state: "normal", eyes: "closed" }), 10, 186, 239, 0.45).hide(blue, 0.6);
       put(P.baby({ pose: "lying", state: "blue", eyes: "closed", mouth: "open" }), 10, 186, 239, 0.45).fade(blue, 0.6);
