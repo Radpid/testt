@@ -157,7 +157,7 @@
       actor(10, 380, 330, { scale: 0.072, body: "DocProtectiveClothe", hair: "Bun", face: "Calm", flip: true, seed: 112 }, nurse10.g)
         .walk("b14@الفرملية", pan(10).x + 296, 1.0).face(blue, "Fear").turn("b15", false).walk("b15+0.1", pan(10).x + 420, 0.7);
       actor(10, 420, 330, { scale: 0.072, body: "Doc", hair: "GrayShort", face: "Serious", flip: true, seed: 113 }, in10).walk("b15@جريين", pan(10).x + 296, 0.7);
-      chip(10, "Oberarzt", "الطبيب المسؤول", 196, 120, 15, "main").pop("b15@جريين+0.6");
+      chip(10, "Oberarzt", "الطبيب المسؤول", 150, 130, 15, "main").pop("b15@جريين+0.6");
       put(P.crib({ w: 300, part: "back", rail: 0 }), 10, 104, 334, 0.55);
       put(P.baby({ pose: "lying", state: "normal", eyes: "closed" }), 10, 186, 239, 0.45).hide(blue, 0.6);
       put(P.baby({ pose: "lying", state: "blue", eyes: "closed", mouth: "open" }), 10, 186, 239, 0.45).fade(blue, 0.6);
@@ -193,18 +193,18 @@
 
       /* 13 · le tribunal ------------------------------------------------------- */
       focus(13, "b18");
-      actor(13, 168, 318, { scale: 0.15, body: "Turtleneck", hair: "GrayShort", face: "Serious", accessory: "GlassRound", seed: 114 }).talk("b19", "b19@end");
+      actor(13, 168, 334, { scale: 0.15, body: "Turtleneck", hair: "GrayShort", face: "Serious", accessory: "GlassRound", seed: 114 }).talk("b19", "b19@end");
       put(P.judgeBench({ w: 290, h: 120, label: "LG Bielefeld" }), 13, 23, 336);
       const strike = T("b18@fahrlässige");
       c.dyn((t) => P.gavel({ angle: t < strike - 0.4 ? 0 : t < strike ? 30 * E.out(prog(t, strike - 0.4, 0.3)) : 30 * (1 - E.in(prog(t, strike, 0.12))) }), ...A(13, 270, 216), 0.22);
       c.shake(strike + 0.12, 8, 0.35);
       chip(13, "fahrlässige Tötung · 2012", "القتل غير العمدي", 168, 46, 18, "accent").pop(strike).hide("b19", 0.25);
-      put(`<rect x="0" y="0" width="300" height="118" rx="14" fill="var(--white)" stroke="var(--ink)" stroke-width="2.6"/>`, 13, 18, 22).pop("b19", 0.4);
+      put(`<rect x="0" y="0" width="300" height="128" rx="14" fill="var(--white)" stroke="var(--ink)" stroke-width="2.6"/>`, 13, 18, 18).pop("b19", 0.4);
       const q1 = de(13, "„Da hätte der Angeklagte", 168, 54, 18, null), q2 = de(13, "zumindest nachfragen", 168, 80, 18, null), q3 = de(13, "müssen.“", 168, 106, 18, null);
       const d19 = Math.max(1.5, T("b19@end") - T("b19"));
       c.write(q1, "b19", d19 * 0.4); c.write(q2, `b19+${(d19 * 0.4).toFixed(2)}`, d19 * 0.35); c.write(q3, `b19+${(d19 * 0.75).toFixed(2)}`, d19 * 0.2);
       U.underline(c, ...[A(13, 178, 86)[0], A(13, 262, 86)[0]], A(13, 0, 86)[1]).wipe("b19@nachfragen", 0.4);
-      ar(13, "كان خاص المتهم على الأقل يسول", 168, 158, 16).fade("b19@end");
+      ar(13, "كان خاص المتهم على الأقل يسول", 168, 134, 14).fade("b19@end");
       detail({ x: pan(13).x + 10, y: pan(13).y + 14, w: 316, h: 160 }, "b19", { d: 0.6 });
 
       /* 14 · les parents, la licence ------------------------------------------- */
@@ -220,11 +220,11 @@
       /* 15 · la règle ---------------------------------------------------------- */
       focus(15, "b22");
       ["Was", "ist", "da", "drin?"].forEach((w, i) => {
-        const at = `b22@${w.replace("?", "")}`, [x, y] = A(15, 20 + i * 76, 24);
-        c.box(x, y, 68, 46, 10, i === 3 ? "var(--main)" : "var(--white)", "var(--ink)", 2.6).pop(at);
-        c.text(w, x + 34, y + 33, 22, "de" + (i === 3 ? " on-main" : "")).pop(at);
+        const at = `b22@${w.replace("?", "")}`, [x, y] = A(15, 18 + i * 66, 24);
+        c.box(x, y, 60, 46, 10, i === 3 ? "var(--main)" : "var(--white)", "var(--ink)", 2.6).pop(at);
+        c.text(w, x + 30, y + 33, 20, "de" + (i === 3 ? " on-main" : "")).pop(at);
       });
-      ar(15, "شنو كاين فيها؟", 168, 98, 20, "ar strong").fade("b22@drin+0.2");
+      ar(15, "شنو كاين فيها؟", 150, 98, 20, "ar strong").fade("b22@drin+0.2");
       [["Selbst aufgezogen?", "عمرتيها بيدك؟", "b23@عمرتيهاش"], ["Beschriftet?", "مكتوب عليها؟", "b23@مكتوب"], ["Nein? → nachfragen!", "لا؟ ← سول!", "b23@سول"]].forEach(([d, a, at], i) => {
         const [x, y] = A(15, 24, 140 + i * 52);
         c.put(`<circle cx="${x + 12}" cy="${y - 7}" r="11" fill="var(--main)" stroke="var(--ink)" stroke-width="2"/>`).pop(at);
