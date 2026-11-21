@@ -36,7 +36,7 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 
 | # | Titre de travail | Statut |
 |---|---|---|
-| 01 | La seringue blanche (PJler, Bielefeld 2011) | **en production** |
+| 01 | La seringue blanche (PJler, Bielefeld 2011) | **en production** — scénario : `videos/ep01-spritze/scenario.md` |
 | 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
 | 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | prêt (source primaire) |
@@ -44,11 +44,14 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
 
 ### 01 — La seringue blanche
-- Faits : 22.08.2011, Kinderklinik d'un hôpital de Bielefeld (NRW). Un étudiant en PJ (29 ans) injecte dans le
-  cathéter central d'un bébé de ~9 mois une seringue non étiquetée de liquide laiteux qu'une infirmière lui a
-  tendue : c'était un antibiotique oral (Cotrimoxazol-Saft). Le bébé meurt (choc anaphylactique selon la presse).
-- Sanction : fahrlässige Tötung. AG Bielefeld 22.10.2012 (10 Ds-16 Js 279/11-1009/12) : 120 Tagessätze.
-  LG Bielefeld 14.08.2013 (appel ; Az. 011 Ns-16 Js 279/11-11/13 selon l'Ärzteblatt) : 90 Tagessätze, 1 800 €.
+- Faits (vérifiés dans les deux jugements) : 22.08.2011, oncologie pédiatrique d'un hôpital de Bielefeld (NRW).
+  Un étudiant en PJ (29 ans, une semaine sur la station) devait seulement prélever du sang ; il a cru devoir aussi
+  donner la Refobacin. L'infirmière a posé à côté de l'enfant une seringue Luer sans étiquette de Cotrim-K sirop
+  (oral) en le disant à la mère ; il lui tournait le dos. Il l'a injectée dans le cathéter central d'un garçon de
+  10 mois (AML). Choc anaphylactique, décès à 12 h 28 après 3 h 30 de réanimation.
+- Sanction : fahrlässige Tötung. AG Bielefeld 22.10.2012 (10 Ds-16 Js 279/11-1009/12) : 120 × 15 €.
+  LG Bielefeld 14.08.2013 (011 Ns-16 Js 279/11-11/13) : 90 × 20 € (= 1 800 € aussi), définitif le 22.08.2013.
+  Approbation obtenue en janvier 2013 ; inscription au Bundeszentralregister.
 - Citation : « Da hätte der Angeklagte zumindest nachfragen müssen. » L'Organisationsverschulden de la clinique
   « ändere an der strafrechtlichen Verantwortlichkeit des Angeklagten nichts ».
 - Règle : ne jamais injecter ce que tu n'as pas préparé toi-même ou que tu ne peux pas identifier avec certitude.
