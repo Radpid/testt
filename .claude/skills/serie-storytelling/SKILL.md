@@ -93,7 +93,9 @@ videos/epNN-<mot>/
   chaque mot allemand (`serie/glossaire.js` pour les sous-titres, `k.chip(de, ar)` / `c.de()` dans les scènes).
 - **Sous-titres karaoké** (`captions: "karaoke"`) : étiquette blanche + scotch, Plex Arabic Bold, UNE ligne
   (≤ 4 mots), mots à venir en filigrane, chaque mot rebondit, mot en cours surligné ; ne jamais séparer
-  « La | seringue » ; pas de traduction en double si elle est déjà à l'écran (`capTr: false`).
+  « La | seringue » ; pas de traduction en double si elle est déjà à l'écran (`capTr: false`). Traduction arabe
+  d'un mot allemand : SOUS le mot, en encre foncée sur fond blanc ; le surligneur ne couvre que le mot allemand
+  (`.rb`), jamais la traduction (retour de l'auteur sur AKTE 02).
 - **Repères** calés sur les mots (`"b7@الدم"`, `"b21@end"`, `"b4@جملة+0.2"`) ; vérifier qu'aucun ne manque
   (script beattimes : charge la page, erreur si un mot est introuvable).
 

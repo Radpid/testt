@@ -544,7 +544,9 @@
     for (const m of tk.matchAll(LATSEG)) {
       out += esc(tk.slice(last, m.index));
       const core = m[0].replace(/[?!]+$/, ""), g = gloss(core), tail = m[0].slice(core.length);
-      out += `<span class="lat" dir="ltr">${ruby(core, g)}${esc(tail)}</span>`;
+      // le surligneur ne couvre que le mot allemand (.rb) ; la traduction arabe (rt) reste dessous, sur fond blanc
+      const base = `<span class="rb">${esc(core)}</span>`;
+      out += `<span class="lat" dir="ltr">${g ? `<ruby>${base}<rt>${esc(g)}</rt></ruby>` : base}${esc(tail)}</span>`;
       last = m.index + m[0].length;
     }
     out += esc(tk.slice(last));

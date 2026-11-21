@@ -32,9 +32,14 @@
   .cap .kline { display: block; }
   .cap .w { display: inline-block; padding: 0 4px; border-radius: 10px; transform-origin: 50% 85%; }
   .cap .w.on { background: linear-gradient(transparent 14%, rgba(248,206,78,.95) 14%, rgba(248,206,78,.95) 94%, transparent 94%); }
-  .cap .lat { font-family: Kalam; font-weight: 700; background: linear-gradient(transparent 56%, rgba(248,206,78,.55) 56%, rgba(248,206,78,.55) 92%, transparent 92%); padding: 0 2px; }
-  .cap .w.on .lat { background: none; }
-  .cap rt { font-size: 30px; font-weight: 700; color: #4A4843; font-family: "Plex Arabic", sans-serif; }
+  .cap .lat { font-family: Kalam; font-weight: 700; padding: 0 2px; }
+  .cap .lat .rb { background: linear-gradient(transparent 56%, rgba(248,206,78,.55) 56%, rgba(248,206,78,.55) 92%, transparent 92%); }
+  /* mot en cours : le surligneur couvre seulement le mot allemand, jamais sa traduction arabe */
+  .cap .w.on:has(rt) { background: none; }
+  .cap .w.on .rb { background: linear-gradient(transparent 12%, rgba(248,206,78,.95) 12%, rgba(248,206,78,.95) 94%, transparent 94%); }
+  .cap ruby { ruby-position: under; }
+  .cap rt { font-size: 32px; font-weight: 700; color: #2E2C29; font-family: "Plex Arabic", sans-serif; padding-top: 6px; line-height: 1.15; }
+  .cap:has(rt) { padding-bottom: 16px; }
   .cap .cap-tr { font-size: 40px; font-weight: 700; color: #4A4843; margin-top: 2px; }
   /* sous-titres classiques (secours) */
   .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
