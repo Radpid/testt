@@ -103,8 +103,12 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   Transcrire chaque prise (Scribe), décider où elle remplace / complète le texte, et monter par phrase
   avec plusieurs sources (`videos/ep01-spritze/montage_voix.py` : `BEATS = [("b8", [("t7", [...]), ("raw", [90])])]`).
   Isoler chaque source AVANT le montage (Audio Isolation sur l'enregistrement complet et sur chaque prise).
+- **Durée : ≤ 1 min** (exigence de l'auteur). Si sa voix dépasse, couper des PHRASES entières (redites, détails que
+  l'image montre déjà, ce qui est écrit à l'écran), jamais accélérer au-delà de ×1,2. Lui donner la liste des coupes.
+- **La mort** ne se dit pas : scène muette (moniteur qui ralentit puis ligne plate, mère, heure, « مات الـBébé » écrit,
+  la couleur s'éteint), son de moniteur synthétisé (`son/flatline.py`).
 - **Rythme** (demande de l'auteur : « beaucoup plus rapide ») : pauses ≤ 0,3 s dans une phrase, 0,14–0,32 s
-  entre phrases, 0,24–0,42 s entre scènes, puis `atempo=1.12` (hauteur conservée). Transitions 0,35 s (`whip`).
+  entre phrases, 0,2–0,34 s entre scènes, puis `atempo=1.2` (hauteur conservée). Transitions 0,35 s (`whip`).
 - **Sous-titres karaoké** (`SV_CONFIG.captions = "karaoke"`) : pages de ≤ 6 mots, gros texte (62 px, Plex Arabic Bold),
   mots à venir en filigrane, chaque mot rebondit quand il est dit, mot en cours surligné en jaune ; ne jamais couper
   « La | seringue ». `captionBottom: 320` pour utiliser le bas de l'écran.
