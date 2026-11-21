@@ -11,7 +11,13 @@ N = int(TOTAL * SR)
 mix = np.zeros(N, np.float32)
 v = load(VOICE); mix[:min(N, len(v))] += v[:N]
 # --- musique : niveau de base puis ducking quand la voix parle
-m = load(MUSIC)[:N]; m = np.pad(m, (0, N - len(m)))
+m = load(MUSIC)
+# insertion de silence dans la musique (section « Loss », quasi muette) pour suivre une scène muette allongée
+if len(sys.argv) > 5:
+    at, d = map(float, sys.argv[5].split(":")); i = int(at * SR); z = int(d * SR); xf = int(0.3 * SR)
+    head, tail = m[:i].copy(), m[i:].copy(); head[-xf:] *= np.linspace(1, 0, xf); tail[:xf] *= np.linspace(0, 1, xf)
+    m = np.concatenate([head, np.zeros(z, np.float32), tail])
+m = m[:N]; m = np.pad(m, (0, N - len(m)))
 rms = lambda x: np.sqrt(np.mean(x ** 2) + 1e-12)
 m *= db(-25) / rms(m[: int(100 * SR)])                # musique ≈ -25 dBFS RMS
 hop = int(0.01 * SR); vv = np.pad(v, (0, max(0, N - len(v))))[:N]
@@ -29,7 +35,8 @@ cues = dict(json.load(open(os.path.join(D, "cuetimes.json")))); cues["0"] = 0.0
 cache = {}
 for name, cue, off, gdb, fade, maxd in P:
     if name not in cache:
-        x = load(os.path.join(D, name + ".mp3"))
+        f = os.path.join(D, name + ".wav"); f = f if os.path.exists(f) else os.path.join(D, name + ".mp3")
+        x = load(f)
         nz = np.nonzero(np.abs(x) > 10 ** (-45 / 20))[0]          # enlève le silence de tête
         x = x[nz[0]:] if len(nz) else x
         cache[name] = x / (np.max(np.abs(x)) + 1e-9)               # crête à 0 dBFS avant gain

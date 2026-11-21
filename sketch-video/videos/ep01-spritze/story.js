@@ -266,17 +266,40 @@
     /* 11 · réanimation ---------------------------------------------------------- */
     st.scene({ from: "b17", in: "fade", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
-      const r0 = T("b17"), flat = T("b17@بقاش");
-      c.camera([{ at: "b17", s: 1, cx: 540, cy: 900 }, { at: "b17+0.2", s: 1.1, cx: 540, cy: 880, d: 3, ease: "lin" }]);
+      const r0 = T("b17"), r1 = T("b17@end");
+      c.camera([{ at: "b17", s: 1, cx: 540, cy: 900 }, { at: "b17+0.2", s: 1.1, cx: 540, cy: 880, d: 2, ease: "lin" }]);
       k.chip("K1 · Intensivstation", "قسم الإنعاش", 540, 330, 46).pop("b16@Intensivstation-0.2");
-      const hm = (t) => { const m = Math.round(lerp(8 * 60 + 55, 12 * 60 + 28, E.inOut(prog(t, r0, Math.max(1, flat - r0))))); return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; };
+      const hm = (t) => { const m = Math.round(lerp(8 * 60 + 55, 12 * 60 + 28, E.inOut(prog(t, r0, Math.max(1, r1 - r0))))); return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; };
       c.sk((g, p) => K.clock(g, { x: 0, y: 0, r: 120, time: p.time, label: false }), (t) => ({ time: hm(t) }), 300, 720, 1);
       const dg = c.text("08:55", 300, 930, 80, "de");
       dg.on((t) => { const s = hm(t); if (dg.textEl.textContent !== s) dg.textEl.textContent = s; });
-      k.prop("monitor", 760, 720, 0.85, (t) => ({ ecg: t >= flat ? "flat" : "alarm", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= flat ? "0" : "!" }));
+      k.prop("monitor", 760, 720, 0.85, (t) => ({ ecg: "alarm", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: "!" }));
       k.chip("Reanimation · 3,5 h", "الإنعاش · 3 سوايع و نص", 540, 1120, 46).pop("b17@Réanimation");
-      c.put(`<rect x="-200" y="-200" width="1480" height="2400" fill="#F7F7F1"/>`).on((t, s) => { s.o *= 0.86 * E.inOut(prog(t, flat + 0.4, 1.2)); });
-      k.title("12:28", 540, 860, 150).fade(flat + 0.9, 0.8);
+    } });
+
+    /* 11b · le silence : le Bébé est mort (aucune voix, seulement le moniteur) ---- */
+    st.scene({ from: "b17@end+0.3", in: "fade", inDur: 0.5, summary: false, build(c) {
+      const k = kit(c); k.bg();
+      const a = T("b17@end+0.3"), flatT = T("b17@end+2.0");     // = la ligne plate du son (flatline.wav)
+      c.camera([{ at: a, s: 1, cx: 540, cy: 900 }, { at: a + 0.1, s: 1.06, cx: 560, cy: 900, d: 4, ease: "lin" }]);
+      k.ground(560, 1252, 940);
+      // moniteur : les bips ralentissent (repères du son : +0,05 / +0,65 / +1,3) puis ligne plate
+      const beeps = [0.05, 0.65, 1.3].map((x) => T("b17@end") + x);
+      k.prop("monitor", 255, 740, 0.95, (t) => {
+        if (t >= flatT) return { ecg: "flat", t: 0, hr: "0", stand: 440 };
+        const last = beeps.filter((x) => x <= t).pop();
+        const q = last != null ? Math.min(1, (t - last) / 0.5) : 1;          // le tracé « bat » à chaque bip
+        return { ecg: "normal", t: Math.round(q * 24) / 24, hr: "", stand: 440 };
+      }).pulse(flatT, 0.5, 0.05, 1);
+      k.prop("crib", 590, 1250, 1.2, () => ({ w: 380, part: "back" }));
+      k.baby(560, 1250 - 180, 1.2, () => ({ pose: "lying", state: "normal", eyes: "closed" }));
+      k.prop("crib", 590, 1250, 1.2, () => ({ w: 380, part: "front" }));
+      k.person(880, 1250, 1.2, () => Object.assign({ outfit: "mother", seed: 21, facing: -1 }, SC.Pose.handsOnHead)).fade(a + 0.6, 0.9);
+      k.title("12:28", 540, 330, 100).fade(flatT, 0.4);
+      k.ar("مات الـBébé", 540, 480, 66, "ttl").wipe(flatT + 0.15, 0.75, "rtl");
+      // la pièce se vide de sa couleur
+      c.layer.style.filter = "";
+      c.tick((t) => { const g = E.inOut(prog(t, flatT, 1.2)); c.layer.style.filter = g > 0 ? `grayscale(${g.toFixed(2)})` : ""; });
     } });
 
     /* 12 · le lendemain --------------------------------------------------------- */

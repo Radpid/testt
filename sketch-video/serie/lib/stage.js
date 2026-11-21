@@ -358,7 +358,7 @@
      */
     summary(o) {
       o = Object.assign({ cols: 3, crop: [170, 1310], top: 118, gap: 10, side: 16, dezoomDur: 2.2 }, o);
-      const scenes = this.scenes.slice();
+      const scenes = this.scenes.filter((sc) => sc.def.summary !== false);
       const stage = this;
       const cw = (W - 2 * o.side - (o.cols - 1) * 20) / o.cols;
       const k = cw / W, ch = (o.crop[1] - o.crop[0]) * k;

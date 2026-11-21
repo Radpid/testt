@@ -25,8 +25,8 @@ P = [
  ("pop", "b14@الفم", 0, -13, None, None),
  ("alarm", "b15@أزرق", 0, -17, 0.8, None),
  ("run", "b16@كيجريو", 0, -12, 0.6, None),
- ("icu", "b17", 0, -22, 0.6, None),
- ("flat", "b17@بقاش", 0.25, -17, 0.7, None),
+ ("icu", "b17", 0, -22, 0.5, 1.9),
+ ("flatline", "b17@end", 0.0, -17, None, None),   # 3 bips qui ralentissent puis ligne plate (synthétisé, calé sur la scène 11b)
  ("page", "b18", 0.0, -10, None, None), ("scribble", "b18@بدل", 0, -14, None, None),
  ("whoosh", "b19", -0.1, -16, None, None), ("murmur", "b19", 0, -24, 0.8, 2.6),
  ("gavel", "b19@fahrlässige", 0.08, -6, None, None), ("scribble", "b19@تهمة", 0, -15, None, None),
