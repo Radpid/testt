@@ -36,12 +36,12 @@
   const H = [[{ eyes: "open" }, "held · open"], [{}, "held · closed"], [{ state: "blue" }, "held · blue"], [{ eyes: "half", mouth: "open", blanket: true }, "held · half · mouth open · blanket"]];
   H.forEach(([o, t], i) => { const x = 140 + i * 265; s += at(P.baby(Object.assign({ pose: "held" }, o)), x, 590, 1) + cap(t, x, 668); });
   // ── 3 : petits (0.35)
-  let x = 80;
-  L.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "lying" }, o)), x, 760, 0.35); x += 130; });
-  s += at(P.baby({ pose: "lying", eyes: "half", mouth: "open" }), x, 760, 0.35); x += 120;
-  H.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "held" }, o)), x, 746, 0.35); x += 90; });
-  s += at(P.baby({ pose: "lying", line: false, ecg: false, blanket: false }), 960, 760, 0.6);
-  s += cap("× 0.35", 400, 800) + cap("sans couverture/ligne × 0.6", 960, 800);
+  let x = 70;
+  L.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "lying" }, o)), x, 770, 0.35); x += 120; });
+  s += at(P.baby({ pose: "lying", eyes: "half", mouth: "open" }), x, 770, 0.35); x += 100;
+  H.forEach(([o]) => { s += at(P.baby(Object.assign({ pose: "held" }, o)), x, 762, 0.35); x += 80; });
+  s += at(P.baby({ pose: "lying", line: false, ecg: false, blanket: false }), 960, 770, 0.6);
+  s += cap("× 0.35", 400, 800) + cap("lying · blanket/line/ecg:false × 0.6", 940, 800);
 
   // ── 4 : lit à barreaux
   const C = P.CRIB;

@@ -933,7 +933,7 @@
     // joues
     if (!blue) s += F(ell(48, 29, 9, 6), "f-accent2", { wob: 0.3 }) + F(ell(-17, 31, 10, 6.5), "f-accent2", { wob: 0.3 });
     // sourcils (deux petites marques)
-    s += G(O("M-10 -8C-6 -11 1 -11 5 -9", W3(), { seed: 4 }) + O("M32 -9C36 -11 41 -11 45 -8", W3(), { seed: 5 }), eyes === "half" ? "translate(0 -4)" : "");
+    s += G(O("M-10 -8C-6 -11 1 -11 5 -9", W3(), { seed: 4 }) + O("M32 -9C36 -11 41 -11 45 -8", W3(), { seed: 5 }), eyes === "half" ? "translate(0 -1)" : "");
     // yeux
     for (const [ex, sd] of [[-3, 1], [37, 2]]) {
       if (eyes === "closed") {
@@ -941,8 +941,10 @@
       } else {
         s += F(ell(ex, 9, 6, 7.5), "ink", { wob: 0.3 }) + F(ell(ex + 2, 6, 2, 2), "f-white", { wob: 0 });
         if (eyes === "half") {
-          s += F(rr(ex - 9, 0, 18, 7, 2), skin, { wob: 0 });
-          s += O(`M${ex - 9} 8C${ex - 5} 4 ${ex + 5} 4 ${ex + 9} 8`, W2(), { seed: sd, taper: 0.9 });
+          // paupière lourde, tombante vers l'extérieur (somnolent, pas « blasé »)
+          const yl = sd === 1 ? 11 : 6, yr = sd === 1 ? 6 : 11;
+          s += F(`M${ex - 10} -1L${ex + 10} -1L${ex + 10} ${yr}L${ex - 10} ${yl}Z`, skin, { wob: 0 });
+          s += O(`M${ex - 9} ${yl}C${ex - 3} ${(yl + yr) / 2 - 2.5} ${ex + 3} ${(yl + yr) / 2 - 2.5} ${ex + 9} ${yr}`, W2(), { seed: sd, taper: 0.9 });
         }
       }
     }
