@@ -11,7 +11,7 @@
   const isLatin = (s) => /[A-Za-z0-9]/.test(s) && !/[؀-ۿ]/.test(s);
 
   window.SV_BUILD = (sv) => {
-    const st = Stage.create(sv, { view: { s: 1.06, oy: 10, breathe: 0.04 } }), T = (x) => st.T(x), E = Stage.E, prog = Stage.prog, lerp = Stage.lerp, clamp = Stage.clamp;
+    const st = Stage.create(sv, { view: { s: 1.06, oy: -46, breathe: 0.04 } }), T = (x) => st.T(x), E = Stage.E, prog = Stage.prog, lerp = Stage.lerp, clamp = Stage.clamp;
 
     /* ---------- boîte à outils de scène ---------- */
     function kit(c) {
@@ -80,7 +80,7 @@
     /* 1 · condamné ------------------------------------------------------------- */
     st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: 0, s: 1.55, cx: 400, cy: 800 }, { at: "b1@تحكم", s: 1, cx: 540, cy: 900, d: 1.1 }]);
+      c.camera([{ at: 0, s: 1.45, cx: 400, cy: 1060 }, { at: "b1@تحكم", s: 1, cx: 540, cy: 900, d: 1.1 }]);
       k.ribbon("مُدان", 400, 330, { size: 92, w: 360 }).wipe("b1@تحكم+0.3", 0.5, "rtl");
       k.ground(400, 1250, 600);
       const stu = k.person(400, 1250, 1.45, (t) => Object.assign({ outfit: "coat", seed: 7, expr: t > T("b1@تحكم") ? "sad" : "unsure" }, SC.Pose.standDock));
@@ -96,7 +96,7 @@
     st.scene({ from: "b2", in: "whip", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
       c.camera([{ at: "b2", s: 1, cx: 540, cy: 900 }, { at: "b2+0.2", s: 1.08, cx: 540, cy: 880, d: 3, ease: "lin" }]);
-      k.ribbon("حتى 5 سنين ف الحبس", 540, 365, { size: 70, parent: c.hud }).wipe("b2", 0.6, "rtl");
+      k.ribbon("حتى 5 سنين ف الحبس", 540, 325, { size: 70, parent: c.hud }).wipe("b2", 0.6, "rtl");
       k.ground(540, 1250, 640);
       k.person(540, 1250, 1.4, (t) => Object.assign({ outfit: "coat", seed: 7, expr: t > T("b2@الحبس") ? "shock" : "sad" }, t > T("b2@الحبس") ? SC.Pose.handsOnHead : SC.Pose.stand));
       // barreaux dessinés à la main, qui descendent
@@ -114,7 +114,7 @@
     st.scene({ from: "b3", in: "zoom", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
       c.camera([{ at: "b3", s: 1, cx: 540, cy: 900 }, { at: "b3@بيضا", s: 1.5, cx: 470, cy: 690, d: 0.8 }, { at: "b4", s: 1, cx: 540, cy: 900, d: 0.9 }]);
-      k.ribbon("و السبب؟", 540, 355, { size: 84, parent: c.hud }).wipe("b3", 0.5, "rtl");
+      k.ribbon("و السبب؟", 540, 328, { size: 84, parent: c.hud }).wipe("b3", 0.5, "rtl");
       k.prop("syringe", 560, 680, 2.2, () => MILKY, -8).slide("b3@Spritze", 700, 0, 0.7).float(5, 3.2);
       k.marker(368, 700, 230, 120, -8).wipe("b3@مكتوب", 0.4).on((t, s) => { s.o *= 0.55; });
       [[190, 480, 0], [890, 470, 1.7]].forEach(([x, y, ph], i) => k.title("?", x, y, 92).pop(`b3+${(0.5 + i * 0.3).toFixed(2)}`).float(10, 2.2, ph).wobble(`b3@بيضا`, 0.6, 8));
@@ -140,8 +140,8 @@
     st.scene({ from: "b5", in: "iris", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
       c.camera([{ at: "b5", s: 1.7, cx: 720, cy: 690 }, { at: "b5@واحد-0.1", s: 1, cx: 540, cy: 900, d: 0.8 }]);
-      k.ribbon("Bielefeld · 2011", 540, 355, { size: 64, parent: c.hud }).wipe("b5", 0.5);
-      k.ar("ألمانيا · قسم سرطان الأطفال", 540, 472, 34, "ar strong", c.hud).wipe("b5+0.3", 0.7, "rtl");
+      k.ribbon("Bielefeld · 2011", 540, 322, { size: 64, parent: c.hud }).wipe("b5", 0.5);
+      k.ar("ألمانيا · قسم سرطان الأطفال", 540, 432, 34, "ar strong", c.hud).wipe("b5+0.3", 0.7, "rtl");
       // la carte
       const map = el("g"); const C = SC.util.ctx(map, 4242, false, 1);
       el("path", { d: "M" + DE.map((p) => geo(...p).map((v) => v + 7).join(" ")).join(" L") + " Z", fill: "#D2D2CB" }, map);   // ombre
@@ -174,7 +174,7 @@
     st.scene({ from: "b6", in: "whip", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
       c.camera([{ at: "b6", s: 1.1, cx: 540, cy: 920 }, { at: "b6@سيمانة", s: 1.3, cx: 580, cy: 900, d: 0.8 }]);
-      k.ribbon("الطالب", 540, 355, { size: 84, parent: c.hud }).wipe("b6", 0.5, "rtl");
+      k.ribbon("الطالب", 540, 328, { size: 84, parent: c.hud }).wipe("b6", 0.5, "rtl");
       k.ground(540, 1250, 900);
       k.walker({ at: "b6", dur: 1.6, x0: -150, x1: 380, y: 1250, s: 1.4, outfit: "coat", seed: 7, expr: "calm", after: () => SC.Pose.stand });
       k.chip("PJ · 29 Jahre", "طالب ف آخر عام ديال الطب", 780, 640, 40).pop("b6@طالب");
@@ -210,7 +210,7 @@
       k.person(200, 1250, 1.1, () => Object.assign({ outfit: "mother", seed: 21, baby: { state: "normal", eyes: "closed" } }, SC.Pose.carryBaby));
       k.person(420, 1250, 1.2, () => Object.assign({ outfit: "coat", seed: 7, view: "back" }, SC.Pose.stand, { view: "back" }));
       k.cast("cabinet", { x: 600, y: 1250 });
-      k.walker({ at: "b9", dur: 1.2, x0: 1250, x1: 900, y: 1250, s: 1.2, outfit: "scrubs", seed: 11, expr: "neutral",
+      k.walker({ at: "b9", dur: 1.2, x0: 1250, x1: 860, y: 1250, s: 1.2, outfit: "scrubs", seed: 11, expr: "neutral",
         after: (t) => (t >= T("b10") ? Object.assign({}, SC.Pose.point, { expr: "talk", talk: t < T("b10@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0, facing: -1 }) : Object.assign({}, SC.Pose.stand, { facing: -1 })) });
       k.prop("syringe", 700, 1000, 0.45, () => MILKY).slide("b9@حطت", 0, -60, 0.4);
       k.chip("kein Blickkontakt", "ما تشافوش", 420, 520, 34).pop("b9@ضهرو").hide("b10", 0.3);
@@ -275,9 +275,9 @@
       const blue = T("b15@أزرق");
       c.camera([{ at: "b15", s: 1, cx: 540, cy: 900 }, { at: "b15@أزرق-0.2", s: 1.55, cx: 385, cy: 990, d: 0.5 }, { at: "b16", s: 1, cx: 540, cy: 900, d: 0.7 }]);
       // textes fixés à l'écran (hors caméra) : le zoom sur le Bébé ne les coupe pas
-      { const g = el("g", { transform: "translate(540 262)" }); SC.marker(g, { w: 360, h: 120, rot: -1.5 }); c.node(g, c.hud).wipe("b15@أزرق", 0.4); }
-      k.title("08:46", 540, 302, 110, { parent: c.hud }).pop("b15@أزرق");
-      k.ar("الـBébé ولى زرق و كيتنفس بجهد", 540, 398, 36, "ar strong", c.hud).wipe("b15@أزرق+0.3", 0.7, "rtl");
+      { const g = el("g", { transform: "translate(660 262)" }); SC.marker(g, { w: 360, h: 120, rot: -1.5 }); c.node(g, c.hud).wipe("b15@أزرق", 0.4); }
+      k.title("08:46", 660, 302, 110, { parent: c.hud }).pop("b15@أزرق");
+      k.ar("الـBébé ولى زرق و كيتنفس بجهد", 660, 392, 36, "ar strong", c.hud).wipe("b15@أزرق+0.3", 0.7, "rtl");
       k.ground(540, 1252, 1000);
       k.prop("monitor", 150, 760, 0.85, (t) => ({ ecg: t >= blue ? "alarm" : "normal", t: Math.round(((t * 0.6) % 1) * 24) / 24, hr: t >= blue ? "!" : "", stand: 420 })).pulse("b15@أزرق", 0.8, 0.06, 3);
       k.prop("crib", 440, 1250, 1.2, () => ({ w: 380, part: "back" }));
@@ -285,7 +285,7 @@
       k.prop("crib", 440, 1250, 1.2, () => ({ w: 380, part: "front" }));
       k.walker({ at: "b15@فرملية", dur: 0.9, x0: 1250, x1: 820, y: 1250, s: 1.25, outfit: "scrubs", seed: 11,
         after: (t) => Object.assign({}, t >= blue ? SC.Pose.leanOverCrib : SC.Pose.stand, { facing: -1, expr: t >= blue ? "shock" : "neutral" }) });
-      k.walker({ at: "b16@كيجريو", dur: 0.8, x0: 1300, x1: 940, y: 1250, s: 1.2, outfit: "oberarzt", seed: 13, run: true, expr: "shock",
+      k.walker({ at: "b16@كيجريو", dur: 0.8, x0: 1300, x1: 905, y: 1250, s: 1.2, outfit: "oberarzt", seed: 13, run: true, expr: "shock",
         after: () => Object.assign({}, SC.Pose.point, { facing: -1, expr: "focused" }) });
       k.chip("Oberarzt", "الطبيب المسؤول", 860, 620, 34).pop("b16@كيجريو+0.8");
       st.vignette("b15@أزرق", 2.2, 3);
@@ -388,7 +388,7 @@
     /* 15 · la règle -------------------------------------------------------------- */
     st.scene({ from: "b24", in: "fade", inDur: 0.35, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b24", s: 1.05, cx: 540, cy: 560 }, { at: "b26", s: 1, cx: 540, cy: 880, d: 0.7 }]);
+      c.camera([{ at: "b24", s: 1.0, cx: 540, cy: 600 }, { at: "b26", s: 1, cx: 540, cy: 880, d: 0.7 }]);
       ["Was", "ist", "da", "drin?"].forEach((w, i) => {
         const at = `b25@${w.replace("?", "")}`, pre = `b24+${(0.3 + i * 0.15).toFixed(2)}`;
         k.card(70 + i * 240, 280, 220, 140, { seed: 500 + i, yellow: i === 3 }).pop(pre);
@@ -410,14 +410,14 @@
     } });
 
     /* affiche-résumé finale --------------------------------------------------- */
-    st.flash("b29@ديالك", 0.35, 0.85);
-    st.summary({ at: "b29@ديالك", in: "cut", dezoomAt: "b29@ديالك+0.6", cols: 3, crop: [230, 1310], top: 120, gap: 10, side: 16,
+    st.flash("b29@commentaire", 0.35, 0.85);
+    st.summary({ at: "b29@commentaire", in: "cut", dezoomAt: "b29@commentaire+0.4", cols: 4, crop: [230, 1310], top: 305, gap: 10, side: 60,
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);
-        k.ribbon("AKTE 01 · الحقنة البيضا", 540, 64, { size: 46, w: 640 });
-        k.chip("@dr.aguilo", null, 120, 64, 26);
-        k.chip("AKTE 02 · قريبا", null, 950, 64, 24, { yellow: true });
+        k.ribbon("AKTE 01 · الحقنة البيضا", 540, 262, { size: 40, w: 560 });
+        k.chip("@dr.aguilo", null, 135, 262, 22);
+        k.chip("AKTE 02 · قريبا", null, 945, 262, 20, { yellow: true });
         cells.forEach((cell) => {
           const g = el("g");
           el("path", { d: SC.util.rrect(cell.x, cell.y, cell.w, cell.h, 14), fill: "#D2D2CB", transform: "translate(6 8)" }, g);
@@ -435,7 +435,7 @@
         });
       } });
 
-    { const brand = document.getElementById("brand"), until = T("b29@ديالك");
+    { const brand = document.getElementById("brand"), until = T("b29@commentaire");
       sv.hooks.push((t) => { const o = t < 0.25 ? t / 0.25 : t < until ? 1 : Math.max(0, 1 - (t - until) / 0.3); brand.style.opacity = o.toFixed(3); }); }
     st.finish(0.3);
   };

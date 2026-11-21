@@ -82,7 +82,7 @@ EXTRA = {"b17": 4.4, "b12": 0.3}   # b17 : scène muette « مات الـBébé 
 RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
 TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
 XF = 0.02
-PAUSE_BEFORE = {("raw", 228): 0.42, ("raw", 47): 0.62}   # 47 : après « في بيلفيلد » (carte de l'Allemagne)   # « Approbation، | ما تحيداتش ليه » : respiration naturelle
+PAUSE_BEFORE = {("raw", 216): 0.8, ("raw", 228): 0.22, ("raw", 47): 0.62}   # 216 : pause entre « …الحبس. » et « والرخصة… » (deux phrases) ; 228 : virgule ; 47 : après « في بيلفيلد » (carte)
 
 def quietest(A, t0, t1, win=0.03):
     if t1 - t0 < 0.012: return (t0 + t1) / 2
@@ -108,6 +108,7 @@ for k in range(1, len(seq)):
     wp, wq = W(p), W(q)
     extra = EXTRA.get(p["beat"], 0) if p["last"] else 0
     lo, hi = RANGE[q["kind"]]; lo += extra; hi += extra
+    PB = PAUSE_BEFORE.get((q["src"], q["i"]), 0); lo = max(lo, PB); hi = max(hi, PB)   # pause imposée, même entre mots qui se suivent
     same = p["src"] == q["src"]
     contiguous = same and q["i"] == p["i"] + 1
     gap = wq["start"] - wp["end"]

@@ -114,8 +114,13 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   (étiquette de la seringue, mère + Bébé, injection avec le Bébé entier, Bébé bleu + moniteur…) : jamais un
   personnage, une bulle ou une carte coupés. Titres de scène (rubans) fixés à l'écran (`parent: c.hud`) pour que
   les zooms ne les coupent pas. Vérifier sur une planche des pics de zoom avant le rendu.
-- **Sous-titres centrés** sur toute la largeur (`capSafeRight: 0`), 76 px, pages ≤ 5 mots / 24 caractères,
-  `captionBottom: 280` : le bas (≈ 280 px) reste libre car Instagram y affiche pseudo, légende et musique.
+- **Zones Instagram Reels (mesurées)** : en-tête 0–220 px ; bas 1500–1920 px (pseudo, légende, musique) ;
+  boutons à droite x > 960 pour y 1000–1500. Vérifier chaque planche avec `python3 tools/ig_overlay.py capture.png`.
+  Sous-titres : centrés (`capSafeRight: 0`), 70 px, UNE ligne (pages ≤ 4 mots / 18 caractères, `capTr: false`),
+  `captionBottom: 440` (bas du cadre à 1480 px). Image remontée (`view.oy: -46`) pour finir au-dessus des
+  sous-titres (~1310 px). Affiche finale en 4 colonnes entre 300 et 1250 px.
+- **Pauses de sens** : entre deux phrases distinctes (« …الحبس. » / « والرخصة… »), imposer ~0,6 s
+  (`PAUSE_BEFORE`, appliqué même si les mots se suivent dans l'enregistrement).
 - **Livrer aussi la description Instagram** (`instagram.md`, modèle ci-dessus).
 - **Durée** : l'auteur veut court MAIS refuse qu'on supprime des scènes ou des phrases (AKTE 01). Garder tout son
   texte, accélérer à ×1,3 (vérifié : aussi intelligible que ×1,12 au contrôle Scribe), pauses très serrées.

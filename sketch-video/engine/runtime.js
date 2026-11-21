@@ -531,7 +531,7 @@
       const C = config(), MAXC = C.capChars || 30, MAXW = C.capWords || 6;
       if (!glue && ((len >= MAXC * 0.72 && brk) || len >= MAXC || cur.length >= MAXW)) { pages.push(cur); cur = []; len = 0; }
     });
-    if (cur.length) { if (cur.length === 1 && pages.length && toks[cur[0]].length < 9) pages[pages.length - 1].push(...cur); else pages.push(cur); }
+    if (cur.length) { if (cur.length === 1 && pages.length && toks[cur[0]].length < 5) pages[pages.length - 1].push(...cur); else pages.push(cur); }
     return (b._pages = pages.map((ix) => ({ ix, toks, start: W[ix[0]][0], end: W[ix[ix.length - 1]][1] })));
   }
   function tokHTML(tk, i, j) {
@@ -553,7 +553,7 @@
     const toks = pg.toks, arabic = /[؀-ۿ]/.test(toks.join(" "));
     const body = pg.ix.map((i) => tokHTML(toks[i], i)).join(" ");
     let tr = "";
-    if (!arabic) { const g = gloss((b.cap || b.text)); if (g) tr = `<span class="cap-tr" dir="rtl">${esc(g)}</span>`; }
+    if (!arabic && config().capTr !== false) { const g = gloss((b.cap || b.text)); if (g) tr = `<span class="cap-tr" dir="rtl">${esc(g)}</span>`; }
     return `<div class="kline" dir="${arabic ? "rtl" : "ltr"}">${body}</div>${tr}`;
   }
   function karaoke(t, cur) {
