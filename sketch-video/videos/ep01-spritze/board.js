@@ -72,7 +72,7 @@
       U.ribbon(c, "Bielefeld · 2011", ...A(4, 168, 50), 230, 26, "de").wipe("b5", 0.5);
       put(P.hospitalBed({ w: 300 }), 4, 18, 322, 0.62).fade("b5+0.1");
       actor(4, 150, 330, { scale: 0.068, body: "CrossedLegs", hair: "Long", cls: "sil", seed: 104 }).fade("b5+0.2");
-      put(P.baby({ pose: "held", state: "normal", eyes: "closed" }), 4, 166, 250, 0.32).pop("b5@Bébé");
+      put(P.baby({ pose: "held", state: "normal", eyes: "closed", line: false, ecg: false }), 4, 166, 250, 0.32).pop("b5@Bébé");
       chip(4, "10 Monate", "عشرة د الشهور", 262, 104, 17).pop("b5@عشرة");
       chip(4, "Leukämie", "سرطان الدم", 262, 176, 17, "accent").pop("b5@سرطان");
 
@@ -130,9 +130,9 @@
       /* 9 · l'injection, dans la chambre ---------------------------------------- */
       focus(9, "b13");
       actor(9, 272, 334, { scale: 0.074, body: "Doc", hair: "ShortVolumed", face: "Serious", flip: true, seed: 111 });
-      put(P.crib({ w: 300, part: "back" }), 9, 10, 332, 0.55);
+      put(P.crib({ w: 300, part: "back", rail: 0 }), 9, 10, 332, 0.55);
       put(P.baby({ pose: "lying", state: "normal", eyes: "closed" }), 9, 92, 237, 0.45);
-      put(P.crib({ w: 300, part: "front" }), 9, 10, 332, 0.55);
+      put(P.crib({ w: 300, part: "front", rail: 0 }), 9, 10, 332, 0.55);
       const a9 = T("b13@دفعها");
       c.dyn((t) => P.syringe({ liquid: "milky", fill: 0.85, push: Math.round(E.inOut(prog(t, a9, 1.2)) * 40) / 40, label: "?", tip: "none" }), ...A(9, 206, 214), 0.2);
       const line = [A(9, 206, 214), A(9, 184, 210), A(9, 160, 202), A(9, 138, 198)];
@@ -153,10 +153,10 @@
       const nurse10 = c.group(); nurse10.g.setAttribute("class", "nurse");
       actor(10, 380, 330, { scale: 0.072, body: "DocProtectiveClothe", hair: "Bun", face: "Calm", flip: true, seed: 112 }, nurse10.g).walk("b14@الفرملية", pan(10).x + 292, 1.0).face(blue, "Fear");
       actor(10, 400, 330, { scale: 0.072, body: "Doc", hair: "GrayShort", face: "Serious", flip: true, seed: 113 }).walk("b15@جريين", pan(10).x + 236, 0.7);
-      put(P.crib({ w: 300, part: "back" }), 10, 104, 334, 0.55);
+      put(P.crib({ w: 300, part: "back", rail: 0 }), 10, 104, 334, 0.55);
       put(P.baby({ pose: "lying", state: "normal", eyes: "closed" }), 10, 186, 239, 0.45).hide(blue, 0.6);
       put(P.baby({ pose: "lying", state: "blue", eyes: "closed", mouth: "open" }), 10, 186, 239, 0.45).fade(blue, 0.6);
-      put(P.crib({ w: 300, part: "front" }), 10, 104, 334, 0.55);
+      put(P.crib({ w: 300, part: "front", rail: 0 }), 10, 104, 334, 0.55);
       title(10, "08:46 · Alarm!", 168, 56, 30, "de accent").pop("b14@زرق");
       ar(10, "الـBébé ولى زرق", 168, 86, 17).fade("b14@زرق+0.3");
       detail({ x: pan(10).x + 100, y: pan(10).y + 150, w: 190, h: 130 }, "b14@زرق-0.2", { d: 0.6 });
