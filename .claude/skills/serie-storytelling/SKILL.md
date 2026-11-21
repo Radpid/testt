@@ -85,11 +85,16 @@ Modèle complet : `videos/ep01-spritze/` (`index.html` + `beats.js` + `timings.j
   1. Il enregistre à partir du script (il change souvent le texte : c'est SON texte qui fait foi).
   2. ElevenLabs Scribe (`scribe_v2`, horodatage par mot) → transcription ; retirer hésitations, répétitions,
      consignes parlées (« juste le silence » = mettre un vrai silence).
-  3. Montage par liste de mots (EDL) : pauses ≤ 0,22 s dans une phrase, 0,34 s entre phrases, 0,55 s entre scènes,
-     silence volontaire après la mort (≈ 1,7 s).
+  3. Montage **par phrase, jamais mot par mot** (couper chaque mot et le recoller = voix saccadée, refusé par
+     l'auteur). L'audio reste continu tant que les mots gardés se suivent ; on coupe seulement les mots retirés et les
+     pauses trop longues, au point le plus silencieux (énergie sur 30 ms), avec fondus enchaînés de 20 ms et le fond
+     sonore réel de la pièce (pas de silence numérique). Pauses : ≤ 0,42 s dans une phrase, 0,28–0,55 s entre phrases,
+     0,5–0,8 s entre scènes, silence voulu après la mort (≈ 2 s). Vérifier les mots anormalement longs de Scribe
+     (> 0,85 s : la pause a été collée au mot) et recaler leur début à l'énergie.
   4. **Audio Isolation** ElevenLabs (garde SA voix, enlève l'écho/le bruit) puis mastering ffmpeg :
-     `highpass=75, lowpass=15000, EQ +1,5 dB@160, +2,2 dB@3,2 kHz, −1,5 dB@7,2 kHz, deesser, compresseur 3:1`,
-     puis gain vers −14 LUFS et `alimiter` 0,84. Le Speech-to-Speech avec le clone est une alternative
+     `highpass=75, afftdn léger, EQ +1,5 dB@160, −1,8 dB@320, +2 dB@3,2 kHz, −1,5 dB@7,2 kHz, deesser,
+     compresseur doux 2,5:1 (attaque 10 ms, relâche 150 ms)`, puis gain vers −14 LUFS et `alimiter` 0,8.
+     Jamais de gate (effet haché). Le Speech-to-Speech avec le clone est une alternative
      (son plus « studio » mais la darija devient moins intelligible : à proposer, pas à imposer).
   5. Re-transcrire le résultat (Scribe) → `beats.js` (une phrase = un beat) + `timings.js` (mots horodatés).
   6. Bruitages discrets ElevenLabs `sound-generation` (tampon, porte de cellule, alarme, flatline, marteau)

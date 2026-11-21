@@ -154,7 +154,7 @@
       k.ground(540, 1250, 980);
       k.person(250, 1250, 1.3, (t) => Object.assign({ outfit: "scrubs", seed: 11, facing: 1, expr: "talk", talk: t >= T("b7") && t < T("b7@end") ? (Math.floor(t / 0.14) % 2 ? 1 : 0) : 0 }, SC.Pose.point));
       k.bubble({ x: 340, y: 470, w: 380, h: 150, tail: [-120, 70], text: "", size: 44 }).pop("b7@غير").hide("b8", 0.3);
-      c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").pop("b7@ياخد").hide("b8", 0.3);
+      c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").pop("b7@غير+0.1").hide("b8", 0.3);
       k.bubble({ x: 340, y: 470, w: 380, h: 150, tail: [-120, 70], text: "", size: 44 }).fade("b8@Refobacin", 0.5);
       c.de("Blutentnahme", 340, 470, 50, "أخذ الدم").fade("b8@Refobacin", 0.5);
       k.person(830, 1250, 1.3, (t) => Object.assign({ outfit: "coat", seed: 7, facing: -1, expr: t > T("b8@Refobacin") ? "calm" : "focused" }, SC.Pose.stand));
@@ -202,7 +202,7 @@
     /* 9 · l'injection, dans la chambre ----------------------------------------- */
     st.scene({ from: "b13", in: "fade", inDur: 0.5, build(c) {
       const k = kit(c); k.bg();
-      c.camera([{ at: "b13", s: 1.25, cx: 520, cy: 980 }, { at: "b13@injecta", s: 1.7, cx: 500, cy: 1020, d: 1 }, { at: "b14@sirop", s: 1.25, cx: 520, cy: 980, d: 0.8 }]);
+      c.camera([{ at: "b13", s: 1.25, cx: 520, cy: 980 }, { at: "b13@injecta", s: 1.6, cx: 455, cy: 1020, d: 1 }, { at: "b14@sirop", s: 1.25, cx: 520, cy: 980, d: 0.8 }]);
       k.ground(540, 1252, 980);
       k.prop("crib", 330, 1250, 1.2, () => ({ w: 380, part: "back" }));
       const bb = k.baby(300, 1250 - 150 * 1.2, 1.2, () => ({ pose: "lying", state: "normal", eyes: "closed" }));
