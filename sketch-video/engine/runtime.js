@@ -460,12 +460,18 @@
   const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   /* Glossaire optionnel (window.GLOSSARY = { "Spritze": "حقنة", … }) : chaque mot allemand des sous-titres
      reçoit sa traduction arabe en petit (ruby), et une phrase entièrement allemande sa traduction en dessous. */
-  const normKey = (t) => t.toLowerCase().replace(/[„“"«».,;:!?()]/g, "").replace(/\s+/g, " ").trim();
-  let GL = null;
+  // en allemand la majuscule compte (« Spritzen » = des seringues, « spritzen » = injecter) :
+  // on cherche d'abord la forme exacte, puis sans tenir compte de la casse
+  const normKey = (t) => t.replace(/[„“"«».,;:!?()]/g, "").replace(/\s+/g, " ").trim();
+  let GL = null, GLi = null;
   function gloss(term) {
     if (!window.GLOSSARY) return null;
-    if (!GL) { GL = {}; for (const k in window.GLOSSARY) GL[normKey(k)] = window.GLOSSARY[k]; }
-    return GL[normKey(term)] || null;
+    if (!GL) {
+      GL = {}; GLi = {};
+      for (const k in window.GLOSSARY) { GL[normKey(k)] = window.GLOSSARY[k]; GLi[normKey(k).toLowerCase()] ??= window.GLOSSARY[k]; }
+    }
+    const k = normKey(term);
+    return GL[k] || GLi[k.toLowerCase()] || null;
   }
   const ruby = (t, g) => g ? `<ruby>${esc(t)}<rt>${esc(g)}</rt></ruby>` : esc(t);
   function glossRun(run) {

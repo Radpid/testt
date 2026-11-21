@@ -18,7 +18,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
   l'étiquette est vide, un « ? » jaune s'y dessine. Une goutte blanche perle. Puis la seringue glisse sur le côté
   et un tampon à l'encre noire frappe l'écran : « SCHULDIG · fahrlässige Tötung ».
 - **Voix** :
-  - « ف ألمانيا، هاد الـSpritze قتلات بيبي. ما مكتوب عليها والو، بيضا بحال الحليب. و الطالب لي دارها، تحكم عليه بالقتل. »
+  - « ف ألمانيا، هاد الـSpritze قتلات Bébé. ما مكتوب عليها والو، بيضا بحال الحليب. و الطالب لي دارها، تحكم عليه بالقتل. »
 - **Son** : nappe grave, goutte, coup de tampon.
 
 ## 2 · Le dossier — 0:07–0:11
@@ -36,7 +36,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
   Puis l'étudiant entre : blouse, badge **PJ** (glose « آخر عام ف الطب ») ; sa fiche s'affiche :
   « 29 J. · Ex-Rettungssanitäter · seit **1 Woche** auf Station ».
 - **Voix** :
-  - « Bielefeld، ألفين و حداش. بيبي عندو عشرة د الشهور، عندو سرطان ف الدم و كيدير الكيميو. و طالب ف آخر عام ديال الطب، عاد سيمانة و هو ف السيرفيس. »
+  - « Bielefeld، ألفين و حداش. Bébé عندو عشرة د الشهور، عندو سرطان ف الدم و كيدير الكيميو. و طالب ف آخر عام ديال الطب، عاد سيمانة و هو ف السيرفيس. »
 - **Son** : ambiance couloir, bip lent d'un moniteur au loin.
 
 ## 4 · Le malentendu — 0:21–0:27
@@ -52,7 +52,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
   Au fond, l'infirmière entre, pose la seringue blanche à côté de l'enfant (sur le plateau), se tourne vers la mère
   et parle ; sa bulle en allemand. Une flèche jaune montre que leurs regards ne se croisent pas. Elle sort.
 - **Voix** :
-  - « و هو مدير ظهرو، حطات الفرملية Spritze حدا البيبي، و قالت للأم: »
+  - « و هو مدير ظهرو، حطات الفرملية Spritze حدا الـBébé، و قالت للأم: »
   - (voix allemande, infirmière) « Hier ist das orale Antibiotikum. » — étiquette « laut Urteil »,
     sous-titre « ها هو الـantibiotique ديال الفم »
 - **Son** : la voix de l'infirmière est un peu étouffée, comme entendue de loin.
@@ -75,7 +75,7 @@ verbatim), « Rekonstruktion » (pensée ou geste mis en scène).
   La courbe jaune du moniteur s'aplatit. Fondu vers le papier blanc. **Aucune image du bébé.**
 - **Voix** :
   - « دفعها ف الـKatheter، التيو لي داخل للعرق. و داك الـsirop راه ديال الفم. »
-  - « من بعد شي دقايق، البيبي ولى زرق. تلت سوايع و نص ديال الـReanimation… و ما بقاش. » — puis **1,5 s de silence**.
+  - « من بعد شي دقايق، الـBébé ولى زرق. تلت سوايع و نص ديال الـReanimation… و ما بقاش. » — puis **1,5 s de silence**.
 - **Son** : alarme du moniteur, horloge accélérée, puis un son continu doux qui s'éteint, silence.
 
 ## 8 · Le lendemain — 0:55–0:59

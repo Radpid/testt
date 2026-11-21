@@ -25,7 +25,8 @@ window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   "Angeklagter": "المتهم",
   // médecine
   "Spritze": "حقنة",
-  "Spritzen": "حقن",
+  "Spritzen": "حقن",   // nom pluriel ; le verbe « spritzen » = ينجيكتي (voir plus bas)
+  "Baby": "Bébé",
   "Oralspritze": "حقنة ديال الفم",
   "Katheter": "قسطرة",
   "Broviac-Katheter": "قسطرة مركزية",
@@ -64,11 +65,12 @@ window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   "Was ist da drin?": "شنو كاين فيها؟",
   "nachfragen": "سول",
   "Nachfragen": "سول",
-  "Spritzen?": "تحقن؟",
+  "Spritzen?": "ينجيكتيها؟",
   "Selbst aufgezogen?": "عمرتيها بيدك؟",
   "Beschriftet?": "مكتوب عليها؟",
   "i.v. oder oral?": "للعرق ولا للفم؟",
-  "nicht spritzen": "ما تحقنش",
+  "nicht spritzen": "ما تنجيكتيهاش",
+  "spritzen": "ينجيكتي",
   "kein Blickkontakt": "ما تشافوش",
   // phrases entières (sous-titres en allemand)
   "Hier ist das orale Antibiotikum.": "ها هو المضاد الحيوي ديال الفم.",
