@@ -5,6 +5,9 @@ description: Écrire et produire un épisode de la série storytelling « AKTE �
 
 # Série « AKTE » — cas réels de jeunes médecins en Allemagne
 
+**Langue avec l'auteur : toujours le français** (messages, explications, propositions, légendes de fichiers).
+La darija et l'allemand seulement dans le contenu de la vidéo (script à enregistrer, textes à l'écran).
+
 Lis d'abord `sketch-video/serie/SERIE.md` : format, règles de vérité, épisodes (statut, sources).
 **Modèle complet et validé : AKTE 01, `sketch-video/videos/ep01-spritze/`** (publié en novembre 2026).
 Copier ce dossier pour un nouvel épisode et remplacer le contenu ; ne pas repartir de zéro.
