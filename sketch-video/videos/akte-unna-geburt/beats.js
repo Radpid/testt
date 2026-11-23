@@ -1,8 +1,11 @@
-// AKTE (Unna 2008) — texte EXACT de la voix de l'auteur, mots sans importance retirés.
-// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage_voix.py, tempo x1.3).
+// AKTE 02 (Unna 2008) — texte EXACT de la voix de l'auteur (+ intro), mots sans importance retirés.
+// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage_voix.py, tempo x1.5).
 window.BEATS = [
   ["b1", "طبيبة في ألمانيا تحكم عليها بست سنين وتسع شهور ديال الحبس، ومنعوها تخدم طبيبة طول حياتها."],
   ["b2", "ماشي على غلطة صغيرة، على قرار واحد ما بغاتش تبدل الخطة."],
+  ["i1", "أنا ياسين، طبيب فألمانيا."],
+  ["i2", "فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها."],
+  ["i3", "إلا عجباتك، دير j'aime و abonne، باش ما تفوتكش القصة الجاية."],
   ["b3", "هاد القصة حقيقية، وقعت في 2008 في مدينة Unna."],
   ["b4", "واحد Couple ألماني، وجاؤوا بالقصد لـUnna،"],
   ["b5", "حيت سمعوا بواحد طبيبة اللي في نفس الوقت Hebamme، كتولد النساء في الدار،"],

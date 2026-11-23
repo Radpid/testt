@@ -7,3 +7,6 @@ videos/*/voice*.wav
 videos/*/voice*.m4a
 videos/*/voice*.mp3
 videos/*/*.tts.json
+
+# photo personnelle de l'auteur : jamais dans git
+videos/*/assets/portrait*.png

@@ -6,7 +6,7 @@ import numpy as np
 
 D = sys.argv[1]
 SR = 48000
-TEMPO = float(os.environ.get("TEMPO", "1.3"))
+TEMPO = float(os.environ.get("TEMPO", "1.5"))
 
 def load(path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
@@ -38,12 +38,16 @@ def match(x, ws, ref_psd, ref_rms):
     y = np.fft.irfft(np.fft.rfft(x, nfft) * np.fft.rfft(h, nfft), nfft)[NF // 2: NF // 2 + len(x)].astype(np.float32)
     y *= ref_rms / (np.sqrt(np.mean(speech_of(y, ws) ** 2)) + 1e-12)   # même niveau que l'original
     return y
-SRC = {"raw": (load(os.path.join(D, "raw.iso.mp3")), words_of(os.path.join(D, "scribe.json")))}
+raw_a, raw_w = load(os.path.join(D, "raw.iso.mp3")), words_of(os.path.join(D, "scribe.json"))
+raw_sp = speech_of(raw_a, raw_w); REF_PSD = smooth_oct(psd(raw_sp)); REF_RMS = float(np.sqrt(np.mean(raw_sp ** 2)))
+intro_w = words_of(os.path.join(D, "intro.scribe2.json"))
+SRC = {"raw": (raw_a, raw_w), "intro": (match(load(os.path.join(D, "intro.iso.mp3")), intro_w, REF_PSD, REF_RMS), intro_w)}   # intro de l'auteur, égalisée sur l'enregistrement principal
 
 R = lambda a, b: list(range(a, b + 1))
 BEATS = [   # AKTE Unna — phrases gardées (indices Scribe) ; mots sans importance retirés
   ("b1", [("raw", R(0, 15))]),                                   # accroche : la peine
   ("b2", [("raw", R(16, 26))]),
+  ("i1", [("intro", R(0, 4))]), ("i2", [("intro", R(5, 16))]), ("i3", [("intro", R(17, 25))]),   # intro : « أنا ياسين… »
   ("b3", [("raw", R(27, 35))]),
   ("b4", [("raw", [36, 37, 38, 45, 46, 47])]),                   # sans « المرأة كانت خدامة في الـLithuania » (pays faux → Lettland à l'écran)
   ("b5", [("raw", R(48, 56) + [59] + R(61, 63))]),                # sans « يعني Sage-femme », « آآآ » et la redite « وخا يكون البيبي في وضعية صعيبة »
@@ -69,11 +73,15 @@ BEATS = [   # AKTE Unna — phrases gardées (indices Scribe) ; mots sans import
   ("b25", [("raw", R(302, 307))]),
   ("b26", [("raw", R(308, 312))]),
 ]
+FIX_INTRO = {0: "أنا", 1: "ياسين،", 2: "طبيب", 3: "فألمانيا.", 4: "", 5: "فهاد", 6: "", 7: "السلسلة", 8: "كنحكي", 9: "ليكم",
+             10: "قصص", 11: "حقيقية", 12: "من", 13: "المحاكم", 14: "الألمانية،", 15: "باش|نتعلمو", 16: "منها.", 17: "إلا",
+             18: "عجباتك،", 19: "دير", 20: "j'aime", 21: "و|abonne،", 22: "باش|ما", 23: "تفوتكش", 24: "القصة", 25: "الجاية."}
 FIX = {("raw", k): v for k, v in {35: "Unna.", 47: "لـUnna،", 37: "Couple", 38: "ألماني،", 56: "Hebamme،", 66: "الـBébé", 69: "صعيبة.",
        70: "والـBébé", 72: "كان", 77: "صعيبة،", 102: "Hotel", 134: "Hotel", 125: "césarienne.", 59: "كتولد", 63: "الدار،", 152: "والـBébé", 169: "", 205: "césarienne.", 162: "Mekonium،",
        166: "الـBébé", 170: "الأكسجين.", 188: "ولكن…", 223: "Totschlag.", 213: "Tötung…", 258: "BGH", 282: "Hotel،",
        148: "12", 312: "عيب."}.items()}
-SCENE_START = {"b3", "b4", "b6", "b8", "b10", "b13", "b16", "b17", "b20", "b22", "b24"}
+FIX.update({("intro", k): v for k, v in FIX_INTRO.items()})
+SCENE_START = {"i1", "b3", "b4", "b6", "b8", "b10", "b13", "b16", "b17", "b20", "b22", "b24"}
 EXTRA = {"b15": 4.4}   # scène muette après « ولكن… »
 RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
 TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
@@ -174,3 +182,4 @@ dur = len(out) / SR / TEMPO
 json.dump({"duration": round(dur, 3), "tempo": TEMPO, "beats": out_beats}, open(os.path.join(D, "edl3.json"), "w"), ensure_ascii=False, indent=1)
 print(f"edited3.wav : {dur:.1f} s (tempo x{TEMPO}), {len(pieces)} morceaux")
 for b in out_beats: print(f"{b['id']:>5} {b['start']:6.2f}-{b['end']:6.2f}  {b['text']}")
+
