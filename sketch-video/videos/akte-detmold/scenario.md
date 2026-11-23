@@ -1,26 +1,27 @@
-# AKTE — « Personne n'a entendu » — script à lire (darija, approximatif)
+# AKTE — « Personne n'a entendu » — script à dire (Detmold 2019)
+Écrit en français : l'auteur le dit à sa façon en darija. Mots allemands en gras + (sens en français).
 Pas de question au milieu ; appel à commenter écrit à la fin. Publier de préférence APRÈS le verdict d'appel (déc. 2026).
 
-1. طبيب فألمانيا تحكم عليه بعامين ونص ديال الحبس… والفرملية اللي كانت معاه، خرجات براءة.
-2. والمريضة؟ بنت عندها غير تناش العام.
-3. هاد القصة حقيقية، وقعات فـ2019، فسبيطار فمدينة Detmold.
-4. البنت كان عندها Magen-Darm-Infekt وسخانة من شحال من نهار، وطاحت فالدار.
-5. جابوها فالليل فالـRettungswagen.
-6. الطبيب اللي كان فالـDienst: Assistenzarzt، وكان بوحدو فالليل على الـNotaufnahme وجوج ديال الـStationen.
-7. عرف المرض، وعطاها Infusion.
-8. ولكن الخبير قال: المحلول اللي اختار ما كانش مناسب لبنت ناشفة… وما طلبش تتراقب فالليل.
-9. الأم بقات حدا بنتها، وشحال من مرة عيطات على الفرمليات: بنتي كتطيح.
-10. على الجوج د الليل حاولو يتاصلو بالطبيب.
-11. الفرمليات قالو ما جاوبش. وهو قال: ما وصلني حتى اتصال. والمحكمة ما قدراتش تعرف شكون اللي صادق.
-12. مع الستة د الصباح، دخلات فرملية جديدة للنوبة… والورقة ديال البنت ناقصين فيها معلومات مهمة.
-13. ومع الصباح، البنت كانت ممدودة فالناموسية… ما كتتحركش.
-14. داوها للـIntensivstation، وبقاو كيديرو ليها Réanimation تقريبا ساعة.
-   (scène muette, sans voix)
-15. فـ2025، المحكمة حكمات على الطبيب بعامين ونص ديال الحبس.
-16. والفرملية؟ براءة. الخبير قال: المعلومات اللي كانت محتاجاها عمرها ما وصلاتها.
-17. وقال حتى: المشكل الكبير كان هو التواصل بين الطبيب والفرمليات.
-18. والسبيطار خلص للعائلة مية ألف أورو.
-19. الطبيب دار الاستئناف، والحكم مازال ماشي نهائي.
-20. إلا الأم قالت ليك: بنتي ماشي مزيانة، صدقها.
-21. إلا ما جاوبكش الطبيب، عاود عيط، وطلع للـOberarzt.
-22. وكتب كلشي، حيت كل معلومة ما توصلش… تقدر تخسرنا حياة.
+1. Un médecin en Allemagne a été condamné à 2 ans et demi de prison… et l'infirmière qui travaillait avec lui a été acquittée.
+2. La patiente ? Une fille de seulement 12 ans.
+3. Cette histoire est vraie. Elle s'est passée en 2019, dans un hôpital de la ville de Detmold.
+4. La fille avait une **Magen-Darm-Infekt** (gastro-entérite) et de la fièvre depuis plusieurs jours, et elle s'était effondrée à la maison.
+5. Le soir, on l'a amenée à l'hôpital en **Rettungswagen** (ambulance).
+6. Le médecin de garde était un **Assistenzarzt** (médecin en formation de spécialité). Cette nuit-là, il était seul pour la **Notaufnahme** (les urgences) et deux **Stationen** (services).
+7. Il a trouvé la bonne maladie et lui a posé une **Infusion** (perfusion).
+8. Mais l'expert a dit : la solution qu'il a choisie n'était pas adaptée à une enfant déshydratée… et il n'a pas demandé qu'on la surveille pendant la nuit.
+9. La mère est restée à côté de sa fille. Plusieurs fois, elle a appelé les infirmières : ma fille va de plus en plus mal.
+10. Vers 2 heures du matin, on a essayé de joindre le médecin.
+11. Les infirmières disent qu'il n'a pas répondu. Lui dit qu'aucun appel ne lui est arrivé. Le tribunal n'a pas pu savoir qui disait vrai.
+12. À 6 heures du matin, une nouvelle infirmière a commencé son service… et dans le dossier de la fille, il manquait des informations importantes.
+13. Le matin, la fille était allongée dans son lit… immobile.
+14. On l'a emmenée en **Intensivstation** (soins intensifs), et on a essayé de la réanimer pendant environ une heure.
+    [scène muette, sans voix]
+15. En 2025, le tribunal a condamné le médecin à 2 ans et demi de prison.
+16. Et l'infirmière ? Acquittée. L'expert a dit : les informations dont elle avait besoin ne lui sont jamais arrivées.
+17. Il a aussi dit : le vrai problème, c'était la communication entre le médecin et les infirmières.
+18. L'hôpital a payé 100 000 € de dédommagement aux parents.
+19. Le médecin a fait appel : le jugement n'est pas encore définitif.
+20. Si une mère te dit « ma fille ne va pas bien », crois-la.
+21. Si le médecin ne répond pas, rappelle, et va voir l'**Oberarzt** (le médecin senior responsable).
+22. Et note tout. Parce que chaque information qui n'arrive pas… peut coûter une vie.
