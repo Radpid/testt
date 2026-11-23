@@ -40,6 +40,14 @@ videos/epNN-<mot>/
 
 ## Écrire une histoire qui retient
 
+**Consignes de l'auteur (nov. 2026, après AKTE 02) — prioritaires sur le reste de cette section :**
+- **La peine chiffrée DANS L'ACCROCHE** (mois de prison avec ou sans sursis, amende en euros / jours-amende,
+  Berufsverbot…) : c'est le hook des 2 premières secondes. Donc choisir des cas PÉNAUX avec des peines précises.
+- **Infirmier/infirmière ET médecin** dans l'histoire (toucher le public soignant au sens large).
+- **Touchant** (une vie, une famille, un enfant), avec plus d'animation que l'épisode précédent.
+- **Pas de question au spectateur au milieu** (« et toi, qu'aurais-tu fait ? » / sondage STOP) : l'histoire
+  avance sans s'arrêter ; l'appel à commenter reste écrit à la fin seulement.
+
 - **0–2 s : l'accroche** = la conséquence énorme (« طبيب شاب في ألمانيا تحكم عليه بالقتل غير العمدي »).
   Jamais de « Salam, aujourd'hui on va parler de ».
 - **Boucle ouverte** : « والحل كان غير في جملة واحدة » → la réponse arrive à la fin (« Was ist da drin? »).
