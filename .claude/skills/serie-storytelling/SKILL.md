@@ -30,9 +30,9 @@ videos/epNN-<mot>/
 1. **Choix du cas** dans `SERIE.md` (ou nouvelle recherche : jugements VG/OVG/LG/OLG/BGH, presse médicale sérieuse).
 2. **Vérification à fond** → `recherche.md` : chronologie sourcée, citations allemandes VERBATIM, points incertains,
    définitif ou non. Sans source, pas de scène.
-3. **Script** → `scenario.md`, écrit en FRANÇAIS simple, phrase par phrase (consigne de l'auteur : pas de
-   darija inventée par Claude). Chaque mot allemand en gras suivi de son sens en français entre parenthèses,
-   ex. **Beckenlage** (présentation du siège). L'auteur traduit lui-même en darija en enregistrant.
+3. **Script** → `scenario.md` = le texte que l'auteur dira dans l'audio : en darija SIMPLE et courante ; toute
+   phrase dont la darija n'est pas sûre est écrite en français marquée [FR] (ne jamais inventer de darija) ;
+   chaque mot allemand suivi de son sens en français entre parenthèses, ex. Beckenlage (présentation du siège).
 4. **Enregistrement** par l'auteur (+ courtes reprises pour corriger une phrase ou ajouter un mot).
 5. **Montage voix** (§ Voix) → `beats.js` + `timings.js`. Lui signaler ce qui a été retiré/corrigé et les mots incertains.
 6. **Scènes** (§ Image) → planches contact AVEC la maquette Instagram (§ Zones) → validation.
