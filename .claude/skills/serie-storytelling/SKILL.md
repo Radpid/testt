@@ -47,6 +47,14 @@ videos/epNN-<mot>/
   besoin d'être pénal : ce qui compte, c'est une bonne histoire vraie avec une sanction précise et sourcée.
 - **Infirmier/infirmière ET médecin** dans l'histoire (toucher le public soignant au sens large).
 - **Touchant** (une vie, une famille, un enfant), avec plus d'animation que l'épisode précédent.
+- **Intro auteur juste après l'accroche** (~5 s) : il se présente et demande j'aime + abonnement (pas son visage :
+  logo @dr.aguilo animé + icônes j'aime/abonner).
+- **Personnages toujours nouveaux et détaillés** (visages précis : yeux avec reflet, sourcils, bouche expressive,
+  clignement, larmes), couple vivant (se tenir la main, enlacer, regards, tendresse) ; ne pas réutiliser les mêmes
+  silhouettes d'un épisode à l'autre. `serie/lib/persona.js` pour les nouveaux personnages.
+- **Sons naturels seulement** : ambiances et bruits réels de la scène (chambre, oiseaux, voiture, téléphone, horloge,
+  porte, papier, marteau du juge). JAMAIS de pops, whoosh, ding, buzzer, « reveal », swell (= sons « typiques IA »).
+- **Voix ×1,42** (vérifié intelligible au contrôle Scribe) ; réponses à l'auteur courtes, sans redites.
 - **Pas de question au spectateur au milieu** (« et toi, qu'aurais-tu fait ? » / sondage STOP) : l'histoire
   avance sans s'arrêter ; l'appel à commenter reste écrit à la fin seulement.
 
