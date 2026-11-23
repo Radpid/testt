@@ -46,9 +46,15 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
 | 04 | « Je n'ai rien dit » (Remonstrationspflicht, OLG Köln 2025) | vidéo terminée (1 min 11) mais **non publiée** : l'auteur préfère un cas pénal avec peine chiffrée + infirmier et médecin — en réserve, `videos/ep02-schweigen/` |
 | 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
-| **AKTE 02** | « Die Hotelgeburt » (Unna 2008, LG Dortmund 2014, BGH 2016, définitif) | **rendu v1 en validation** — `videos/akte-unna-geburt/` |
+| **AKTE 02** | « Die Hotelgeburt » (Unna 2008, LG Dortmund 2014, BGH 2016, définitif) | **v7 validée par l'auteur (« c bien »), à publier** — 1 min 30, intro avec sa photo — `videos/akte-unna-geburt/` (nouveau modèle) |
 | — | Detmold 2019 (médecin 2 ans ½, infirmière acquittée ; appel, verdict déc. 2026) | script donné ; publier après l'appel — `videos/akte-detmold/` |
 | — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
+
+### Leçons d'AKTE 02 (détail dans le skill)
+- Accroche = la sanction + décor travaillé ; intro « Yassine » (photo, j'aime/abonne) juste après ; pas de question
+  au milieu. Voix ×1,5, rythme rapide, pauses seulement aux changements de contexte ; mots inutiles coupés.
+- Personnages Persona nouveaux et vivants, couple sans chevauchements, chambre vue de face, médical expliqué en
+  image, décès MONTRÉ, peine en icônes, sons naturels seulement, traductions arabes détachées et jamais recouvertes.
 
 ### Leçons d'AKTE 01 (à appliquer dès AKTE 02)
 - Instagram rogne ~50 px de chaque côté sur iPhone : logo et étiquettes coupés à droite → tout le contenu important
