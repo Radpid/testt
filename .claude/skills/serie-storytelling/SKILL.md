@@ -41,8 +41,9 @@ videos/epNN-<mot>/
 ## Écrire une histoire qui retient
 
 **Consignes de l'auteur (nov. 2026, après AKTE 02) — prioritaires sur le reste de cette section :**
-- **La peine chiffrée DANS L'ACCROCHE** (mois de prison avec ou sans sursis, amende en euros / jours-amende,
-  Berufsverbot…) : c'est le hook des 2 premières secondes. Donc choisir des cas PÉNAUX avec des peines précises.
+- **La sanction chiffrée DANS L'ACCROCHE** (prison avec ou sans sursis, amende, dommages et intérêts en euros,
+  licenciement, retrait d'Approbation, Berufsverbot…) : c'est le hook des 2 premières secondes. Le cas n'a PAS
+  besoin d'être pénal : ce qui compte, c'est une bonne histoire vraie avec une sanction précise et sourcée.
 - **Infirmier/infirmière ET médecin** dans l'histoire (toucher le public soignant au sens large).
 - **Touchant** (une vie, une famille, un enfant), avec plus d'animation que l'épisode précédent.
 - **Pas de question au spectateur au milieu** (« et toi, qu'aurais-tu fait ? » / sondage STOP) : l'histoire
