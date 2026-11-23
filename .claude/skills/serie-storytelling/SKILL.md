@@ -47,8 +47,10 @@ videos/epNN-<mot>/
   besoin d'être pénal : ce qui compte, c'est une bonne histoire vraie avec une sanction précise et sourcée.
 - **Infirmier/infirmière ET médecin** dans l'histoire (toucher le public soignant au sens large).
 - **Touchant** (une vie, une famille, un enfant), avec plus d'animation que l'épisode précédent.
-- **Intro auteur juste après l'accroche** (~5 s) : il se présente et demande j'aime + abonnement (pas son visage :
-  logo @dr.aguilo animé + icônes j'aime/abonner).
+- **Intro auteur juste après l'accroche** (~5 s) : il se présente et demande j'aime + abonnement. Sa vraie photo
+  (`videos/<ep>/assets/portrait.png`, JAMAIS dans git) dans un cadre au trait + anneau jaune + petite icône
+  Instagram ; nom écrit **« Yassine » seulement, jamais « Dr. Yassine »** ; « @dr.aguilo » ; cœur j'aime + bouton
+  s'abonner animés sur les mots. Le bloc entier doit finir au-dessus des sous-titres (≈ y 1300 à l'écran).
 - **Personnages toujours nouveaux et détaillés** (visages précis : yeux avec reflet, sourcils, bouche expressive,
   clignement, larmes), couple vivant (se tenir la main, enlacer, regards, tendresse) ; ne pas réutiliser les mêmes
   silhouettes d'un épisode à l'autre. `serie/lib/persona.js` pour les nouveaux personnages.
@@ -108,6 +110,10 @@ videos/epNN-<mot>/
 - **Zooms** : l'auteur VEUT des zooms forts (×1,3 à ×1,7) sur des sujets complets et soignés (étiquette de la
   seringue, carte, mère + Bébé, injection avec le Bébé entier, Bébé bleu + moniteur). Jamais un personnage, une
   bulle, une carte ou un titre coupé. Titres de scène (rubans) et textes importants pendant un zoom → `c.hud`.
+- **Traduction arabe sous une pastille** : bien DÉTACHÉE de la pastille et de son ombre (≈ 20 px d'écart), gras,
+  encre foncée, contour couleur papier (`paint-order: stroke`) — collée à la pastille, l'auteur la voit
+  « superposée » (retour sur AKTE 02, « Hebamme » / « زوج ألماني »). Rien (personnage, trait, tampon, ✗) ne passe
+  sur une ligne arabe.
 - **Étiquettes (chips) avec arabe dessous** : jamais sur un visage ni une tête — les placer AU-DESSUS des têtes
   (tête en y ≈ sol − 416 × échelle) avec leur ligne arabe comprise ; rien qui traverse la barre du mot caché
   (retour de l'auteur sur AKTE 02, scène du bloc).
@@ -166,6 +172,8 @@ Instagram affiche la vidéo 1080×1920 à 0,942× de sa hauteur et **rogne ~50 p
 - [ ] Aucune scène ni phrase supprimée sans son accord ; pauses de sens présentes.
 - [ ] Planche avec maquette Instagram : rien sous les zones rouges, aucun zoom qui coupe un sujet, sous-titres sur
       une ligne, logo entièrement visible.
+- [ ] `node tools/overlapscan.mjs videos/<ep>/index.html 0 <fin> 0.1` : aucun texte (surtout arabe) qui en
+      recouvre un autre, hors transitions de 0,3 s et tampon volontaire.
 - [ ] Musique recomposée sur la durée finale ; bruitages recalés ; −14 LUFS.
 - [ ] `instagram.md` (accroche, résumé, règle, Quellen + Az., « Namen anonymisiert · Szenen nachgestellt · Keine
       Rechtsberatung », hashtags) livré avec la vidéo ; `SERIE.md` à jour.

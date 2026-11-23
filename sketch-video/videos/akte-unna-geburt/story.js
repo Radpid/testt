@@ -42,7 +42,11 @@
           SC.util.shape(C, "chip", SC.util.rrect(-w / 2, -h / 2, w, h, 14), o.yellow ? SC.MAT.yellow : SC.MAT.grey, { sw: 2.8 });
           const arab = /[؀-ۿ]/.test(de);
           SC.util.text(g, de, 0, size * 0.36, size, arab ? { rtl: true, font: "'Plex Arabic', Kalam, sans-serif", weight: 700 } : {});
-          if (ar) SC.util.text(g, ar, 0, h / 2 + size * 0.95, Math.max(26, Math.round(size * 0.82)), { font: "'Plex Arabic', sans-serif", weight: 600, fill: "#3E3C37", rtl: true });
+          if (ar) {   // traduction arabe : bien détachée de la pastille (et de son ombre), avec un contour papier pour rester lisible
+            const gs = Math.max(26, Math.round(size * 0.82));
+            const tx = SC.util.text(g, ar, 0, h / 2 + 7 + 13 + gs * 0.95, gs, { font: "'Plex Arabic', sans-serif", weight: 700, fill: "#2E2C28", rtl: true });
+            tx.setAttribute("stroke", "#F7F7F1"); tx.setAttribute("stroke-width", "7"); tx.setAttribute("stroke-linejoin", "round"); tx.setAttribute("paint-order", "stroke");
+          }
           return c.node(g, o.parent);
         },
         // carte (rectangle à main levée + ombre)
@@ -197,28 +201,29 @@
       const b = el("g"); bars(b); c.node(b).on((t, s) => { s.x += 316; s.y += 330; s.s *= 0.8; }).wipe(0.05, 0.5, "down");
       const a = T("b1@بست"), yrs = c.text("0", 380, 1010, 130, "de"), mos = c.text("0", 700, 1010, 130, "de");
       [yrs, mos].forEach((n, i) => n.fade(a - 0.1, 0.2).on((t) => { const v = Math.round((i ? 9 : 6) * E.out(prog(t, a + i * 0.3, 0.7))); if (n.textEl.textContent !== String(v)) n.textEl.textContent = String(v); }));
-      k.ar("سنين", 380, 1080, 34, "ttl").fade(a + 0.25); k.ar("شهور", 700, 1080, 34, "ttl").fade(a + 0.5);
+      k.ar("سنين", 380, 1098, 34, "ttl").fade(a + 0.25); k.ar("شهور", 700, 1098, 34, "ttl").fade(a + 0.5);
       k.chip("Haft", "حبس", 540, 980, 30, { yellow: true }).pop("b1@الحبس");
       c.kick("b1@الحبس", 0.07);
-      c.sk((g, p) => licence(g, p), (t) => ({ cut: rnd(E.out(prog(t, T("b1@ومنعوها") + 0.15, 0.45)), 10) }), 540, 1250, 0.8).pop("b1@ومنعوها", 0.35);
+      c.sk((g, p) => licence(g, p), (t) => ({ cut: rnd(E.out(prog(t, T("b1@ومنعوها") + 0.15, 0.45)), 10) }), 540, 1250, 0.8).pop("b1@ومنعوها", 0.35)
+        .on((t, s) => { s.o *= 1 - 0.75 * E.out(prog(t, T("b1@حياتها") + 0.2, 0.2)); });
       k.prop("stamp", 540, 1220, 0.4, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.28, 12);
     } });
     st.scene({ from: "b2", in: "whip", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b2", s: 1.08, cx: 540, cy: 900 }, { at: "b2@الخطة", s: 1.12, cx: 540, cy: 880, d: 0.5 }]);
       k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.45, "rtl");
-      c.put(`<path d="M540 1240 L540 900 M540 900 C 540 760, 420 700, 330 600 M540 900 C 540 760, 660 700, 750 600" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>`).wipe("b2@قرار", 0.5, "down");
+      c.put(`<path d="M540 1240 L540 900 M540 900 C 540 780, 430 730, 330 665 M540 900 C 540 780, 650 730, 750 665" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>`).wipe("b2@قرار", 0.5, "down");
       k.chip("Plan: Hausgeburt", "الخطة: ولادة فالدار", 300, 540, 32).pop("b2@قرار+0.2");
       k.chip("Krankenhaus", "السبيطار", 780, 540, 32, { yellow: true }).pop("b2@قرار+0.35");
       k.title("✗", 780, 470, 90).pop("b2@تبدل").wobble("b2@تبدل+0.25", 0.5, 8);
-      pp(540, 1260, 0.62, (t) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.4) % 1) : PP.stand, { expr: "focused", facing: -1, blink: rnd(blinkAt(t, 2)) }); })
-        .on((t, s) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); s.x += lerp(0, -210, p); s.y += lerp(0, -560, p); s.s *= lerp(1, 0.55, p); });
+      pp(0, 0, 0.62, (t) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.4) % 1) : PP.stand, { expr: "focused", facing: -1, blink: rnd(blinkAt(t, 2)) }); })
+        .on((t, s) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); s.x += lerp(540, 455, p); s.y += lerp(1260, 850, p); s.s *= lerp(1, 0.6, p); });
     } });
 
     /* 2 · l'intro de l'auteur : sa photo (bord dessiné), Instagram, j'aime + s'abonner ---------------- */
     st.scene({ from: "i1", in: "iris", inDur: 0.3, summary: false, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "i1", s: 1.1, cx: 540, cy: 760 }, { at: "i2", s: 1.0, cx: 540, cy: 860, d: 0.5 }]);
+      c.camera([{ at: "i1", s: 1.05, cx: 540, cy: 820 }, { at: "i2", s: 1.0, cx: 540, cy: 860, d: 0.5 }]);
       const ph = el("g"), C = U.ctx(ph, 88, false, 1);
       const cp = el("clipPath", { id: "clipPortrait" }, el("defs", {}, ph)); el("circle", { cx: 0, cy: 0, r: 208 }, cp);
       el("circle", { cx: 9, cy: 12, r: 236, fill: "#D2D2CB" }, ph);
@@ -232,25 +237,25 @@
       U.shape(I, "sq", U.rrect(-46, -46, 92, 92, 26), MAT.white, { sw: 4.2 });
       U.shape(I, "c", "M-19 0 A19 19 0 1 1 19 0 A19 19 0 1 1 -19 0", MAT.yellow, { sw: 4.2 });
       el("circle", { cx: 25, cy: -25, r: 6, fill: INK }, ig);
-      c.node(ph).on((t, s) => { s.x += 540; s.y += 660; }).pop("i1", 0.4);
-      k.ribbon("Dr. Yassine", 540, 985, { size: 60 }).wipe("i1@ياسين", 0.35);
+      c.node(ph).on((t, s) => { s.x += 540; s.y += 600; }).pop("i1", 0.4);
+      k.ribbon("Yassine", 540, 905, { size: 60 }).wipe("i1@ياسين", 0.35);
       const hd = el("g"), H = U.ctx(hd, 90, false, 1);
       U.shape(H, "sq", U.rrect(-21, -21, 42, 42, 12), MAT.white, { sw: 3 }); U.stroke(H, "c", "M-9 0 A9 9 0 1 1 9 0 A9 9 0 1 1 -9 0", { sw: 3 }); el("circle", { cx: 12, cy: -12, r: 3, fill: INK }, hd);
-      c.node(hd).on((t, s) => { s.x += 410; s.y += 1066; }).pop("i1@ياسين+0.15", 0.3);
-      c.text("@dr.aguilo", 560, 1082, 46, "de").fade("i1@ياسين+0.15", 0.3);
-      k.chip("Arzt in Deutschland", "طبيب فألمانيا", 540, 1150, 26).pop("i1@فألمانيا").hide("i2@حقيقية", 0.15);
-      k.chip("echte Fälle · deutsche Gerichte", "قصص حقيقية من المحاكم", 540, 1150, 26, { yellow: true }).pop("i2@حقيقية+0.15").hide("i3", 0.15);
+      c.node(hd).on((t, s) => { s.x += 410; s.y += 996; }).pop("i1@ياسين+0.15", 0.3);
+      c.text("@dr.aguilo", 560, 1012, 46, "de").fade("i1@ياسين+0.15", 0.3);
+      k.chip("Arzt in Deutschland", "طبيب فألمانيا", 540, 1078, 26).pop("i1@فألمانيا").hide("i2@حقيقية", 0.15);
+      k.chip("echte Fälle · deutsche Gerichte", "قصص حقيقية من المحاكم", 540, 1078, 26, { yellow: true }).pop("i2@حقيقية+0.15").hide("i3", 0.15);
       // j'aime + s'abonner
       const la = T("i3@j'aime"), fa = T("i3@abonne");
-      c.sk((g, p) => PE.props.heart(g, { size: 1.25, fill: p.on, beat: p.b }), (t) => ({ on: t >= la, b: rnd(Math.sin(Math.min(1, prog(t, la, 0.35)) * Math.PI), 10) }), 330, 1262, 1).pop("i3", 0.3);
-      c.text("j'aime", 330, 1338, 30, "de").pop("i3", 0.3);
+      c.sk((g, p) => PE.props.heart(g, { size: 1.25, fill: p.on, beat: p.b }), (t) => ({ on: t >= la, b: rnd(Math.sin(Math.min(1, prog(t, la, 0.35)) * Math.PI), 10) }), 330, 1185, 1).pop("i3", 0.3);
+      c.text("j'aime", 330, 1258, 30, "de").pop("i3", 0.3);
       c.sk((g, p) => {
         while (g.firstChild) g.removeChild(g.firstChild);
         const B = U.ctx(g, 91, false, 1);
         el("path", { d: U.rrect(-150, -42, 300, 84, 22), fill: "#D2D2CB", transform: "translate(6 7)" }, g);
         U.shape(B, "btn", U.rrect(-150, -42, 300, 84, 22), p.on ? MAT.yellow : MAT.white, { sw: 3.4 });
         U.text(g, p.on ? "✓ abonné" : "+ s'abonner", 0, 14, 40, {});
-      }, (t) => ({ on: t >= fa }), 640, 1262, 1).pop("i3+0.1", 0.3);
+      }, (t) => ({ on: t >= fa }), 640, 1190, 1).pop("i3+0.1", 0.3);
       c.kick(la, 0.05); c.kick(fa, 0.05);
     } });
 
@@ -282,9 +287,9 @@
       const bg_ = el("g"); PE.props.doctorBag(bg_, {}); c.node(bg_).on((t, s) => { const h = doc.out && doc.out.handL; if (h) { s.x += 330 + h[0] * 1.25; s.y += 1300 + h[1] * 1.25 + 74; s.s *= 0.5; } });
       k.chip("Ärztin", "طبيبة", 330, 455, 34).pop("b5@طبيبة");
       k.chip("+ Hebamme", "قابلة", 330, 575, 34, { yellow: true }).pop("b5@Hebamme");
-      const h = el("g"); building(h, { w: 260, h: 300, rows: 2, cols: 2, sign: "", seed: 9 }); c.node(h).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b5@كتولد", 0.4);
-      c.put(`<path d="M630 1000 L760 900 L890 1000" fill="none" stroke="${INK}" stroke-width="6"/>`).pop("b5@كتولد", 0.4);
-      k.chip("Hausgeburt", "ولادة فالدار", 760, 820, 30).pop("b5@الدار");
+      const h = el("g"); building(h, { w: 260, h: 300, rows: 2, cols: 2, sign: "", seed: 9 }); c.node(h).on((t, s) => { s.x += 735; s.y += 1300; }).pop("b5@كتولد", 0.4);
+      c.put(`<path d="M605 1000 L735 900 L865 1000" fill="none" stroke="${INK}" stroke-width="6"/>`).pop("b5@كتولد", 0.4);
+      k.chip("Hausgeburt", "ولادة فالدار", 735, 790, 30).pop("b5@الدار");
     } });
 
     /* 5 · le bébé en siège ; la règle : à l'hôpital ------------------------------------------------ */
@@ -315,10 +320,10 @@
         .on((t, s) => { const p = prog(t, a, d); s.x += xc(t); s.y += p > 0 && p < 1 ? -Math.abs(Math.sin(t * 9)) * 6 : 0; });
       const sc_ = el("g"); PE.props.suitcase(sc_, {}); c.node(sc_).on((t, s) => { s.x += xc(t) + 185; s.y += 1300; s.s *= 0.62; });
       // leur promesse
-      k.card(110, 370, 860, 300, { seed: 91 }).pop("b9@وقالوا", 0.35);
+      k.card(110, 370, 860, 320, { seed: 91 }).pop("b9@وقالوا", 0.35);
       k.ar("بغينا ولادة طبيعية…", 540, 455, 40, "ttl").wipe("b9@طبيعية", 0.5, "rtl");
       k.ar("ولكن إلا كان مشكل ← السبيطار + césarienne", 540, 545, 30, "ar strong").wipe("b9@مشكل", 0.7, "rtl");
-      k.chip("Plan B: Krankenhaus", "الخطة ب: السبيطار", 540, 605, 26, { yellow: true }).pop("b9@césarienne");
+      k.chip("Plan B: Krankenhaus", "الخطة ب: السبيطار", 540, 598, 26, { yellow: true }).pop("b9@césarienne");
     } });
 
     /* 7 · la chambre d'hôtel : 5 h → la nuit ; douleur ; elle arrive 12 h plus tard ------------------ */
@@ -360,8 +365,8 @@
       const ho = el("g"); building(ho, { w: 260, h: 380, rows: 3, cols: 2, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 1 && c2 === 0 }); c.node(ho).on((t, s) => { s.x += 280; s.y += 1300; s.s *= 0.8; }).pop("b14", 0.35);
       k.ground(540, 1300, 1000);
       c.put(`<path d="M420 1150 L640 1150 M620 1134 L640 1150 L620 1166" fill="none" stroke="${INK}" stroke-width="6" stroke-dasharray="16 10" stroke-linecap="round"/>`).wipe("b14@قريب", 0.45);
-      k.chip("قريب", null, 530, 1090, 26, { yellow: true }).pop("b14@قريب");
-      k.title("✗", 530, 1160, 110).pop("b14@صيفتهاش").wobble("b14@صيفتهاش+0.25", 0.45, 8);
+      k.chip("قريب", null, 530, 1060, 26, { yellow: true }).pop("b14@قريب");
+      k.title("✗", 530, 1190, 90).pop("b14@صيفتهاش").wobble("b14@صيفتهاش+0.25", 0.45, 8);
       pp(300, 1300, 0.66, (t) => Object.assign({}, DOCW, PP.stand, { facing: -1, expr: "focused", blink: rnd(blinkAt(t, 11)) })).pop("b14@مكملة", 0.35);
     } });
 
@@ -421,7 +426,7 @@
     } });
 
     /* 12 · la peine ; le BGH : définitif ----------------------------------------------------------------- */
-    st.scene({ from: "b20", in: "zoom", inDur: 0.3, build(c) {
+    st.scene({ from: "b20", in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b20", s: 1.04, cx: 540, cy: 780 }, { at: "b22", s: 1, cx: 540, cy: 900, d: 0.5 }]);
       k.card(140, 470, 800, 200, { seed: 201 }).pop("b20", 0.35);
@@ -431,8 +436,8 @@
       k.chip("≈ 50 000 € an die Eltern", "تعويض للوالدين", 540, 900, 32).pop("b21@خمسين");
       const geo = drawDE(c, 340, 1150, 30, "b22"), [kx, ky] = geo(8.40, 49.01);
       pinAt(c, kx, ky, "b22@BGH");
-      k.chip("BGH · Karlsruhe · 2016", "أعلى محكمة فألمانيا", 690, 1080, 24).pop("b22@BGH");
-      k.prop("stamp", 690, 1230, 0.5, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.28, 10);
+      k.chip("BGH · Karlsruhe · 2016", "أعلى محكمة فألمانيا", 690, 1062, 24).pop("b22@BGH");
+      k.prop("stamp", 690, 1250, 0.5, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.28, 10);
     } });
 
     /* 13 · ce que le tribunal lui reproche ---------------------------------------------------------------- */
@@ -441,11 +446,11 @@
       c.camera([{ at: "b23", s: 1.08, cx: 540, cy: 860 }, { at: "b23@وقفي", s: 1.0, cx: 540, cy: 900, d: 0.35 }]);
       const ho = el("g"); building(ho, { w: 280, h: 360, rows: 3, cols: 2, sign: "HOTEL", seed: 3 }); c.node(ho).on((t, s) => { s.x += 330; s.y += 960; s.s *= 0.9; }).pop("b23", 0.35);
       k.title("✓", 330, 520, 90).pop("b23@Hotel");
-      c.text("ماشي هادي", 330, 1040, 32, "ar strong").wipe("b23@لامتش", 0.4, "rtl");
+      c.text("ماشي هادي", 330, 1030, 32, "ar strong").wipe("b23@لامتش", 0.4, "rtl");
       const hs = el("g"); building(hs, { w: 280, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 }); c.node(hs).on((t, s) => { s.x += 722; s.y += 960; s.s *= 0.9; }).pop("b23@لامتها", 0.35);
       k.title("✗", 722, 560, 90).pop("b23@صيفتهاش");
-      c.text("ما صيفطاتهاش", 722, 1040, 32, "ar strong").wipe("b23@صيفتهاش", 0.4, "rtl");
-      k.prop("stamp", 540, 1180, 0.8, () => ({ text: "STOP", size: 90, rot: -6 })).slam("b23@وقفي", 0.28, 12);
+      c.text("ما صيفطاتهاش", 722, 1030, 32, "ar strong").wipe("b23@صيفتهاش", 0.4, "rtl");
+      k.prop("stamp", 540, 1255, 0.72, () => ({ text: "STOP", size: 90, rot: -6 })).slam("b23@وقفي", 0.28, 12);
     } });
 
     /* 14 · la règle : le patient pèse plus que le plan ------------------------------------------------------- */
@@ -454,9 +459,9 @@
       c.camera([{ at: "b24", s: 1, cx: 540, cy: 860 }]);
       k.ar("القاعدة", 540, 420, 56, "ttl", c.hud).wipe("b24", 0.45, "rtl");
       c.sk((g, p) => scale(g, p), (t) => ({ left: "الخطة", right: "المريض", tilt: rnd(14 * E.out(prog(t, T("b24@أهم"), 0.9)), 10) }), 540, 1000, 1).pop("b24", 0.35);
-      k.chip("Zeichen ändern sich → Plan ändern", "تبدلات الحالة ← بدل الخطة", 540, 1110, 28).pop("b25@تبدل");
-      k.ribbon("Klinik ist keine Niederlage.", 540, 1220, { size: 44 }).wipe("b26", 0.45);
-      c.text("والمشية للسبيطار ماشي عيب", 540, 1310, 34, "ar strong").wipe("b26+0.15", 0.5, "rtl");
+      k.chip("Zeichen ändern sich → Plan ändern", "تبدلات الحالة ← بدل الخطة", 540, 1088, 28).pop("b25@تبدل");
+      k.ribbon("Klinik ist keine Niederlage.", 540, 1234, { size: 44 }).wipe("b26", 0.45);
+      c.text("والمشية للسبيطار ماشي عيب", 540, 1322, 34, "ar strong").wipe("b26+0.15", 0.5, "rtl");
     } });
 
     /* ---------- HUD : barre des heures + barre de progression + logo ---------- */
