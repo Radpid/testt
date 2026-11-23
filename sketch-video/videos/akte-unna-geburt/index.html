@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ar" data-palette="reference">
+<head>
+<meta charset="utf-8">
+<title>AKTE 02 – Die Hotelgeburt</title>
+<link rel="stylesheet" href="../../engine/sketch.css">
+<link rel="stylesheet" href="../../serie/lib/palette.css">
+<style>
+  /* série AKTE : fond uni de la palette, pas de grille de points */
+  #stage, #poster { background: var(--paper); }
+  #poster::before { display: none; }
+  #stage { --skin: #FFFFFF; }
+  .de { font-family: Kalam; font-weight: 700; fill: var(--ink); }
+  .ttl { font-family: Lalezar; fill: var(--ink); direction: rtl; }
+  .ar.on-main { fill: #fff; }
+  .de.light { font-weight: 400; }
+  .ar { font-family: "Plex Arabic"; font-weight: 600; fill: #4A4843; direction: rtl; }
+  .ar.strong { font-weight: 700; fill: var(--ink); }
+  .on-main { fill: var(--white); }
+  .accent { fill: var(--accent); }
+  /* vêtements colorés des Open Peeps -> palette */
+  .peep { --peep-9FD8E5: var(--main2); --peep-8FA7DF: var(--main2); --peep-4F66AF: var(--main); --peep-FFFFFF: var(--white); }
+  .nurse .peep { --peep-8FA7DF: var(--main); --peep-9FD8E5: var(--main); }
+  .sil { --skin: var(--gray2); --ink: #7B776F; }
+  .faded { filter: grayscale(1) contrast(.75) brightness(1.12); opacity: .45; }
+  /* sous-titres « karaoké » : étiquette blanche + scotch (référence), gros texte, chaque mot surgit au rythme de la voix */
+  #captions { padding: 0 24px; }
+  .cap { background: #FFFFFF; border: 4px solid var(--ink); border-radius: 16px; box-shadow: 7px 9px 0 rgba(28,26,28,.2);
+         font-family: "Plex Arabic", "Kalam", sans-serif; font-weight: 700; font-size: 62px; line-height: 1.36;
+         color: var(--ink); padding: 6px 28px 12px; max-width: 720px; transform-origin: 50% 100%; text-align: center; }
+  .cap::before { display: block; left: -18px; top: -20px; width: 96px; height: 34px; background: rgba(190,190,182,.92); }
+  .cap .kline { display: block; }
+  .cap .w { display: inline-block; padding: 0 4px; border-radius: 10px; transform-origin: 50% 85%; }
+  .cap .w.on { background: linear-gradient(transparent 14%, rgba(248,206,78,.95) 14%, rgba(248,206,78,.95) 94%, transparent 94%); }
+  .cap .lat { font-family: Kalam; font-weight: 700; padding: 0 2px; }
+  .cap .lat .rb { background: linear-gradient(transparent 56%, rgba(248,206,78,.55) 56%, rgba(248,206,78,.55) 92%, transparent 92%); }
+  /* mot en cours : le surligneur couvre seulement le mot allemand, jamais sa traduction arabe */
+  .cap .w.on:has(rt) { background: none; }
+  .cap .w.on .rb { background: linear-gradient(transparent 12%, rgba(248,206,78,.95) 12%, rgba(248,206,78,.95) 94%, transparent 94%); }
+  .cap ruby { ruby-position: under; }
+  .cap .latgrp { unicode-bidi: isolate; direction: ltr; white-space: nowrap; }
+  .cap rt { font-size: 32px; font-weight: 700; color: #2E2C29; font-family: "Plex Arabic", sans-serif; padding-top: 6px; line-height: 1.15; }
+  .cap:has(rt) { padding-bottom: 16px; }
+  .cap .cap-tr { font-size: 40px; font-weight: 700; color: #4A4843; margin-top: 2px; }
+  /* sous-titres classiques (secours) */
+  .cap span[dir="ltr"] { font-family: Kalam; font-weight: 700; }
+  /* logo @dr.aguilo : à 100 px du bord droit (Instagram rogne ~50 px de chaque côté), sous la barre d'état */
+  #brand { position: absolute; right: 100px; top: 222px; z-index: 120; display: flex; align-items: center; gap: 10px;
+           background: #FFFFFF; border: 3px solid var(--ink); border-radius: 40px; padding: 3px 14px 3px 5px;
+           box-shadow: 4px 5px 0 rgba(28,26,28,.18); pointer-events: none; opacity: 0; }
+  #brand svg { width: 36px; height: 36px; }
+  #brand span { font-family: Kalam; font-weight: 700; font-size: 26px; color: var(--ink); line-height: 1;
+                background: linear-gradient(transparent 58%, rgba(248,206,78,.9) 58%, rgba(248,206,78,.9) 92%, transparent 92%); }
+  /* barre du mot caché (jeu du pendu) + barre de progression */
+  #prog { position: absolute; left: 100px; top: 236px; width: 600px; height: 14px; border: 3px solid var(--ink); border-radius: 10px;
+          background: #FFFFFF; z-index: 120; opacity: 0; overflow: hidden; }
+  #prog i { display: block; height: 100%; width: 0; background: var(--main2); }
+  /* barre des heures (nouveauté de cet épisode) : 05:00 → 22:00 pendant l'accouchement */
+  #hours { position: absolute; left: 150px; width: 780px; top: 352px; z-index: 115; opacity: 0; direction: ltr; }
+  #hours .track { position: relative; height: 26px; border: 3.5px solid var(--ink); border-radius: 16px; background: #FFFFFF;
+                  box-shadow: 4px 5px 0 rgba(28,26,28,.18); overflow: hidden; }
+  #hours .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #FFE7A1, #F8CE4E 55%, #8E9AAF); }
+  #hours .ghost { position: absolute; top: -6px; bottom: -6px; width: 6px; background: #2F8F4E; opacity: 0; border-radius: 3px; }
+  #hours .lab { display: none; justify-content: space-between; font-family: Kalam; font-weight: 700; font-size: 26px; color: var(--ink); margin-top: 4px; }
+  #hours .now { position: absolute; top: -58px; transform: translateX(-50%); font-family: Kalam; font-weight: 700; font-size: 40px;
+                background: var(--main2); border: 3px solid var(--ink); border-radius: 12px; padding: 0 12px; line-height: 1.25; }
+  #hours .ev { position: absolute; top: 34px; transform: translateX(-50%); font-family: Kalam; font-weight: 700; font-size: 20px;
+               background: #FFFFFF; border: 2.5px solid var(--ink); border-radius: 9px; padding: 0 7px; opacity: 0; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="stage"><div id="poster"></div>
+  <div id="brand"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="#F8CE4E" stroke="#1C1A1C" stroke-width="3"/>
+    <path d="M7 25 h8 l3 -8 l5 16 l4 -12 l3 4 h9" fill="none" stroke="#1C1A1C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>@dr.aguilo</span></div>
+  <div id="prog"><i></i></div>
+  <div id="hours"><div class="track"><i class="fill"></i><i class="ghost"></i></div>
+    <div class="lab"><span>05:00</span><span>22:00</span></div><b class="now">05:00</b>
+    <span class="ev" data-h="5">الطلق</span><span class="ev" data-h="17">جات الطبيبة</span><span class="ev" data-h="19.3">Mekonium</span><span class="ev" data-h="22">22:00</span></div>
+</div>
+
+<script>
+  // Reel Instagram, animation par scènes (serie/lib/stage.js)
+  window.SV_CONFIG = { preset: "instagram", mode: "scenes", hold: 5.6, captions: "karaoke", captionBottom: 320, capSafeRight: 0, capChars: 15, capWords: 4, capTr: false };
+</script>
+<script src="beats.js"></script>
+<script src="timings.js" onerror="void 0"></script>
+<script src="../../serie/glossaire.js"></script>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="../../serie/lib/cast.js"></script>
+<script src="../../serie/lib/sketch-cast.js"></script>
+<script src="../../serie/lib/stage.js"></script>
+<script src="../../serie/lib/sketch-ui.js"></script>
+<script src="story.js"></script>
+<script src="../../engine/runtime.js"></script>
+</body>
+</html>
