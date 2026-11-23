@@ -180,7 +180,7 @@
       return c.node(pin).slide(at, 0, -160, 0.4, "back").wobble(st.T(at) + 0.4, 0.5, 6);
     };
     /* ---------- personnages (serie/lib/persona.js) : nouveaux visages, clignements, paroles ---------- */
-    const PE = Persona, PP = Persona.Pose;
+    const PE = Persona, PP = Persona.Pose, D = UnnaDecor;
     const blinkAt = (t, k) => { const q = (t + (k || 0) * 0.77) % 3.4; return q < 0.07 ? q / 0.07 : q < 0.14 ? (0.14 - q) / 0.07 : 0; };
     const talkAt = (t, a, b) => (t >= a && t < b ? (Math.floor(t / 0.11) % 3 === 0 ? 0.15 : 0.75) : 0);
     const rnd = (v, k = 20) => Math.round(v * k) / k;
@@ -193,12 +193,27 @@
     const EXPERT = { look: "man", hair: "short", hairTone: "grey", glasses: true, outfit: "suit", beard: "short", seed: 44 };
     const couple = (c, x, y, s, fn) => c.sk((g, p) => PE.couple(g, p), fn, x, y, s);
 
-    /* 1 · l'accroche : 6 ans et 9 mois + interdiction à vie ; une seule décision ------------------- */
+    /* 1 · l'accroche : la cellule (les barreaux tombent), son visage qui change, 6 ans 9 mois, interdiction à vie ---- */
     st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: 0, s: 1.3, cx: 540, cy: 680 }, { at: "b1@بست", s: 1.1, cx: 540, cy: 860, d: 0.5 }, { at: "b1@ومنعوها", s: 1, cx: 540, cy: 900, d: 0.5 }]);
-      pp(540, 830, 1.05, (t) => Object.assign({}, DOCW, PP.stand, { expr: t > T("b1@الحبس") ? "sad" : "worried", blink: rnd(blinkAt(t, 1)), look2: [0, 0.3] }));
-      const b = el("g"); bars(b); c.node(b).on((t, s) => { s.x += 316; s.y += 330; s.s *= 0.8; }).wipe(0.05, 0.5, "down");
+      c.camera([{ at: 0, s: 1.38, cx: 540, cy: 590 }, { at: "b1@بست", s: 1.1, cx: 540, cy: 820, d: 0.5 }, { at: "b1@ومنعوها", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+      const wall = el("g"); D.cellWall(wall, {}); c.node(wall).on((t, s) => { s.x += 316; s.y += 330; });
+      const X = 540, Y = 830, S = 1.05, bx = (i) => 316 + i * 448 / 5, tGrip = 0.7, tLet = T("b1@ومنعوها"), tJail = T("b1@الحبس"), tLife = T("b1@حياتها");
+      const doc = (t) => {
+        let expr = "shock", tears = 0, tilt = 0, look = [0, 0.1], sweat = false;
+        if (t >= 0.5) { expr = "worried"; sweat = true; look = [rnd(0.8 * Math.sin(t * 2.6), 10), 0.1]; tilt = rnd(3 * Math.sin(t * 1.7), 2); }
+        if (t >= tJail) { expr = "cry"; sweat = false; tears = rnd(Math.min(1, prog(t, tJail, 0.8)), 10); tilt = rnd(5 * Math.sin(t * 6.5), 2); look = [0, 0.4]; }
+        if (t >= tLet) { expr = "sad"; tears = 1; tilt = 12; look = [0, 1]; }
+        if (t >= tLife) { expr = t < tLife + 0.45 ? "shock" : "cry"; tears = 1; tilt = t < tLife + 0.45 ? 0 : rnd(6 * Math.sin(t * 6), 2); look = [0, 0.3]; }
+        const p = Object.assign({}, DOCW, PP.stand, { expr, tears, sweat, headTilt: tilt, look2: look, blink: rnd(blinkAt(t, 1)) });
+        if (t >= tGrip && t < tLet) Object.assign(p, { reachL: [(bx(2) - X) / S, rnd((585 - Y) / S + 3 * Math.sin(t * 8), 2)], reachR: [(bx(3) - X) / S, rnd((585 - Y) / S - 3 * Math.sin(t * 8), 2)], bendL: -1, bendR: 1 });
+        return p;
+      };
+      const breathe = (t, s) => { s.y += Math.sin(t * 2.4) * 2.5; };
+      pp(X, Y, S, doc).on(breathe);
+      const cb = el("g"); D.cellBars(cb, { n: 4 }); c.node(cb).on((t, s) => { s.x += 316; s.y += 330; }).slide(0.02, 0, -620, 0.26, "in");
+      pp(X, Y, S, (t) => Object.assign(doc(t), { only: ["handL", "handR"] })).on(breathe).on((t, s) => { s.o *= t >= tGrip && t < tLet ? 1 : 0; });
+      c.shake(0.28, 12, 0.35); c.kick(0.28, 0.06);
       const a = T("b1@بست"), yrs = c.text("0", 380, 1010, 130, "de"), mos = c.text("0", 700, 1010, 130, "de");
       [yrs, mos].forEach((n, i) => n.fade(a - 0.1, 0.2).on((t) => { const v = Math.round((i ? 9 : 6) * E.out(prog(t, a + i * 0.3, 0.7))); if (n.textEl.textContent !== String(v)) n.textEl.textContent = String(v); }));
       k.ar("سنين", 380, 1098, 34, "ttl").fade(a + 0.25); k.ar("شهور", 700, 1098, 34, "ttl").fade(a + 0.5);
@@ -208,7 +223,7 @@
         .on((t, s) => { s.o *= 1 - 0.75 * E.out(prog(t, T("b1@حياتها") + 0.2, 0.2)); });
       k.prop("stamp", 540, 1220, 0.4, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.28, 12);
     } });
-    st.scene({ from: "b2", in: "whip", inDur: 0.3, build(c) {
+    st.scene({ from: "b2", in: "whip", inDur: 0.3, summary: false, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b2", s: 1.08, cx: 540, cy: 900 }, { at: "b2@الخطة", s: 1.12, cx: 540, cy: 880, d: 0.5 }]);
       k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.45, "rtl");
@@ -292,18 +307,52 @@
       k.chip("Hausgeburt", "ولادة فالدار", 735, 790, 30).pop("b5@الدار");
     } });
 
-    /* 5 · le bébé en siège ; la règle : à l'hôpital ------------------------------------------------ */
+    /* 5 · le bébé en siège : la maman, une fenêtre dans son ventre, la loupe sur l'utérus (tête en haut) ----------- */
     st.scene({ from: "b6", in: "zoom", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b6", s: 1.15, cx: 540, cy: 860 }, { at: "b7", s: 1, cx: 540, cy: 900, d: 0.5 }]);
-      c.sk((g, p) => uterusBreech(g, p), (t) => ({ arrow: t >= T("b6@الراس") }), 540, 820, 1.1).pop("b6", 0.45);
+      c.camera([{ at: "b6", s: 1.0, cx: 520, cy: 900 }, { at: "b6@الوضعية", s: 1.04, cx: 520, cy: 880, d: 0.6 }]);
+      k.ground(540, 1300, 900);
+      const WX = 245, WY = 1300, WS = 1.35, WP = Object.assign({}, WOMAN, PP.bothHandsOnBellySide, { view: "side", facing: 1 });
+      pp(WX, WY, WS, (t) => Object.assign({}, WP, { expr: t < T("b6@الوضعية") ? "calm" : "worried", blink: rnd(blinkAt(t, 15)), look2: [0.2, 0.8] }));
+      const an = PE.util.rig(WP), bx = WX + an.belly[0] * WS + 6, by = WY + an.belly[1] * WS;
+      const a = T("b6@الوضعية"), hd = T("b6@الراس");
+      const fet = (t) => ({ kick: rnd(Math.pow(Math.max(0, Math.sin((t - a) * 4.2)), 3), 10), hb: rnd(Math.pow(Math.max(0, Math.sin(t * 9)), 4), 5), ghost: rnd(prog(t, hd, 0.5), 10), arrow: rnd(E.out(prog(t, hd + 0.15, 0.7)), 20) });
+      c.sk((g, p) => {   // fenêtre dans le ventre
+        while (g.firstChild) g.removeChild(g.firstChild);
+        const cp = el("clipPath", { id: "bellyWin" }, el("defs", {}, g)); el("ellipse", { cx: 0, cy: 0, rx: 50, ry: 62 }, cp);
+        const w = el("g", { "clip-path": "url(#bellyWin)" }, g); el("ellipse", { cx: 0, cy: 0, rx: 50, ry: 62, fill: "#F3F7F8" }, w);
+        D.uterus(el("g", { transform: "translate(0 4) scale(0.27)" }, w), p);
+        el("ellipse", { cx: 0, cy: 0, rx: 50, ry: 62, fill: "none", stroke: INK, "stroke-width": 3, "stroke-dasharray": "8 6" }, g);
+      }, (t) => Object.assign(fet(t), { arrow: 0, ghost: 0 }), bx, by, 1).pop(a - 0.25, 0.35);
+      const MX = 672, MY = 840, R = 222;   // la loupe
+      c.put(`<path d="M${bx + 40} ${by - 50} L${MX - 150} ${MY - 170} M${bx + 40} ${by + 50} L${MX - 165} ${MY + 150}" stroke="${INK}" stroke-width="3" stroke-dasharray="10 8" fill="none"/>`).wipe(a, 0.4);
+      c.sk((g, p) => {
+        while (g.firstChild) g.removeChild(g.firstChild);
+        el("circle", { cx: 8, cy: 10, r: R, fill: "#D2D2CB" }, g); el("circle", { cx: 0, cy: 0, r: R, fill: "#FFFFFF" }, g);
+        const cp = el("clipPath", { id: "magWin" }, el("defs", {}, g)); el("circle", { cx: 0, cy: 0, r: R - 3 }, cp);
+        D.uterus(el("g", { transform: "translate(0 10) scale(0.94)" }, el("g", { "clip-path": "url(#magWin)" }, g)), p);
+        el("circle", { cx: 0, cy: 0, r: R, fill: "none", stroke: INK, "stroke-width": 6 }, g);
+      }, fet, MX, MY, 1).pop(a + 0.15, 0.45);
       k.chip("Beckenlage", "البيبي جالس : الراس ماشي لتحت", 540, 470, 36, { yellow: true }).pop("b6@الوضعية");
+    } });
+
+    /* 5b · la règle : en siège → accouchement à l'hôpital ------------------------------------------------------------ */
+    st.scene({ from: "b7", in: "slideLeft", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b7", s: 1.04, cx: 540, cy: 900 }]);
+      k.ground(520, 1300, 900);
+      k.card(90, 470, 560, 380, { seed: 71 }).pop("b7@قواعد", 0.35);
+      c.text("Leitlinie", 370, 545, 50, "de").pop("b7@قواعد");
+      c.sk((g, p) => D.uterus(g, p), (t) => ({ hb: rnd(Math.pow(Math.max(0, Math.sin(t * 9)), 4), 5) }), 215, 690, 0.36).pop(T("b7@قواعد") + 0.1, 0.35);
+      c.text("Beckenlage", 480, 670, 36, "de").pop(T("b7@قواعد") + 0.15);
+      c.text("→ Klinik", 480, 732, 44, "de").pop(T("b7@قواعد") + 0.3);
+      c.text("الولادة خاصها تكون فالسبيطار", 370, 818, 32, "ar strong").wipe("b7@السبيطار", 0.5, "rtl");
       const hs = el("g"); building(hs, { w: 300, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 });
-      c.node(hs).on((t, s) => { s.x += 760; s.y += 1300; s.s *= 0.85; }).slide("b7", 500, 0, 0.45, "back");
-      k.card(100, 1035, 420, 200, { seed: 71 }).pop("b7@قواعد");
-      c.text("Leitlinie:", 310, 1100, 34, "de").pop("b7@قواعد");
-      c.text("Beckenlage → Klinik", 310, 1150, 34, "de").pop("b7@قواعد+0.12");
-      c.text("الولادة خاصها تكون فالسبيطار", 310, 1200, 28, "ar strong").wipe("b7@السبيطار", 0.5, "rtl");
+      c.node(hs).on((t, s) => { s.x += 728; s.y += 1300; s.s *= 0.76; }).slide("b7", 500, 0, 0.45, "back");
+      const w0 = T("b7@قواعد") + 0.4;
+      pp(0, 0, 0.75, (t) => { const p = prog(t, w0, 1.4); return Object.assign({}, WOMAN, p > 0 && p < 1 ? PP.walk(((t - w0) * 1.3) % 1) : PP.stand, { view: p > 0 ? "side" : "front", facing: 1, expr: "calm", blink: rnd(blinkAt(t, 16)) }); })
+        .on((t, s) => { s.x += lerp(170, 565, E.inOut(prog(t, w0, 1.4))); s.y += 1300; });
+      k.title("✓", 728, 950, 80).pop(w0 + 1.45);
     } });
 
     /* 6 · l'hôtel près du cabinet ; ils arrivent main dans la main ; leur promesse ------------------ */
@@ -329,8 +378,8 @@
     /* 7 · la chambre d'hôtel : 5 h → la nuit ; douleur ; elle arrive 12 h plus tard ------------------ */
     st.scene({ from: "b10", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b10", s: 1.05, cx: 480, cy: 940 }, { at: "b11", s: 1.0, cx: 520, cy: 940, d: 0.5 }, { at: "b12", s: 1.02, cx: 510, cy: 960, d: 0.6 }]);
-      const a = T("b10"), arr = T("b11@زازت") + 0.4, end = T("b12@end") + 0.2;
+      c.camera([{ at: "b10", s: 1.05, cx: 480, cy: 940 }, { at: "b11", s: 1.0, cx: 520, cy: 940, d: 0.5 }]);
+      const a = T("b10"), arr = T("b11@دازت") + 0.4, end = T("b12@end") + 0.2;
       const P = (t) => t < arr ? 0.7 * E.inOut(prog(t, a, arr - a)) : 0.7 + 0.12 * prog(t, arr, end - arr);
       c.sk((g, p) => windowSky(g, p), (t) => ({ p: rnd(P(t), 40) }), 540, 800, 0.9);
       c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 48 }), (t) => { const h = t < arr ? lerp(5, 17, E.inOut(prog(t, a, arr - a))) : lerp(17, 20, prog(t, arr, end - arr)); return { tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] }; }, 860, 620, 1);
@@ -344,7 +393,28 @@
       k.chip("📞 Ärztin", "عيطات للطبيبة", 540, 440, 28, { parent: c.hud }).pop("b10@عيطات").hide("b11", 0.2);
       pp(0, 0, 1.05, (t) => { const p = prog(t, arr - 0.2, 0.9); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.3) % 1) : PP.stand, { facing: -1, expr: "calm", blink: rnd(blinkAt(t, 8)) }); })
         .on((t, s) => { s.x += lerp(1160, 735, E.out(prog(t, arr - 0.2, 0.9))); s.y += 1300; });
-      k.chip("~ 12 Stunden später", "تقريبا 12 ساعة من بعد", 540, 440, 28, { yellow: true, parent: c.hud }).pop("b11@ساعة").hide("b12@وقفات", 0.2);
+      k.chip("~ 12 Stunden später", "تقريبا 12 ساعة من بعد", 540, 440, 28, { yellow: true, parent: c.hud }).pop("b11@ساعة");
+    } });
+
+    /* 7b · le soir : le travail se bloque — elle est allongée, la médecin (tenue de bloc) fait tout, le papa regarde ---- */
+    const wv = (t, fr, amp) => rnd(amp * Math.sin(t * fr), 2);
+    const dadSide = (t, extra) => Object.assign({}, MAN, PP.stand, { view: "side", facing: 1, expr: "worried", torsoLean: 14, look2: [0.6, 0.6], reachR: [80, -150 + wv(t, 3, 6)], bendR: -1, blink: rnd(blinkAt(t, 17)) }, extra || {});
+    const momLabor = (t, extra) => Object.assign({}, WOMAN, { view: "side", facing: 1, expr: Math.floor(t / 1.1) % 2 ? "pain" : "cry", tears: 0.4, sweat: true, blink: rnd(blinkAt(t, 18)), legL: [52, -118], legR: [rnd(58 + 3 * Math.sin(t * 5), 2), -122], armL: [60, 80], reachR: [40, -228], headTilt: -8 + wv(t, 4, 4) }, extra || {});
+    const docWork = (t, extra) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null }, PP.stand, { view: "side", facing: -1, expr: "focused", sweat: true, torsoLean: 22, reachL: [-110 + wv(t, 7, 10), -170], reachR: [-120 - wv(t, 7, 10), -200], bendL: 1, bendR: 1, blink: rnd(blinkAt(t, 19)) }, extra || {});
+    const room = (c, k, night, clockFn) => {
+      c.sk((g, p) => windowSky(g, p), () => ({ p: night }), 450, 820, 0.75);
+      c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 44 }), clockFn, 720, 720, 1);
+      k.ground(470, 1300, 900);
+    };
+    st.scene({ from: "b12", in: "cut", inDur: 0, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b12", s: 1.04, cx: 480, cy: 1030 }, { at: "b12@وقفات", s: 1.0, cx: 470, cy: 1000, d: 0.7 }]);
+      room(c, k, 0.82, (t) => { const h = lerp(18, 19.5, prog(t, T("b12"), T("b13") - T("b12"))); return { tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] }; });
+      const ns = el("g"); PE.props.nightstand(ns, { on: true }); c.node(ns).on((t, s) => { s.x += 140; s.y += 1300; s.s *= 0.85; });
+      pp(245, 1300, 1.0, (t) => dadSide(t));
+      const bed = el("g"); PE.props.hotelBed(bed, { w: 480, blanket: 0 }); c.node(bed).on((t, s) => { s.x += 450; s.y += 1300; });
+      c.sk((g, p) => PE.person(g, p), (t) => momLabor(t), 640, 1196, 0.9, -90);
+      pp(750, 1300, 0.98, (t) => docWork(t, { expr: t < T("b12@وقفات") ? "focused" : "worried" }));
       k.chip("Geburtsstillstand", "الولادة وقفات", 540, 440, 30, { parent: c.hud }).pop("b12@وقفات").wobble("b12@وقفات+0.35", 0.45, 6);
     } });
 
@@ -370,21 +440,27 @@
       pp(300, 1300, 0.66, (t) => Object.assign({}, DOCW, PP.stand, { facing: -1, expr: "focused", blink: rnd(blinkAt(t, 11)) })).pop("b14@مكملة", 0.35);
     } });
 
-    /* 9 · la naissance… puis le silence : ils s'enlacent, la couverture vide, la bougie --------------- */
+    /* 9 · la naissance… le moniteur ralentit puis la ligne plate ; la médecin à genoux ; le papa enlace la maman épuisée */
     st.scene({ from: "b15", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b15", s: 1, cx: 540, cy: 880 }, { at: "b15@زادت", s: 1.1, cx: 540, cy: 900, d: 3.4, ease: "lin" }]);
-      c.sk((g, p) => windowSky(g, p), () => ({ p: 1 }), 520, 740, 0.7);
-      c.sk((g, p) => PE.props.clockWall(g, { time: [22, 0], r: 48 }), () => ({}), 820, 640, 1).pop("b15@تمنطاشر");
-      k.ground(540, 1300, 1000);
-      const ns = el("g"); PE.props.nightstand(ns, { on: false }); c.node(ns).on((t, s) => { s.x += 170; s.y += 1300; s.s *= 0.9; });
-      c.sk((g, p) => PE.props.candle(g, { lit: true, flicker: p.f, h: 70 }), (t) => ({ f: rnd((Math.sin(t * 7) + 1) / 2, 5) }), 170, 1196, 0.8);
-      const bed = el("g"); PE.props.hotelBed(bed, { w: 380 }); c.node(bed).on((t, s) => { s.x += 420; s.y += 1300; });
-      const bl = el("g"); PE.props.babyBlanket(bl, { w: 110 }); c.node(bl).on((t, s) => { s.x += 440; s.y += 1300 - 92; }).fade("b15@زادت", 0.5);
-      const quiet = T("b15@end") + 0.5;
-      couple(c, 715, 1300, 0.9, (t) => t < quiet ? { mode: "lookEachOther", exprA: "worried", exprB: "worried", heart: 0, blink: rnd(blinkAt(t, 12)) } : { mode: "hug", exprA: "cry", exprB: "sad", tears: rnd(Math.min(1, prog(t, quiet, 1.2)), 10), heart: 0 });
-      k.ar("البنت ما عاشتش", 540, 430, 66, "ttl", c.hud).wipe(quiet + 0.2, 0.8, "rtl").hide("b16", 0.2);
-      c.tick((t) => { const g = E.inOut(prog(t, quiet + 0.4, 1.4)); c.layer.style.filter = g > 0 ? `grayscale(${(g * 0.85).toFixed(2)})` : ""; });
+      const born = T("b15@زادت"), quiet = T("b15@end") + 0.45, hugP = (t) => E.inOut(prog(t, quiet + 0.3, 0.8));
+      c.camera([{ at: "b15", s: 1.0, cx: 470, cy: 1000 }, { at: quiet, s: 1.06, cx: 450, cy: 1040, d: 3.4, ease: "lin" }]);
+      room(c, k, 1, () => ({ tm: [22, 0] }));
+      const ns = el("g"); PE.props.nightstand(ns, { on: false }); c.node(ns).on((t, s) => { s.x += 140; s.y += 1300; s.s *= 0.85; });
+      const ph = (t) => t < born ? t * 1.3 : born * 1.3 + (t - born) * 0.75;
+      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd(ph(t) % 1, 30), flat: t >= quiet ? 1 : 0, alarm: t >= quiet }), 140, 1201, 0.75);
+      const dad = (t) => { const h = hugP(t); return dadSide(t, h > 0.5 ? { expr: "cry", tears: 1, look2: [0.4, 1], reachR: [170, -150], reachL: [150, -140], bendL: -1, torsoLean: lerp(14, 30, h), headTilt: lerp(0, 24, h) } : {}); };
+      pp(245, 1300, 1.0, dad);
+      const bed = el("g"); PE.props.hotelBed(bed, { w: 480 }); c.node(bed).on((t, s) => { s.x += 450; s.y += 1300; });
+      const bl = el("g"); PE.props.babyBlanket(bl, { w: 90 }); c.node(bl).on((t, s) => { s.x += 640; s.y += 1300 - 92; }).fade(born, 0.5);
+      c.sk((g, p) => PE.person(g, p), (t) => t < quiet ? momLabor(t, { expr: t < born ? "pain" : "sad" })
+        : Object.assign({}, WOMAN, { pregnant: false, view: "side", facing: 1, expr: "sad", blink: 0.6, tears: 1, sweat: true, legL: [4, 0], legR: [8, 0], armL: [30, 50], armR: [168, 10], headTilt: -6 }), 640, 1196, 0.9, -90)
+        .on((t, s) => { if (t >= quiet) s.x += 58; });
+      pp(245, 1300, 1.0, (t) => Object.assign(dad(t), { only: "arms" })).on((t, s) => { s.o *= hugP(t) > 0.5 ? 1 : 0; });
+      pp(750, 1300, 0.98, (t) => docWork(t, { expr: t < born ? "focused" : "worried" })).hide(quiet, 0.25);
+      pp(610, 1300, 0.98, (t) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null, facing: -1 }, PP.kneel, { expr: "sad", headTilt: 22, look2: [0, 1], armL: [14, 30], armR: [22, 24], tears: 0.6, blink: rnd(blinkAt(t, 22)) })).fade(quiet + 0.15, 0.4);
+      k.ar("البنت ما عاشتش", 540, 430, 66, "ttl", c.hud).wipe(quiet + 0.9, 0.8, "rtl").hide("b16", 0.2);
+      c.tick((t) => { const g = E.inOut(prog(t, quiet + 0.6, 1.4)); c.layer.style.filter = g > 0 ? `grayscale(${(g * 0.85).toFixed(2)})` : ""; });
     } });
 
     /* 10 · l'expert : 4 heures plus tôt → hôpital → césarienne → bébé en bonne santé ---------------- */
@@ -398,9 +474,12 @@
         c.text(d, x, 595, d.length > 8 ? 22 : 32, "de").pop(at);
         c.text(a, x, 690, 22, "ar strong").wipe(at + "+0.1", 0.4, "rtl");
       });
-      const bb = el("g"); PE.baby(bb, { state: "sleep" }); c.node(bb).on((t, s) => { s.x += 640; s.y += 1020; s.s *= 1.15; }).pop("b16@بصحتها", 0.45).float(4, 2.4);
-      c.put(`<ellipse cx="640" cy="1030" rx="170" ry="80" fill="none" stroke="#2F8F4E" stroke-width="5" stroke-dasharray="12 10"/>`).fade("b16@بصحتها");
-      k.title("✓", 640, 900, 80).pop("b16@بصحتها+0.2");
+      c.sk((g, p) => {   // la petite, en ange, à côté du Gutachter
+        while (g.firstChild) g.removeChild(g.firstChild);
+        D.wings(el("g", { transform: "translate(18 -52)" }, g), { flap: p.f, size: 1.3 });
+        PE.baby(el("g", { transform: "scale(1.15)" }, g), { state: "sleep" });
+        D.halo(el("g", { transform: "translate(-72 -96)" }, g), { r: 42 });
+      }, (t) => ({ f: rnd((Math.sin(t * 5) + 1) / 2, 10) }), 560, 1050, 1).pop("b16@بصحتها", 0.5).float(8, 2.6);
     } });
 
     /* 11 · Dortmund : pas « négligence », mais Totschlag --------------------------------------------- */
@@ -425,19 +504,55 @@
       k.chip("sie kannte die Gefahr", "كانت عارفة بالخطر", 540, 420, 30, { yellow: true }).pop("b19@عارفة+0.1");
     } });
 
-    /* 12 · la peine ; le BGH : définitif ----------------------------------------------------------------- */
+    /* 12 · la peine : son visage (grimaces) + une icône pour chaque sanction ------------------------------------------ */
     st.scene({ from: "b20", in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b20", s: 1.04, cx: 540, cy: 780 }, { at: "b22", s: 1, cx: 540, cy: 900, d: 0.5 }]);
-      k.card(140, 470, 800, 200, { seed: 201 }).pop("b20", 0.35);
-      c.text("6 Jahre 9 Monate Haft", 540, 565, 56, "de").pop("b20+0.1");
-      c.text("ست سنين وتسع شهور ديال الحبس", 540, 630, 32, "ar strong").wipe("b20+0.25", 0.5, "rtl");
-      k.chip("lebenslanges Berufsverbot", "ممنوعة تخدم طول حياتها", 540, 760, 32, { yellow: true }).pop("b20@ومنعوها");
-      k.chip("≈ 50 000 € an die Eltern", "تعويض للوالدين", 540, 900, 32).pop("b21@خمسين");
-      const geo = drawDE(c, 340, 1150, 30, "b22"), [kx, ky] = geo(8.40, 49.01);
+      c.camera([{ at: "b20", s: 1.0, cx: 520, cy: 820 }, { at: "b20@ومنعوها", s: 1.0, cx: 520, cy: 890, d: 0.5 }]);
+      const j = T("b20@الحبس"), m = T("b20@ومنعوها"), hb = T("b20@Hebamme");
+      c.sk((g, p) => PE.head(g, p), (t) => {
+        let expr = "shock", tears = 0, tilt = rnd(3 * Math.sin(t * 9), 2), mouth;
+        if (t >= j) { expr = "cry"; tears = rnd(Math.min(1, prog(t, j, 0.6)), 10); tilt = rnd(7 * Math.sin(t * 7), 2); mouth = "wail"; }
+        if (t >= m && t < m + 0.5) { expr = "shock"; mouth = undefined; tilt = 0; }
+        if (t >= m + 0.5) { expr = "pain"; tears = 1; tilt = rnd(8 * Math.sin(t * 6), 2); mouth = undefined; }
+        if (t >= hb) { expr = "cry"; mouth = "wail"; }
+        return Object.assign({}, DOCW, { expr, tears, sweat: true, headTilt: tilt, blink: rnd(blinkAt(t, 23)), mouth });
+      }, 520, 640, 1.9).pop("b20", 0.4);
+      const row = (y, icon, de, ar, at, seed) => {
+        k.card(160, y - 85, 700, 170, { seed }).pop(at, 0.35);
+        const ic = el("g"); icon(ic); c.node(ic).on((t, s) => { s.x += 248; s.y += y; }).pop(at + 0.05, 0.4);
+        c.text(de, 572, y - 6, de.length > 20 ? 36 : 44, "de").pop(at + 0.1);
+        c.text(ar, 572, y + 52, 30, "ar strong").wipe(at + 0.25, 0.45, "rtl");
+      };
+      row(960, D.iconBars, "6 Jahre 9 Monate Haft", "ست سنين وتسع شهور ديال الحبس", T("b20") + 0.1, 201);
+      row(1170, D.iconBan, "lebenslanges Berufsverbot", "ممنوعة تخدم طول حياتها", m, 202);
+      c.kick(j, 0.06); c.kick(m, 0.06);
+    } });
+
+    /* 12b · l'argent : il sort de chez la médecin et va aux parents --------------------------------------------------- */
+    st.scene({ from: "b21", in: "slideLeft", inDur: 0.25, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b21", s: 1.05, cx: 520, cy: 960 }]);
+      k.ground(520, 1300, 900);
+      const a = T("b21") + 0.2;
+      pp(230, 1300, 1.0, (t) => Object.assign({}, DOCW, PP.holdHandOut, { expr: "sad", tears: 0.7, blink: rnd(blinkAt(t, 24)), look2: [0.6, 0.2] }));
+      couple(c, 690, 1300, 0.82, (t) => ({ mode: "holdHands", exprA: "sad", exprB: "sad", blink: rnd(blinkAt(t, 25)), a: { pregnant: false, outfit: "casual" } }));
+      for (let i = 0; i < 6; i++) {
+        const n = el("g"); D.banknote(n, { seed: 330 + i });
+        c.node(n).on((t, s) => { const p = E.inOut(prog(t, a + i * 0.16, 0.9)); s.x += lerp(310, 610 + (i % 3) * 32, p); s.y += lerp(1110, 1150 - (i % 2) * 24, p) - Math.sin(p * Math.PI) * 165; s.r += lerp(-12, 14, p) + i * 3; s.o *= t >= a + i * 0.16 ? 1 : 0; });
+      }
+      const n0 = c.text("0 €", 520, 680, 96, "de"); n0.fade(a, 0.2).on((t) => { const v = Math.round(50 * E.out(prog(t, a, 1.2))) * 1000, txt = "≈ " + v.toLocaleString("de-DE") + " €"; if (n0.textEl.textContent !== txt) n0.textEl.textContent = txt; });
+      k.chip("an die Eltern", "تعويض للوالدين", 520, 790, 32, { yellow: true }).pop("b21@خمسين");
+      const ic = el("g"); D.iconMoney(ic); c.node(ic).on((t, s) => { s.x += 520; s.y += 520; }).pop(a, 0.4);
+    } });
+
+    /* 12c · le BGH (Karlsruhe) confirme : définitif ---------------------------------------------------------------------- */
+    st.scene({ from: "b22", in: "zoom", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b22", s: 1.0, cx: 520, cy: 900 }, { at: "b22@BGH", s: 1.12, cx: 470, cy: 900, d: 0.5 }]);
+      const geo = drawDE(c, 480, 900, 52, "b22"), [kx, ky] = geo(8.40, 49.01);
       pinAt(c, kx, ky, "b22@BGH");
-      k.chip("BGH · Karlsruhe · 2016", "أعلى محكمة فألمانيا", 690, 1062, 24).pop("b22@BGH");
-      k.prop("stamp", 690, 1250, 0.5, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.28, 10);
+      k.chip("BGH · Karlsruhe · 2016", "أعلى محكمة فألمانيا", 500, 520, 30).pop("b22@BGH");
+      k.prop("stamp", 520, 1250, 0.6, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.28, 10);
     } });
 
     /* 13 · ce que le tribunal lui reproche ---------------------------------------------------------------- */
@@ -469,7 +584,7 @@
       const hEl = document.getElementById("hours"), fill = hEl.querySelector(".fill"), ghost = hEl.querySelector(".ghost"), now = hEl.querySelector(".now"), evs = [...hEl.querySelectorAll(".ev")];
       const W0 = 780, hx = (h) => (W0 * (h - 5) / 17);
       evs.forEach((e) => { e.style.left = hx(+e.dataset.h) + "px"; });
-      const a = T("b10"), arr = T("b11@زازت") + 0.4, mk = T("b13@جوج"), birth = T("b15@زادت"), on0 = T("b10") - 0.2, off0 = T("b15@end") + 0.4, on1 = T("b16"), off1 = T("b16@end") + 0.2;
+      const a = T("b10"), arr = T("b11@دازت") + 0.4, mk = T("b13@جوج"), birth = T("b15@زادت"), on0 = T("b10") - 0.2, off0 = T("b15@end") + 0.4, on1 = T("b16"), off1 = T("b16@end") + 0.2;
       const hourAt = (t) => t < arr ? lerp(5, 17, E.inOut(prog(t, a, arr - a))) : t < mk ? lerp(17, 19.3, prog(t, arr, mk - arr)) : lerp(19.3, 22, prog(t, mk, birth - mk));
       const evAt = [a, arr, mk, birth];
       const progEl = document.getElementById("prog"), bar = progEl.firstElementChild, total = T("b26@end"), endT = total + 0.15;
@@ -494,7 +609,7 @@
 
     /* ---------- affiche finale + appel à commenter (écrit, pas dit) ---------- */
     st.flash("b26@end+0.15", 0.35, 0.85);
-    st.summary({ at: "b26@end+0.15", in: "cut", dezoomAt: "b26@end+0.5", cols: 5, crop: [230, 1310], top: 372, gap: 10, side: 92,
+    st.summary({ at: "b26@end+0.15", in: "cut", dezoomAt: "b26@end+0.5", cols: 6, crop: [230, 1310], top: 372, gap: 10, side: 92,
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);

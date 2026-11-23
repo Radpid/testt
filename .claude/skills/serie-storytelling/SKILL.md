@@ -75,6 +75,10 @@ videos/epNN-<mot>/
 
 ## Voix (sa voix, jamais une voix de synthèse par défaut)
 
+- **Pauses** (retour sur AKTE 02 : « c'est très rapide ») : à l'écoute ≈ 0,35 s entre deux phrases et ≈ 0,65 s à
+  chaque changement de scène / de contexte, plus une pause là où deux idées se mélangent (ex. après
+  « بغينا ولادة طبيعية »). Dans `montage_voix.py` les durées sont AVANT l'accélération x1,5 (beat 0,52 s, scène 1,0 s).
+
 1. **Scribe** (`scribe_v2`, horodatage par mot) sur l'enregistrement et chaque reprise. Re-transcrire aussi le
    résultat monté : la 2e transcription corrige souvent la 1re (AKTE 01 : « وكيتنفس بجهد », « دازت … ونص »).
    Signaler à l'auteur les mots incertains au lieu de deviner.
@@ -110,6 +114,16 @@ videos/epNN-<mot>/
 - **Zooms** : l'auteur VEUT des zooms forts (×1,3 à ×1,7) sur des sujets complets et soignés (étiquette de la
   seringue, carte, mère + Bébé, injection avec le Bébé entier, Bébé bleu + moniteur). Jamais un personnage, une
   bulle, une carte ou un titre coupé. Titres de scène (rubans) et textes importants pendant un zoom → `c.hud`.
+- **Personnages vivants** (retour de l'auteur sur AKTE 02) : jamais un visage figé — clignements, respiration,
+  regard qui bouge, expression qui CHANGE avec la phrase (choc → inquiète → pleure), larmes, sueur, mains qui
+  agissent (elle serre les barreaux). Tenue adaptée à la scène (blouse de bloc pour l'accouchement, pas la blouse
+  de ville). Pour une scène dure (blocage, décès) : nouveau plan (allongée sur le lit, médecin qui s'acharne, papa
+  à côté), moniteur qui ralentit puis ligne plate (son synthétisé, `son/bip_moniteur.py`), médecin à genoux, maman
+  épuisée, le papa qui l'enlace.
+- **Expliquer le médical en image** : coupe anatomique (ex. utérus + bébé en siège, tête en haut) dans une fenêtre
+  sur le corps + loupe reliée, bébé qui bouge, cœur qui bat, fantôme de la bonne position. Peine = une icône par
+  sanction (barreaux, sacoche barrée, billets) + le visage de la médecin en grosses grimaces ; l'argent part
+  visiblement de la médecin vers les parents. Bébé décédé évoqué en ange (ailes + auréole), sans cadre vert.
 - **Traduction arabe sous une pastille** : bien DÉTACHÉE de la pastille et de son ombre (≈ 20 px d'écart), gras,
   encre foncée, contour couleur papier (`paint-order: stroke`) — collée à la pastille, l'auteur la voit
   « superposée » (retour sur AKTE 02, « Hebamme » / « زوج ألماني »). Rien (personnage, trait, tampon, ✗) ne passe

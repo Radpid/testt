@@ -79,14 +79,17 @@ FIX_INTRO = {0: "أنا", 1: "ياسين،", 2: "طبيب", 3: "فألمانيا
 FIX = {("raw", k): v for k, v in {35: "Unna.", 47: "لـUnna،", 37: "Couple", 38: "ألماني،", 56: "Hebamme،", 66: "الـBébé", 69: "صعيبة.",
        70: "والـBébé", 72: "كان", 77: "صعيبة،", 102: "Hotel", 134: "Hotel", 125: "césarienne.", 59: "كتولد", 63: "الدار،", 152: "والـBébé", 169: "", 205: "césarienne.", 162: "Mekonium،",
        166: "الـBébé", 170: "الأكسجين.", 188: "ولكن…", 223: "Totschlag.", 213: "Tötung…", 258: "BGH", 282: "Hotel،",
-       148: "12", 312: "عيب."}.items()}
+       148: "12", 312: "عيب.", 146: "دازت"}.items()}
 FIX.update({("intro", k): v for k, v in FIX_INTRO.items()})
-SCENE_START = {"i1", "b3", "b4", "b6", "b8", "b10", "b13", "b16", "b17", "b20", "b22", "b24"}
-EXTRA = {"b15": 4.4}   # scène muette après « ولكن… »
-RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.18, 0.3)}
-TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.24}
+# Rythme (retour de l'auteur : « c'est très rapide ») — durées AVANT l'accélération x1,5 :
+#   entre deux phrases 0,52 s (≈ 0,35 s à l'écoute), à chaque changement de scène / de contexte 1,0 s (≈ 0,67 s).
+SCENE_START = {"i1", "b3", "b4", "b5", "b6", "b7", "b8", "b10", "b12", "b13", "b15", "b16", "b17", "b20", "b22", "b23", "b24"}
+EXTRA = {"b15": 6.0}   # scène muette après « ولكن… » (bip du moniteur, l'étreinte) ≈ 4 s à l'écoute
+RANGE = {"inner": (0.0, 0.24), "beat": (0.45, 0.6), "scene": (0.9, 1.1)}
+TARGET = {"inner": 0.08, "beat": 0.52, "scene": 1.0}
 XF = 0.02
-PAUSE_BEFORE = {("raw", 36): 0.45}   # après « مدينة Unna » (carte)
+PAUSE_BEFORE = {("raw", 27): 1.3,    # fin de l'intro → début de l'histoire
+                ("raw", 117): 0.65}  # après « بغينا ولادة طبيعية، » (avant « إلا وقع أي مشكل »)
 
 def quietest(A, t0, t1, win=0.03):
     if t1 - t0 < 0.012: return (t0 + t1) / 2
