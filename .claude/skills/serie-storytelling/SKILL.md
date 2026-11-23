@@ -75,9 +75,11 @@ videos/epNN-<mot>/
 
 ## Voix (sa voix, jamais une voix de synthèse par défaut)
 
-- **Pauses** (retour sur AKTE 02 : « c'est très rapide ») : à l'écoute ≈ 0,35 s entre deux phrases et ≈ 0,65 s à
-  chaque changement de scène / de contexte, plus une pause là où deux idées se mélangent (ex. après
-  « بغينا ولادة طبيعية »). Dans `montage_voix.py` les durées sont AVANT l'accélération x1,5 (beat 0,52 s, scène 1,0 s).
+- **Rythme RAPIDE, pauses ciblées** (retours sur AKTE 02) : entre deux phrases du même contexte, enchaîner vite
+  (≈ 0,1 s). Pause courte (≈ 0,4 s à l'écoute) SEULEMENT quand le contexte change complètement (accroche → intro,
+  intro → histoire, nouvel événement, verdict → peine, leçon), et là où deux idées se mélangent (ex. après
+  « بغينا ولادة طبيعية »). Jamais de longues pauses, jamais de pause « au hasard » à chaque scène. Dans
+  `montage_voix.py` les durées sont AVANT l'accélération x1,5 (beat 0,16 s, contexte 0,6 s).
 
 1. **Scribe** (`scribe_v2`, horodatage par mot) sur l'enregistrement et chaque reprise. Re-transcrire aussi le
    résultat monté : la 2e transcription corrige souvent la 1re (AKTE 01 : « وكيتنفس بجهد », « دازت … ونص »).
