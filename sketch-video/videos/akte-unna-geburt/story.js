@@ -1,6 +1,7 @@
 /* AKTE 02 — « Die Hotelgeburt » (Unna 2008 · LG Dortmund 01.10.2014, 37 Ks 3/11 · BGH 11.05.2016, 4 StR 428/15).
- * Nouveautés par rapport aux épisodes précédents : décors (voyage, hôtel jour/nuit, chambre avec fenêtre dont le ciel
- * change, cabinet, hôpital tout proche, Karlsruhe), barre des heures 05:00 → 22:00, scènes de famille, balance finale.
+ * Personnages : serie/lib/persona.js (visages détaillés, clignements, expressions, couple : main dans la main, bras autour,
+ * regard, étreinte). Intro de l'auteur après l'accroche (photo assets/portrait.png, hors git). Décors : voyage, hôtel
+ * jour/nuit, chambre (lit, table de nuit, téléphone, horloge), cabinet, hôpital tout proche, Karlsruhe, balance finale.
  * Zones Instagram : contenu entre x 90 et 990 ; rien dans la colonne de boutons (x > 915, y 980–1650).
  */
 (function () {
@@ -106,23 +107,11 @@
       U.stroke(C, "mv", "M0 -200 L0 40 M-150 -80 L150 -80", { sw: 3.5 });
       U.shape(C, "sill", U.rrect(-170, 40, 340, 18, 5), MAT.grey, { sw: 2.6 });
     }
-    function suitcase(g) {
-      const C = U.ctx(g, 41, false, 1);
-      U.shape(C, "b", U.rrect(-40, -70, 80, 70, 8), MAT.yellow, { sw: 3 });
-      U.stroke(C, "h", "M-14 -70 L-14 -86 L14 -86 L14 -70", { sw: 3 });
-      U.stroke(C, "s", "M-40 -36 L40 -36", { sw: 2 });
-    }
     function car(g) {
       const C = U.ctx(g, 43, false, 1);
       U.shape(C, "body", "M-60 0 L-60 -26 L-36 -30 L-20 -52 L26 -52 L42 -30 L60 -26 L60 0 Z", MAT.yellow, { sw: 3 });
       U.shape(C, "win", "M-14 -46 L20 -46 L32 -31 L-28 -31 Z", { base: "#EAF1F4" }, { sw: 2 });
       [-34, 34].forEach((x, i) => el("circle", { cx: x, cy: 0, r: 13, fill: "#3A3A37", stroke: INK, "stroke-width": 2.5 }, g));
-    }
-    function bag(g) {
-      const C = U.ctx(g, 47, false, 1);
-      U.shape(C, "b", U.rrect(-34, -44, 68, 44, 10), { base: "#6C6C66", hatch: "#262624", gap: 5, fw: 1.3 }, { sw: 2.8 });
-      U.stroke(C, "h", "M-14 -44 C -14 -60, 14 -60, 14 -44", { sw: 3 });
-      el("path", { d: "M-6 -28 h12 v6 h6 v12 h-6 v6 h-12 v-6 h-6 v-12 h6 Z", fill: "#fff", stroke: INK, "stroke-width": 1.6 }, g);
     }
     function uterusBreech(g, o) {   // utérus + bébé en siège (tête en haut)
       const C = U.ctx(g, 33, false, 1);
@@ -186,246 +175,288 @@
       el("circle", { cx: 0, cy: -48, r: 9, fill: "#FFFFFF", stroke: INK, "stroke-width": 3 }, pin);
       return c.node(pin).slide(at, 0, -160, 0.4, "back").wobble(st.T(at) + 0.4, 0.5, 6);
     };
-    const DOC = (extra) => Object.assign({ outfit: "coat", hair: "bun", badge: "Dr", seed: 61 }, extra || {});
-    const pregnant = (c, n, x0, y0, s, parent) => {   // ventre de la future mère (silhouette)
-      const b = c.put(`<ellipse cx="0" cy="0" rx="46" ry="54" fill="#DDDDD8" stroke="#6E6E68" stroke-width="3"/><path d="M-30 -20 l60 30 M-34 6 l60 30" stroke="#A1A19B" stroke-width="2"/>`, 0, 0, 1, 0, parent);
-      b.on((t, sx) => { const h = n.out && n.out.hip; if (h) { sx.x += x0 + h[0] * s + 6 * s; sx.y += y0 + (h[1] - 62) * s; sx.s *= s; } });
-      return b;
-    };
+    /* ---------- personnages (serie/lib/persona.js) : nouveaux visages, clignements, paroles ---------- */
+    const PE = Persona, PP = Persona.Pose;
+    const blinkAt = (t, k) => { const q = (t + (k || 0) * 0.77) % 3.4; return q < 0.07 ? q / 0.07 : q < 0.14 ? (0.14 - q) / 0.07 : 0; };
+    const talkAt = (t, a, b) => (t >= a && t < b ? (Math.floor(t / 0.11) % 3 === 0 ? 0.15 : 0.75) : 0);
+    const rnd = (v, k = 20) => Math.round(v * k) / k;
+    const pp = (x, y, s, fn, parent) => c_.sk((g, p) => PE.person(g, p), fn, x, y, s, 0, parent);
+    let c_ = null;   // scène courante (pour pp)
+    const WOMAN = { look: "woman", hair: "longwave", hairTone: "dark", outfit: "maternity", pregnant: true, seed: 31 };
+    const MAN = { look: "man", hair: "short", hairTone: "dark", beard: "stubble", outfit: "sweater", seed: 32 };
+    const DOCW = { look: "oldwoman", hair: "bun", hairTone: "grey", glasses: true, outfit: "coat", badge: "Dr", seed: 61 };
+    const JUDGE = { look: "oldman", hair: "crown", hairTone: "grey", glasses: true, outfit: "robe", seed: 17 };
+    const EXPERT = { look: "man", hair: "short", hairTone: "grey", glasses: true, outfit: "suit", beard: "short", seed: 44 };
+    const couple = (c, x, y, s, fn) => c.sk((g, p) => PE.couple(g, p), fn, x, y, s);
 
-    /* 1 · l'accroche : 6 ans et 9 mois + interdiction à vie ---------------------------------- */
+    /* 1 · l'accroche : 6 ans et 9 mois + interdiction à vie ; une seule décision ------------------- */
     st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: 0, s: 1.3, cx: 540, cy: 700 }, { at: "b1@بست", s: 1.1, cx: 540, cy: 860, d: 0.5 }, { at: "b1@ومنعوها", s: 1, cx: 540, cy: 900, d: 0.6 }]);
-      const b = el("g"); bars(b); c.node(b).on((t, s) => { s.x += 316; s.y += 330; s.s *= 0.8; }).wipe(0.05, 0.55, "down");
-      k.person(540, 830, 1.0, (t) => DOC({ expr: t > T("b1@الحبس") ? "sad" : "unsure" }), null);
-      // compteur qui roule jusqu'à 6 ans / 9 mois
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: 0, s: 1.3, cx: 540, cy: 680 }, { at: "b1@بست", s: 1.1, cx: 540, cy: 860, d: 0.5 }, { at: "b1@ومنعوها", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+      pp(540, 830, 1.05, (t) => Object.assign({}, DOCW, PP.stand, { expr: t > T("b1@الحبس") ? "sad" : "worried", blink: rnd(blinkAt(t, 1)), look2: [0, 0.3] }));
+      const b = el("g"); bars(b); c.node(b).on((t, s) => { s.x += 316; s.y += 330; s.s *= 0.8; }).wipe(0.05, 0.5, "down");
       const a = T("b1@بست"), yrs = c.text("0", 380, 1010, 130, "de"), mos = c.text("0", 700, 1010, 130, "de");
-      [yrs, mos].forEach((n, i) => n.fade(a - 0.1, 0.2).on((t) => { const v = Math.round((i ? 9 : 6) * E.out(prog(t, a + i * 0.35, 0.8))); if (n.textEl.textContent !== String(v)) n.textEl.textContent = String(v); }));
-      k.ar("سنين", 380, 1080, 34, "ttl").fade(a + 0.3); k.ar("شهور", 700, 1080, 34, "ttl").fade(a + 0.6);
+      [yrs, mos].forEach((n, i) => n.fade(a - 0.1, 0.2).on((t) => { const v = Math.round((i ? 9 : 6) * E.out(prog(t, a + i * 0.3, 0.7))); if (n.textEl.textContent !== String(v)) n.textEl.textContent = String(v); }));
+      k.ar("سنين", 380, 1080, 34, "ttl").fade(a + 0.25); k.ar("شهور", 700, 1080, 34, "ttl").fade(a + 0.5);
       k.chip("Haft", "حبس", 540, 980, 30, { yellow: true }).pop("b1@الحبس");
-      c.kick("b1@الحبس", 0.07); st.flash("b1@الحبس", 0.25, 0.4);
-      // l'Approbation déchirée
-      const lic = c.sk((g, p) => licence(g, p), (t) => ({ cut: Math.round(E.out(prog(t, T("b1@ومنعوها") + 0.2, 0.5)) * 10) / 10 }), 540, 1250, 0.8).pop("b1@ومنعوها", 0.4);
-      k.prop("stamp", 560, 1220, 0.5, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.3, 12);
+      c.kick("b1@الحبس", 0.07);
+      c.sk((g, p) => licence(g, p), (t) => ({ cut: rnd(E.out(prog(t, T("b1@ومنعوها") + 0.15, 0.45)), 10) }), 540, 1250, 0.8).pop("b1@ومنعوها", 0.35);
+      k.prop("stamp", 540, 1220, 0.4, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.28, 12);
+    } });
+    st.scene({ from: "b2", in: "whip", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b2", s: 1.08, cx: 540, cy: 900 }, { at: "b2@الخطة", s: 1.12, cx: 540, cy: 880, d: 0.5 }]);
+      k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.45, "rtl");
+      c.put(`<path d="M540 1240 L540 900 M540 900 C 540 760, 420 700, 330 600 M540 900 C 540 760, 660 700, 750 600" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>`).wipe("b2@قرار", 0.5, "down");
+      k.chip("Plan: Hausgeburt", "الخطة: ولادة فالدار", 300, 540, 32).pop("b2@قرار+0.2");
+      k.chip("Krankenhaus", "السبيطار", 780, 540, 32, { yellow: true }).pop("b2@قرار+0.35");
+      k.title("✗", 780, 470, 90).pop("b2@تبدل").wobble("b2@تبدل+0.25", 0.5, 8);
+      pp(540, 1260, 0.62, (t) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.4) % 1) : PP.stand, { expr: "focused", facing: -1, blink: rnd(blinkAt(t, 2)) }); })
+        .on((t, s) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); s.x += lerp(0, -210, p); s.y += lerp(0, -560, p); s.s *= lerp(1, 0.55, p); });
     } });
 
-    /* 2 · une seule décision : ne pas changer de plan ------------------------------------------ */
-    st.scene({ from: "b2", in: "whip", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b2", s: 1.1, cx: 540, cy: 900 }, { at: "b2@الخطة", s: 1.25, cx: 540, cy: 860, d: 0.6 }]);
-      k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.5, "rtl");
-      // fourche : le plan (tout droit) / l'hôpital (à droite)
-      c.put(`<path d="M540 1240 L540 900 M540 900 C 540 760, 420 700, 330 600 M540 900 C 540 760, 660 700, 750 600" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>`).wipe("b2@قرار", 0.6, "down");
-      k.chip("Plan: Hausgeburt", "الخطة: ولادة فالدار", 300, 540, 32).pop("b2@قرار+0.3");
-      k.chip("Krankenhaus", "السبيطار", 780, 540, 32, { yellow: true }).pop("b2@قرار+0.45");
-      k.title("✗", 780, 470, 90).pop("b2@تبدل").wobble("b2@تبدل+0.3", 0.5, 8);
-      const dot = c.put(`<circle r="22" fill="#F8CE4E" stroke="${INK}" stroke-width="4"/>`, 540, 1220);
-      dot.on((t, s) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.4, 1.4)); const q = Math.min(1, p * 1.6); const x = p < 0.6 ? 540 : lerp(540, 330, (p - 0.6) / 0.4), y = p < 0.6 ? lerp(1220, 900, q) : lerp(900, 600, (p - 0.6) / 0.4); s.x += x - 540; s.y += y - 1220; });
-      c.kick("b2@الخطة", 0.06);
+    /* 2 · l'intro de l'auteur : sa photo (bord dessiné), Instagram, j'aime + s'abonner ---------------- */
+    st.scene({ from: "i1", in: "iris", inDur: 0.3, summary: false, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "i1", s: 1.1, cx: 540, cy: 760 }, { at: "i2", s: 1.0, cx: 540, cy: 860, d: 0.5 }]);
+      const ph = el("g"), C = U.ctx(ph, 88, false, 1);
+      const cp = el("clipPath", { id: "clipPortrait" }, el("defs", {}, ph)); el("circle", { cx: 0, cy: 0, r: 208 }, cp);
+      el("circle", { cx: 9, cy: 12, r: 236, fill: "#D2D2CB" }, ph);
+      U.shape(C, "ring", "M-236 0 A236 236 0 1 1 236 0 A236 236 0 1 1 -236 0", MAT.yellow, { sw: 4 });
+      el("image", { href: "assets/portrait.png", x: -210, y: -210, width: 420, height: 420, "clip-path": "url(#clipPortrait)", preserveAspectRatio: "xMidYMid slice" }, ph);
+      U.shape(C, "ring1", "M-209 0 A209 209 0 1 1 209 0 A209 209 0 1 1 -209 0", {}, { sw: 5.5 });
+      U.stroke(C, "dash", "M-150 -196 C -90 -232, 60 -236, 140 -200", { sw: 3, stroke: "#FFFFFF" });
+      // badge Instagram dessiné, accroché au cadre
+      const ig = el("g", { transform: "translate(160 160)" }, ph), I = U.ctx(ig, 89, false, 1);
+      el("path", { d: U.rrect(-46, -46, 92, 92, 26), fill: "#D2D2CB", transform: "translate(5 6)" }, ig);
+      U.shape(I, "sq", U.rrect(-46, -46, 92, 92, 26), MAT.white, { sw: 4.2 });
+      U.shape(I, "c", "M-19 0 A19 19 0 1 1 19 0 A19 19 0 1 1 -19 0", MAT.yellow, { sw: 4.2 });
+      el("circle", { cx: 25, cy: -25, r: 6, fill: INK }, ig);
+      c.node(ph).on((t, s) => { s.x += 540; s.y += 660; }).pop("i1", 0.4);
+      k.ribbon("Dr. Yassine", 540, 985, { size: 60 }).wipe("i1@ياسين", 0.35);
+      const hd = el("g"), H = U.ctx(hd, 90, false, 1);
+      U.shape(H, "sq", U.rrect(-21, -21, 42, 42, 12), MAT.white, { sw: 3 }); U.stroke(H, "c", "M-9 0 A9 9 0 1 1 9 0 A9 9 0 1 1 -9 0", { sw: 3 }); el("circle", { cx: 12, cy: -12, r: 3, fill: INK }, hd);
+      c.node(hd).on((t, s) => { s.x += 410; s.y += 1066; }).pop("i1@ياسين+0.15", 0.3);
+      c.text("@dr.aguilo", 560, 1082, 46, "de").fade("i1@ياسين+0.15", 0.3);
+      k.chip("Arzt in Deutschland", "طبيب فألمانيا", 540, 1150, 26).pop("i1@فألمانيا").hide("i2@حقيقية", 0.15);
+      k.chip("echte Fälle · deutsche Gerichte", "قصص حقيقية من المحاكم", 540, 1150, 26, { yellow: true }).pop("i2@حقيقية+0.15").hide("i3", 0.15);
+      // j'aime + s'abonner
+      const la = T("i3@j'aime"), fa = T("i3@abonne");
+      c.sk((g, p) => PE.props.heart(g, { size: 1.25, fill: p.on, beat: p.b }), (t) => ({ on: t >= la, b: rnd(Math.sin(Math.min(1, prog(t, la, 0.35)) * Math.PI), 10) }), 330, 1262, 1).pop("i3", 0.3);
+      c.text("j'aime", 330, 1338, 30, "de").pop("i3", 0.3);
+      c.sk((g, p) => {
+        while (g.firstChild) g.removeChild(g.firstChild);
+        const B = U.ctx(g, 91, false, 1);
+        el("path", { d: U.rrect(-150, -42, 300, 84, 22), fill: "#D2D2CB", transform: "translate(6 7)" }, g);
+        U.shape(B, "btn", U.rrect(-150, -42, 300, 84, 22), p.on ? MAT.yellow : MAT.white, { sw: 3.4 });
+        U.text(g, p.on ? "✓ abonné" : "+ s'abonner", 0, 14, 40, {});
+      }, (t) => ({ on: t >= fa }), 640, 1262, 1).pop("i3+0.1", 0.3);
+      c.kick(la, 0.05); c.kick(fa, 0.05);
     } });
 
-    /* 3 · la carte : Unna, 2008 ; 4 · le voyage depuis la Lettonie ------------------------------- */
-    st.scene({ from: "b3", in: "iris", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
+    /* 3 · la carte : Unna 2008 ; le voyage ; le couple ------------------------------------------- */
+    st.scene({ from: "b3", in: "iris", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
       const geo = drawDE(c, 560, 860, 66, "b3"), [ux, uy] = geo(7.69, 51.54);
-      c.camera([{ at: "b3", s: 1.05, cx: 560, cy: 880 }, { at: "b3@Unna", s: 1.3, cx: 520, cy: 860, d: 0.6 }, { at: "b4", s: 1, cx: 560, cy: 860, d: 0.6 }]);
+      c.camera([{ at: "b3", s: 1.05, cx: 560, cy: 880 }, { at: "b3@Unna", s: 1.3, cx: 520, cy: 860, d: 0.45 }]);
       k.chip("2008 · echter Fall", "قصة حقيقية", 560, 470, 32).pop("b3@حقيقية");
       pinAt(c, ux, uy, "b3@Unna");
-      k.chip("Unna", null, ux - 120, uy - 40, 32, { yellow: true }).pop("b3@Unna+0.3");
-      // voyage : de la Lettonie (hors carte, nord-est) jusqu'à Unna
-      const path = `M960 360 C 860 420, 760 520, ${ux + 40} ${uy - 60}`;
-      c.put(`<path d="${path}" fill="none" stroke="${INK}" stroke-width="5" stroke-dasharray="14 12" stroke-linecap="round"/>`).wipe("b4", 0.8, "rtl");
-      k.chip("Lettland", "لاتفيا", 800, 400, 30).pop("b4+0.45");
-      const cr = el("g"); car(cr); const P = el("path", { d: path }); const len = () => P.getTotalLength();
-      c.node(cr).on((t, s) => { const p = E.inOut(prog(t, T("b4") + 0.2, 1.4)); const pt = P.getPointAtLength(len() * p); s.x += pt.x; s.y += pt.y - 10; s.s *= 0.8; s.o *= t >= T("b4") ? 1 : 0; });
-      k.chip("Couple aus Deutschland", "زوج ألماني", 760, 1220, 28).pop("b4@Couple");
+      k.chip("Unna", null, ux - 120, uy - 40, 32, { yellow: true }).pop("b3@Unna+0.25");
+    } });
+    st.scene({ from: "b4", in: "whip", inDur: 0.25, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b4", s: 1.25, cx: 540, cy: 960 }, { at: "b4@بالقصد", s: 1.08, cx: 560, cy: 980, d: 0.5 }]);
+      k.ground(540, 1300, 760);
+      couple(c, 540, 1300, 1.15, (t) => ({ mode: "armAround", exprA: "love", exprB: "smile", heart: rnd(E.out(prog(t, T("b4") + 0.25, 0.7))), blink: rnd(blinkAt(t, 3)) }));
+      k.chip("Couple aus Deutschland", "زوج ألماني", 540, 520, 30).pop("b4@Couple");
+      const sc_ = el("g"); PE.props.suitcase(sc_, {}); c.node(sc_).on((t, s) => { s.x += 810; s.y += 1300; s.s *= 0.75; }).slide("b4@بالقصد", 300, 0, 0.35, "back");
+      k.chip("extra nach Unna", "جاو بالقصد لـUnna", 720, 690, 28, { yellow: true }).pop("b4@بالقصد");
     } });
 
-    /* 5 · la médecin qui est aussi sage-femme ------------------------------------------------------ */
-    st.scene({ from: "b5", in: "whip", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b5", s: 1.2, cx: 420, cy: 900 }, { at: "b5@Hebamme", s: 1.05, cx: 540, cy: 900, d: 0.6 }]);
+    /* 4 · la médecin qui est aussi sage-femme ----------------------------------------------------- */
+    st.scene({ from: "b5", in: "whip", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b5", s: 1.25, cx: 400, cy: 860 }, { at: "b5@Hebamme", s: 1.05, cx: 540, cy: 900, d: 0.5 }]);
       k.ground(540, 1300, 900);
-      const doc = k.person(330, 1300, 1.3, () => Object.assign(DOC({ expr: "calm" }), SC.Pose.stand));
-      const bg_ = el("g"); bag(bg_); c.node(bg_).on((t, s) => { const h = doc.out && doc.out.handL; if (h) { s.x += 330 + h[0] * 1.3; s.y += 1300 + h[1] * 1.3 + 40; } });
-      k.chip("Ärztin", "طبيبة", 330, 600, 34).pop("b5@طبيبة");
-      k.chip("+ Hebamme", "قابلة", 330, 720, 34, { yellow: true }).pop("b5@Hebamme");
-      const h = el("g"); building(h, { w: 260, h: 300, rows: 2, cols: 2, sign: "", seed: 9 }); c.node(h).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b5@كتولد", 0.5);
-      c.put(`<path d="M630 1000 L760 900 L890 1000" fill="none" stroke="${INK}" stroke-width="6"/>`).pop("b5@كتولد", 0.5);
+      const doc = pp(330, 1300, 1.25, (t) => Object.assign({}, DOCW, PP.stand, { expr: "calm", blink: rnd(blinkAt(t, 4)), look2: [0.3, 0] }));
+      const bg_ = el("g"); PE.props.doctorBag(bg_, {}); c.node(bg_).on((t, s) => { const h = doc.out && doc.out.handL; if (h) { s.x += 330 + h[0] * 1.25; s.y += 1300 + h[1] * 1.25 + 74; s.s *= 0.5; } });
+      k.chip("Ärztin", "طبيبة", 330, 455, 34).pop("b5@طبيبة");
+      k.chip("+ Hebamme", "قابلة", 330, 575, 34, { yellow: true }).pop("b5@Hebamme");
+      const h = el("g"); building(h, { w: 260, h: 300, rows: 2, cols: 2, sign: "", seed: 9 }); c.node(h).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b5@كتولد", 0.4);
+      c.put(`<path d="M630 1000 L760 900 L890 1000" fill="none" stroke="${INK}" stroke-width="6"/>`).pop("b5@كتولد", 0.4);
       k.chip("Hausgeburt", "ولادة فالدار", 760, 820, 30).pop("b5@الدار");
     } });
 
-    /* 6 · le bébé en siège ; 7 · la règle : à l'hôpital ------------------------------------------- */
-    st.scene({ from: "b6", in: "zoom", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b6", s: 1.15, cx: 540, cy: 860 }, { at: "b7", s: 1, cx: 540, cy: 900, d: 0.6 }]);
-      c.sk((g, p) => uterusBreech(g, p), (t) => ({ arrow: t >= T("b6@الراس") }), 540, 820, 1.1).pop("b6", 0.5);
+    /* 5 · le bébé en siège ; la règle : à l'hôpital ------------------------------------------------ */
+    st.scene({ from: "b6", in: "zoom", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b6", s: 1.15, cx: 540, cy: 860 }, { at: "b7", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+      c.sk((g, p) => uterusBreech(g, p), (t) => ({ arrow: t >= T("b6@الراس") }), 540, 820, 1.1).pop("b6", 0.45);
       k.chip("Beckenlage", "البيبي جالس : الراس ماشي لتحت", 540, 470, 36, { yellow: true }).pop("b6@الوضعية");
-      k.title("?", 760, 700, 80).pop("b6@الراس").wobble("b6@مقبل", 0.5, 10);
-      // la règle : à l'hôpital
       const hs = el("g"); building(hs, { w: 300, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 });
-      c.node(hs).on((t, s) => { s.x += 760; s.y += 1300; s.s *= 0.85; }).slide("b7", 500, 0, 0.5, "back");
+      c.node(hs).on((t, s) => { s.x += 760; s.y += 1300; s.s *= 0.85; }).slide("b7", 500, 0, 0.45, "back");
       k.card(100, 1035, 420, 200, { seed: 71 }).pop("b7@قواعد");
       c.text("Leitlinie:", 310, 1100, 34, "de").pop("b7@قواعد");
-      c.text("Beckenlage → Klinik", 310, 1150, 34, "de").pop("b7@قواعد+0.15");
-      c.text("الولادة خاصها تكون فالسبيطار", 310, 1200, 28, "ar strong").wipe("b7@السبيطار", 0.6, "rtl");
+      c.text("Beckenlage → Klinik", 310, 1150, 34, "de").pop("b7@قواعد+0.12");
+      c.text("الولادة خاصها تكون فالسبيطار", 310, 1200, 28, "ar strong").wipe("b7@السبيطار", 0.5, "rtl");
     } });
 
-    /* 8 · l'hôtel près du cabinet ; 9 · « si problème → hôpital » ---------------------------------- */
-    st.scene({ from: "b8", in: "slideLeft", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b8", s: 1, cx: 540, cy: 900 }, { at: "b8@Hotel", s: 1.12, cx: 400, cy: 900, d: 0.5 }, { at: "b8@العيادة", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+    /* 6 · l'hôtel près du cabinet ; ils arrivent main dans la main ; leur promesse ------------------ */
+    st.scene({ from: "b8", in: "slideLeft", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b8", s: 1, cx: 540, cy: 900 }, { at: "b8@Hotel", s: 1.1, cx: 420, cy: 900, d: 0.45 }, { at: "b8@العيادة", s: 1, cx: 540, cy: 900, d: 0.45 }]);
       k.ground(540, 1300, 1000);
-      const ho = el("g"); building(ho, { w: 380, h: 560, rows: 4, cols: 3, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 2 && c2 === 1 }); c.node(ho).on((t, s) => { s.x += 330; s.y += 1300; }).pop("b8@Hotel", 0.5);
-      const pr = el("g"); building(pr, { w: 260, h: 300, rows: 2, cols: 2, sign: "PRAXIS", signMat: MAT.white, seed: 5 }); c.node(pr).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b8@العيادة", 0.5);
-      c.put(`<path d="M540 1180 L640 1180 M624 1166 L640 1180 L624 1194 M540 1180 M556 1166 L540 1180 L556 1194" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`).pop("b8@قريب");
+      const ho = el("g"); building(ho, { w: 380, h: 560, rows: 4, cols: 3, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 2 && c2 === 1 }); c.node(ho).on((t, s) => { s.x += 330; s.y += 1300; }).pop("b8@Hotel", 0.45);
+      const pr = el("g"); building(pr, { w: 260, h: 300, rows: 2, cols: 2, sign: "PRAXIS", signMat: MAT.white, seed: 5 }); c.node(pr).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b8@العيادة", 0.45);
       k.chip("قريب", null, 590, 1120, 26, { yellow: true }).pop("b8@قريب");
-      // le couple arrive avec la valise
-      const mom = k.walker({ at: "b8@كراو", dur: 1.3, x0: -120, x1: 290, y: 1300, s: 1.0, outfit: "mother", seed: 32 });
-      pregnant(c, mom, 0, 0, 1.0).on((t, s) => { s.x += lerp(-120, 290, clamp((t - T("b8@كراو")) / 1.3, 0, 1)); s.y += 1300; });
-      k.walker({ at: "b8@كراو+0.2", dur: 1.3, x0: -200, x1: 190, y: 1300, s: 1.05, outfit: "civil", seed: 31 });
-      const sc_ = el("g"); suitcase(sc_); c.node(sc_).on((t, s) => { s.x += lerp(-160, 120, clamp((t - T("b8@كراو") - 0.2) / 1.3, 0, 1)); s.y += 1300; });
-      // la promesse des parents
-      k.card(110, 370, 860, 300, { seed: 91 }).pop("b9@وقالوا", 0.4);
-      k.ar("بغينا ولادة طبيعية…", 540, 455, 40, "ttl").wipe("b9@طبيعية", 0.6, "rtl");
-      k.ar("ولكن إلا كان مشكل ← السبيطار + césarienne", 540, 545, 30, "ar strong").wipe("b9@مشكل", 0.8, "rtl");
+      const a = T("b8@كراو"), d = 1.3;
+      const xc = (t) => lerp(-150, 255, E.out(prog(t, a, d)));
+      couple(c, 0, 1300, 0.78, (t) => ({ mode: "holdHands", exprA: t >= T("b9@طبيعية") ? "love" : "smile", exprB: "smile", heart: rnd(E.out(prog(t, T("b9@طبيعية"), 0.6)), 10), blink: rnd(blinkAt(t, 5)) }))
+        .on((t, s) => { const p = prog(t, a, d); s.x += xc(t); s.y += p > 0 && p < 1 ? -Math.abs(Math.sin(t * 9)) * 6 : 0; });
+      const sc_ = el("g"); PE.props.suitcase(sc_, {}); c.node(sc_).on((t, s) => { s.x += xc(t) + 185; s.y += 1300; s.s *= 0.62; });
+      // leur promesse
+      k.card(110, 370, 860, 300, { seed: 91 }).pop("b9@وقالوا", 0.35);
+      k.ar("بغينا ولادة طبيعية…", 540, 455, 40, "ttl").wipe("b9@طبيعية", 0.5, "rtl");
+      k.ar("ولكن إلا كان مشكل ← السبيطار + césarienne", 540, 545, 30, "ar strong").wipe("b9@مشكل", 0.7, "rtl");
       k.chip("Plan B: Krankenhaus", "الخطة ب: السبيطار", 540, 605, 26, { yellow: true }).pop("b9@césarienne");
     } });
 
-    /* 10–12 · la chambre d'hôtel : de 5 h du matin à la nuit ---------------------------------------- */
-    st.scene({ from: "b10", in: "fade", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b10", s: 1.05, cx: 520, cy: 940 }, { at: "b11", s: 1.02, cx: 580, cy: 940, d: 0.6 }, { at: "b12", s: 1.04, cx: 520, cy: 960, d: 0.7 }]);
+    /* 7 · la chambre d'hôtel : 5 h → la nuit ; douleur ; elle arrive 12 h plus tard ------------------ */
+    st.scene({ from: "b10", in: "fade", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b10", s: 1.05, cx: 480, cy: 940 }, { at: "b11", s: 1.0, cx: 520, cy: 940, d: 0.5 }, { at: "b12", s: 1.02, cx: 510, cy: 960, d: 0.6 }]);
       const a = T("b10"), arr = T("b11@زازت") + 0.4, end = T("b12@end") + 0.2;
       const P = (t) => t < arr ? 0.7 * E.inOut(prog(t, a, arr - a)) : 0.7 + 0.12 * prog(t, arr, end - arr);
-      c.sk((g, p) => windowSky(g, p), (t) => ({ p: Math.round(P(t) * 40) / 40 }), 540, 810, 0.9);
+      c.sk((g, p) => windowSky(g, p), (t) => ({ p: rnd(P(t), 40) }), 540, 800, 0.9);
+      c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 48 }), (t) => { const h = t < arr ? lerp(5, 17, E.inOut(prog(t, a, arr - a))) : lerp(17, 20, prog(t, arr, end - arr)); return { tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] }; }, 860, 620, 1);
       k.ground(540, 1300, 1000);
-      k.cast("bed", { x: 110, y: 1300, w: 460 });
-      const mom = k.person(440, 1300, 1.15, (t) => Object.assign({ outfit: "mother", seed: 32 }, t > T("b12") ? SC.Pose.handsOnHead : SC.Pose.stand));
-      pregnant(c, mom, 440, 1300, 1.15);
-      // ondes de douleur (contractions)
-      c.put(`<path d="M330 820 q 14 -16 28 0 t 28 0 t 28 0 M490 820 q 14 -16 28 0 t 28 0 t 28 0" fill="none" stroke="#C9625A" stroke-width="4"/>`).fade("b10@الوجيعات").float(6, 0.7);
-      k.person(220, 1300, 1.15, () => Object.assign({ outfit: "civil", seed: 31, facing: 1 }, SC.Pose.stand));
-      // l'appel au téléphone
-      k.chip("📞 Ärztin", "عيطات للطبيبة", 540, 440, 28, { parent: c.hud }).pop("b10@عيطات").hide("b11", 0.25);
-      // elle arrive ~12 h plus tard
-      k.walker({ at: arr - 0.2, dur: 0.9, x0: 1150, x1: 740, y: 1300, s: 1.2, outfit: "coat", seed: 61, extra: { hair: "bun", badge: "Dr" }, after: () => Object.assign({}, SC.Pose.stand, { facing: -1, hair: "bun", badge: "Dr", expr: "calm" }) });
-      k.chip("~ 12 Stunden später", "تقريبا 12 ساعة من بعد", 540, 440, 28, { yellow: true, parent: c.hud }).pop("b11@ساعة").hide("b12@وقفات", 0.25);
-      k.chip("Geburtsstillstand", "الولادة وقفات", 540, 440, 30, { parent: c.hud }).pop("b12@وقفات").wobble("b12@وقفات+0.4", 0.5, 6);
+      const ns = el("g"); PE.props.nightstand(ns, { on: true }); c.node(ns).on((t, s) => { s.x += 165; s.y += 1300; s.s *= 0.9; });
+      c.sk((g, p) => PE.props.phone(g, { ring: p.r, on: true }), (t) => ({ r: t >= T("b10@عيطات") - 0.2 && t < T("b11") && Math.floor(t / 0.18) % 2 === 0 }), 145, 1146, 0.55, 8);
+      const bed = el("g"); const bo = PE.props.hotelBed(bed, { w: 400 }); c.node(bed).on((t, s) => { s.x += 425; s.y += 1300; });
+      const seat = 425 + bo.seat[0];
+      pp(seat - 120, 1297, 1.0, (t) => Object.assign({}, MAN, PP.sitEdge, { facing: 1, expr: "worried", blink: rnd(blinkAt(t, 7)), look2: [0.7, 0.2], headTilt: 6 }));
+      pp(seat, 1297, 1.0, (t) => Object.assign({}, WOMAN, PP.sitEdge34, { facing: 1, expr: Math.floor(t / 1.6) % 2 ? "pain" : "worried", sweat: true, blink: rnd(blinkAt(t, 6)), armR: [10, 62] }));
+      k.chip("📞 Ärztin", "عيطات للطبيبة", 540, 440, 28, { parent: c.hud }).pop("b10@عيطات").hide("b11", 0.2);
+      pp(0, 0, 1.05, (t) => { const p = prog(t, arr - 0.2, 0.9); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.3) % 1) : PP.stand, { facing: -1, expr: "calm", blink: rnd(blinkAt(t, 8)) }); })
+        .on((t, s) => { s.x += lerp(1160, 735, E.out(prog(t, arr - 0.2, 0.9))); s.y += 1300; });
+      k.chip("~ 12 Stunden später", "تقريبا 12 ساعة من بعد", 540, 440, 28, { yellow: true, parent: c.hud }).pop("b11@ساعة").hide("b12@وقفات", 0.2);
+      k.chip("Geburtsstillstand", "الولادة وقفات", 540, 440, 30, { parent: c.hud }).pop("b12@وقفات").wobble("b12@وقفات+0.35", 0.45, 6);
     } });
 
-    /* 13 · le méconium, deux fois ; 14 · l'hôpital était tout près -------------------------------- */
+    /* 8 · le méconium, deux fois ; l'hôpital était tout près ---------------------------------------- */
     st.scene({ from: "b13", in: "cut", inDur: 0, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b13", s: 1.1, cx: 540, cy: 820 }, { at: "b14", s: 1, cx: 540, cy: 900, d: 0.6 }]);
-      const w1 = el("g"); warn(w1, { n: 1 }); c.node(w1).on((t, s) => { s.x += 330; s.y += 620; }).pop("b13@جوج", 0.4).pulse("b13@جوج+0.4", 0.6, 0.08, 2);
-      const w2 = el("g"); warn(w2, { n: 2 }); c.node(w2).on((t, s) => { s.x += 750; s.y += 620; }).pop("b13@Mekonium", 0.4).pulse("b13@Mekonium+0.4", 0.6, 0.08, 2);
-      k.chip("Mekonium", "أول خروج ديال البيبي فالما", 540, 790, 34, { yellow: true }).pop("b13@Mekonium").hide("b14", 0.3);
-      k.chip("O₂ ↓", "الأكسجين ما كيوصلش", 540, 930, 40).pop("b13@الأكسجين").hide("b14", 0.3);
-      st.vignette("b13@علامة", 1.6, 2);
-      // l'hôpital tout proche, mais elle continue
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b13", s: 1.08, cx: 540, cy: 820 }, { at: "b14", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+      // gros plans : elle a mal, il a peur
+      c.sk((g, p) => PE.head(g, p), (t) => Object.assign({}, WOMAN, { expr: "pain", sweat: true, blink: rnd(blinkAt(t, 9)) }), 330, 690, 1.25).pop("b13", 0.35).hide("b14", 0.25);
+      c.sk((g, p) => PE.head(g, p), (t) => Object.assign({}, MAN, { expr: "shock", blink: rnd(blinkAt(t, 10)), look2: [-0.5, 0] }), 750, 690, 1.25).pop("b13+0.15", 0.35).hide("b14", 0.25);
+      const w1 = el("g"); warn(w1, { n: 1 }); c.node(w1).on((t, s) => { s.x += 430; s.y += 960; }).pop("b13@جوج", 0.35).hide("b14", 0.25);
+      const w2 = el("g"); warn(w2, { n: 2 }); c.node(w2).on((t, s) => { s.x += 650; s.y += 960; }).pop("b13@Mekonium", 0.35).hide("b14", 0.25);
+      k.chip("Mekonium", "أول خروج ديال البيبي فالما", 540, 1100, 30, { yellow: true }).pop("b13@Mekonium").hide("b14", 0.25);
+      k.chip("O₂ ↓", "الأكسجين ما كيوصلش", 540, 1220, 36).pop("b13@الأكسجين").hide("b14", 0.25);
+      st.vignette("b13@علامة", 1.4, 2);
       const hs = el("g"); building(hs, { w: 300, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 });
-      c.node(hs).on((t, s) => { s.x += 770; s.y += 1300; s.s *= 0.8; }).pop("b14", 0.4);
-      const ho = el("g"); building(ho, { w: 260, h: 380, rows: 3, cols: 2, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 1 && c2 === 0 }); c.node(ho).on((t, s) => { s.x += 280; s.y += 1300; s.s *= 0.8; }).pop("b14", 0.4);
+      c.node(hs).on((t, s) => { s.x += 770; s.y += 1300; s.s *= 0.8; }).pop("b14", 0.35);
+      const ho = el("g"); building(ho, { w: 260, h: 380, rows: 3, cols: 2, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 1 && c2 === 0 }); c.node(ho).on((t, s) => { s.x += 280; s.y += 1300; s.s *= 0.8; }).pop("b14", 0.35);
       k.ground(540, 1300, 1000);
-      c.put(`<path d="M420 1150 L640 1150 M620 1134 L640 1150 L620 1166" fill="none" stroke="${INK}" stroke-width="6" stroke-dasharray="16 10" stroke-linecap="round"/>`).wipe("b14@قريب", 0.5);
+      c.put(`<path d="M420 1150 L640 1150 M620 1134 L640 1150 L620 1166" fill="none" stroke="${INK}" stroke-width="6" stroke-dasharray="16 10" stroke-linecap="round"/>`).wipe("b14@قريب", 0.45);
       k.chip("قريب", null, 530, 1090, 26, { yellow: true }).pop("b14@قريب");
-      k.title("✗", 530, 1160, 110).pop("b14@صيفتهاش").wobble("b14@صيفتهاش+0.3", 0.5, 8);
+      k.title("✗", 530, 1160, 110).pop("b14@صيفتهاش").wobble("b14@صيفتهاش+0.25", 0.45, 8);
+      pp(300, 1300, 0.66, (t) => Object.assign({}, DOCW, PP.stand, { facing: -1, expr: "focused", blink: rnd(blinkAt(t, 11)) })).pop("b14@مكملة", 0.35);
     } });
 
-    /* 15 · la naissance… puis le silence (aucune voix) ---------------------------------------------- */
-    st.scene({ from: "b15", in: "fade", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b15", s: 1, cx: 540, cy: 880 }, { at: "b15@زادت", s: 1.08, cx: 540, cy: 860, d: 3, ease: "lin" }]);
-      c.sk((g, p) => windowSky(g, p), () => ({ p: 1 }), 540, 640, 1);
-      c.sk((g, p) => K.clock(g, { x: 0, y: 0, r: 70, time: "22:00", label: false }), () => ({}), 860, 520, 1).pop("b15@تمنطاشر");
+    /* 9 · la naissance… puis le silence : ils s'enlacent, la couverture vide, la bougie --------------- */
+    st.scene({ from: "b15", in: "fade", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b15", s: 1, cx: 540, cy: 880 }, { at: "b15@زادت", s: 1.1, cx: 540, cy: 900, d: 3.4, ease: "lin" }]);
+      c.sk((g, p) => windowSky(g, p), () => ({ p: 1 }), 520, 740, 0.7);
+      c.sk((g, p) => PE.props.clockWall(g, { time: [22, 0], r: 48 }), () => ({}), 820, 640, 1).pop("b15@تمنطاشر");
       k.ground(540, 1300, 1000);
-      k.cast("bed", { x: 110, y: 1300, w: 460 });
-      k.person(400, 1300, 1.15, () => Object.assign({ outfit: "mother", seed: 32, facing: 1 }, SC.Pose.stand, { headTilt: 10 }));
-      k.person(560, 1300, 1.2, () => Object.assign({ outfit: "civil", seed: 31, facing: -1 }, SC.Pose.handsOnHead)).fade("b15@ولكن", 0.6);
-      // la petite couverture, posée sur le lit
-      c.put(`<g><ellipse cx="0" cy="0" rx="62" ry="26" fill="#F3E7C9" stroke="${INK}" stroke-width="3"/><path d="M-40 -6 q 40 -18 80 0" fill="none" stroke="#C9B98F" stroke-width="2"/></g>`, 250, 1160).fade("b15@زادت", 0.6);
-      const quiet = T("b15@end") + 0.6;
-      k.ar("البنت ما عاشتش", 540, 430, 66, "ttl", c.hud).wipe(quiet, 0.9, "rtl").hide("b16", 0.2);
-      c.tick((t) => { const g = E.inOut(prog(t, quiet, 1.4)); c.layer.style.filter = g > 0 ? `grayscale(${g.toFixed(2)})` : ""; });
+      const ns = el("g"); PE.props.nightstand(ns, { on: false }); c.node(ns).on((t, s) => { s.x += 170; s.y += 1300; s.s *= 0.9; });
+      c.sk((g, p) => PE.props.candle(g, { lit: true, flicker: p.f, h: 70 }), (t) => ({ f: rnd((Math.sin(t * 7) + 1) / 2, 5) }), 170, 1196, 0.8);
+      const bed = el("g"); PE.props.hotelBed(bed, { w: 380 }); c.node(bed).on((t, s) => { s.x += 420; s.y += 1300; });
+      const bl = el("g"); PE.props.babyBlanket(bl, { w: 110 }); c.node(bl).on((t, s) => { s.x += 440; s.y += 1300 - 92; }).fade("b15@زادت", 0.5);
+      const quiet = T("b15@end") + 0.5;
+      couple(c, 715, 1300, 0.9, (t) => t < quiet ? { mode: "lookEachOther", exprA: "worried", exprB: "worried", heart: 0, blink: rnd(blinkAt(t, 12)) } : { mode: "hug", exprA: "cry", exprB: "sad", tears: rnd(Math.min(1, prog(t, quiet, 1.2)), 10), heart: 0 });
+      k.ar("البنت ما عاشتش", 540, 430, 66, "ttl", c.hud).wipe(quiet + 0.2, 0.8, "rtl").hide("b16", 0.2);
+      c.tick((t) => { const g = E.inOut(prog(t, quiet + 0.4, 1.4)); c.layer.style.filter = g > 0 ? `grayscale(${(g * 0.85).toFixed(2)})` : ""; });
     } });
 
-    /* 16 · l'expert : 4 heures plus tôt → césarienne → bébé en bonne santé --------------------------- */
-    st.scene({ from: "b16", in: "fade", inDur: 0.5, build(c) {
-      const k = kit(c); k.bg();
+    /* 10 · l'expert : 4 heures plus tôt → hôpital → césarienne → bébé en bonne santé ---------------- */
+    st.scene({ from: "b16", in: "fade", inDur: 0.4, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b16", s: 1, cx: 540, cy: 900 }]);
-      k.chip("Gutachter", "الخبير", 540, 470, 34).pop("b16@الخبير");
-      // chemin « fantôme » : 4 h plus tôt → hôpital → césarienne → bébé ✓
-      [["− 4 h", "ربعة د السوايع قبل", 210, "b16@ربعة"], ["Klinik", "السبيطار", 430, "b16@للسبيطار"], ["Kaiserschnitt", "césarienne", 650, "b16@césarienne"], ["✓", "بصحتها", 870, "b16@بصحتها"]].forEach(([d, a, x, at], i) => {
-        k.card(x - 95, 640, 190, 150, { seed: 140 + i, yellow: i === 3 }).pop(at, 0.4);
-        c.text(d, x, 725, i === 3 ? 70 : (d.length > 8 ? 24 : 32), "de").pop(at);
-        c.text(a, x, 840, 24, "ar strong").wipe(at + "+0.1", 0.5, "rtl");
-        if (i < 3) c.put(`<path d="M${x + 100} 715 L${x + 122} 715 M${x + 112} 705 L${x + 122} 715 L${x + 112} 725" stroke="${INK}" stroke-width="4" fill="none"/>`).pop(at + "+0.2");
+      pp(215, 1300, 0.95, (t) => Object.assign({}, EXPERT, PP.point, { facing: 1, expr: "focused", talk: rnd(talkAt(t, T("b16"), T("b16@end")), 10), blink: rnd(blinkAt(t, 13)) }));
+      k.chip("Gutachter", "الخبير", 225, 760, 30).pop("b16@الخبير");
+      [["− 4 h", "ربعة د السوايع قبل", 390, "b16@ربعة"], ["Klinik", "السبيطار", 560, "b16@للسبيطار"], ["Kaiserschnitt", "césarienne", 730, "b16@césarienne"]].forEach(([d, a, x, at], i) => {
+        k.card(x - 78, 520, 156, 130, { seed: 140 + i }).pop(at, 0.35);
+        c.text(d, x, 595, d.length > 8 ? 22 : 32, "de").pop(at);
+        c.text(a, x, 690, 22, "ar strong").wipe(at + "+0.1", 0.4, "rtl");
       });
-      const bb = el("g"); SC.baby(bb, { pose: "lying", state: "normal", eyes: "closed" }); c.node(bb).on((t, s) => { s.x += 540; s.y += 1080; s.s *= 1.1; }).pop("b16@بصحتها", 0.5).float(4, 2.4);
-      c.put(`<ellipse cx="540" cy="1090" rx="170" ry="70" fill="none" stroke="#2F8F4E" stroke-width="5" stroke-dasharray="12 10"/>`).fade("b16@بصحتها");
+      const bb = el("g"); PE.baby(bb, { state: "sleep" }); c.node(bb).on((t, s) => { s.x += 640; s.y += 1020; s.s *= 1.15; }).pop("b16@بصحتها", 0.45).float(4, 2.4);
+      c.put(`<ellipse cx="640" cy="1030" rx="170" ry="80" fill="none" stroke="#2F8F4E" stroke-width="5" stroke-dasharray="12 10"/>`).fade("b16@بصحتها");
+      k.title("✓", 640, 900, 80).pop("b16@بصحتها+0.2");
     } });
 
-    /* 17–19 · le tribunal de Dortmund : pas « négligence », mais Totschlag --------------------------- */
-    st.scene({ from: "b17", in: "wipe", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b17", s: 1, cx: 540, cy: 900 }, { at: "b19", s: 1.06, cx: 540, cy: 880, d: 0.6 }]);
+    /* 11 · Dortmund : pas « négligence », mais Totschlag --------------------------------------------- */
+    st.scene({ from: "b17", in: "wipe", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b17", s: 1, cx: 540, cy: 900 }]);
       const strike = T("b18@حكمات");
-      k.person(540, 1300, 1.3, () => Object.assign({ outfit: "robe", seed: 17, expr: "focused" }, SC.Pose.standDock));
-      k.prop("dock", 540, 1312, 1.3, () => ({ w: 600, h: 180, seed: 44 }));
-      k.person(540, 1300, 1.3, () => Object.assign({ outfit: "robe", seed: 17, only: "arms" }, SC.Pose.standDock));
-      c.sk((g, p) => K.gavel(g, { x: 0, y: 0, rot: p.ang - 20, scale: 1.1 }), (t) => ({ ang: Math.round(t < strike - 0.4 ? 0 : t < strike ? -35 * E.out(prog(t, strike - 0.4, 0.3)) : -35 * (1 - E.in(prog(t, strike, 0.12)))) }), 820, 1040, 1);
+      const jp = (t) => Object.assign({}, JUDGE, PP.stand, { expr: t < strike ? "focused" : "angry", armL: [-24, 70], armR: [24, -70], blink: rnd(blinkAt(t, 14)) });
+      pp(540, 1300, 1.25, (t) => Object.assign(jp(t), { hide: ["armL", "armR"] }));
+      k.prop("dock", 540, 1312, 1.3, () => ({ w: 520, h: 180, seed: 44 }));
+      pp(540, 1300, 1.25, (t) => Object.assign(jp(t), { only: "arms" }));
+      c.sk((g, p) => K.gavel(g, { x: 0, y: 0, rot: p.ang - 20, scale: 1.1 }), (t) => ({ ang: Math.round(t < strike - 0.4 ? 0 : t < strike ? -35 * E.out(prog(t, strike - 0.4, 0.3)) : -35 * (1 - E.in(prog(t, strike, 0.12)))) }), 730, 1050, 1);
       c.shake(strike + 0.12, 10, 0.4); c.kick(strike + 0.12, 0.07);
-      k.chip("LG Dortmund · 2014", "المحكمة ديال Dortmund", 540, 420, 34).pop("b17@Dortmund").hide("b19@عارفة", 0.25);
-      k.card(110, 520, 390, 170, { seed: 171 }).pop("b17@fahrlässige");
-      c.text("fahrlässige Tötung", 305, 600, 32, "de").pop("b17@fahrlässige");
-      k.ar("قتل بالإهمال", 305, 650, 26, "ar strong").wipe("b17@fahrlässige+0.2", 0.5, "rtl");
-      c.put(`<path d="M130 540 L480 670 M480 540 L130 670" stroke="#C9625A" stroke-width="9" stroke-linecap="round"/>`).wipe("b17@fahrlässige+0.7", 0.4);
-      k.card(580, 520, 390, 170, { seed: 172, yellow: true }).pop(strike);
-      c.text("Totschlag", 775, 600, 44, "de").pop(strike);
-      k.ar("قتل عمد (قبلات الخطر)", 775, 650, 26, "ar strong").wipe(strike + 0.2, 0.5, "rtl");
+      k.chip("LG Dortmund · 2014", "المحكمة ديال Dortmund", 540, 420, 34).pop("b17@Dortmund").hide("b19@عارفة", 0.2);
+      k.card(135, 520, 345, 170, { seed: 171 }).pop("b17@fahrlässige");
+      c.text("fahrlässige Tötung", 307, 600, 30, "de").pop("b17@fahrlässige");
+      c.text("قتل بالإهمال", 307, 655, 26, "ar strong").wipe("b17@fahrlässige+0.15", 0.4, "rtl");
+      c.put(`<path d="M150 540 L465 670 M465 540 L150 670" stroke="#C9625A" stroke-width="9" stroke-linecap="round"/>`).wipe("b17@fahrlässige+0.6", 0.35);
+      k.card(600, 520, 345, 170, { seed: 172, yellow: true }).pop(strike);
+      c.text("Totschlag", 772, 600, 44, "de").pop(strike);
+      c.text("قتل عمد (قبلات الخطر)", 772, 655, 26, "ar strong").wipe(strike + 0.15, 0.4, "rtl");
       k.chip("sie kannte die Gefahr", "كانت عارفة بالخطر", 540, 420, 30, { yellow: true }).pop("b19@عارفة+0.1");
     } });
 
-    /* 20–21 · la peine ; 22 · le BGH : définitif ------------------------------------------------------ */
-    st.scene({ from: "b20", in: "zoom", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b20", s: 1.1, cx: 540, cy: 760 }, { at: "b22", s: 1, cx: 540, cy: 900, d: 0.6 }]);
-      k.card(140, 470, 800, 200, { seed: 201 }).pop("b20", 0.4);
+    /* 12 · la peine ; le BGH : définitif ----------------------------------------------------------------- */
+    st.scene({ from: "b20", in: "zoom", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b20", s: 1.04, cx: 540, cy: 780 }, { at: "b22", s: 1, cx: 540, cy: 900, d: 0.5 }]);
+      k.card(140, 470, 800, 200, { seed: 201 }).pop("b20", 0.35);
       c.text("6 Jahre 9 Monate Haft", 540, 565, 56, "de").pop("b20+0.1");
-      c.text("ست سنين وتسع شهور ديال الحبس", 540, 630, 32, "ar strong").wipe("b20+0.3", 0.6, "rtl");
+      c.text("ست سنين وتسع شهور ديال الحبس", 540, 630, 32, "ar strong").wipe("b20+0.25", 0.5, "rtl");
       k.chip("lebenslanges Berufsverbot", "ممنوعة تخدم طول حياتها", 540, 760, 32, { yellow: true }).pop("b20@ومنعوها");
       k.chip("≈ 50 000 € an die Eltern", "تعويض للوالدين", 540, 900, 32).pop("b21@خمسين");
-      // le BGH à Karlsruhe
       const geo = drawDE(c, 340, 1150, 30, "b22"), [kx, ky] = geo(8.40, 49.01);
       pinAt(c, kx, ky, "b22@BGH");
       k.chip("BGH · Karlsruhe · 2016", "أعلى محكمة فألمانيا", 690, 1080, 24).pop("b22@BGH");
-      k.prop("stamp", 690, 1230, 0.5, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.3, 10);
+      k.prop("stamp", 690, 1230, 0.5, () => ({ text: "RECHTSKRÄFTIG", size: 54, rot: -8 })).slam("b22@نهائي", 0.28, 10);
     } });
 
-    /* 23 · ce que le tribunal lui reproche ------------------------------------------------------------- */
-    st.scene({ from: "b23", in: "slideUp", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
-      c.camera([{ at: "b23", s: 1.15, cx: 540, cy: 860 }, { at: "b23@وقفي", s: 1.05, cx: 540, cy: 900, d: 0.4 }]);
-      const ho = el("g"); building(ho, { w: 280, h: 360, rows: 3, cols: 2, sign: "HOTEL", seed: 3 }); c.node(ho).on((t, s) => { s.x += 300; s.y += 960; s.s *= 0.9; }).pop("b23", 0.4);
-      k.title("✓", 300, 520, 90).pop("b23@Hotel");
-      k.ar("ماشي هادي", 300, 1030, 30, "ar strong").wipe("b23@لامتش", 0.5, "rtl");
-      const hs = el("g"); building(hs, { w: 280, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 }); c.node(hs).on((t, s) => { s.x += 780; s.y += 960; s.s *= 0.9; }).pop("b23@لامتها", 0.4);
-      k.title("✗", 780, 560, 90).pop("b23@صيفتهاش");
-      k.ar("ما صيفطاتهاش", 780, 1030, 30, "ar strong").wipe("b23@صيفتهاش", 0.5, "rtl");
-      k.prop("stamp", 540, 1180, 0.8, () => ({ text: "STOP", size: 90, rot: -6 })).slam("b23@وقفي", 0.3, 12);
+    /* 13 · ce que le tribunal lui reproche ---------------------------------------------------------------- */
+    st.scene({ from: "b23", in: "slideUp", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
+      c.camera([{ at: "b23", s: 1.08, cx: 540, cy: 860 }, { at: "b23@وقفي", s: 1.0, cx: 540, cy: 900, d: 0.35 }]);
+      const ho = el("g"); building(ho, { w: 280, h: 360, rows: 3, cols: 2, sign: "HOTEL", seed: 3 }); c.node(ho).on((t, s) => { s.x += 330; s.y += 960; s.s *= 0.9; }).pop("b23", 0.35);
+      k.title("✓", 330, 520, 90).pop("b23@Hotel");
+      c.text("ماشي هادي", 330, 1040, 32, "ar strong").wipe("b23@لامتش", 0.4, "rtl");
+      const hs = el("g"); building(hs, { w: 280, h: 330, rows: 2, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 21 }); c.node(hs).on((t, s) => { s.x += 722; s.y += 960; s.s *= 0.9; }).pop("b23@لامتها", 0.35);
+      k.title("✗", 722, 560, 90).pop("b23@صيفتهاش");
+      c.text("ما صيفطاتهاش", 722, 1040, 32, "ar strong").wipe("b23@صيفتهاش", 0.4, "rtl");
+      k.prop("stamp", 540, 1180, 0.8, () => ({ text: "STOP", size: 90, rot: -6 })).slam("b23@وقفي", 0.28, 12);
     } });
 
-    /* 24–26 · la règle : le patient pèse plus que le plan ---------------------------------------------- */
-    st.scene({ from: "b24", in: "fade", inDur: 0.35, build(c) {
-      const k = kit(c); k.bg();
+    /* 14 · la règle : le patient pèse plus que le plan ------------------------------------------------------- */
+    st.scene({ from: "b24", in: "fade", inDur: 0.3, build(c) {
+      const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b24", s: 1, cx: 540, cy: 860 }]);
-      k.ar("القاعدة", 540, 420, 56, "ttl", c.hud).wipe("b24", 0.5, "rtl");
-      c.sk((g, p) => scale(g, p), (t) => ({ left: "الخطة", right: "المريض", tilt: Math.round(14 * E.out(prog(t, T("b24@أهم"), 1.0)) * 10) / 10 }), 540, 1000, 1).pop("b24", 0.4);
+      k.ar("القاعدة", 540, 420, 56, "ttl", c.hud).wipe("b24", 0.45, "rtl");
+      c.sk((g, p) => scale(g, p), (t) => ({ left: "الخطة", right: "المريض", tilt: rnd(14 * E.out(prog(t, T("b24@أهم"), 0.9)), 10) }), 540, 1000, 1).pop("b24", 0.35);
       k.chip("Zeichen ändern sich → Plan ändern", "تبدلات الحالة ← بدل الخطة", 540, 1110, 28).pop("b25@تبدل");
-      k.ribbon("Klinik ist keine Niederlage.", 540, 1220, { size: 44 }).wipe("b26", 0.5);
-      k.ar("والمشية للسبيطار ماشي عيب", 540, 1310, 30, "ar strong").wipe("b26+0.2", 0.6, "rtl");
+      k.ribbon("Klinik ist keine Niederlage.", 540, 1220, { size: 44 }).wipe("b26", 0.45);
+      c.text("والمشية للسبيطار ماشي عيب", 540, 1310, 34, "ar strong").wipe("b26+0.15", 0.5, "rtl");
     } });
 
     /* ---------- HUD : barre des heures + barre de progression + logo ---------- */
@@ -451,19 +482,20 @@
         const g = prog(t, T("b16@ربعة"), 0.5); ghost.style.left = hx(18) + "px"; ghost.style.opacity = t >= on1 ? g.toFixed(2) : "0";
         progEl.style.opacity = t > 0.2 && t < endT ? "1" : "0";
         bar.style.width = (100 * clamp(t / total, 0, 1)).toFixed(2) + "%";
-        brand.style.opacity = (t < 0.25 ? t / 0.25 : t < endT ? 1 : Math.max(0, 1 - (t - endT) / 0.3)).toFixed(3);
+        const intro = t >= T("i1") - 0.1 && t < T("b3") - 0.1;
+        brand.style.opacity = intro ? "0" : (t < 0.25 ? t / 0.25 : t < endT ? 1 : Math.max(0, 1 - (t - endT) / 0.3)).toFixed(3);
       });
     }
 
     /* ---------- affiche finale + appel à commenter (écrit, pas dit) ---------- */
     st.flash("b26@end+0.15", 0.35, 0.85);
-    st.summary({ at: "b26@end+0.15", in: "cut", dezoomAt: "b26@end+0.5", cols: 5, crop: [230, 1310], top: 372, gap: 10, side: 60,
+    st.summary({ at: "b26@end+0.15", in: "cut", dezoomAt: "b26@end+0.5", cols: 5, crop: [230, 1310], top: 372, gap: 10, side: 92,
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);
-        k.ribbon("AKTE 02 · الولادة فالأوطيل", 540, 312, { size: 40, w: 600 });
-        k.chip("@dr.aguilo", null, 160, 312, 22);
-        k.chip("AKTE 03 · قريبا", null, 915, 312, 20, { yellow: true });
+        k.ribbon("AKTE 02 · الولادة فالأوطيل", 540, 312, { size: 36, w: 470 });
+        k.chip("@dr.aguilo", null, 180, 312, 20);
+        k.chip("AKTE 03 · قريبا", null, 885, 312, 18, { yellow: true });
         cells.forEach((cell) => {
           const g = el("g");
           el("path", { d: SC.util.rrect(cell.x, cell.y, cell.w, cell.h, 14), fill: "#D2D2CB", transform: "translate(6 8)" }, g);
@@ -475,7 +507,7 @@
         // appel à commenter (écrit, pas dit) + flèche vers le bouton « commenter » d'Instagram (x≈950, y≈1194)
         const k = kit(c);
         k.card(110, 960, 760, 300, { seed: 990 }).pop("b26@end+2.7", 0.4);
-        k.ar("ونتا، واش عمرك سكتّي حيت خفتي؟", 490, 1060, 34, "ttl").wipe("b26@end+2.8", 0.6, "rtl");
+        k.ar("شنو رأيك فهاد القصة؟", 490, 1060, 38, "ttl").wipe("b26@end+2.8", 0.6, "rtl");
         k.ar("كتب ليا فالكومنتير", 490, 1170, 32, "ar strong").wipe("b26@end+3.2", 0.5, "rtl");
         c.put(`<path d="M780 1150 C 860 1150, 900 1160, 918 1196 M896 1186 L918 1196 L922 1172" stroke="#1C1A1C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).wipe("b26@end+3.4", 0.4);
         cells.forEach((cell) => {

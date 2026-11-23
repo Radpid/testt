@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Persona — planche de personnages</title>
+<style>
+  @font-face { font-family: "Kalam"; font-weight: 400; src: url("../../engine/fonts/Kalam-Regular.ttf") format("truetype"); }
+  @font-face { font-family: "Kalam"; font-weight: 700; src: url("../../engine/fonts/Kalam-Bold.ttf") format("truetype"); }
+  html, body { margin: 0; background: #F7F7F1; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg id="stage" xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="sketch-cast.js"></script>
+<script src="persona.js"></script>
+<script>
+/* Vues : ?view=sheet (défaut) | faces | poses | couple | props | zoom */
+(async function () {
+  const S = SketchCast, PE = Persona, { el, text } = S.util, P = PE.Pose;
+  const svg = document.getElementById("stage");
+  const view = new URLSearchParams(location.search).get("view") || "sheet";
+  await Promise.all([document.fonts.load('700 40px "Kalam"'), document.fonts.load('400 40px "Kalam"')]).catch(() => {});
+  S.paper(svg, 1080, 1920);
+  function put(fn, x, y, s, r) {
+    const g = el("g", { transform: `translate(${x} ${y})${r ? ` rotate(${r})` : ""}${s && s !== 1 ? ` scale(${s})` : ""}` }, svg);
+    return fn(g) || {};
+  }
+  const cap = (t, x, y, size, fill) => text(svg, t, x, y, size || 20, { weight: 400, fill: fill || "#55554F" });
+  const title = (t, y) => text(svg, t, 40, y, 30, { anchor: "start" });
+  const ground = (x, y, w) => put((g) => S.ground(g, { w, seed: Math.round(x) }), x, y, 1);
+
+  const LOOKS = [["woman", {}], ["man", {}], ["oldwoman", {}], ["oldman", {}]];
+  const EX = ["neutral", "smile", "bigsmile", "love", "worried", "pain", "sad", "cry", "shock", "angry", "focused", "calm"];
+
+  function faces(y0, sc, rowsPerLook, dy) {
+    LOOKS.forEach((lk, r) => {
+      for (let k = 0; k < rowsPerLook; k++) {
+        const list = rowsPerLook === 2 ? EX.slice(k * 6, k * 6 + 6) : (r % 2 === 0 ? ["neutral", "smile", "love", "worried", "pain", "cry"] : ["neutral", "bigsmile", "sad", "shock", "angry", "focused"]);
+        list.forEach((e, i) => {
+          const x = 180 + i * 162, y = y0 + (r * rowsPerLook + k) * dy;
+          put((g) => PE.head(g, Object.assign({ look: lk[0], expr: e, seed: r + 1 }, lk[1])), x, y, sc);
+          cap(e, x, y + 96 * sc + 14, 19);
+        });
+        if (k === 0) text(svg, lk[0], 60, y0 + (r * rowsPerLook) * dy + 6, 22, { anchor: "middle", transform: `rotate(-90 60 ${y0 + (r * rowsPerLook) * dy + 6})` });
+      }
+    });
+  }
+
+  function poses(y1, y2, k) {
+    const row1 = [
+      ["stand", { look: "woman", outfit: "maternity", expr: "smile" }, P.stand],
+      ["handOnBelly", { look: "woman", outfit: "maternity", expr: "love" }, P.handOnBelly],
+      ["bothHands (side)", { look: "woman", outfit: "maternity", expr: "calm" }, P.bothHandsOnBellySide],
+      ["walk", { look: "man", outfit: "jacket", expr: "smile" }, P.walk(0.12)],
+      ["point", { look: "man", outfit: "sweater", expr: "bigsmile" }, P.point],
+      ["wave", { look: "woman", outfit: "casual", hair: "ponytail", hairTone: "brown", expr: "bigsmile" }, P.wave],
+      ["cry", { look: "woman", outfit: "sweater", hair: "bob", expr: "cry" }, P.cry],
+    ];
+    const row2 = [
+      ["coat + badge", { look: "oldman", outfit: "coat", badge: "Dr", glasses: true, expr: "focused" }, P.stand],
+      ["scrubs", { look: "woman", outfit: "scrubs", hair: "bun", hairTone: "blond", expr: "calm" }, P.holdHandOut],
+      ["robe", { look: "oldwoman", outfit: "robe", expr: "angry" }, P.stand],
+      ["suit", { look: "man", outfit: "suit", hair: "shortcurly", beard: "short", expr: "neutral" }, P.stand],
+      ["facepalm", { look: "man", outfit: "casual", expr: "sad" }, P.facepalm],
+      ["kneel", { look: "man", outfit: "sweater", expr: "love" }, P.kneel],
+      ["pain (side)", { look: "woman", outfit: "maternity", expr: "pain", torsoLean: 10 }, P.bothHandsOnBellySide],
+    ];
+    [[row1, y1], [row2, y2]].forEach(([row, y]) => row.forEach((c, i) => {
+      const x = 96 + i * 148;
+      ground(x, y, 120);
+      put((g) => PE.person(g, Object.assign({}, c[2], c[1], { seed: i + 3 })), x, y, k);
+      cap(c[0], x, y + 30, 18);
+    }));
+  }
+
+  function couples(y, k, xs) {
+    ["holdHands", "hug", "armAround", "forehead", "lookEachOther"].forEach((m, i) => {
+      const x = xs[i];
+      ground(x, y, 200 * k / 0.5);
+      put((g) => PE.couple(g, { mode: m, heart: i % 2 ? 1 : 0.7 }), x, y, k);
+      cap(m, x, y + 30, 19);
+    });
+  }
+
+  function propsRow(y) {
+    put((g) => PE.baby(g, { state: "sleep" }), 120, y - 50, 0.8);
+    put((g) => PE.baby(g, { state: "normal", hat: false }), 320, y - 50, 0.8);
+    cap("baby sleep / normal", 220, y + 26, 18);
+    [["suitcase", {}, 470, 0.5], ["doctorBag", {}, 580, 0.5], ["babyBlanket", {}, 700, 0.6], ["candle", {}, 810, 0.62], ["phone", { ring: true }, 900, 0.5], ["clockWall", { time: [3, 12] }, 1005, 0.62]].forEach((c) => {
+      put((g) => PE.props[c[0]](g, c[1]), c[2], c[0] === "phone" || c[0] === "clockWall" ? y - 48 : y, c[3]); cap(c[0], c[2], y + 26, 18);
+    });
+  }
+  function propsRow2(y) {
+    const bed = put((g) => PE.props.hotelBed(g, { w: 520 }), 210, y, 0.5); cap("hotelBed + sitEdge34 + kneel", 250, y + 26, 18);
+    put((g) => PE.person(g, Object.assign({}, P.sitEdge34, { look: "woman", outfit: "maternity", expr: "worried", armR: [10, 62] })), 210 + bed.seat[0] * 0.5, y - 3, 0.5);
+    put((g) => PE.person(g, Object.assign({}, P.kneel, { look: "man", outfit: "sweater", expr: "worried", facing: -1, look2: [0.5, -0.4] })), 470, y, 0.5);
+    put((g) => PE.props.nightstand(g, { on: true }), 660, y, 0.62); cap("nightstand", 660, y + 26, 18);
+    put((g) => PE.props.window(g, {}), 840, y - 86, 0.46); cap("window", 840, y + 26, 18);
+    put((g) => PE.props.heart(g, { size: 1.3 }), 1000, y - 50, 1); cap("heart", 1000, y + 26, 18);
+  }
+
+  if (view === "sheet") {
+    text(svg, "Persona · nouveau casting", 540, 52, 40);
+    faces(140, 0.6, 1, 138);
+    poses(900, 1185, 0.5);
+    couples(1462, 0.5, [120, 320, 520, 720, 930]);
+    propsRow(1640);
+    propsRow2(1876);
+  } else if (view === "faces") {
+    text(svg, "Persona · visages × expressions", 540, 52, 38);
+    faces(170, 0.98, 2, 222);
+  } else if (view === "zoom") {
+    const list = [["woman", "love"], ["man", "smile"], ["woman", "pain"], ["man", "worried"], ["oldwoman", "smile"], ["oldman", "focused"], ["woman", "cry"], ["man", "shock"]];
+    list.forEach((c, i) => { const x = 280 + (i % 2) * 520, y = 280 + Math.floor(i / 2) * 440; put((g) => PE.head(g, { look: c[0], expr: c[1], seed: i + 1 }), x, y, 2.4); cap(c[0] + " · " + c[1], x, y + 220, 26); });
+  } else if (view === "views") {
+    text(svg, "Persona · vues & coiffures", 540, 52, 38);
+    const hairs = ["longwave", "ponytail", "bun", "bob", "shortcurly", "short", "crown", "bald"];
+    hairs.forEach((h, i) => {
+      const y = 180 + i * 215, lk = i < 4 ? "woman" : (i < 6 ? "man" : "oldman"), tone = ["dark", "brown", "grey", "blond"][i % 4];
+      ["front", "three-quarter", "side"].forEach((v, j) => put((g) => PE.head(g, { look: lk, hair: h, hairTone: tone, view: v, expr: ["smile", "love", "neutral"][j], seed: i + 1 }), 190 + j * 190, y, 0.95));
+      put((g) => PE.head(g, { look: lk === "woman" ? "oldwoman" : (lk === "man" ? "man" : "oldman"), hair: h, hairTone: tone, view: "side", facing: -1, expr: "worried", beard: lk === "man" ? "short" : undefined, seed: i + 9 }), 760, y, 0.95);
+      put((g) => PE.head(g, { look: lk, hair: h, hairTone: tone, view: "three-quarter", facing: -1, expr: "bigsmile", glasses: i % 2 === 0, seed: i + 5 }), 950, y, 0.95);
+      cap(h + " · " + tone, 60, y + 108, 18).setAttribute("text-anchor", "start");
+    });
+  } else if (view === "misc") {
+    text(svg, "Persona · animation, profils, tenues de côté", 540, 52, 34);
+    [0, 0.35, 0.7, 1].forEach((b, i) => { put((g) => PE.head(g, { look: "woman", expr: "smile", blink: b }), 110 + i * 130, 170, 0.8); cap("blink " + b, 110 + i * 130, 262, 18); });
+    [0, 0.3, 0.6, 1].forEach((t, i) => { put((g) => PE.head(g, { look: "man", expr: "neutral", talk: t }), 640 + i * 130, 170, 0.8); cap("talk " + t, 640 + i * 130, 262, 18); });
+    [0.3, 0.7].forEach((t, i) => { put((g) => PE.head(g, { look: "woman", expr: "smile", talk: t, view: "three-quarter" }), 110 + i * 130, 370, 0.8); cap("3/4 talk " + t, 110 + i * 130, 462, 18); });
+    [[0.5, 0], [-0.8, 0], [0, 0.9], [0.8, -0.6]].forEach((l, i) => { put((g) => PE.head(g, { look: "woman", expr: "neutral", look2: l }), 400 + i * 130, 370, 0.8); cap("look2 " + l, 400 + i * 130, 462, 18); });
+    [0.3, 1].forEach((t, i) => { put((g) => PE.head(g, { look: "man", expr: "sad", tears: t }), 920 + i * 110, 370, 0.7); cap("tears " + t, 920 + i * 110, 462, 18); });
+    EX.forEach((e, i) => { const x = 100 + (i % 6) * 176, y = 590 + Math.floor(i / 6) * 220; put((g) => PE.head(g, { look: i % 2 ? "man" : "woman", view: "side", expr: e, facing: i % 3 === 2 ? -1 : 1, hair: i % 2 ? "short" : "ponytail" }), x, y, 0.85); cap("side · " + e, x, y + 100, 18); });
+    EX.slice(0, 6).forEach((e, i) => { const x = 100 + i * 176; put((g) => PE.head(g, { look: i % 2 ? "oldman" : "oldwoman", view: "three-quarter", expr: EX[i + 3], facing: i > 2 ? -1 : 1 }), x, 1040, 0.85); cap("3/4 · " + EX[i + 3], x, 1140, 18); });
+    ["casual", "sweater", "jacket", "maternity", "coat", "scrubs", "robe", "suit"].forEach((o, i) => {
+      const x = 80 + i * 132; ground(x, 1500, 110); ground(x, 1870, 110);
+      put((g) => PE.person(g, Object.assign({}, P.walk(0.1 + i * 0.11), { look: i % 2 ? "man" : "woman", outfit: o, badge: o === "coat" ? "Dr" : null, facing: i > 5 ? -1 : 1, expr: "smile" })), x, 1500, 0.62); cap(o + " (side)", x, 1528, 17);
+      put((g) => PE.person(g, Object.assign({}, P.stand, { look: i % 2 ? "woman" : "man", outfit: o, pregnant: i === 5, badge: o === "coat" ? "Dr" : null, view: i % 3 === 0 ? "three-quarter" : "front", facing: i % 2 ? 1 : -1, expr: "calm", hair: i % 2 ? ["ponytail", "bun", "bob", "longwave"][(i - 1) / 2] : undefined, hairTone: ["dark", "brown", "blond", "grey"][i % 4] })), x, 1870, 0.62); cap(o, x, 1898, 17);
+    });
+  } else if (view === "poses") {
+    text(svg, "Persona · poses", 540, 52, 38);
+    poses(620, 1180, 0.95 * 0.72);
+    const extra = [["sitEdge", { look: "woman", outfit: "maternity", expr: "smile" }, P.sitEdge], ["sitEdge34", { look: "man", outfit: "casual", expr: "worried" }, P.sitEdge34], ["hug", { look: "man", outfit: "sweater" }, P.hug], ["armAround", { look: "man", outfit: "jacket", expr: "smile" }, P.armAround], ["handOnBellySide", { look: "woman", outfit: "maternity", expr: "love" }, P.handOnBellySide], ["walk .6", { look: "woman", outfit: "coat", hair: "ponytail", badge: "Dr" }, P.walk(0.6)], ["oldwoman", { look: "oldwoman", outfit: "sweater", expr: "smile" }, P.wave]];
+    extra.forEach((c, i) => { const x = 96 + i * 148; ground(x, 1740, 120); put((g) => PE.person(g, Object.assign({}, c[2], c[1], { seed: i + 13 })), x, 1740, 0.68); cap(c[0], x, 1770, 18); });
+  } else if (view === "couple") {
+    text(svg, "Persona · le couple", 540, 52, 38);
+    const modes = ["holdHands", "hug", "armAround", "forehead", "lookEachOther"];
+    modes.forEach((m, i) => { const x = i < 2 ? 290 + i * 500 : (i < 4 ? 290 + (i - 2) * 500 : 540), y = 590 + Math.floor(i / 2) * 610; ground(x, y, 420); put((g) => PE.couple(g, { mode: m, heart: 1 }), x, y, 1.1); cap(m, x, y + 40, 26); });
+    put((g) => PE.couple(g, { mode: "holdHands", exprA: "pain", exprB: "worried", heart: 0, a: { armL: [-20, 86] } }), 160, 1810, 0.62);
+    put((g) => PE.couple(g, { mode: "lookEachOther", exprA: "cry", exprB: "sad", heart: 0 }), 930, 1810, 0.62);
+  } else if (view === "props") {
+    text(svg, "Persona · bébé & accessoires", 540, 52, 38);
+    put((g) => PE.baby(g, { state: "sleep" }), 290, 250, 1.5); cap("baby · sleep", 290, 360, 22);
+    put((g) => PE.baby(g, { state: "normal", hat: false }), 780, 250, 1.5); cap("baby · normal, hat:false", 780, 360, 22);
+    const it = [["suitcase", {}, 130, 720, 1], ["doctorBag", {}, 350, 720, 1], ["babyBlanket", {}, 560, 720, 1.1], ["candle", {}, 740, 720, 1.2], ["candle", { lit: false }, 860, 720, 1.2], ["phone", { ring: true }, 990, 630, 0.9]];
+    it.forEach((c) => { put((g) => PE.props[c[0]](g, c[1]), c[2], c[3], c[4]); cap(c[0], c[2], 760, 22); });
+    put((g) => PE.props.window(g, {}), 200, 1010, 1); cap("window", 200, 1230, 22);
+    put((g) => PE.props.clockWall(g, { time: [3, 12] }), 520, 930, 1.2); cap("clockWall", 520, 1040, 22);
+    put((g) => PE.props.heart(g, { size: 1.6 }), 520, 1150, 1); cap("heart", 520, 1230, 22);
+    put((g) => PE.props.nightstand(g, { on: true }), 760, 1190, 1); put((g) => PE.props.nightstand(g, { on: false }), 960, 1190, 1); cap("nightstand on / off", 860, 1230, 22);
+    ground(540, 1800, 900);
+    const bed = put((g) => PE.props.hotelBed(g, { w: 560 }), 400, 1800, 1); cap("hotelBed + sitEdge34", 400, 1840, 22);
+    put((g) => PE.person(g, Object.assign({}, P.sitEdge34, { look: "woman", outfit: "maternity", expr: "worried", armR: [10, 62] })), 400 + bed.seat[0], 1800 - 6, 1);
+    put((g) => PE.person(g, Object.assign({}, P.kneel, { look: "man", outfit: "sweater", expr: "worried", facing: -1, look2: [0.5, -0.4] })), 880, 1800, 1);
+    put((g) => PE.props.suitcase(g, {}), 1010, 1800, 0.8);
+  }
+  window.READY = true;
+})();
+</script>
+</body>
+</html>
