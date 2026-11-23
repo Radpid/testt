@@ -355,19 +355,26 @@
       k.title("✓", 728, 950, 80).pop(w0 + 1.45);
     } });
 
-    /* 6 · l'hôtel près du cabinet ; ils arrivent main dans la main ; leur promesse ------------------ */
+    /* 6 · l'hôtel près du cabinet (au fond) ; le couple arrive à pied avec la valise (devant) ; leur promesse -------- */
     st.scene({ from: "b8", in: "slideLeft", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b8", s: 1, cx: 540, cy: 900 }, { at: "b8@Hotel", s: 1.1, cx: 420, cy: 900, d: 0.45 }, { at: "b8@العيادة", s: 1, cx: 540, cy: 900, d: 0.45 }]);
-      k.ground(540, 1300, 1000);
-      const ho = el("g"); building(ho, { w: 380, h: 560, rows: 4, cols: 3, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 2 && c2 === 1 }); c.node(ho).on((t, s) => { s.x += 330; s.y += 1300; }).pop("b8@Hotel", 0.45);
-      const pr = el("g"); building(pr, { w: 260, h: 300, rows: 2, cols: 2, sign: "PRAXIS", signMat: MAT.white, seed: 5 }); c.node(pr).on((t, s) => { s.x += 760; s.y += 1300; }).pop("b8@العيادة", 0.45);
-      k.chip("قريب", null, 590, 1120, 26, { yellow: true }).pop("b8@قريب");
-      const a = T("b8@كراو"), d = 1.3;
-      const xc = (t) => lerp(-150, 255, E.out(prog(t, a, d)));
-      couple(c, 0, 1300, 0.78, (t) => ({ mode: "holdHands", exprA: t >= T("b9@طبيعية") ? "love" : "smile", exprB: "smile", heart: rnd(E.out(prog(t, T("b9@طبيعية"), 0.6)), 10), blink: rnd(blinkAt(t, 5)) }))
-        .on((t, s) => { const p = prog(t, a, d); s.x += xc(t); s.y += p > 0 && p < 1 ? -Math.abs(Math.sin(t * 9)) * 6 : 0; });
-      const sc_ = el("g"); PE.props.suitcase(sc_, {}); c.node(sc_).on((t, s) => { s.x += xc(t) + 185; s.y += 1300; s.s *= 0.62; });
+      c.camera([{ at: "b8", s: 1, cx: 540, cy: 900 }, { at: "b8@Hotel", s: 1.06, cx: 450, cy: 920, d: 0.45 }, { at: "b8@العيادة", s: 1, cx: 540, cy: 920, d: 0.45 }]);
+      const BASE = 1165, FG = 1330;
+      k.ground(540, BASE, 1000);
+      c.put(`<rect x="40" y="${BASE}" width="1000" height="${FG - BASE}" fill="#ECEBE4"/><path d="M40 ${BASE + 70} L1040 ${BASE + 70}" stroke="#CFCEC6" stroke-width="2.4" stroke-dasharray="44 30"/>`);
+      k.ground(540, FG, 1000);
+      const ho = el("g"); building(ho, { w: 380, h: 520, rows: 4, cols: 3, sign: "HOTEL", seed: 3, lit: (r, c2) => r === 2 && c2 === 1 }); c.node(ho).on((t, s) => { s.x += 320; s.y += BASE; s.s *= 0.85; }).pop("b8@Hotel", 0.45);
+      const pr = el("g"); building(pr, { w: 260, h: 300, rows: 2, cols: 2, sign: "PRAXIS", signMat: MAT.white, seed: 5 }); c.node(pr).on((t, s) => { s.x += 770; s.y += BASE; s.s *= 0.85; }).pop("b8@العيادة", 0.45);
+      c.put(`<path d="M522 1100 L652 1100 M637 1088 L652 1100 L637 1112 M537 1088 L522 1100 L537 1112" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`).pop("b8@قريب");
+      k.chip("قريب", null, 587, 1050, 26, { yellow: true }).pop("b8@قريب");
+      // ils arrivent à pied (vrai cycle de marche), la valise derrière lui ; à l'arrivée ils se tournent, main dans la main
+      const a = T("b8@كراو"), d = 1.5, arrive = a + d, xw = (t) => lerp(-140, 300, E.out(prog(t, a, d)));
+      const walker = (base, k0) => (t) => Object.assign({}, base, prog(t, a, d) < 1 ? PP.walk(((t - a) * 1.6 + k0) % 1) : PP.stand, { view: "side", facing: 1, expr: "smile", blink: rnd(blinkAt(t, 5 + k0 * 10)) });
+      pp(0, 0, 0.8, walker(Object.assign({}, WOMAN), 0)).on((t, s) => { s.x += xw(t); s.y += FG; }).hide(arrive, 0.15);
+      pp(0, 0, 0.84, walker(Object.assign({}, MAN), 0.5)).on((t, s) => { s.x += xw(t) + 120; s.y += FG; }).hide(arrive, 0.15);
+      const sc0 = el("g"); PE.props.suitcase(sc0, {}); c.node(sc0).on((t, s) => { s.x += xw(t) + 205; s.y += FG; s.s *= 0.58; }).hide(arrive, 0.15);
+      couple(c, 360, FG, 0.82, (t) => ({ mode: "holdHands", exprA: t >= T("b9@طبيعية") ? "love" : "smile", exprB: "smile", heart: rnd(E.out(prog(t, T("b9@طبيعية"), 0.6)), 10), blink: rnd(blinkAt(t, 5)) })).fade(arrive, 0.2);
+      const sc1 = el("g"); PE.props.suitcase(sc1, {}); c.node(sc1).on((t, s) => { s.x += 540; s.y += FG; s.s *= 0.58; }).fade(arrive, 0.2);
       // leur promesse
       k.card(110, 370, 860, 320, { seed: 91 }).pop("b9@وقالوا", 0.35);
       k.ar("بغينا ولادة طبيعية…", 540, 455, 40, "ttl").wipe("b9@طبيعية", 0.5, "rtl");
@@ -375,46 +382,54 @@
       k.chip("Plan B: Krankenhaus", "الخطة ب: السبيطار", 540, 598, 26, { yellow: true }).pop("b9@césarienne");
     } });
 
-    /* 7 · la chambre d'hôtel : 5 h → la nuit ; douleur ; elle arrive 12 h plus tard ------------------ */
+    /* chambre d'hôtel vue DE FACE : la maman assise dans le lit (la couette cache ses jambes), le papa à gauche, la médecin à droite */
+    const RX = 600, MS = 0.95, DXA = 340, NSX = 200;
+    const wv = (t, fr, amp) => rnd(amp * Math.sin(t * fr), 2);
+    const relTo = (o, sc, pt) => [rnd((pt[0] - o[0]) / sc, 2), rnd((pt[1] - o[1]) / sc, 2)];
+    const breathe = (t, s) => { s.y += Math.sin(t * 2.6) * 1.8; };
+    const MO = [RX, 1300];
+    const momP = (t, extra) => Object.assign({}, WOMAN, PP.stand, { expr: Math.floor(t / 1.1) % 2 ? "pain" : "worried", sweat: true, blink: rnd(blinkAt(t, 18)), armL: [-20, 86], armR: [14, -96], headTilt: wv(t, 3, 3) }, extra || {});
+    const momGrip = (t, extra) => momP(t, Object.assign({ expr: Math.floor(t / 1.1) % 2 ? "pain" : "cry", tears: 0.4, reachL: relTo(MO, MS, [RX - 92, 1118]), bendL: -1, reachR: relTo(MO, MS, [RX + 22, 1000]), bendR: 1 }, extra || {}));
+    const dadHand = (t, extra) => Object.assign({}, MAN, PP.stand, { expr: "worried", headTilt: 6, look2: [0.6, 0.5], reachR: relTo([DXA, 1300], 1, [RX - 96, 1120 + wv(t, 3, 3)]), bendR: 1, blink: rnd(blinkAt(t, 17)) }, extra || {});
+    const DOX = 815, DOS = 0.95;
+    const docWork = (t, extra) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null }, PP.stand, { view: "side", facing: -1, expr: "focused", sweat: true, torsoLean: 8, reachL: relTo([DOX, 1300], DOS, [RX + 64 + wv(t, 7, 6), 1068]), reachR: relTo([DOX, 1300], DOS, [RX + 78 - wv(t, 7, 6), 1032]), bendL: 1, bendR: 1, blink: rnd(blinkAt(t, 19)) }, extra || {});
+    const roomBack = (c, k, skyP, clockFn, lamp) => {
+      c.sk((g, p) => windowSky(g, p), (t) => ({ p: rnd(skyP(t), 40) }), RX, 790, 0.8);
+      c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 42 }), clockFn, RX + 280, 700, 1);
+      k.ground(540, 1300, 980);
+      const ns = el("g"); PE.props.nightstand(ns, { on: lamp }); c.node(ns).on((t, s) => { s.x += NSX; s.y += 1300; s.s *= 0.85; });
+      const bb = el("g"); D.bedBack(bb, {}); c.node(bb).on((t, s) => { s.x += RX; s.y += 1300; });
+    };
+    const bedFront = (c) => { const g = el("g"); D.bedFront(g, {}); return c.node(g).on((t, s) => { s.x += RX; s.y += 1300; }); };
+    const hourTm = (h) => ({ tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] });
+
+    /* 7 · le matin : les douleurs ; le papa appelle la médecin ; elle arrive ~12 h plus tard ------------------------- */
     st.scene({ from: "b10", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b10", s: 1.05, cx: 480, cy: 940 }, { at: "b11", s: 1.0, cx: 520, cy: 940, d: 0.5 }]);
-      const a = T("b10"), arr = T("b11@دازت") + 0.4, end = T("b12@end") + 0.2;
-      const P = (t) => t < arr ? 0.7 * E.inOut(prog(t, a, arr - a)) : 0.7 + 0.12 * prog(t, arr, end - arr);
-      c.sk((g, p) => windowSky(g, p), (t) => ({ p: rnd(P(t), 40) }), 540, 800, 0.9);
-      c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 48 }), (t) => { const h = t < arr ? lerp(5, 17, E.inOut(prog(t, a, arr - a))) : lerp(17, 20, prog(t, arr, end - arr)); return { tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] }; }, 860, 620, 1);
-      k.ground(540, 1300, 1000);
-      const ns = el("g"); PE.props.nightstand(ns, { on: true }); c.node(ns).on((t, s) => { s.x += 165; s.y += 1300; s.s *= 0.9; });
-      c.sk((g, p) => PE.props.phone(g, { ring: p.r, on: true }), (t) => ({ r: t >= T("b10@عيطات") - 0.2 && t < T("b11") && Math.floor(t / 0.18) % 2 === 0 }), 145, 1146, 0.55, 8);
-      const bed = el("g"); const bo = PE.props.hotelBed(bed, { w: 400 }); c.node(bed).on((t, s) => { s.x += 425; s.y += 1300; });
-      const seat = 425 + bo.seat[0];
-      pp(seat - 120, 1297, 1.0, (t) => Object.assign({}, MAN, PP.sitEdge, { facing: 1, expr: "worried", blink: rnd(blinkAt(t, 7)), look2: [0.7, 0.2], headTilt: 6 }));
-      pp(seat, 1297, 1.0, (t) => Object.assign({}, WOMAN, PP.sitEdge34, { facing: 1, expr: Math.floor(t / 1.6) % 2 ? "pain" : "worried", sweat: true, blink: rnd(blinkAt(t, 6)), armR: [10, 62] }));
+      c.camera([{ at: "b10", s: 1.0, cx: 540, cy: 930 }, { at: "b11", s: 1.0, cx: 560, cy: 930, d: 0.5 }]);
+      const a = T("b10"), arr = T("b11@دازت") + 0.4, end = T("b12");
+      const P = (t) => t < arr ? 0.7 * E.inOut(prog(t, a, arr - a)) : 0.7 + 0.1 * prog(t, arr, end - arr);
+      roomBack(c, k, P, (t) => hourTm(t < arr ? lerp(5, 17, E.inOut(prog(t, a, arr - a))) : lerp(17, 18, prog(t, arr, end - arr))), true);
+      pp(RX, 1300, MS, (t) => momP(t)).on(breathe);
+      bedFront(c);
+      const call0 = T("b10@عيطات") - 0.3, call1 = T("b11");
+      pp(DXA, 1300, 1, (t) => { const calling = t >= call0 && t < call1; return Object.assign({}, MAN, PP.stand, { expr: "worried", blink: rnd(blinkAt(t, 7)), look2: t >= arr - 0.3 ? [0.9, 0] : calling ? [0.2, 0.7] : [0.6, 0.4], talk: calling ? rnd(talkAt(t, call0 + 0.25, call1), 10) : 0 }, calling ? { reachR: [46, -260], bendR: 1 } : {}); });
+      c.sk((g, p) => PE.props.phone(g, { ring: p.r }), (t) => ({ r: t < T("b10@عيطات") && Math.floor(t / 0.18) % 2 === 0 }), DXA + 52, 1020, 0.42).fade(call0, 0.15).hide(call1, 0.15);
       k.chip("📞 Ärztin", "عيطات للطبيبة", 540, 440, 28, { parent: c.hud }).pop("b10@عيطات").hide("b11", 0.2);
-      pp(0, 0, 1.05, (t) => { const p = prog(t, arr - 0.2, 0.9); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.3) % 1) : PP.stand, { facing: -1, expr: "calm", blink: rnd(blinkAt(t, 8)) }); })
-        .on((t, s) => { s.x += lerp(1160, 735, E.out(prog(t, arr - 0.2, 0.9))); s.y += 1300; });
+      pp(0, 0, DOS, (t) => { const p = prog(t, arr - 0.2, 0.9); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk(((t - arr) * 1.3) % 1) : PP.stand, { view: "side", facing: -1, expr: "calm", blink: rnd(blinkAt(t, 8)) }); })
+        .on((t, s) => { s.x += lerp(1160, 820, E.out(prog(t, arr - 0.2, 0.9))); s.y += 1300; });
       k.chip("~ 12 Stunden später", "تقريبا 12 ساعة من بعد", 540, 440, 28, { yellow: true, parent: c.hud }).pop("b11@ساعة");
     } });
 
-    /* 7b · le soir : le travail se bloque — elle est allongée, la médecin (tenue de bloc) fait tout, le papa regarde ---- */
-    const wv = (t, fr, amp) => rnd(amp * Math.sin(t * fr), 2);
-    const dadSide = (t, extra) => Object.assign({}, MAN, PP.stand, { view: "side", facing: 1, expr: "worried", torsoLean: 14, look2: [0.6, 0.6], reachR: [80, -150 + wv(t, 3, 6)], bendR: -1, blink: rnd(blinkAt(t, 17)) }, extra || {});
-    const momLabor = (t, extra) => Object.assign({}, WOMAN, { view: "side", facing: 1, expr: Math.floor(t / 1.1) % 2 ? "pain" : "cry", tears: 0.4, sweat: true, blink: rnd(blinkAt(t, 18)), legL: [52, -118], legR: [rnd(58 + 3 * Math.sin(t * 5), 2), -122], armL: [60, 80], reachR: [40, -228], headTilt: -8 + wv(t, 4, 4) }, extra || {});
-    const docWork = (t, extra) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null }, PP.stand, { view: "side", facing: -1, expr: "focused", sweat: true, torsoLean: 22, reachL: [-110 + wv(t, 7, 10), -170], reachR: [-120 - wv(t, 7, 10), -200], bendL: 1, bendR: 1, blink: rnd(blinkAt(t, 19)) }, extra || {});
-    const room = (c, k, night, clockFn) => {
-      c.sk((g, p) => windowSky(g, p), () => ({ p: night }), 450, 820, 0.75);
-      c.sk((g, p) => PE.props.clockWall(g, { time: p.tm, r: 44 }), clockFn, 720, 720, 1);
-      k.ground(470, 1300, 900);
-    };
+    /* 7b · le soir : le travail se bloque — le papa lui tient la main, la médecin (tenue de bloc) les mains sur son ventre */
     st.scene({ from: "b12", in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b12", s: 1.04, cx: 480, cy: 1030 }, { at: "b12@وقفات", s: 1.0, cx: 470, cy: 1000, d: 0.7 }]);
-      room(c, k, 0.82, (t) => { const h = lerp(18, 19.5, prog(t, T("b12"), T("b13") - T("b12"))); return { tm: [Math.floor(h), Math.round((h % 1) * 12) * 5 % 60] }; });
-      const ns = el("g"); PE.props.nightstand(ns, { on: true }); c.node(ns).on((t, s) => { s.x += 140; s.y += 1300; s.s *= 0.85; });
-      pp(245, 1300, 1.0, (t) => dadSide(t));
-      const bed = el("g"); PE.props.hotelBed(bed, { w: 480, blanket: 0 }); c.node(bed).on((t, s) => { s.x += 450; s.y += 1300; });
-      c.sk((g, p) => PE.person(g, p), (t) => momLabor(t), 640, 1196, 0.9, -90);
-      pp(750, 1300, 0.98, (t) => docWork(t, { expr: t < T("b12@وقفات") ? "focused" : "worried" }));
+      c.camera([{ at: "b12", s: 1.06, cx: 580, cy: 990 }, { at: "b12@وقفات", s: 1.0, cx: 560, cy: 960, d: 0.7 }]);
+      roomBack(c, k, () => 0.82, (t) => hourTm(lerp(18, 19.5, prog(t, T("b12"), T("b13") - T("b12")))), true);
+      pp(RX, 1300, MS, (t) => momGrip(t)).on(breathe);
+      bedFront(c);
+      pp(DXA, 1300, 1, (t) => dadHand(t));
+      pp(DOX, 1300, DOS, (t) => docWork(t, { expr: t < T("b12@وقفات") ? "focused" : "worried" }));
       k.chip("Geburtsstillstand", "الولادة وقفات", 540, 440, 30, { parent: c.hud }).pop("b12@وقفات").wobble("b12@وقفات+0.35", 0.45, 6);
     } });
 
@@ -440,26 +455,31 @@
       pp(300, 1300, 0.66, (t) => Object.assign({}, DOCW, PP.stand, { facing: -1, expr: "focused", blink: rnd(blinkAt(t, 11)) })).pop("b14@مكملة", 0.35);
     } });
 
-    /* 9 · la naissance… le moniteur ralentit puis la ligne plate ; la médecin à genoux ; le papa enlace la maman épuisée */
+    /* 9 · la naissance : la petite dans les bras de sa maman… le moniteur ralentit, puis la ligne plate.
+     *     La maman pleure sur son bébé, le papa l'enlace, la médecin tombe à genoux. -------------------------------- */
     st.scene({ from: "b15", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      const born = T("b15@زادت"), quiet = T("b15@end") + 0.45, hugP = (t) => E.inOut(prog(t, quiet + 0.3, 0.8));
-      c.camera([{ at: "b15", s: 1.0, cx: 470, cy: 1000 }, { at: quiet, s: 1.06, cx: 450, cy: 1040, d: 3.4, ease: "lin" }]);
-      room(c, k, 1, () => ({ tm: [22, 0] }));
-      const ns = el("g"); PE.props.nightstand(ns, { on: false }); c.node(ns).on((t, s) => { s.x += 140; s.y += 1300; s.s *= 0.85; });
+      const born = T("b15@زادت"), quiet = T("b15@end") + 0.45, q2 = quiet + 0.3;
+      c.camera([{ at: "b15", s: 1.03, cx: 560, cy: 990 }, { at: quiet, s: 1.06, cx: 560, cy: 1020, d: 3.0, ease: "lin" }]);
+      roomBack(c, k, () => 1, () => ({ tm: [22, 0] }), false);
       const ph = (t) => t < born ? t * 1.3 : born * 1.3 + (t - born) * 0.75;
-      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd(ph(t) % 1, 30), flat: t >= quiet ? 1 : 0, alarm: t >= quiet }), 140, 1201, 0.75);
-      const dad = (t) => { const h = hugP(t); return dadSide(t, h > 0.5 ? { expr: "cry", tears: 1, look2: [0.4, 1], reachR: [170, -150], reachL: [150, -140], bendL: -1, torsoLean: lerp(14, 30, h), headTilt: lerp(0, 24, h) } : {}); };
-      pp(245, 1300, 1.0, dad);
-      const bed = el("g"); PE.props.hotelBed(bed, { w: 480 }); c.node(bed).on((t, s) => { s.x += 450; s.y += 1300; });
-      const bl = el("g"); PE.props.babyBlanket(bl, { w: 90 }); c.node(bl).on((t, s) => { s.x += 640; s.y += 1300 - 92; }).fade(born, 0.5);
-      c.sk((g, p) => PE.person(g, p), (t) => t < quiet ? momLabor(t, { expr: t < born ? "pain" : "sad" })
-        : Object.assign({}, WOMAN, { pregnant: false, view: "side", facing: 1, expr: "sad", blink: 0.6, tears: 1, sweat: true, legL: [4, 0], legR: [8, 0], armL: [30, 50], armR: [168, 10], headTilt: -6 }), 640, 1196, 0.9, -90)
-        .on((t, s) => { if (t >= quiet) s.x += 58; });
-      pp(245, 1300, 1.0, (t) => Object.assign(dad(t), { only: "arms" })).on((t, s) => { s.o *= hugP(t) > 0.5 ? 1 : 0; });
-      pp(750, 1300, 0.98, (t) => docWork(t, { expr: t < born ? "focused" : "worried" })).hide(quiet, 0.25);
-      pp(610, 1300, 0.98, (t) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null, facing: -1 }, PP.kneel, { expr: "sad", headTilt: 22, look2: [0, 1], armL: [14, 30], armR: [22, 24], tears: 0.6, blink: rnd(blinkAt(t, 22)) })).fade(quiet + 0.15, 0.4);
-      k.ar("البنت ما عاشتش", 540, 430, 66, "ttl", c.hud).wipe(quiet + 0.9, 0.8, "rtl").hide("b16", 0.2);
+      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd(ph(t) % 1, 30), flat: t >= quiet ? 1 : 0, alarm: t >= quiet }), NSX, 1201, 0.72);
+      const BX = RX - 6, BY = 1058;
+      const hold = { pregnant: false, outfit: "casual", look2: [0, 1], reachL: relTo(MO, MS, [BX - 74, BY + 16]), bendL: -1, reachR: relTo(MO, MS, [BX + 68, BY + 18]), bendR: 1 };
+      const mom = (t) => t < born ? momGrip(t, { expr: "pain" })
+        : Object.assign(momP(t), hold, { expr: t < quiet ? "worried" : "cry", tears: t < quiet ? 0.3 : 1, headTilt: t < quiet ? -4 : rnd(-10 + 2 * Math.sin(t * 2.5), 2) });
+      const DXB = 455, dadHug = (t) => Object.assign({}, MAN, PP.stand, { expr: "cry", tears: 1, headTilt: 14, look2: [0.5, 1], reachR: relTo([DXB, 1300], 1, [RX + 56, 962]), bendR: 1, blink: rnd(blinkAt(t, 20)) });
+      pp(DXB, 1300, 1, (t) => Object.assign(dadHug(t), { only: "armR" })).fade(q2, 0.35);        // son bras passe derrière elle
+      pp(RX, 1300, MS, mom).on(breathe);
+      bedFront(c);
+      const bb = el("g"); PE.baby(bb, { state: "sleep" }); c.node(bb).on((t, s) => { s.x += BX + 15; s.y += BY + Math.sin(t * 2.6) * 1.8; s.s *= 0.92; }).pop(born, 0.4);
+      pp(RX, 1300, MS, (t) => Object.assign(mom(t), { only: ["handL", "handR"] })).on(breathe).on((t, s) => { s.o *= t >= born ? 1 : 0; });
+      pp(DXA, 1300, 1, (t) => t < born ? dadHand(t) : Object.assign({}, MAN, PP.stand, { expr: "worried", headTilt: 8, look2: [0.8, 0.7], blink: rnd(blinkAt(t, 17)) })).hide(quiet, 0.3);
+      pp(DXB, 1300, 1, (t) => Object.assign(dadHug(t), { hide: ["armR"] })).fade(q2, 0.35);
+      pp(DXB, 1300, 1, (t) => Object.assign(dadHug(t), { only: "handR" })).fade(q2, 0.35);
+      pp(DOX, 1300, DOS, (t) => t < born ? docWork(t) : Object.assign({}, DOCW, { outfit: "scrubs", badge: null }, PP.stand, { view: "side", facing: -1, expr: "worried", sweat: true, look2: [0.8, 0.6], blink: rnd(blinkAt(t, 19)) })).hide(quiet, 0.3);
+      pp(795, 1300, 0.85, (t) => Object.assign({}, DOCW, { outfit: "scrubs", badge: null, facing: -1 }, PP.kneel, { expr: "sad", headTilt: 22, look2: [0, 1], armL: [14, 30], armR: [22, 24], tears: 0.6, blink: rnd(blinkAt(t, 22)) })).fade(q2, 0.35);
+      k.ar("البنت ما عاشتش", 540, 1440, 66, "ttl", c.hud).wipe(quiet + 0.9, 0.8, "rtl").hide("b16", 0.2);
       c.tick((t) => { const g = E.inOut(prog(t, quiet + 0.6, 1.4)); c.layer.style.filter = g > 0 ? `grayscale(${(g * 0.85).toFixed(2)})` : ""; });
     } });
 
@@ -528,17 +548,21 @@
       c.kick(j, 0.06); c.kick(m, 0.06);
     } });
 
-    /* 12b · l'argent : il sort de chez la médecin et va aux parents --------------------------------------------------- */
+    /* 12b · l'argent : les billets partent de la main de la médecin et arrivent dans la main du papa ------------------ */
     st.scene({ from: "b21", in: "slideLeft", inDur: 0.25, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       c.camera([{ at: "b21", s: 1.05, cx: 520, cy: 960 }]);
       k.ground(520, 1300, 900);
       const a = T("b21") + 0.2;
-      pp(230, 1300, 1.0, (t) => Object.assign({}, DOCW, PP.holdHandOut, { expr: "sad", tears: 0.7, blink: rnd(blinkAt(t, 24)), look2: [0.6, 0.2] }));
-      couple(c, 690, 1300, 0.82, (t) => ({ mode: "holdHands", exprA: "sad", exprB: "sad", blink: rnd(blinkAt(t, 25)), a: { pregnant: false, outfit: "casual" } }));
-      for (let i = 0; i < 6; i++) {
-        const n = el("g"); D.banknote(n, { seed: 330 + i });
-        c.node(n).on((t, s) => { const p = E.inOut(prog(t, a + i * 0.16, 0.9)); s.x += lerp(310, 610 + (i % 3) * 32, p); s.y += lerp(1110, 1150 - (i % 2) * 24, p) - Math.sin(p * Math.PI) * 165; s.r += lerp(-12, 14, p) + i * 3; s.o *= t >= a + i * 0.16 ? 1 : 0; });
+      const DP = Object.assign({}, DOCW, PP.holdHandOut, { expr: "sad", tears: 0.7 }), da = PE.util.rig(DP), dh = [230 + da.handR[0], 1300 + da.handR[1]];
+      const MP = Object.assign({}, MAN, PP.holdHandOutSide, { facing: -1, expr: "sad" }), ma = PE.util.rig(MP), mh = [605 + ma.handR[0], 1300 + ma.handR[1]];
+      pp(230, 1300, 1.0, (t) => Object.assign({}, DP, { blink: rnd(blinkAt(t, 24)), look2: [0.6, 0.2] }));
+      pp(770, 1300, 0.95, (t) => Object.assign({}, WOMAN, PP.stand, { pregnant: false, outfit: "casual", expr: "sad", tears: 0.5, view: "three-quarter", facing: -1, look2: [0.5, 0.3], blink: rnd(blinkAt(t, 25)) }));
+      pp(605, 1300, 1.0, (t) => Object.assign({}, MP, { blink: rnd(blinkAt(t, 26)) }));
+      for (let i = 0; i < 5; i++) {
+        const n = el("g"); D.banknote(n, { seed: 330 + i, w: 80 });
+        const end = [mh[0] + (i % 2 ? 5 : -5), mh[1] - 8 - i * 5];
+        c.node(n).on((t, s) => { const p = E.inOut(prog(t, a + i * 0.18, 0.75)); s.x += lerp(dh[0], end[0], p); s.y += lerp(dh[1] - 10, end[1], p) - Math.sin(p * Math.PI) * 120; s.r += lerp(-14, i % 2 ? 6 : -4, p); s.o *= t >= a + i * 0.18 ? 1 : 0; });
       }
       const n0 = c.text("0 €", 520, 680, 96, "de"); n0.fade(a, 0.2).on((t) => { const v = Math.round(50 * E.out(prog(t, a, 1.2))) * 1000, txt = "≈ " + v.toLocaleString("de-DE") + " €"; if (n0.textEl.textContent !== txt) n0.textEl.textContent = txt; });
       k.chip("an die Eltern", "تعويض للوالدين", 520, 790, 32, { yellow: true }).pop("b21@خمسين");

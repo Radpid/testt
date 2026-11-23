@@ -122,6 +122,12 @@ videos/epNN-<mot>/
   de ville). Pour une scène dure (blocage, décès) : nouveau plan (allongée sur le lit, médecin qui s'acharne, papa
   à côté), moniteur qui ralentit puis ligne plate (son synthétisé, `son/bip_moniteur.py`), médecin à genoux, maman
   épuisée, le papa qui l'enlace.
+- **Couple et chambre : composition propre** (retour sur AKTE 02 : « beaucoup d'overlapping, amateur ») : lit vu
+  DE FACE (`decor.js` bedBack → maman → bedFront), la maman assise dedans, la couette cache ses jambes ; papa à
+  gauche, médecin à droite, aucune tête ni corps qui se chevauchent ; pas de personne allongée de travers. Un
+  couple qui marche = vrai cycle de marche (jamais un couple qui glisse) ; bâtiments au fond + trottoir. Le bébé
+  qui n'a pas vécu est MONTRÉ (dans les bras de sa maman), jamais seulement suggéré par une couverture.
+  Ancres Persona (`n.out`, `Persona.util.rig`) déjà orientées : pour facing -1, main = x + handR[0].
 - **Expliquer le médical en image** : coupe anatomique (ex. utérus + bébé en siège, tête en haut) dans une fenêtre
   sur le corps + loupe reliée, bébé qui bouge, cœur qui bat, fantôme de la bonne position. Peine = une icône par
   sanction (barreaux, sacoche barrée, billets) + le visage de la médecin en grosses grimaces ; l'argent part

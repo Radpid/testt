@@ -180,5 +180,26 @@
     U.text(g, "€", 0, h * 0.17, h * 0.46, { weight: 700 });
   }
 
-  window.UnnaDecor = { cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
+
+  // ───────── lit d'hôtel vu de face (la maman assise dedans) — origine : sol, centre ; deux couches :
+  //   bedBack (tête de lit + oreillers) AVANT la maman, bedFront (couette) APRÈS : la couette cache ses jambes.
+  function bedBack(g, o) {
+    clear(g); o = Object.assign({ w: 470, seed: 91 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w;
+    el("path", { d: U.rrect(-w / 2, -440, w, 260, 18), fill: "#D2D2CB", transform: "translate(7 8)" }, g);
+    U.shape(C, "hb", U.rrect(-w / 2, -440, w, 260, 18), { base: "#E4D9C6", hatch: "#B9A98C", gap: 6, fw: 1.1 }, { sw: 3 });
+    U.shape(C, "hbp", U.rrect(-w / 2 + 26, -414, w - 52, 150, 12), { base: "#EFE7D8", hatch: "#C9BCA2", gap: 7, fw: 1 }, { sw: 2.2 });
+    [[-w / 4 + 6, -1], [w / 4 - 6, 1]].forEach(([x, k], i) => U.shape(C, "pil" + i, `M${x - 98} -232 C ${x - 104} -276, ${x + 104} -282, ${x + 98} -236 C ${x + 102} -204, ${x - 100} -200, ${x - 98} -232 Z`, MAT.white, { sw: 2.6 }));
+  }
+  function bedFront(g, o) {
+    clear(g); o = Object.assign({ w: 470, seed: 92, top: -196 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, y0 = o.top;
+    el("path", { d: `M${-w / 2 - 14} ${y0 + 10} Q 0 ${y0 - 8} ${w / 2 + 14} ${y0 + 10} L${w / 2 + 18} 0 L${-w / 2 - 18} 0 Z`, fill: "#D2D2CB", transform: "translate(7 6)" }, g);
+    U.shape(C, "duvet", `M${-w / 2 - 14} ${y0 + 10} Q 0 ${y0 - 8} ${w / 2 + 14} ${y0 + 10} L${w / 2 + 18} 0 L${-w / 2 - 18} 0 Z`, { base: "#F1F1EC", hatch: "#C2C2BA", gap: 8, fw: 1 }, { sw: 3 });
+    U.shape(C, "sheet", `M${-w / 2 - 14} ${y0 + 10} Q 0 ${y0 - 8} ${w / 2 + 14} ${y0 + 10} L${w / 2 + 15} ${y0 + 44} Q 0 ${y0 + 28} ${-w / 2 - 15} ${y0 + 44} Z`, MAT.white, { sw: 2.4 });
+    el("path", { d: `M${-w / 2 - 6} ${y0 + 34} Q 0 ${y0 + 18} ${w / 2 + 6} ${y0 + 34}`, fill: "none", stroke: YEL, "stroke-width": 5, "stroke-linecap": "round" }, g);
+    ln(g, `M${-w / 4} ${y0 + 70} q 14 50 0 ${-y0 - 90} M${w / 5} ${y0 + 66} q -12 60 6 ${-y0 - 92}`, 1.6, "#A9A9A2");
+  }
+
+  window.UnnaDecor = { bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
 })();
