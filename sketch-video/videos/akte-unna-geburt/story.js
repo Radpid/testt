@@ -223,16 +223,34 @@
         .on((t, s) => { s.o *= 1 - 0.75 * E.out(prog(t, T("b1@حياتها") + 0.2, 0.2)); });
       k.prop("stamp", 540, 1220, 0.4, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.28, 12);
     } });
+    /* 1b · une seule décision : le panneau Hausgeburt / Klinik ; elle serre son PLAN et refuse de changer ----------- */
     st.scene({ from: "b2", in: "whip", inDur: 0.3, summary: false, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "b2", s: 1.08, cx: 540, cy: 900 }, { at: "b2@الخطة", s: 1.12, cx: 540, cy: 880, d: 0.5 }]);
-      k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.45, "rtl");
-      c.put(`<path d="M540 1240 L540 900 M540 900 C 540 780, 430 730, 330 665 M540 900 C 540 780, 650 730, 750 665" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/>`).wipe("b2@قرار", 0.5, "down");
-      k.chip("Plan: Hausgeburt", "الخطة: ولادة فالدار", 300, 540, 32).pop("b2@قرار+0.2");
-      k.chip("Krankenhaus", "السبيطار", 780, 540, 32, { yellow: true }).pop("b2@قرار+0.35");
-      k.title("✗", 780, 470, 90).pop("b2@تبدل").wobble("b2@تبدل+0.25", 0.5, 8);
-      pp(0, 0, 0.62, (t) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); return Object.assign({}, DOCW, p > 0 && p < 1 ? PP.walk((t * 1.4) % 1) : PP.stand, { expr: "focused", facing: -1, blink: rnd(blinkAt(t, 2)) }); })
-        .on((t, s) => { const p = E.inOut(prog(t, T("b2@قرار") + 0.3, 1.2)); s.x += lerp(540, 455, p); s.y += lerp(1260, 850, p); s.s *= lerp(1, 0.6, p); });
+      const q = T("b2@قرار"), ch = T("b2@تبدل"), pl = T("b2@الخطة");
+      c.camera([{ at: "b2", s: 1.0, cx: 540, cy: 930 }, { at: q, s: 1.2, cx: 430, cy: 930, d: 0.35 }, { at: "b2@بغاتش", s: 1.0, cx: 560, cy: 920, d: 0.32 }]);
+      k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.4, "rtl");
+      k.ground(540, 1300, 900);
+      // le panneau : le bras « Klinik » appelle (il bouge), puis il est barré ; « Hausgeburt » s'allume
+      c.sk((g, p) => D.signpost(g, p), (t) => ({ swing: rnd(t >= ch - 0.15 && t < pl ? -6 * Math.sin((t - ch + 0.15) * 14) : 0, 2), crossK: rnd(E.out(prog(t, pl, 0.4)), 20), glowA: rnd(prog(t, pl + 0.1, 0.3), 10) }), 690, 1300, 1);
+      c.text("ولادة فالدار", 572, 706, 26, "ar strong").fade(T("b2") + 0.2, 0.3);
+      c.text("السبيطار", 820, 826, 26, "ar strong").fade(T("b2") + 0.3, 0.3);
+      // la médecin serre son plan ; regarde la Klinik… et secoue la tête
+      const X = 330, Y = 1300, S = 1.2, CB = [X + 4, 1050], rl = (pt) => [rnd((pt[0] - X) / S, 2), rnd((pt[1] - Y) / S, 2)];
+      const doc = (t) => {
+        let expr = "calm", look = [0, 0.1], tilt = 0;
+        if (t >= q) { expr = "focused"; look = [0, 0]; }
+        if (t >= ch - 0.1) { expr = "angry"; look = [0.8, 0]; tilt = rnd(9 * Math.sin((t - ch) * 13) * Math.max(0, 1 - prog(t, ch, 0.8)), 2); }
+        if (t >= pl + 0.4) { look = [-0.6, 0]; tilt = -6; }
+        return Object.assign({}, DOCW, PP.stand, { expr, look2: look, headTilt: tilt, blink: rnd(blinkAt(t, 2)), reachL: rl([CB[0] - 58, CB[1] + 10]), bendL: -1, reachR: rl([CB[0] + 58, CB[1] + 10]), bendR: 1 });
+      };
+      const breathe = (t, s) => { s.y += Math.sin(t * 2.6) * 2; };
+      pp(X, Y, S, doc).on(breathe);
+      const cl = el("g"); D.clipboard(cl, {}); c.node(cl).on((t, s) => { s.x += CB[0]; s.y += CB[1] + Math.sin(t * 2.6) * 2; });
+      pp(X, Y, S, (t) => Object.assign(doc(t), { only: ["handL", "handR"] })).on(breathe);
+      // « قرار واحد » : un grand 1
+      c.put(`<circle cx="0" cy="0" r="46" fill="#F8CE4E" stroke="${INK}" stroke-width="4"/>`, 515, 790).pop(q, 0.35);
+      c.text("1", 515, 815, 72, "de").pop(q, 0.35);
+      c.kick(q, 0.05); c.kick(pl, 0.06);
     } });
 
     /* 2 · l'intro de l'auteur : sa photo (bord dessiné), Instagram, j'aime + s'abonner ---------------- */

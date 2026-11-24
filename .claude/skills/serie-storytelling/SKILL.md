@@ -92,15 +92,15 @@ videos/<episode>/
    proposer la liste. Une info fausse dite à l'oral (AKTE 02 : mauvais pays) → couper le mot, corriger à l'écran,
    le lui dire.
 6. **Montage par phrase, jamais mot par mot** (saccadé, refusé). Coupes au point le plus silencieux, fondus 20 ms.
-7. **Vitesse : `atempo=1.5`** (hauteur conservée ; vérifié intelligible au contrôle Scribe). Il veut RAPIDE.
-8. **Rythme RAPIDE, pauses ciblées** (retours AKTE 02 : « très rapide » puis « pas de longues pauses, pas de pauses
-   à l'improviste ») — valeurs AVANT ×1,5 dans `montage_voix.py` :
-   - même contexte : `beat` 0,10–0,24 s (cible 0,16 → ≈ 0,1 s à l'écoute) ;
-   - **changement COMPLET de contexte seulement** (`SCENE_START`) : 0,5–0,65 s (≈ 0,4 s) — accroche → intro,
-     intro → histoire (0,75), nouvel événement (douleurs, naissance), expert → tribunal, verdict → peine, leçon ;
-   - `PAUSE_BEFORE` là où deux idées se mélangent (AKTE 02 : après « بغينا ولادة طبيعية »  0,52) ;
-   - `EXTRA` pour la scène muette (AKTE 02 : 4,8 → ≈ 3,2 s). Jamais de pause à chaque scène « par principe ».
-9. **Durée** : AKTE 01 1 min 32 (×1,3) ; AKTE 02 1 min 30 avec l'intro (×1,5). Court, mais rien de supprimé sans accord.
+7. **Vitesse : `atempo=1.3`** (hauteur conservée). AKTE 02 : ×1,5 jugé TROP rapide par l'auteur → retour à ×1,3.
+8. **Rythme enchaîné, pauses ciblées** (retours AKTE 02 : « pas de longues pauses, pas de pauses à l'improviste »)
+   — valeurs AVANT ×1,3 dans `montage_voix.py` :
+   - même contexte : `beat` 0,09–0,20 s (cible 0,14 → ≈ 0,1 s à l'écoute) ;
+   - **changement COMPLET de contexte seulement** (`SCENE_START`) : 0,48–0,6 s (≈ 0,42 s) — accroche → intro,
+     intro → histoire (0,65), nouvel événement (douleurs, naissance), expert → tribunal, verdict → peine, leçon ;
+   - `PAUSE_BEFORE` là où deux idées se mélangent (AKTE 02 : après « بغينا ولادة طبيعية »  0,45) ;
+   - `EXTRA` pour la scène muette (AKTE 02 : 4,2 → ≈ 3,2 s). Jamais de pause à chaque scène « par principe ».
+9. **Durée** : AKTE 01 1 min 32 (×1,3) ; AKTE 02 ≈ 1 min 41 avec l'intro (×1,3). Court, mais rien de supprimé sans accord.
 10. **Mastering « voice-off »** : `highpass 80, EQ +2 dB@120, −2,5 dB@300, +3 dB@3,5 kHz, high-shelf +1,5 dB@9,5 kHz,
     deesser 0,45, compresseur 3:1 (6/90 ms)` → −15 LUFS voix, `alimiter 0.8`. Jamais de gate.
     Puis régénérer `beats.js` / `timings.js` depuis `edl3.json`, et tout ce qui dépend du minutage (bip du
@@ -120,6 +120,9 @@ videos/<episode>/
   qui se croisent, pas de bras tendu raide dans le vide, pas de tête qui en cache une autre.
 - **Couple** : montrer l'amour (main dans la main, bras autour, cœur, regard, blush, sourire) puis la douleur
   (pleurs, étreinte). Composition propre : chacun sa place, aucune tête ni corps qui se chevauchent.
+- **Idée abstraite = objet concret** (retour AKTE 02 : la fourche avec un point qui marche était « très amateur ») :
+  « une décision, ne pas changer le plan » → vrai panneau indicateur Hausgeburt / Klinik, la médecin qui serre
+  son PLAN, un grand « 1 », elle regarde la Klinik, secoue la tête, la Klinik est barrée. Jamais de schéma nu.
 - **Tenue adaptée à la scène** (blouse de ville à l'arrivée, tenue de bloc pour l'accouchement) ; changer de
   plan pour les moments forts (gros plan des visages, nouvel angle).
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache

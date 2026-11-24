@@ -1,5 +1,5 @@
 // AKTE 02 (Unna 2008) — texte EXACT de la voix de l'auteur (+ intro), mots sans importance retirés.
-// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage_voix.py, tempo x1.5).
+// Un beat = une phrase = un sous-titre. Minutage : timings.js (montage_voix.py, tempo x1.3).
 window.BEATS = [
   ["b1", "طبيبة في ألمانيا تحكم عليها بست سنين وتسع شهور ديال الحبس، ومنعوها تخدم طبيبة طول حياتها."],
   ["b2", "ماشي على غلطة صغيرة، على قرار واحد ما بغاتش تبدل الخطة."],

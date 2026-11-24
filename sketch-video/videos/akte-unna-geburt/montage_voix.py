@@ -6,7 +6,7 @@ import numpy as np
 
 D = sys.argv[1]
 SR = 48000
-TEMPO = float(os.environ.get("TEMPO", "1.5"))
+TEMPO = float(os.environ.get("TEMPO", "1.3"))   # x1,3 (retour de l'auteur : x1,5 trop rapide)
 
 def load(path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
@@ -81,15 +81,15 @@ FIX = {("raw", k): v for k, v in {35: "Unna.", 47: "لـUnna،", 37: "Couple", 3
        166: "الـBébé", 170: "الأكسجين.", 188: "ولكن…", 223: "Totschlag.", 213: "Tötung…", 258: "BGH", 282: "Hotel،",
        148: "12", 312: "عيب.", 146: "دازت"}.items()}
 FIX.update({("intro", k): v for k, v in FIX_INTRO.items()})
-# Rythme (retours de l'auteur) : RAPIDE. Entre deux phrases du même contexte : pause courte (0,16 s avant x1,5 ≈ 0,11 s).
-# Pause seulement quand le contexte change complètement : 0,6 s avant x1,5 (≈ 0,4 s à l'écoute). Jamais de pause « au hasard ».
+# Rythme (retours de l'auteur) : enchaîné. Entre deux phrases du même contexte : pause courte (0,14 s avant x1,3 ≈ 0,11 s).
+# Pause seulement quand le contexte change complètement : 0,55 s avant x1,3 (≈ 0,42 s à l'écoute). Jamais de pause « au hasard ».
 SCENE_START = {"i1", "b3", "b6", "b8", "b10", "b15", "b17", "b20", "b23", "b24"}   # vrais changements de contexte
-EXTRA = {"b15": 4.8}   # scène muette après « ولكن… » (moniteur → ligne plate, l'étreinte) ≈ 3,2 s
-RANGE = {"inner": (0.0, 0.24), "beat": (0.1, 0.24), "scene": (0.5, 0.65)}
-TARGET = {"inner": 0.08, "beat": 0.16, "scene": 0.6}
+EXTRA = {"b15": 4.2}   # scène muette après « ولكن… » (moniteur → ligne plate, l'étreinte) ≈ 3,2 s
+RANGE = {"inner": (0.0, 0.22), "beat": (0.09, 0.2), "scene": (0.48, 0.6)}
+TARGET = {"inner": 0.07, "beat": 0.14, "scene": 0.55}
 XF = 0.02
-PAUSE_BEFORE = {("raw", 27): 0.75,   # fin de l'intro → début de l'histoire (≈ 0,5 s)
-                ("raw", 117): 0.52}  # après « بغينا ولادة طبيعية، » : les deux idées ne se mélangent pas (≈ 0,35 s)
+PAUSE_BEFORE = {("raw", 27): 0.65,   # fin de l'intro → début de l'histoire (≈ 0,5 s)
+                ("raw", 117): 0.45}  # après « بغينا ولادة طبيعية، » : les deux idées ne se mélangent pas (≈ 0,35 s)
 
 def quietest(A, t0, t1, win=0.03):
     if t1 - t0 < 0.012: return (t0 + t1) / 2

@@ -201,5 +201,43 @@
     ln(g, `M${-w / 4} ${y0 + 70} q 14 50 0 ${-y0 - 90} M${w / 5} ${y0 + 66} q -12 60 6 ${-y0 - 92}`, 1.6, "#A9A9A2");
   }
 
-  window.UnnaDecor = { bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
+  // ───────── panneau indicateur à deux bras — origine : pied du poteau (sol) ; o.swing (°) fait bouger le bras « Klinik »
+  function signpost(g, o) {
+    clear(g); o = Object.assign({ h: 740, swing: 0, crossK: 0, glowA: 0, seed: 95 }, o);
+    const C = U.ctx(g, o.seed, false, 1), h = o.h;
+    el("ellipse", { cx: 0, cy: 2, rx: 46, ry: 10, fill: "rgba(28,26,28,.18)" }, g);
+    U.shape(C, "pole", U.rrect(-11, -h, 22, h, 8), { base: "#8E8E88", hatch: "#3F3F3B", gap: 4, fw: 1.2 }, { sw: 2.8 });
+    el("circle", { cx: 0, cy: -h - 8, r: 14, fill: YEL, stroke: INK, "stroke-width": 2.6 }, g);
+    // bras A : vers la gauche (Hausgeburt), jaune
+    const A = el("g", { transform: `translate(0 ${-h + 70})` }, g), CA = C.sub ? C.sub(A) : U.ctx(A, o.seed + 1, false, 1);
+    if (o.glowA > 0.02) el("path", { d: "M14 -48 L-226 -48 L-270 0 L-226 48 L14 48 Z", fill: YEL, opacity: f(0.35 * o.glowA), transform: "scale(1.08)" }, A);
+    U.shape(CA, "a", "M10 -36 L-214 -36 L-252 0 L-214 36 L10 36 Z", MAT.yellow, { sw: 3.2 });
+    U.text(A, "Hausgeburt", -118, 12, 34, {});
+    // bras B : vers la droite (Klinik), blanc + croix rouge ; il « appelle » (swing)
+    const B = el("g", { transform: `translate(0 ${-h + 190}) rotate(${f(o.swing)})` }, g), CB = C.sub ? C.sub(B) : U.ctx(B, o.seed + 2, false, 1);
+    U.shape(CB, "b", "M-10 -36 L214 -36 L252 0 L214 36 L-10 36 Z", MAT.white, { sw: 3.2 });
+    el("path", { d: "M18 -12 h10 v-10 h12 v10 h10 v12 h-10 v10 h-12 v-10 h-10 Z", fill: "#E05A4F", stroke: INK, "stroke-width": 1.8 }, B);
+    U.text(B, "Klinik", 130, 12, 36, {});
+    if (o.crossK > 0.02) {
+      const L = 300 * o.crossK;
+      el("path", { d: "M0 -30 L230 30", stroke: "#C9625A", "stroke-width": 10, "stroke-linecap": "round", fill: "none", "stroke-dasharray": `${f(Math.min(L, 238))} 999` }, B);
+      if (o.crossK > 0.5) el("path", { d: "M230 -30 L0 30", stroke: "#C9625A", "stroke-width": 10, "stroke-linecap": "round", fill: "none", "stroke-dasharray": `${f(Math.max(0, L - 150))} 999` }, B);
+    }
+  }
+  // ───────── porte-documents « PLAN : Hausgeburt » — origine : centre
+  function clipboard(g, o) {
+    clear(g); o = Object.assign({ seed: 97 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    el("path", { d: U.rrect(-66, -86, 132, 172, 10), fill: "#D2D2CB", transform: "translate(5 6)" }, g);
+    U.shape(C, "board", U.rrect(-66, -86, 132, 172, 10), MAT.wood || { base: "#D9C3A0", hatch: "#A88B5F", gap: 6, fw: 1 }, { sw: 2.8 });
+    U.shape(C, "paper", U.rrect(-54, -66, 108, 140, 4), MAT.white, { sw: 2 });
+    U.shape(C, "clip", U.rrect(-26, -96, 52, 26, 6), MAT.mid, { sw: 2.4 });
+    U.text(g, "PLAN", 0, -36, 26, {});
+    // petite maison + coche
+    ln(g, "M-26 16 L0 -8 L26 16 M-20 10 L-20 40 L20 40 L20 10", 3);
+    el("rect", { x: -6, y: 24, width: 12, height: 16, fill: YEL, stroke: INK, "stroke-width": 1.8 }, g);
+    ln(g, "M-34 56 L34 56", 2, "#B4B4AE");
+  }
+
+  window.UnnaDecor = { signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
 })();
