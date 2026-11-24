@@ -122,7 +122,12 @@ videos/<episode>/
   (pleurs, étreinte). Composition propre : chacun sa place, aucune tête ni corps qui se chevauchent.
 - **Idée abstraite = objet concret** (retour AKTE 02 : la fourche avec un point qui marche était « très amateur ») :
   « une décision, ne pas changer le plan » → vrai panneau indicateur Hausgeburt / Klinik, la médecin qui serre
-  son PLAN, un grand « 1 », elle regarde la Klinik, secoue la tête, la Klinik est barrée. Jamais de schéma nu.
+  son porte-documents « راسي قاصح », un grand « 1 », elle regarde la Klinik, secoue la tête, la Klinik est barrée.
+  Jamais de schéma nu. **Chaque scène est ANIMÉE** (retour AKTE 02 : « ça doit être animé ! ») : le personnage
+  entre en marchant, réagit (se tourne, lève un objet, secoue la tête, tape du pied + poussière), le texte s'écrit
+  à la main, puis il repart ; jamais une pose fixe pendant toute la phrase.
+- **Textes sur les objets en darija parlante** qui disent l'attitude (« راسي قاصح ») plutôt qu'un mot neutre
+  (« PLAN »).
 - **Tenue adaptée à la scène** (blouse de ville à l'arrivée, tenue de bloc pour l'accouchement) ; changer de
   plan pour les moments forts (gros plan des visages, nouvel angle).
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache

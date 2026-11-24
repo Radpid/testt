@@ -223,34 +223,45 @@
         .on((t, s) => { s.o *= 1 - 0.75 * E.out(prog(t, T("b1@حياتها") + 0.2, 0.2)); });
       k.prop("stamp", 540, 1220, 0.4, () => ({ text: "LEBENSLANGES BERUFSVERBOT", size: 44, rot: -6 })).slam("b1@حياتها", 0.28, 12);
     } });
-    /* 1b · une seule décision : le panneau Hausgeburt / Klinik ; elle serre son PLAN et refuse de changer ----------- */
+    /* 1b · une seule décision : elle arrive, lève son porte-documents « راسي قاصح », refuse la Klinik et repart --------- */
     st.scene({ from: "b2", in: "whip", inDur: 0.3, summary: false, build(c) {
       const k = kit(c); k.bg(); c_ = c;
-      const q = T("b2@قرار"), ch = T("b2@تبدل"), pl = T("b2@الخطة");
-      c.camera([{ at: "b2", s: 1.0, cx: 540, cy: 930 }, { at: q, s: 1.2, cx: 430, cy: 930, d: 0.35 }, { at: "b2@بغاتش", s: 1.0, cx: 560, cy: 920, d: 0.32 }]);
+      const q = T("b2@قرار"), ch = T("b2@تبدل"), pl = T("b2@الخطة"), t0 = T("b2") + 0.05, t1 = q - 0.08, stomp = ch + 0.45, tOut = pl + 0.3;
+      c.camera([{ at: "b2", s: 1.0, cx: 540, cy: 930 }, { at: q, s: 1.1, cx: 490, cy: 935, d: 0.35 }, { at: "b2@بغاتش", s: 1.0, cx: 560, cy: 920, d: 0.32 }]);
       k.ar("ماشي غلطة صغيرة", 540, 430, 46, "ttl", c.hud).wipe("b2", 0.4, "rtl");
       k.ground(540, 1300, 900);
-      // le panneau : le bras « Klinik » appelle (il bouge), puis il est barré ; « Hausgeburt » s'allume
-      c.sk((g, p) => D.signpost(g, p), (t) => ({ swing: rnd(t >= ch - 0.15 && t < pl ? -6 * Math.sin((t - ch + 0.15) * 14) : 0, 2), crossK: rnd(E.out(prog(t, pl, 0.4)), 20), glowA: rnd(prog(t, pl + 0.1, 0.3), 10) }), 690, 1300, 1);
-      c.text("ولادة فالدار", 572, 706, 26, "ar strong").fade(T("b2") + 0.2, 0.3);
-      c.text("السبيطار", 820, 826, 26, "ar strong").fade(T("b2") + 0.3, 0.3);
-      // la médecin serre son plan ; regarde la Klinik… et secoue la tête
-      const X = 330, Y = 1300, S = 1.2, CB = [X + 4, 1050], rl = (pt) => [rnd((pt[0] - X) / S, 2), rnd((pt[1] - Y) / S, 2)];
+      c.sk((g, p) => D.signpost(g, p), (t) => ({ swing: rnd(t >= ch - 0.15 && t < pl ? -6 * Math.sin((t - ch + 0.15) * 14) : 0, 2), crossK: rnd(E.out(prog(t, pl, 0.4)), 20), glowA: rnd(prog(t, pl + 0.1, 0.3), 10) }), 650, 1300, 1);
+      c.text("ولادة فالدار", 532, 706, 26, "ar strong").fade(T("b2") + 0.2, 0.3);
+      c.text("السبيطار", 780, 826, 26, "ar strong").fade(T("b2") + 0.3, 0.3);
+      const X = 310, Y = 1300, S = 1.2, CB = [X + 4, 1050], rl = (pt) => [rnd((pt[0] - X) / S, 2), rnd((pt[1] - Y) / S, 2)];
+      const front = (t) => t >= t1 && t < tOut;
+      const xAt = (t) => t < t1 ? lerp(-110, X, E.out(prog(t, t0, t1 - t0))) : t < tOut ? X : lerp(X, 160, prog(t, tOut, 0.7));
+      const hop = (t) => (t >= stomp && t < stomp + 0.22 ? -16 * Math.sin(Math.PI * prog(t, stomp, 0.22)) : 0);
+      const lift = (t) => front(t) ? Math.sin(t * 2.6) * 2 + hop(t) : 0;
       const doc = (t) => {
-        let expr = "calm", look = [0, 0.1], tilt = 0;
-        if (t >= q) { expr = "focused"; look = [0, 0]; }
-        if (t >= ch - 0.1) { expr = "angry"; look = [0.8, 0]; tilt = rnd(9 * Math.sin((t - ch) * 13) * Math.max(0, 1 - prog(t, ch, 0.8)), 2); }
-        if (t >= pl + 0.4) { look = [-0.6, 0]; tilt = -6; }
-        return Object.assign({}, DOCW, PP.stand, { expr, look2: look, headTilt: tilt, blink: rnd(blinkAt(t, 2)), reachL: rl([CB[0] - 58, CB[1] + 10]), bendL: -1, reachR: rl([CB[0] + 58, CB[1] + 10]), bendR: 1 });
+        if (!front(t)) {   // elle arrive (vers la droite) / elle repart vers « Hausgeburt » (vers la gauche) : vrai cycle de marche
+          const out = t >= tOut, ph = (((t - (out ? tOut : t0)) * 1.7) % 1 + 1) % 1;
+          return Object.assign({}, DOCW, PP.walk(ph), { view: "side", facing: out ? -1 : 1, expr: out ? "angry" : "focused", blink: rnd(blinkAt(t, 2)) });
+        }
+        let expr = "focused", look = [0, 0], tilt = 0;
+        if (t >= ch - 0.1) { expr = "angry"; look = [0.8, 0]; tilt = rnd(10 * Math.sin((t - ch) * 13) * Math.max(0, 1 - prog(t, ch, 0.7)), 2); }
+        if (t >= pl) { look = [-0.6, 0]; tilt = -6; }
+        return Object.assign({}, DOCW, PP.stand, { expr, look2: look, headTilt: tilt, blink: rnd(blinkAt(t, 2)), reachL: rl([CB[0] - 60, CB[1] + 12]), bendL: -1, reachR: rl([CB[0] + 60, CB[1] + 12]), bendR: 1 });
       };
-      const breathe = (t, s) => { s.y += Math.sin(t * 2.6) * 2; };
-      pp(X, Y, S, doc).on(breathe);
-      const cl = el("g"); D.clipboard(cl, {}); c.node(cl).on((t, s) => { s.x += CB[0]; s.y += CB[1] + Math.sin(t * 2.6) * 2; });
-      pp(X, Y, S, (t) => Object.assign(doc(t), { only: ["handL", "handR"] })).on(breathe);
-      // « قرار واحد » : un grand 1
-      c.put(`<circle cx="0" cy="0" r="46" fill="#F8CE4E" stroke="${INK}" stroke-width="4"/>`, 515, 790).pop(q, 0.35);
-      c.text("1", 515, 815, 72, "de").pop(q, 0.35);
-      c.kick(q, 0.05); c.kick(pl, 0.06);
+      const docN = pp(0, 0, S, doc).on((t, s) => { s.x += xAt(t); s.y += Y + lift(t); });
+      // le porte-documents : levé quand elle se tourne vers nous, « راسي قاصح » s'écrit à la main ; elle repart avec
+      c.sk((g, p) => D.clipboard(g, p), (t) => ({ write: rnd(E.inOut(prog(t, q + 0.1, 0.6)), 20) }), 0, 0, 1).on((t, s) => {
+        if (t < t1) { s.o *= 0; return; }
+        if (t < tOut) { s.x += CB[0]; s.y += CB[1] + 80 * (1 - E.out(prog(t, t1, 0.25))) + lift(t); return; }
+        const h = docN.out && docN.out.handR; if (h) { s.x += xAt(t) + h[0] * S; s.y += Y + h[1] * S + 48; s.s *= 0.72; }
+      });
+      pp(0, 0, S, (t) => Object.assign(doc(t), { only: ["handL", "handR"] })).on((t, s) => { s.x += xAt(t); s.y += Y + lift(t); s.o *= front(t) ? 1 : 0; });
+      // elle tape du pied : un peu de poussière
+      [-1, 1].forEach((sg) => c.put(`<ellipse cx="0" cy="0" rx="22" ry="9" fill="#DEDCD3" stroke="#B4B2A8" stroke-width="2"/>`).on((t, s) => { const p = prog(t, stomp + 0.18, 0.45); s.o *= p > 0 && p < 1 ? 1 - p : 0; s.x += X + sg * (50 + 34 * p); s.y += 1294 - 10 * p; }));
+      // « قرار واحد » : un grand 1 qui rebondit
+      c.put(`<circle cx="0" cy="0" r="46" fill="#F8CE4E" stroke="${INK}" stroke-width="4"/>`, 488, 800).pop(q, 0.35).wobble(q + 0.35, 0.4, 10);
+      c.text("1", 488, 825, 72, "de").pop(q, 0.35).wobble(q + 0.35, 0.4, 10);
+      c.kick(q, 0.05); c.kick(stomp, 0.04); c.kick(pl, 0.06);
     } });
 
     /* 2 · l'intro de l'auteur : sa photo (bord dessiné), Instagram, j'aime + s'abonner ---------------- */

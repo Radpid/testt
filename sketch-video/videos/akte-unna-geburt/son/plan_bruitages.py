@@ -4,7 +4,10 @@ P = [
  ("bars", "0", 0.22, -7, None, None),                       # la grille de la cellule tombe
  ("tear", "b1@ومنعوها", 0.2, -9, None, None),               # l'Approbation déchirée
  ("stamp", "b1@حياتها", 0.22, -6, None, None),              # tampon « Berufsverbot »
+ ("steps", "b2", 0.05, -20, 0.3, 0.9),                     # elle arrive en marchant
  ("creak", "b2@تبدل", -0.1, -17, 0.3, 0.8),                # le panneau « Klinik » grince
+ ("steps", "b2@تبدل", 0.45, -14, None, 0.25),              # elle tape du pied
+ ("steps", "b2@الخطة", 0.3, -20, 0.3, 0.6),                # elle repart vers « Hausgeburt »
  ("suitcase", "b4@بالقصد", 0.0, -17, 0.3, 1.0),            # la valise arrive à côté du couple
  ("heartbeat", "b6@الوضعية", 0.0, -20, 0.6, 2.5),           # cœur du bébé dans l'utérus
  ("steps", "b7@قواعد", 0.4, -20, 0.3, 1.4),                 # la maman marche vers la Klinik

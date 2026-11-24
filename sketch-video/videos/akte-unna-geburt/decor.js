@@ -224,19 +224,21 @@
       if (o.crossK > 0.5) el("path", { d: "M230 -30 L0 30", stroke: "#C9625A", "stroke-width": 10, "stroke-linecap": "round", fill: "none", "stroke-dasharray": `${f(Math.max(0, L - 150))} 999` }, B);
     }
   }
-  // ───────── porte-documents « PLAN : Hausgeburt » — origine : centre
+  // ───────── porte-documents : « راسي قاصح » qui s'écrit à la main (o.write 0..1, de droite à gauche) — origine : centre
   function clipboard(g, o) {
-    clear(g); o = Object.assign({ seed: 97 }, o);
+    clear(g); o = Object.assign({ seed: 97, write: 1, lines: ["راسي", "قاصح"] }, o);
     const C = U.ctx(g, o.seed, false, 1);
-    el("path", { d: U.rrect(-66, -86, 132, 172, 10), fill: "#D2D2CB", transform: "translate(5 6)" }, g);
-    U.shape(C, "board", U.rrect(-66, -86, 132, 172, 10), MAT.wood || { base: "#D9C3A0", hatch: "#A88B5F", gap: 6, fw: 1 }, { sw: 2.8 });
-    U.shape(C, "paper", U.rrect(-54, -66, 108, 140, 4), MAT.white, { sw: 2 });
-    U.shape(C, "clip", U.rrect(-26, -96, 52, 26, 6), MAT.mid, { sw: 2.4 });
-    U.text(g, "PLAN", 0, -36, 26, {});
-    // petite maison + coche
-    ln(g, "M-26 16 L0 -8 L26 16 M-20 10 L-20 40 L20 40 L20 10", 3);
-    el("rect", { x: -6, y: 24, width: 12, height: 16, fill: YEL, stroke: INK, "stroke-width": 1.8 }, g);
-    ln(g, "M-34 56 L34 56", 2, "#B4B4AE");
+    el("path", { d: U.rrect(-70, -90, 140, 180, 10), fill: "#D2D2CB", transform: "translate(5 6)" }, g);
+    U.shape(C, "board", U.rrect(-70, -90, 140, 180, 10), { base: "#D9C3A0", hatch: "#A88B5F", gap: 6, fw: 1 }, { sw: 2.8 });
+    U.shape(C, "paper", U.rrect(-58, -70, 116, 148, 4), MAT.white, { sw: 2 });
+    U.shape(C, "clip", U.rrect(-26, -100, 52, 26, 6), MAT.mid, { sw: 2.4 });
+    if (o.write > 0.01) {
+      const id = "cbw" + o.seed, cp = el("clipPath", { id }, el("defs", {}, g));
+      el("rect", { x: f(58 - 116 * o.write), y: -70, width: f(116 * o.write), height: 148 }, cp);
+      const tg = el("g", { "clip-path": `url(#${id})` }, g);
+      o.lines.forEach((l, i) => U.text(tg, l, 0, -16 + i * 50, 40, { font: "Lalezar, 'Plex Arabic', sans-serif", weight: 400, rtl: true }));
+      el("path", { d: "M-40 52 Q 0 62 40 50", fill: "none", stroke: YEL, "stroke-width": 6, "stroke-linecap": "round", opacity: o.write > 0.95 ? 1 : 0 }, tg);
+    }
   }
 
   window.UnnaDecor = { signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
