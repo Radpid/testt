@@ -209,23 +209,21 @@
     st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const m = T("b2@مسؤولة"), dth = T("b2@الموت"), sh = T("b2@شخصيا");
-      c.camera([{ at: 0, s: 1.0, cx: 540, cy: 930 }, { at: "b2", s: 1.0, cx: 530, cy: 920, d: 0.45 }, { at: sh, s: 1.05, cx: 500, cy: 950, d: 0.4 }]);
-      // le mur du tribunal : grand emblème de la justice
-      c.put(`<g transform="translate(690 600)"><circle r="92" fill="#FFFFFF" stroke="${INK}" stroke-width="4"/></g>`);
-      const em = el("g"); D.scalesEmblem(em, 1.7); c.node(em).on((t, s) => { s.x += 690; s.y += 600; });
+      c.camera([{ at: 0, s: 1.0, cx: 540, cy: 930 }, { at: sh, s: 1.04, cx: 520, cy: 940, d: 0.4 }]);
+      // le mur : l'emblème de la justice, derrière la juge
+      c.put(`<g transform="translate(640 650)"><circle r="80" fill="#FFFFFF" stroke="${INK}" stroke-width="4"/><circle r="70" fill="none" stroke="#D2D2CB" stroke-width="3"/></g>`);
+      const em = el("g"); D.scalesEmblem(em, 1.4); c.node(em).on((t, s) => { s.x += 640; s.y += 655; });
       k.ground(540, 1300, 980);
-      // la juge : elle la regarde, puis la montre du doigt et prononce
-      pp(670, 1300, 1.1, (t) => Object.assign({}, JUD, t >= m - 0.1 ? PP.point : PP.stand, { facing: -1, expr: t >= m - 0.1 ? "angry" : "focused", blink: rnd(blinkAt(t, 1)), talk: rnd(talkAt(t, T("b2@أنت"), T("b2@end")), 10), look2: [0.7, 0.1] }));
-      const bn = el("g"); D.bench(bn, { w: 540 }); c.node(bn).on((t, s) => { s.x += 660; s.y += 1300; s.s *= 0.68; });
-      c.sk((g, p) => K.gavel(g, { x: 0, y: 0, rot: p.ang - 20, scale: 1.0 }), (t) => ({ ang: Math.round(t < m - 0.35 ? 0 : t < m ? -35 * E.out(prog(t, m - 0.35, 0.25)) : -35 * (1 - E.in(prog(t, m, 0.1)))) }), 750, 1090, 1);
-      c.shake(m + 0.1, 10, 0.35); c.kick(m + 0.1, 0.07);
-      // l'Assistenzärztin : inquiète → choc → larmes ; elle recule d'un pas
+      pp(640, 1300, 1.08, (t) => Object.assign({}, JUD, t >= m - 0.1 ? PP.point : PP.stand, { facing: -1, expr: t >= m - 0.1 ? "angry" : "focused", blink: rnd(blinkAt(t, 1)), talk: rnd(talkAt(t, T("b2@أنت"), T("b2@end")), 10), look2: [0.7, 0.1] }));
+      const bn = el("g"); D.bench(bn, { w: 540 }); c.node(bn).on((t, s) => { s.x += 630; s.y += 1300; s.s *= 0.64; });
+      c.kick(m, 0.06);
+      // l'Assistenzärztin entre, inquiète → choc → larmes ; elle recule d'un pas
       const ex = (t) => t < m ? "worried" : t < dth ? "shock" : t < sh ? "cry" : (t < sh + 0.4 ? "shock" : "cry");
       const wIn = 1.15, xA = (t) => lerp(-130, 290, E.out(prog(t, 0, wIn))) - 24 * E.out(prog(t, m + 0.05, 0.25));
       pp(0, 0, 1.12, (t) => Object.assign({}, ASS, { outfit: "coat" }, t < wIn ? Object.assign(PP.walk(((t * 1.7) % 1)), { view: "side" }) : PP.stand, t < wIn ? {} : { view: "three-quarter" }, { facing: 1, expr: ex(t), tears: t >= dth ? rnd(Math.min(1, prog(t, dth, 0.6)), 10) : 0, sweat: t < dth, look2: [0.7, 0], blink: rnd(blinkAt(t, 2)), headTilt: t >= dth ? rnd(4 * Math.sin(t * 6), 2) : 0 }))
         .on((t, s) => { s.x += xA(t); s.y += 1300 + Math.sin(t * 2.6) * 2; });
       k.chip("Assistenzärztin", "طبيبة فطور الاختصاص", 290, 690, 30).pop("b1@طور");
-      k.prop("stamp", 520, 470, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 48, rot: -5 })).slam(sh + 0.1, 0.28, 12);
+      k.prop("stamp", 540, 470, 0.5, () => ({ text: "HAFTET PERSÖNLICH", size: 48, rot: -5 })).slam(sh + 0.1, 0.28, 12);
     } });
 
     /* ═══════ 2 · « ce n'est pas elle qui a décidé ; le problème : elle s'est tue » ═══════ */
@@ -308,10 +306,10 @@
       k.ground(540, BASE, 1000);
       c.put(`<rect x="40" y="${BASE}" width="1000" height="${FG - BASE}" fill="#ECEBE4"/><path d="M40 ${BASE + 70} L1040 ${BASE + 70}" stroke="#CFCEC6" stroke-width="2.4" stroke-dasharray="44 30"/>`);
       k.ground(540, FG, 1000);
-      const hs = el("g"); building(hs, { w: 340, h: 380, rows: 3, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 31 }); c.node(hs).on((t, s) => { s.x += 700; s.y += BASE; s.s *= 0.85; });
+      const hs = el("g"); building(hs, { w: 340, h: 380, rows: 3, cols: 3, sign: "KLINIK", cross: true, signMat: MAT.white, seed: 31 }); c.node(hs).on((t, s) => { s.x += 665; s.y += BASE; s.s *= 0.8; });
       pp(0, 0, 0.95, (t) => Object.assign(walkTo(PAT, t, a, d, 1), { expr: "smile", blink: rnd(blinkAt(t, 6)) }, prog(t, a, d) >= 1 ? { view: "front", look2: [0, 0] } : {}))
         .on((t, s) => { s.x += lerp(-120, 420, E.out(prog(t, a, d))); s.y += FG; });
-      k.chip("40+ Jahre", "فالأربعينات", 420, 840, 28).pop("b5@الأربعينيات");
+      k.chip("40+ Jahre", "فالأربعينات", 420, 770, 28).pop("b5@الأربعينيات");
       k.chip("Hysteroskopie", "فحص بسيط فالرحم", 540, 500, 34, { yellow: true }).pop("b5@Hysteroskopie");
     } });
 
@@ -327,50 +325,61 @@
       k.chip("um gut zu sehen", "باش يشوفو مزيان", 540, 1290, 26).pop("b6@مزيان");
     } });
 
-    /* ═══════ 6 · le bloc : l'Oberärztin (depuis 1 mois) + l'Assistenzärztin ; Dr. K veut tester son appareil ;
-     *          l'eau distillée ; l'Oberärztin doute… et continue ; l'Assistenzärztin ne dit rien ═══════ */
-    const orRoom = (c, k, o) => {
+    /* ═══════ le bloc opératoire : une mise en place FIXE (chaque élément a sa place, rien ne se chevauche) ═══════
+     *   lampe au centre · poche d'eau à gauche (tuyau vers le pied de la table) · moniteur au mur à droite ·
+     *   table au milieu, patiente allongée (tête à droite) · Oberärztin + Assistenzärztin derrière la table ·
+     *   étiquettes dans la bande du haut (y ≈ 470) */
+    const ORc = { BX: 500, BW: 460, SY: 1272, S: 0.95, OX: 390, AX: 575, MX: 830, MY: 620 };
+    const BED_A = D.bed2(el("g"), { flip: true, w: ORc.BW });
+    const orBack = (c, k, o) => {
       o = o || {};
-      c.sk((g, p) => D.opLamp(g, Object.assign(p, { drop: 150 })), (t) => ({ on: o.lampAt != null ? rnd(t < o.lampAt ? 0 : (Math.floor((t - o.lampAt) / 0.07) % 2 && t < o.lampAt + 0.3 ? 0.3 : 1), 10) : 1 }), 520, 230, 1);
-      k.ground(540, 1300, 980);
+      c.sk((g, p) => D.opLamp(g, Object.assign(p, { drop: 150 })), (t) => ({ on: o.lampAt != null ? rnd(t < o.lampAt ? 0 : (Math.floor((t - o.lampAt) / 0.07) % 2 && t < o.lampAt + 0.3 ? 0.3 : 1), 10) : 1 }), 500, 230, 1);
+      k.ground(520, 1300, 980);
+      c.put(`<path d="M${ORc.MX} ${ORc.MY - 108} L${ORc.MX} ${ORc.MY - 160} L${ORc.MX + 60} ${ORc.MY - 160}" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`);
+      c.sk((g, p) => D.monitor(g, p), o.mon || ((t) => ({ t: rnd((t * 1.2) % 1, 30) })), ORc.MX, ORc.MY, 0.72);
     };
-    const TBL = [540, 1300];
-    const table = (c, extra) => { const g = el("g"); const a = D.opTable(g, Object.assign({}, extra || {})); c.node(g).on((t, s) => { s.x += TBL[0]; s.y += TBL[1]; }); return a; };
-    const TA = (() => { const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); return D.opTable(g, {}); })();
-    const patientHead = (c, fn) => ph(TBL[0] + TA.head[0], TBL[1] + TA.head[1] + 4, 0.6, fn, -80);
+    const handsO = (t, k) => ({ reachL: rl([ORc.OX, ORc.SY], ORc.S, [352 + (k || 0) * Math.sin(t * 5), 1082]), reachR: rl([ORc.OX, ORc.SY], ORc.S, [410 - (k || 0) * Math.sin(t * 5), 1076]), bendL: -1, bendR: 1 });
+    const handsA = (t) => ({ reachL: rl([ORc.AX, ORc.SY], ORc.S, [545, 1080]), reachR: rl([ORc.AX, ORc.SY], ORc.S, [606, 1074]), bendL: -1, bendR: 1 });
+    const orBed = (c, headFn) => {
+      const g = el("g"); D.bed2(g, { flip: true, w: ORc.BW }); c.node(g).on((t, s) => { s.x += ORc.BX; s.y += 1300; });
+      return ph(ORc.BX + BED_A.head[0], 1300 + BED_A.head[1] - 8, 0.85, headFn || ((t) => Object.assign({}, PAT, { view: "side", facing: 1, expr: "sleep" })), -90);
+    };
+    const bagAt = (c, fn) => c.sk((g, p) => D.fluidBag(g, p), fn, 165, 1300, 1);
+
+    /* ═══════ 6 · le bloc : Oberärztin (depuis 1 mois) + Assistenzärztin ; Dr. K entre avec son appareil ;
+     *          l'eau distillée ; l'Oberärztin doute… et continue ; l'Assistenzärztin ne dit rien ═══════ */
     st.scene({ from: "b7", in: "slideLeft", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const oA = T("b7@Oberärztin"), aA = T("b7@Assistenzärztin"), dk = T("b8"), wa = T("b9@destilliertes"), dbt = T("b10@شكات"), cnt = T("b10@كملات"), sl = T("b11"), sl2 = T("b11@والو");
-      c.camera([{ at: "b7", s: 1.0, cx: 540, cy: 900 }, { at: sl, s: 1.32, cx: 640, cy: 990, d: 0.45 }]);
-      orRoom(c, k, { lampAt: T("b7") + 0.1 });
-      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd((t * 1.2) % 1, 30) }), 860, 590, 0.72);
-      // la poche d'eau distillée arrive, coule, et se vide
-      c.sk((g, p) => D.fluidBag(g, p), (t) => ({ level: rnd(1 - 0.75 * prog(t, wa + 0.4, 9), 40), flow: rnd(t >= wa + 0.4 ? ((t - wa) * 1.2) % 1 : 0, 30), tube: [170, -250] }), 190, 1300, 1).slide(wa - 0.1, 0, -500, 0.4, "out");
-      k.chip("destilliertes Wasser", "الماء المقطر", 300, 520, 28, { yellow: true }).pop(wa + 0.15).hide(dbt, 0.2);
-      // l'équipe derrière la table
-      const ob = pp(450, 1300, 1.0, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= dbt && t < cnt ? "worried" : "focused", look2: t >= dbt && t < cnt ? [0.8, -0.2] : [0.2, 0.6], blink: rnd(blinkAt(t, 7)), reachL: rl([450, 1300], 1, [430 + 6 * Math.sin(t * 5), 1050]), reachR: rl([450, 1300], 1, [500 - 6 * Math.sin(t * 5), 1046]), bendL: -1, bendR: 1 })).on(breathe(3));
-      const as = pp(650, 1300, 1.0, (t) => Object.assign({}, ASS, PP.stand, { expr: t >= sl ? "worried" : "calm", sweat: t >= sl, look2: t >= sl ? [Math.sin((t - sl) * 5) > 0 ? -0.8 : 0.8, 0] : [-0.3, 0.6], blink: rnd(blinkAt(t, 8)), reachL: rl([650, 1300], 1, [600, 1052]), reachR: rl([650, 1300], 1, [690, 1048]), bendL: -1, bendR: 1 }));
+      c.camera([{ at: "b7", s: 1.0, cx: 520, cy: 920 }, { at: sl, s: 1.28, cx: 600, cy: 960, d: 0.45 }]);
+      orBack(c, k, { lampAt: T("b7") + 0.1 });
+      bagAt(c, (t) => ({ level: rnd(1 - 0.75 * prog(t, wa + 0.4, 9), 40), flow: rnd(t >= wa + 0.4 ? ((t - wa) * 1.2) % 1 : 0, 30), tube: [135, -200] })).slide(wa - 0.1, 0, -600, 0.45, "out");
+      pp(ORc.OX, ORc.SY, ORc.S, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= dbt && t < cnt ? "worried" : "focused", look2: t >= dbt && t < cnt ? [-0.6, -0.6] : [-0.2, 0.7], blink: rnd(blinkAt(t, 7)) }, handsO(t, 6))).on(breathe(3));
+      const as = pp(ORc.AX, ORc.SY, ORc.S, (t) => Object.assign({}, ASS, PP.stand, { expr: t >= sl ? "worried" : "calm", sweat: t >= sl, look2: t >= sl ? [Math.sin((t - sl) * 5) > 0 ? -0.8 : 0.8, 0] : [-0.4, 0.6], blink: rnd(blinkAt(t, 8)) }, handsA(t)));
       as.on(breathe(4));
-      table(c);
-      patientHead(c, (t) => Object.assign({}, PAT, { expr: "sleep" }));
-      k.chip("Oberärztin · seit 1 Monat", "عاد شهر وهي Oberärztin", 450, 760, 26).pop(oA).hide(aA, 0.2);
-      k.chip("Assistenzärztin", "طبيبة فطور الاختصاص", 650, 760, 28).pop(aA).hide(dk, 0.2);
-      // Dr. K entre avec l'appareil qui brille
-      const kIn = dk + 0.05, kX = (t) => lerp(1180, 835, E.out(prog(t, kIn, 1.0)));
-      const kd = pp(0, 0, 1.0, (t) => Object.assign(walkTo(DRK, t, kIn, 1.0, -1), { expr: "bigsmile", blink: rnd(blinkAt(t, 9)) }, prog(t, kIn, 1.0) >= 1 ? PP.holdHandOutSide : {}, { facing: -1 }))
-        .on((t, s) => { s.x += kX(t); s.y += 1300; });
-      c.sk((g, p) => D.scope(g, p), (t) => ({ sparkle: rnd((Math.sin(t * 6) + 1) / 2, 5) }), 0, 0, 0.75, 180).on((t, s) => { const h = kd.out && kd.out.handR; if (!h || prog(t, kIn, 1.0) < 1) { s.o *= 0; return; } s.x += kX(t) + h[0]; s.y += 1300 + h[1]; });
-      k.chip("will das Gerät testen", "بغا يجرب الجهاز", 640, 760, 26, { yellow: true }).pop(T("b8@يجرب")).hide(wa, 0.2);
-      // l'Oberärztin doute (« ? ») ; Dr. K : « keine Bedenken » ; elle efface son doute et continue
-      cloud(c, 330, 690, 150, 120, [420, 850]).pop(dbt, 0.35).hide(cnt, 0.3);
-      c.text("?", 330, 715, 70, "de").pop(dbt, 0.35).wobble(dbt + 0.3, 0.4, 10).hide(cnt, 0.3);
-      bubble(c, 760, 660, 280, 96, [840, 790]).pop(dbt + 0.5, 0.3).hide(sl, 0.2);
-      c.text("keine Bedenken", 760, 656, 32, "de").pop(dbt + 0.5, 0.3).hide(sl, 0.2);
-      c.text("ما عندو حتى مشكل", 760, 704, 22, "ar strong").pop(dbt + 0.6, 0.3).hide(sl, 0.2);
-      // l'Assistenzärztin : rien. Une bulle vide, puis le scotch
-      bubble(c, 760, 820, 120, 84, [700, 900]).pop(sl + 0.3, 0.3).hide(sl2, 0.25);
-      c.text("…", 760, 834, 54, "de").pop(sl + 0.3, 0.3).hide(sl2, 0.25);
-      tapeOn(c, as, 650, 1300, 1.0, sl2 + 0.05);
+      orBed(c);
+      // Dr. K entre par la droite et montre fièrement son appareil
+      const kIn = dk + 0.05, KX = 782, KS = 0.95, kX = (t) => lerp(1180, KX, E.out(prog(t, kIn, 1.0)));
+      const kPose = (t) => Object.assign({}, DRK, { facing: -1 }, prog(t, kIn, 1.0) < 1 ? Object.assign(PP.walk((((t - kIn) * 1.7) % 1 + 1) % 1), { view: "side" })
+        : Object.assign({}, PP.stand, { view: "three-quarter", reachR: rl([KX, 1300], KS, [732, 1062]), bendR: 1 }), { expr: "bigsmile", blink: rnd(blinkAt(t, 9)) });
+      const kd = pp(0, 0, KS, kPose).on((t, s) => { s.x += kX(t); s.y += 1300; });
+      c.sk((g, p) => D.scope(g, p), (t) => ({ sparkle: rnd((Math.sin(t * 6) + 1) / 2, 5) }), 0, 0, 0.62, -90).on((t, s) => { const h = kd.out && kd.out.handR; if (!h || prog(t, kIn, 1.0) < 1) { s.o *= 0; return; } s.x += kX(t) + h[0] * KS; s.y += 1300 + h[1] * KS; });
+      // étiquettes : bande du haut, une à la fois
+      k.chip("Oberärztin · seit 1 Monat", "عاد شهر وهي Oberärztin", 540, 470, 28).pop(oA).hide(aA, 0.2);
+      k.chip("Assistenzärztin", "طبيبة فطور الاختصاص", 540, 470, 30).pop(aA).hide(dk, 0.2);
+      k.chip("will das Gerät testen", "بغا يجرب الجهاز", 540, 470, 28, { yellow: true }).pop(T("b8@يجرب")).hide(wa, 0.2);
+      k.chip("destilliertes Wasser", "الماء المقطر", 540, 470, 30, { yellow: true }).pop(wa + 0.15).hide(dbt, 0.2);
+      // l'Oberärztin doute : « ? » au-dessus de sa tête ; Dr. K : « keine Bedenken » ; elle continue
+      bubble(c, 300, 720, 110, 96, null).pop(dbt, 0.35).hide(cnt, 0.3);
+      c.put(`<g fill="#FFFFFF" stroke="${INK}" stroke-width="3"><circle cx="338" cy="790" r="12"/><circle cx="360" cy="822" r="8"/></g>`).pop(dbt, 0.3).hide(cnt, 0.3);
+      c.text("?", 300, 744, 64, "de").pop(dbt, 0.35).wobble(dbt + 0.3, 0.4, 10).hide(cnt, 0.3);
+      bubble(c, 720, 720, 280, 112, [790, 860]).pop(dbt + 0.5, 0.3).hide(sl, 0.2);
+      c.text("keine Bedenken", 720, 712, 32, "de").pop(dbt + 0.5, 0.3).hide(sl, 0.2);
+      c.text("ما عندو حتى مشكل", 720, 758, 22, "ar strong").pop(dbt + 0.6, 0.3).hide(sl, 0.2);
+      // l'Assistenzärztin : rien — une petite bulle vide, puis le scotch
+      bubble(c, 610, 760, 110, 78, [585, 830]).pop(sl + 0.3, 0.3).hide(sl2, 0.25);
+      c.text("…", 610, 772, 50, "de").pop(sl + 0.3, 0.3).hide(sl2, 0.25);
+      tapeOn(c, as, ORc.AX, ORc.SY, ORc.S, sl2 + 0.05);
     } });
 
     /* ═══════ 7 · dans sa tête : la hiérarchie — « le Oberarzt a l'expérience, moi je ne suis qu'Assistenzärztin »
@@ -378,22 +387,27 @@
     st.scene({ from: "b12", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const ex = T("b12@الخبرة"), only = T("b12@غير"), knew = T("b13@عارفة"), never = T("b13@عمرها");
-      c.camera([{ at: "b12", s: 1.0, cx: 540, cy: 900 }, { at: knew, s: 1.06, cx: 560, cy: 880, d: 0.5 }]);
-      cloud(c, 570, 790, 560, 580, [270, 1090]).pop(T("b12"), 0.4);
-      const ld = el("g"); D.ladder(ld, { h: 480, w: 170 }); c.node(ld).on((t, s) => { s.x += 450; s.y += 1040; }).wipe(T("b12") + 0.2, 0.4, "up");
-      const R = [1040 - 70, 1040 - 70 - 340 / 3, 1040 - 70 - 680 / 3, 1040 - 410];
+      c.camera([{ at: "b12", s: 1.0, cx: 540, cy: 900 }]);
+      // la bulle de pensée : une carte propre + trois petits ronds qui partent de sa tête
+      k.card(300, 440, 600, 560, { seed: 811 }).pop(T("b12"), 0.4);
+      c.put(`<g fill="#FFFFFF" stroke="${INK}" stroke-width="3"><circle cx="300" cy="1062" r="11"/><circle cx="324" cy="1030" r="15"/></g>`).pop(T("b12"), 0.3);
+      const ld = el("g"); D.ladder(ld, { h: 430, w: 150 }); c.node(ld).on((t, s) => { s.x += 420; s.y += 980; }).wipe(T("b12") + 0.2, 0.4, "up");
+      const R = [980 - 70, 980 - 70 - 290 / 3, 980 - 70 - 580 / 3, 980 - 360];
       [[CHF, 3, "Chefarzt", "الشاف"], [DRK, 2, "Oberarzt", "عندو الخبرة"], [OBE, 1, "Oberärztin", "عاد شهر"], [ASS, 0, "Assistenzärztin", "غير Assistenzärztin"]].forEach(([who, i, de, ar], j) => {
-        const at = T("b12") + 0.35 + j * 0.15, y = R[i] - 30;
-        ph(450, y, 0.55, (t) => Object.assign({}, who, { expr: i === 0 && t >= knew ? "worried" : i === 1 && t >= never ? "shock" : "calm", blink: rnd(blinkAt(t, 10 + j)) })).pop(at, 0.3);
-        c.text(de, 650, y + 4, 26, "de").pop(at + 0.05, 0.3);
-        c.text(ar, 650, y + 42, 22, "ar strong").pop(at + 0.1, 0.3);
+        const at = T("b12") + 0.35 + j * 0.15, y = R[i] - 28;
+        ph(420, y, 0.5, (t) => Object.assign({}, who, { expr: i === 0 && t >= knew ? "worried" : "calm", blink: rnd(blinkAt(t, 10 + j)) })).pop(at, 0.3);
+        c.text(de, 680, y + 2, 26, "de").pop(at + 0.05, 0.3);
+        const g2 = c.text(ar, 680, y + 40, 22, "ar strong").pop(at + 0.1, 0.3);
+        if (i === 1) g2.hide(never, 0.15);
       });
-      c.put(`<circle cx="450" cy="${R[2] - 30}" r="52" fill="none" stroke="#F8CE4E" stroke-width="10" opacity=".9"/>`).pop(ex, 0.3).hide(knew, 0.2);
-      c.put(`<circle cx="450" cy="${R[0] - 30}" r="52" fill="none" stroke="#F8CE4E" stroke-width="10" opacity=".9"/>`).pop(only, 0.3);
-      k.chip("1. Mal", "أول مرة", 320, R[1] - 40, 26, { yellow: true }).pop(never).wobble(never + 0.3, 0.4, 8);
-      // elle, en grand, en bas à gauche
-      ph(230, 1180, 1.25, (t) => Object.assign({}, ASS, { expr: t < knew ? "calm" : "worried", look2: t < knew ? [0.6, -0.7] : [0.2, -0.2], sweat: t >= knew, blink: rnd(blinkAt(t, 14)) }));
-      c.text("!", 340, 1080, 90, "de").pop(knew + 0.1, 0.3).wobble(knew + 0.4, 0.4, 10);
+      c.put(`<circle cx="420" cy="${R[2] - 28}" r="46" fill="none" stroke="#F8CE4E" stroke-width="9" opacity=".9"/>`).pop(ex, 0.3).hide(knew, 0.2);
+      c.put(`<circle cx="420" cy="${R[0] - 28}" r="46" fill="none" stroke="#F8CE4E" stroke-width="9" opacity=".9"/>`).pop(only, 0.3).hide(knew, 0.2);
+      // elle savait : l'Oberärztin ne l'avait jamais faite → la ligne devient jaune
+      c.text("أول مرة كدير هاد العملية", 680, R[1] + 12, 22, "ar strong").wipe(never + 0.1, 0.35, "rtl");
+      c.put(`<circle cx="420" cy="${R[1] - 28}" r="46" fill="none" stroke="#C9625A" stroke-width="7"/>`).pop(never, 0.3);
+      // elle, en bas à gauche
+      ph(220, 1180, 1.2, (t) => Object.assign({}, ASS, { expr: t < knew ? "calm" : "worried", look2: t < knew ? [0.6, -0.7] : [0.2, -0.2], sweat: t >= knew, blink: rnd(blinkAt(t, 14)) }));
+      c.text("!", 320, 1100, 80, "de").pop(knew + 0.1, 0.3).wobble(knew + 0.4, 0.4, 10);
     } });
 
     /* ═══════ 8 · l'eau distillée dans le sang : les globules rouges éclatent (Hämolyse) ═══════ */
@@ -408,19 +422,18 @@
       k.chip("Hämolyse", "الكريات الحمرا كيتفرقعو", 540, 1130, 36, { yellow: true }).pop(b + 0.2);
     } });
 
-    /* ═══════ 9 · 11:30 — le cœur s'arrête ═══════ */
+    /* ═══════ 9 · 11:30 — le cœur s'arrête (même bloc) ═══════ */
     st.scene({ from: "b15", in: "cut", inDur: 0, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const st0 = T("b15@وقف");
-      c.camera([{ at: "b15", s: 1.06, cx: 600, cy: 880 }, { at: st0 - 0.1, s: 1.0, cx: 540, cy: 900, d: 0.35 }]);
-      orRoom(c, k, {});
-      c.sk((g, p) => PE.props.clockWall(g, { time: [11, p.m], r: 62 }), (t) => ({ m: Math.round(lerp(25, 30, prog(t, T("b15"), st0 - T("b15")))) }), 830, 620, 1);
-      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd((t * 1.2) % 1, 30), flat: t >= st0 ? 1 : 0, alarm: t >= st0 && Math.floor(t / 0.25) % 2 === 0 }), 830, 790, 0.72);
-      pp(450, 1300, 1.0, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= st0 ? "shock" : "focused", blink: rnd(blinkAt(t, 7)), look2: t >= st0 ? [0.6, -0.4] : [0.2, 0.6], reachL: rl([450, 1300], 1, [430, 1050]), reachR: rl([450, 1300], 1, [500, 1046]), bendL: -1, bendR: 1 }));
-      pp(650, 1300, 1.0, (t) => Object.assign({}, ASS, PP.stand, { expr: t >= st0 ? "shock" : "worried", sweat: true, blink: rnd(blinkAt(t, 8)), look2: t >= st0 ? [0, -0.5] : [-0.3, 0.6] }));
-      table(c);
-      patientHead(c, (t) => Object.assign({}, PAT, { expr: "sleep" }));
-      k.chip("11:30 · Asystolie", "القلب وقف", 520, 620, 30, { yellow: true, parent: c.hud }).pop(st0);
+      c.camera([{ at: "b15", s: 1.03, cx: 520, cy: 900 }, { at: st0 - 0.1, s: 1.0, cx: 520, cy: 920, d: 0.35 }]);
+      orBack(c, k, { mon: (t) => ({ t: rnd((t * 1.2) % 1, 30), flat: t >= st0 ? 1 : 0, alarm: t >= st0 && Math.floor(t / 0.25) % 2 === 0 }) });
+      c.sk((g, p) => PE.props.clockWall(g, { time: [11, p.m], r: 50 }), (t) => ({ m: Math.round(lerp(25, 30, prog(t, T("b15"), st0 - T("b15")))) }), 650, 610, 1);
+      bagAt(c, (t) => ({ level: 0.25, flow: rnd((t * 1.2) % 1, 30), tube: [135, -200] }));
+      pp(ORc.OX, ORc.SY, ORc.S, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= st0 ? "shock" : "focused", blink: rnd(blinkAt(t, 7)), look2: t >= st0 ? [0.8, -0.5] : [-0.2, 0.7] }, handsO(t, 6)));
+      pp(ORc.AX, ORc.SY, ORc.S, (t) => Object.assign({}, ASS, PP.stand, { expr: t >= st0 ? "shock" : "worried", sweat: true, blink: rnd(blinkAt(t, 8)), look2: t >= st0 ? [0.8, -0.6] : [-0.4, 0.6] }, handsA(t)));
+      orBed(c);
+      k.chip("11:30 · Asystolie", "القلب وقف", 540, 470, 30, { yellow: true }).pop(st0);
       st.vignette(st0, 1.2, 2); c.kick(st0, 0.07);
     } });
 
@@ -429,47 +442,45 @@
       const k = kit(c); k.bg(); c_ = c;
       const a = T("b16"), back = T("b16@رجع"), nw = T("b16@فاقتش");
       const cpr = (t) => t >= a && t < back;
-      c.camera([{ at: "b16", s: 1.0, cx: 540, cy: 900 }, { at: nw - 0.2, s: 1.15, cx: 420, cy: 990, d: 0.4 }]);
-      orRoom(c, k, {});
-      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd((t * 1.2) % 1, 30), flat: t < back ? 1 : 0, alarm: t < back }), 860, 590, 0.72);
-      // massage cardiaque : l'Oberärztin appuie, bras tendus, le corps qui monte et descend
-      const push = (t) => cpr(t) ? Math.max(0, Math.sin((t - a) * Math.PI * 3.6)) : 0;
-      pp(470, 1300, 1.0, (t) => Object.assign({}, OBE, PP.stand, { expr: "focused", sweat: true, blink: rnd(blinkAt(t, 7)), look2: [0.3, 0.9], reachL: rl([470, 1300], 1, [455, 1052 + 14 * push(t)]), reachR: rl([470, 1300], 1, [485, 1052 + 14 * push(t)]), bendL: -1, bendR: 1 }))
-        .on((t, s) => { s.y += 10 * push(t); });
-      pp(660, 1300, 1.0, (t) => Object.assign({}, ASS, PP.stand, { expr: t < back ? "worried" : "sad", sweat: true, blink: rnd(blinkAt(t, 8)), look2: [-0.6, 0.5] }));
-      table(c);
-      patientHead(c, (t) => Object.assign({}, PAT, { expr: "sleep" }));
-      const tm = c.text("00:00", 520, 640, 84, "de"); tm.fade(a, 0.2).hide(back + 0.2, 0.3).on((t) => { const m2 = Math.min(25, Math.floor(25 * prog(t, a + 0.1, back - a - 0.3))), txt = String(m2).padStart(2, "0") + ":00"; if (tm.textEl.textContent !== txt) tm.textEl.textContent = txt; });
-      k.chip("Reanimation", "25 دقيقة", 520, 712, 28).pop(a + 0.1).hide(back + 0.2, 0.3);
-      k.chip("Herz schlägt wieder", "القلب رجع", 520, 660, 28).pop(back + 0.5).hide(nw - 0.2, 0.2);
-      // le ventilateur : elle reste intubée, elle ne se réveille pas
-      c.sk((g, p) => D.ventilator(g, p), (t) => ({ ph: rnd((t * 0.5) % 1, 20) }), 140, 1300, 1).slide(back, -300, 0, 0.4, "out");
-      c.put(`<path d="M190 1090 C 220 1030, 260 1020, 296 1010" fill="none" stroke="#6E8B99" stroke-width="6" stroke-linecap="round"/>`).fade(back + 0.3, 0.3);
-      k.chip("Koma", "ما فاقتش", 330, 780, 30, { yellow: true }).pop(nw);
+      c.camera([{ at: "b16", s: 1.0, cx: 520, cy: 920 }, { at: nw - 0.2, s: 1.06, cx: 560, cy: 960, d: 0.4 }]);
+      orBack(c, k, { mon: (t) => ({ t: rnd((t * 1.2) % 1, 30), flat: t < back ? 1 : 0, alarm: t < back }) });
+      // massage cardiaque : les deux mains sur la poitrine, tout le corps pousse
+      const push = (t) => cpr(t) ? Math.max(0, Math.sin((t - a) * Math.PI * 3.6)) : 0, CH = [ORc.BX + BED_A.chest[0], 1300 + BED_A.chest[1]];
+      pp(ORc.OX, ORc.SY, ORc.S, (t) => Object.assign({}, OBE, PP.stand, { expr: "focused", sweat: true, blink: rnd(blinkAt(t, 7)), look2: [0.4, 0.9], torsoLean: cpr(t) ? 10 : 0,
+        reachL: rl([ORc.OX, ORc.SY], ORc.S, [CH[0] - 18, CH[1] + 10 * push(t)]), reachR: rl([ORc.OX, ORc.SY], ORc.S, [CH[0] + 8, CH[1] - 4 + 10 * push(t)]), bendL: -1, bendR: 1 }))
+        .on((t, s) => { s.y += 8 * push(t); });
+      pp(ORc.AX, ORc.SY, ORc.S, (t) => Object.assign({}, ASS, PP.stand, { expr: t < back ? "worried" : "sad", sweat: true, blink: rnd(blinkAt(t, 8)), look2: [-0.6, 0.5] }, handsA(t)));
+      orBed(c);
+      // le respirateur arrive près de la tête (à droite), tuyau jusqu'à la bouche
+      c.sk((g, p) => D.ventilator(g, p), (t) => ({ ph: rnd((t * 0.5) % 1, 20) }), 825, 1300, 0.85).slide(back, 300, 0, 0.4, "out");
+      c.put(`<path d="M782 1150 C 750 1130, 740 1092, ${ORc.BX + BED_A.head[0] + 22} ${1300 + BED_A.head[1] - 18}" fill="none" stroke="#6E8B99" stroke-width="6" stroke-linecap="round"/>`).fade(back + 0.35, 0.3);
+      const tm = c.text("0 min", 540, 630, 76, "de"); tm.fade(a, 0.2).hide(back + 0.2, 0.3).on((t) => { const m2 = Math.min(25, Math.floor(25 * prog(t, a + 0.1, back - a - 0.3))), txt = m2 + " min"; if (tm.textEl.textContent !== txt) tm.textEl.textContent = txt; });
+      k.chip("Reanimation", "إنعاش", 540, 470, 30).pop(a + 0.1).hide(back + 0.2, 0.3);
+      k.chip("Herz schlägt wieder", "القلب رجع", 540, 470, 30).pop(back + 0.5).hide(nw - 0.2, 0.2);
+      k.chip("Koma", "ما فاقتش", 540, 470, 32, { yellow: true }).pop(nw);
     } });
 
     /* ═══════ scène muette : le lendemain, presque 24 h après — elle meurt. Son mari lui tient la main ═══════ */
     st.scene({ from: "b16@end+0.1", in: "fade", inDur: 0.4, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const quiet = T("b16@end") + 1.1;
-      c.camera([{ at: "b16@end", s: 1.0, cx: 540, cy: 920 }, { at: quiet, s: 1.04, cx: 520, cy: 950, d: 2.4, ease: "lin" }]);
-      c.sk((g, p) => windowSky(g, p), () => ({ p: 0.35 }), 560, 690, 0.55);
-      c.sk((g, p) => PE.props.clockWall(g, { time: [11, 53], r: 48 }), () => ({}), 830, 640, 1);
-      k.chip("+ 24 h", "النهار اللي من بعد", 830, 750, 26).pop(T("b16@end") + 0.3);
-      k.ground(540, 1300, 980);
-      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd((t * (t < quiet ? 0.8 : 0)) % 1, 30), flat: t >= quiet ? 1 : 0, alarm: t >= quiet }), 250, 830, 0.7);
-      c.sk((g, p) => D.ventilator(g, p), (t) => ({ ph: rnd(t < quiet ? (t * 0.5) % 1 : 0.5, 20) }), 180, 1300, 0.9);
-      // le mari, derrière le lit, lui tient la main ; il pleure
-      const BED = [500, 1300], ICU = (() => { const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); return D.opTable(g, { kind: "icu" }); })();
-      const hand = [BED[0] + ICU.hand[0], BED[1] + ICU.hand[1]];
-      const hus = (t) => Object.assign({}, HUS, PP.stand, { view: "side", facing: 1, torsoLean: 16, headTilt: t >= quiet ? 18 : 8, expr: t >= quiet ? "cry" : "sad", tears: t >= quiet ? 1 : 0.4, look2: [0.4, 0.9], blink: rnd(blinkAt(t, 15)), reachR: rl([520, 1300], 1, hand), bendR: -1 });
-      pp(520, 1300, 1.0, hus);
-      const bg = el("g"); D.opTable(bg, { kind: "icu" }); c.node(bg).on((t, s) => { s.x += BED[0]; s.y += BED[1]; });
-      ph(BED[0] + ICU.head[0], BED[1] + ICU.head[1] + 4, 0.6, (t) => Object.assign({}, PAT, { expr: "sleep" }), -80);
-      c.put(`<path d="M225 1090 C 260 1040, ${BED[0] + ICU.head[0] - 10} ${BED[1] + ICU.head[1] + 20}, ${BED[0] + ICU.head[0] + 14} ${BED[1] + ICU.head[1] + 22}" fill="none" stroke="#6E8B99" stroke-width="6" stroke-linecap="round"/>`);
-      pp(520, 1300, 1.0, (t) => Object.assign(hus(t), { only: "handR" }));
-      // l'Assistenzärztin, à la porte, tête baissée
-      pp(805, 1300, 0.9, (t) => Object.assign({}, ASS, PP.stand, { view: "side", facing: -1, expr: "sad", tears: 0.6, headTilt: 16, look2: [0, 1], blink: rnd(blinkAt(t, 16)) })).fade(quiet + 0.2, 0.4);
+      c.camera([{ at: "b16@end", s: 1.0, cx: 520, cy: 920 }, { at: quiet, s: 1.05, cx: 520, cy: 950, d: 2.4, ease: "lin" }]);
+      c.sk((g, p) => windowSky(g, p), () => ({ p: 0.3 }), 560, 700, 0.55);
+      c.sk((g, p) => PE.props.clockWall(g, { time: [11, 53], r: 46 }), () => ({}), 830, 640, 1);
+      k.chip("+ 24 h", "النهار اللي من بعد", 540, 470, 28).pop(T("b16@end") + 0.3);
+      k.ground(520, 1300, 980);
+      c.put(`<path d="M175 752 L175 700 L115 700" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`);
+      c.sk((g, p) => D.monitor(g, p), (t) => ({ t: rnd((t * (t < quiet ? 0.8 : 0)) % 1, 30), flat: t >= quiet ? 1 : 0, alarm: t >= quiet }), 175, 860, 0.72);
+      c.sk((g, p) => D.ventilator(g, p), (t) => ({ ph: rnd(t < quiet ? (t * 0.5) % 1 : 0.5, 20) }), 170, 1300, 0.9);
+      const BX = 530, B0 = D.bed2(el("g"), { kind: "icu", arm: true, w: 420 }), hand = [BX + B0.hand[0], 1300 + B0.hand[1]], HX = 470;
+      const hus = (t) => Object.assign({}, HUS, { beard: "stubble" }, PP.stand, { view: "three-quarter", facing: 1, expr: t >= quiet ? "cry" : "sad", tears: t >= quiet ? 1 : 0.4, headTilt: t >= quiet ? 12 : 6, look2: [-0.2, 0.9], blink: rnd(blinkAt(t, 15)), reachL: rl([HX, 1262], 1, [hand[0] - 4, hand[1] - 4]), bendL: -1 });
+      pp(HX, 1262, 1.0, hus).on(breathe(6));
+      const bg = el("g"); D.bed2(bg, { kind: "icu", arm: true, w: 420 }); c.node(bg).on((t, s) => { s.x += BX; s.y += 1300; });
+      ph(BX + B0.head[0], 1300 + B0.head[1] - 8, 0.85, (t) => Object.assign({}, PAT, { view: "side", facing: 1, expr: "sleep" }), -90);
+      c.put(`<path d="M222 1120 C 270 1100, 310 1080, ${BX + B0.head[0] - 6} ${1300 + B0.head[1] - 24}" fill="none" stroke="#6E8B99" stroke-width="6" stroke-linecap="round"/>`);
+      pp(HX, 1262, 1.0, (t) => Object.assign(hus(t), { only: "handL" })).on(breathe(6));
+      // l'Assistenzärztin, à droite, tête baissée
+      pp(795, 1300, 0.85, (t) => Object.assign({}, ASS, PP.stand, { view: "side", facing: -1, expr: "sad", tears: 0.6, headTilt: 16, look2: [0, 1], blink: rnd(blinkAt(t, 16)) })).fade(quiet + 0.2, 0.4);
       k.ar("ماتت", 540, 1440, 72, "ttl", c.hud).wipe(quiet + 0.5, 0.6, "rtl").hide("b17", 0.2);
       c.tick((t) => { const g = E.inOut(prog(t, quiet + 0.3, 1.2)); c.layer.style.filter = g > 0 ? `grayscale(${(g * 0.85).toFixed(2)})` : ""; });
     } });
@@ -522,64 +533,65 @@
     st.scene({ from: "b20", in: "slideLeft", inDur: 0.25, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const q = T("b20@تطرح") - 0.2;
-      c.camera([{ at: "b20", s: 1.0, cx: 540, cy: 920 }, { at: q, s: 1.05, cx: 540, cy: 900, d: 0.4 }]);
-      orRoom(c, k, {});
-      c.sk((g, p) => D.fluidBag(g, p), (t) => ({ level: 0.8, flow: 0, tube: [170, -250] }), 190, 1300, 1);
-      pp(450, 1300, 1.0, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= q + 0.5 ? "worried" : "focused", look2: t >= q ? [0.9, 0] : [0.2, 0.6], blink: rnd(blinkAt(t, 7)) }));
-      const as = pp(650, 1300, 1.0, (t) => Object.assign({}, ASS, t >= q ? PP.wave : PP.stand, { expr: t >= q ? "focused" : "worried", look2: [-0.8, 0], talk: rnd(talkAt(t, q + 0.1, q + 1.2), 10), blink: rnd(blinkAt(t, 8)) }));
+      c.camera([{ at: "b20", s: 1.0, cx: 520, cy: 920 }]);
+      orBack(c, k, {});
+      bagAt(c, () => ({ level: 0.9, flow: 0, tube: [135, -200] }));
+      pp(ORc.OX, ORc.SY, ORc.S, (t) => Object.assign({}, OBE, PP.stand, { expr: t >= q + 0.6 ? "worried" : "focused", look2: t >= q ? [0.9, 0] : [-0.2, 0.7], blink: rnd(blinkAt(t, 7)) }, handsO(t, 0)));
+      const as = pp(ORc.AX, ORc.SY, ORc.S, (t) => Object.assign({}, ASS, t >= q ? PP.wave : PP.stand, { expr: t >= q ? "focused" : "worried", look2: [-0.8, 0], talk: rnd(talkAt(t, q + 0.1, q + 1.2), 10), blink: rnd(blinkAt(t, 8)) }, t >= q ? {} : handsA(t)));
       as.on(breathe(5));
-      table(c);
-      patientHead(c, (t) => Object.assign({}, PAT, { expr: "sleep" }));
-      bubble(c, 690, 640, 380, 130, [660, 800]).pop(q, 0.35);
-      c.text("Warum Aqua dest.?", 690, 634, 38, "de").pop(q + 0.05, 0.3);
-      c.text("علاش الما المقطر؟", 690, 692, 28, "ar strong").wipe(q + 0.2, 0.4, "rtl");
-      k.chip("die Frage stellen", "طرح السؤال", 300, 520, 28, { yellow: true }).pop(q + 0.3);
+      orBed(c);
+      k.chip("die Frage stellen", "طرح السؤال", 540, 470, 28, { yellow: true }).pop(q + 0.3);
+      bubble(c, 640, 704, 380, 136, [610, 836]).pop(q, 0.35);
+      c.text("Warum Aqua dest.?", 640, 690, 38, "de").pop(q + 0.05, 0.3);
+      c.text("علاش الما المقطر؟", 640, 748, 28, "ar strong").wipe(q + 0.2, 0.4, "rtl");
     } });
 
-    /* ═══════ 15 · la sanction : l'Assistenzärztin, l'Oberärztin et la clinique paient la famille ═══════ */
+    /* ═══════ 15 · la sanction : l'Assistenzärztin, l'Oberärztin et la clinique dédommagent la famille ═══════ */
     st.scene({ from: "b21", in: "whip", inDur: 0.25, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const a1 = T("b21@عليها"), a2 = T("b21@Oberärztin"), a3 = T("b21@والمصحة"), pay = T("b21@بالتعويض");
       c.camera([{ at: "b21", s: 1.0, cx: 540, cy: 900 }]);
       k.ground(540, 1300, 980);
-      const cards = [[ASS, 230, a1, "Assistenzärztin"], [OBE, 450, a2, "Oberärztin"], [null, 670, a3, "Klinik"]];
+      k.prop("stamp", 540, 470, 0.5, () => ({ text: "HAFTEN", size: 60, rot: -5 })).slam(a3 + 0.35, 0.26, 8);
+      const cards = [[ASS, 250, a1, "Assistenzärztin"], [OBE, 470, a2, "Oberärztin"], [null, 690, a3, "Klinik"]];
       cards.forEach(([who, x, at, de], i) => {
-        k.card(x - 95, 520, 190, 240, { seed: 701 + i }).pop(at, 0.35);
-        if (who) ph(x, 620, 0.75, (t) => Object.assign({}, who, { expr: "sad", blink: rnd(blinkAt(t, 20 + i)) })).pop(at + 0.05, 0.35);
-        else { const hs = el("g"); building(hs, { w: 150, h: 150, rows: 1, cols: 2, sign: "", cross: true, seed: 33 }); c.node(hs).on((t, s) => { s.x += x; s.y += 690; s.s *= 0.9; }).pop(at + 0.05, 0.35); }
-        c.text(de, x, 732, de.length > 12 ? 20 : 24, "de").pop(at + 0.1);
+        k.card(x - 95, 550, 190, 230, { seed: 701 + i }).pop(at, 0.35);
+        if (who) ph(x, 650, 0.72, (t) => Object.assign({}, who, { expr: "sad", blink: rnd(blinkAt(t, 20 + i)) })).pop(at + 0.05, 0.35);
+        else { const hs = el("g"); building(hs, { w: 150, h: 150, rows: 1, cols: 2, sign: "", cross: true, seed: 33 }); c.node(hs).on((t, s) => { s.x += x; s.y += 720; s.s *= 0.85; }).pop(at + 0.05, 0.35); }
+        c.text(de, x, 758, de.length > 12 ? 20 : 24, "de").pop(at + 0.1);
       });
-      k.prop("stamp", 450, 820, 0.42, () => ({ text: "HAFTEN", size: 54, rot: -6 })).slam(a3 + 0.35, 0.26, 8);
-      // la famille (le mari) reçoit le dédommagement
-      const MP = Object.assign({}, HUS, PP.holdHandOutSide, { facing: -1, expr: "sad" }), ma = PE.util.rig(MP), mh = [780 + ma.handR[0], 1300 + ma.handR[1]];
-      pp(780, 1300, 1.0, (t) => Object.assign({}, MP, { blink: rnd(blinkAt(t, 23)) }));
+      // la famille (le mari) reçoit le dédommagement : les billets partent SOUS chaque carte et arrivent dans sa main
+      const HX = 800, MP = Object.assign({}, HUS, PP.holdHandOutSide, { facing: -1, expr: "sad" }), ma = PE.util.rig(MP), mh = [HX + ma.handR[0], 1300 + ma.handR[1]];
+      pp(HX, 1300, 1.0, (t) => Object.assign({}, MP, { blink: rnd(blinkAt(t, 23)) }));
       cards.forEach(([w, x], i) => { for (let j = 0; j < 2; j++) {
         const n = el("g"); D.banknote(n, { seed: 340 + i * 2 + j, w: 76 }); const st0 = pay + i * 0.2 + j * 0.1, end = [mh[0] + (j ? 5 : -5), mh[1] - 6 - (i * 2 + j) * 5];
-        c.node(n).on((t, s) => { const p = E.inOut(prog(t, st0, 0.7)); s.x += lerp(x, end[0], p); s.y += lerp(760, end[1], p) - Math.sin(p * Math.PI) * 90; s.r += lerp(-12, j ? 5 : -4, p); s.o *= t >= st0 ? 1 : 0; });
+        c.node(n).on((t, s) => { const p = E.inOut(prog(t, st0, 0.7)); s.x += lerp(x, end[0], p); s.y += lerp(830, end[1], p); s.r += lerp(-12, j ? 5 : -4, p); s.o *= t >= st0 ? 1 : 0; });
       } });
-      k.chip("Schadensersatz an die Familie", "تعويض للعائلة", 380, 1160, 28, { yellow: true }).pop(pay + 0.2);
+      k.chip("Schadensersatz an die Familie", "تعويض للعائلة", 380, 1210, 28, { yellow: true }).pop(pay + 0.2);
     } });
 
     /* ═══════ 16 · la règle : trois marches — le dire, demander pourquoi, monter au Oberarzt / Chefarzt ═══════ */
     st.scene({ from: "b22", in: "fade", inDur: 0.3, build(c) {
       const k = kit(c); k.bg(); c_ = c;
       const s1 = T("b22@بصوت") - 0.2, s2 = T("b22@سول") - 0.1, s3 = T("b22@طلع") - 0.1, chf = T("b22@Chefarzt");
-      c.camera([{ at: "b22", s: 1.0, cx: 540, cy: 900 }]);
+      c.camera([{ at: "b22", s: 1.0, cx: 540, cy: 920 }]);
       k.ground(540, 1300, 980);
-      const SX = 150, stp = el("g"); const SA = D.stairs(stp, { door: "Chefarzt" }); c.node(stp).on((t, s) => { s.x += SX; s.y += 1300; });
-      // le Chefarzt ouvre la porte
-      ph(SX + SA.top[0] - 6, 1300 + SA.top[1] - 150, 0.7, (t) => Object.assign({}, CHF, { expr: "calm", blink: rnd(blinkAt(t, 24)) })).pop(chf, 0.35);
+      const SX = 110, stp = c.sk((g, p) => D.stairs(g, p), (t) => ({ door: "Chefarzt", open: rnd(E.out(prog(t, chf - 0.25, 0.35)), 10) }), SX, 1300, 1);
+      const SA = D.stairs(el("g"), {});
+      // le Chefarzt sort sur le palier, devant sa porte
+      pp(SX + SA.door[0] - 10, 1300 + SA.door[1], 0.72, (t) => Object.assign({}, CHF, PP.stand, { view: "three-quarter", facing: -1, expr: t >= chf + 0.3 ? "smile" : "calm", blink: rnd(blinkAt(t, 24)) })).fade(chf - 0.05, 0.3);
       // elle monte marche après marche
-      const P0 = [SX - 60, 1300], Pk = SA.steps.map(([x, y]) => [SX + x, 1300 + y]), P4 = [SX + SA.top[0] - 125, 1300 + SA.top[1]];
-      const legs = [[P0, Pk[0], s1], [Pk[0], Pk[1], s2], [Pk[1], Pk[2], s3], [Pk[2], P4, chf - 0.3]];
+      const P0 = [SX - 50, 1300], Pk = SA.steps.map(([x, y]) => [SX + x, 1300 + y]), P4 = [SX + SA.landing[0] - 40, 1300 + SA.landing[1]];
+      const legs = [[P0, Pk[0], s1], [Pk[0], Pk[1], s2], [Pk[1], Pk[2], s3], [Pk[2], P4, chf - 0.5]];
       const posAt = (t) => { let p = P0; for (const [a, b, at] of legs) { const q = prog(t, at, 0.55); if (q <= 0) break; p = [lerp(a[0], b[0], E.inOut(q)), lerp(a[1], b[1], E.inOut(q)) - Math.sin(q * Math.PI) * 14]; } return p; };
       const moving = (t) => legs.some(([, , at]) => t > at && t < at + 0.55);
-      const as = pp(0, 0, 0.82, (t) => Object.assign({}, ASS, moving(t) ? PP.walk(((t * 1.8) % 1)) : PP.stand, { view: "side", facing: 1, expr: "focused", blink: rnd(blinkAt(t, 25)), talk: rnd(talkAt(t, s1 + 0.6, s1 + 1.3), 10) }))
+      pp(0, 0, 0.8, (t) => Object.assign({}, ASS, moving(t) ? PP.walk(((t * 1.8) % 1)) : PP.stand, { view: "side", facing: 1, expr: "focused", blink: rnd(blinkAt(t, 25)), talk: rnd(talkAt(t, s1 + 0.6, s1 + 1.3), 10) }))
         .on((t, s) => { const p = posAt(t); s.x += p[0]; s.y += p[1]; });
-      [[D.iconMegaphone, Pk[0][0], s1, "laut sagen", "قولها بصوت عالي"], [D.iconQuestion, Pk[1][0], s2, "Warum?", "سول علاش"], [D.iconUp, Pk[2][0], s3, "Oberarzt / Chefarzt", "طلع للفوق"]].forEach(([ic, x, at, de, ar], i) => {
-        const g = el("g"); ic(g); c.node(g).on((t, s) => { s.x += x; s.y += 440; s.s *= 0.8; }).pop(at, 0.35);
-        c.text(de, x, 548, de.length > 12 ? 22 : 28, "de").pop(at + 0.05);
-        c.text(ar, x, 588, 22, "ar strong").pop(at + 0.1);
+      [[D.iconMegaphone, 270, s1, "laut sagen", "قولها بصوت عالي"], [D.iconQuestion, 540, s2, "Warum?", "سول علاش"], [D.iconUp, 810, s3, "Oberarzt / Chefarzt", "طلع للفوق"]].forEach(([ic, x, at, de, ar], i) => {
+        const g = el("g"); ic(g); c.node(g).on((t, s) => { s.x += x; s.y += 460; s.s *= 0.8; }).pop(at, 0.35);
+        c.text(de, x, 568, de.length > 12 ? 22 : 28, "de").pop(at + 0.05);
+        c.text(ar, x, 608, 22, "ar strong").pop(at + 0.1);
+        c.text(String(i + 1), x - 62, 420, 34, "de").pop(at, 0.3);
       });
     } });
 

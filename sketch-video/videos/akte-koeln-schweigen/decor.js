@@ -364,10 +364,12 @@
     const cells = [[-300, -40], [-210, 50], [-120, -60], [-30, 30], [60, -50], [150, 40], [240, -30], [310, 55], [-250, -80], [100, 75]];
     cells.forEach(([x0, y], i) => {
       const x = ((x0 + 340 + o.t * 180) % 680) - 340, b = Math.max(0, Math.min(1, o.burst * 1.6 - (i % 4) * 0.18)), sw = 1 + 0.35 * Math.min(1, o.water * 1.4) + 0.2 * b;
-      if (b < 0.85) {
-        const gg = el("g", { transform: `translate(${f(x)} ${y}) scale(${f(sw)})` }, g);
+      const gg = el("g", { transform: `translate(${f(x)} ${y}) scale(${f(sw)})` }, g);
+      if (b < 0.6) {
         el("ellipse", { cx: 0, cy: 0, rx: 30, ry: 22, fill: "#E05A4F", stroke: INK, "stroke-width": 2.4 }, gg);
         el("ellipse", { cx: 0, cy: 0, rx: 13, ry: 8, fill: "#C9433A", opacity: f(1 - Math.min(1, o.water)) }, gg);
+      } else {   // éclaté : membrane déchirée, pâle
+        el("path", { d: "M-30 0 C -30 -16, -12 -24, 4 -22 M14 -20 C 28 -14, 32 2, 24 14 M14 20 C 0 26, -20 22, -28 10", fill: "none", stroke: "#D98478", "stroke-width": 2.6, "stroke-dasharray": "6 5", "stroke-linecap": "round" }, gg);
       }
       if (b > 0.5) { const k = (b - 0.5) * 2; for (let j = 0; j < 6; j++) { const a = j / 6 * Math.PI * 2 + i, r = 20 + 36 * k; el("path", { d: `M${f(x + Math.cos(a) * r)} ${f(y + Math.sin(a) * r)} l ${f(8 * Math.cos(a + 1))} ${f(8 * Math.sin(a + 1))}`, stroke: "#E05A4F", "stroke-width": 5, "stroke-linecap": "round", opacity: f(1 - k * 0.6) }, g); } }
     });
@@ -405,18 +407,22 @@
     const ys = []; for (let i = 0; i < 4; i++) { const y = -70 - i * (h - 120) / 3; ys.push(y); U.stroke(C, "rg" + i, `M${-w / 2 + 6} ${y} L${w / 2 - 6} ${y}`, { sw: 5 }); }
     return { rungs: ys };
   }
-  // escalier 3 marches (vu de côté) + porte en haut — origine : bas-gauche
+  // escalier 3 marches + palier + porte (vu de côté) — origine : bas-gauche ; renvoie les marches, le palier, la porte
   function stairs(g, o) {
-    clear(g); o = Object.assign({ step: 170, rise: 110, seed: 423, door: "Chefarzt" }, o);
-    const C = U.ctx(g, o.seed, false, 1), s = o.step, r = o.rise;
-    let d = "M0 0"; for (let i = 0; i < 3; i++) d += ` L${i * s} ${-(i + 1) * r} L${(i + 1) * s} ${-(i + 1) * r}`; d += ` L${3 * s + 40} ${-3 * r} L${3 * s + 40} 0 Z`;
+    clear(g); o = Object.assign({ step: 150, rise: 105, landing: 240, seed: 423, door: "Chefarzt", open: 0 }, o);
+    const C = U.ctx(g, o.seed, false, 1), s = o.step, r = o.rise, L = o.landing, X3 = 3 * s, H = 3 * r;
+    let d = "M0 0"; for (let i = 0; i < 3; i++) d += ` L${i * s} ${-(i + 1) * r} L${(i + 1) * s} ${-(i + 1) * r}`; d += ` L${X3 + L} ${-H} L${X3 + L} 0 Z`;
+    el("path", { d, fill: "#D2D2CB", transform: "translate(7 7)" }, g);
     U.shape(C, "st", d, MAT.grey, { sw: 3 });
-    const dx = 3 * s - 40, dy = -3 * r;
-    U.shape(C, "door", U.rrect(dx - 10, dy - 200, 110, 200, 8), { base: "#E4D9C6", hatch: "#B9A98C", gap: 7, fw: 1 }, { sw: 2.8 });
-    el("circle", { cx: dx + 80, cy: dy - 100, r: 6, fill: YEL, stroke: INK, "stroke-width": 2 }, g);
-    U.shape(C, "plate", U.rrect(dx - 4, dy - 186, 98, 34, 6), MAT.white, { sw: 2 });
-    U.text(g, o.door, dx + 45, dy - 162, 18, {});
-    return { steps: [0, 1, 2].map((i) => [i * s + s / 2, -(i + 1) * r]), top: [dx + 45, dy] };
+    const dx = X3 + L - 120, dy = -H;
+    U.shape(C, "frame", U.rrect(dx - 8, dy - 214, 126, 214, 8), MAT.mid, { sw: 2.6 });
+    el("rect", { x: dx, y: dy - 206, width: 110, height: 206, fill: "#FFF6C9", stroke: INK, "stroke-width": 2 }, g);
+    const ow = 110 * (1 - 0.75 * o.open);
+    U.shape(C, "door", U.rrect(dx, dy - 206, ow, 206, 6), { base: "#E4D9C6", hatch: "#B9A98C", gap: 7, fw: 1 }, { sw: 2.6 });
+    el("circle", { cx: dx + ow - 16, cy: dy - 100, r: 6, fill: YEL, stroke: INK, "stroke-width": 2 }, g);
+    U.shape(C, "plate", U.rrect(dx + 6, dy - 250, 98, 32, 6), MAT.white, { sw: 2 });
+    U.text(g, o.door, dx + 55, dy - 227, 18, {});
+    return { steps: [0, 1, 2].map((i) => [i * s + s / 2, -(i + 1) * r]), landing: [X3 + 60, -H], door: [dx + 55, dy] };
   }
   // icônes (≈ 130) : mégaphone / point d'interrogation / flèche vers le haut
   function iconMegaphone(g) { clear(g); const C = U.ctx(g, 431, false, 1); iconFrame(g, C); U.shape(C, "m", "M-34 -12 L10 -36 L10 36 L-34 12 Z", MAT.yellow, { sw: 3 }); U.shape(C, "h", U.rrect(-48, -14, 16, 28, 4), MAT.mid, { sw: 2.4 }); [0, 1].forEach((i) => ln(g, `M${22 + i * 12} ${-20 - i * 6} Q ${32 + i * 14} 0 ${22 + i * 12} ${20 + i * 6}`, 3)); }
@@ -434,5 +440,51 @@
     for (let i = 1; i < 4; i++) ln(g, `M-26 ${f(-140 + bh * i / 4)} L26 ${f(-140 + bh * i / 4)}`, 1.4, "#77776F");
   }
 
-  window.UnnaDecor = { bench, courthouse, opLamp, opTable, scope, fluidBag, uterusCam, vessel, wordCard, tape, ladder, stairs, iconMegaphone, iconQuestion, iconUp, ventilator, scalesEmblem, signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
+  // ───────── table d'opération / lit de réa v2, vue de côté : vraie patiente allongée sous le drap (corps visible),
+  //   tête à DROITE si flip (par défaut à gauche) ; la tête se dessine à part (Persona.head, profil vers le haut) aux
+  //   ancres renvoyées. o.kind "op" | "icu" ; o.arm : bras posé SUR la couverture (icu) → ancre hand.
+  function bed2(g, o) {
+    clear(g); o = Object.assign({ w: 480, kind: "op", flip: false, breath: 0, seed: 451, arm: false }, o);
+    const root = el("g", o.flip ? { transform: "scale(-1,1)" } : null, g), C = U.ctx(root, o.seed, !!o.flip, 1), w = o.w, x0 = -w / 2, x1 = w / 2;
+    const top = o.kind === "op" ? -190 : -200, sg = o.flip ? -1 : 1;
+    el("ellipse", { cx: 0, cy: 4, rx: w * 0.45, ry: 10, fill: "rgba(28,26,28,.14)" }, root);
+    if (o.kind === "op") {
+      U.shape(C, "col", U.rrect(-34, top + 30, 68, -top - 56, 8), MAT.mid, { sw: 2.6 });
+      U.shape(C, "base", U.rrect(-130, -30, 260, 30, 10), MAT.grey, { sw: 2.8 });
+      U.shape(C, "slab", U.rrect(x0, top, w, 30, 10), MAT.white, { sw: 2.8 });
+    } else {
+      [x0 + 40, x1 - 40].forEach((x, i) => { U.stroke(C, "leg" + i, `M${x} ${top + 28} L${x} -16`, { sw: 5 }); el("circle", { cx: x, cy: -10, r: 10, fill: "#3A3A37", stroke: INK, "stroke-width": 2 }, root); });
+      U.shape(C, "frame", U.rrect(x0, top + 6, w, 24, 8), MAT.grey, { sw: 2.6 });
+      U.shape(C, "hb", U.rrect(x0 - 18, top - 110, 24, 150, 8), MAT.grey, { sw: 2.6 });
+      U.shape(C, "fb", U.rrect(x1 - 6, top - 60, 22, 100, 8), MAT.grey, { sw: 2.6 });
+      U.shape(C, "matt", U.rrect(x0 + 4, top - 12, w - 8, 22, 9), MAT.white, { sw: 2.4 });
+    }
+    const y = o.kind === "op" ? top : top - 12, b = 3 * o.breath;
+    U.shape(C, "pillow", `M${x0 + 10} ${y} C ${x0 + 8} ${y - 30}, ${x0 + 120} ${y - 34}, ${x0 + 122} ${y} Z`, MAT.white, { sw: 2.4 });
+    // corps sous le drap : épaules → poitrine (respire) → ventre → cuisses → genoux → pieds
+    const body = `M${x0 + 98} ${y} C ${x0 + 100} ${y - 44 - b}, ${x0 + 170} ${y - 56 - b}, ${x0 + 210} ${y - 48 - b} C ${x0 + 250} ${y - 42}, ${x0 + 300} ${y - 50}, ${x0 + 330} ${y - 40}`
+      + ` C ${x0 + 360} ${y - 32}, ${x1 - 100} ${y - 46}, ${x1 - 70} ${y - 34} C ${x1 - 46} ${y - 26}, ${x1 - 40} ${y - 50}, ${x1 - 22} ${y - 46} C ${x1 - 6} ${y - 40}, ${x1 - 2} ${y - 16}, ${x1 - 4} ${y} Z`;
+    const drapeMat = o.kind === "op" ? { base: "#BFD9C9", hatch: "#7FA68E", gap: 7, fw: 1 } : { base: "#ECECE7", hatch: "#B4B4AE", gap: 8, fw: 1 };
+    U.shape(C, "drape", body, drapeMat, { sw: 2.8 });
+    el("path", { d: `M${x0 + 96} ${y + 8} L${x1 + 2} ${y + 8} L${x1 + 2} ${y + 34} L${x0 + 96} ${y + 34} Z`, fill: o.kind === "op" ? "#A9CDB6" : "#E2E2DC", stroke: INK, "stroke-width": 2.4 }, root);
+    ln(root, `M${x0 + 200} ${y - 30} q 30 10 60 2 M${x1 - 150} ${y - 24} q 24 8 48 0`, 1.6, o.kind === "op" ? "#6F957E" : "#A9A9A2");
+    let hand = null;
+    if (o.arm) {   // bras sur la couverture (manche + main en moufle)
+      U.shape(C, "arm", `M${x0 + 130} ${y - 34} C ${x0 + 170} ${y - 30}, ${x0 + 220} ${y - 22}, ${x0 + 262} ${y - 26} L${x0 + 264} ${y - 12} C ${x0 + 220} ${y - 8}, ${x0 + 170} ${y - 14}, ${x0 + 128} ${y - 18} Z`, { base: "#E9E3F1", hatch: "#B8AFC8", gap: 6, fw: 1 }, { sw: 2.2 });
+      U.shape(C, "hand", `M${x0 + 258} ${y - 30} C ${x0 + 284} ${y - 34}, ${x0 + 290} ${y - 8}, ${x0 + 266} ${y - 8} C ${x0 + 256} ${y - 8}, ${x0 + 254} ${y - 26}, ${x0 + 258} ${y - 30} Z`, MAT.skin || { base: "#FBE9DA" }, { sw: 2.2 });
+      hand = [sg * (x0 + 272), y - 20];
+    }
+    return { head: [sg * (x0 + 64), y - 30], top: y, pelvis: [sg * (x0 + 300), y - 44], feet: [sg * (x1 - 20), y - 30], chest: [sg * (x0 + 190), y - 52], hand };
+  }
+  // moniteur sur pied à roulettes — origine : sol ; renvoie le centre de l'écran
+  function monitorCart(g, o) {
+    clear(g); o = Object.assign({ h: 520, seed: 455 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    [-34, 34].forEach((x) => el("circle", { cx: x, cy: -9, r: 9, fill: "#3A3A37", stroke: INK, "stroke-width": 2 }, g));
+    U.shape(C, "foot", U.rrect(-50, -26, 100, 14, 6), MAT.mid, { sw: 2.2 });
+    U.stroke(C, "pole", `M0 -14 L0 ${-o.h + 60}`, { sw: 6 });
+    return { screen: [0, -o.h + 75] };
+  }
+
+  window.UnnaDecor = { bed2, monitorCart, bench, courthouse, opLamp, opTable, scope, fluidBag, uterusCam, vessel, wordCard, tape, ladder, stairs, iconMegaphone, iconQuestion, iconUp, ventilator, scalesEmblem, signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
 })();

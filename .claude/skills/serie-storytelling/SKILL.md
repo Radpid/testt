@@ -130,6 +130,13 @@ videos/<episode>/
   (« PLAN »).
 - **Tenue adaptée à la scène** (blouse de ville à l'arrivée, tenue de bloc pour l'accouchement) ; changer de
   plan pour les moments forts (gros plan des visages, nouvel angle).
+- **Bloc opératoire / réa : mise en place FIXE** (retour AKTE 03 : « plein de structures qui overlappent ») — lampe
+  au centre, poche à gauche, moniteur AU MUR (bras) à droite, table au milieu avec une VRAIE patiente allongée
+  (`decor.js` bed2 : corps sous le drap + tête Persona en profil à l'échelle des soignants, jamais une petite tête
+  isolée qui ressemble à un bébé), soignants derrière la table, étiquettes toutes dans la bande du haut (y ≈ 470),
+  une à la fois. Une même mise en place pour toutes les scènes du bloc ; zooms ≤ ×1,3 qui ne poussent rien dans le
+  logo ni dans la colonne des boutons ; rien à moins de 90 px des bords.
+- **Bulles** : rectangle arrondi + petits ronds (pas de nuage déformé) ; jamais posées sur un objet.
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache
   les jambes) ; papa à gauche, soignant à droite ; jamais de personne allongée de travers. Extérieur : bâtiments
   au fond (plus petits) + trottoir, personnages devant.
