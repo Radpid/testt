@@ -145,6 +145,13 @@ videos/<episode>/
   l'épaule (≈ 90–150 px à l'échelle 1), du BON côté (mesurer avec `Persona.util.rig` : en trois-quarts facing 1,
   handR = côté droit de l'écran). Derrière une table : bras qui pendent, la table cache les mains. Massage
   cardiaque : soignant sur un marchepied, épaules au-dessus de la poitrine, bras tendus vers le bas.
+- **Décors COMPLETS, jamais un personnage sur papier vide** (retour AKTE 03 : « plus de détails, refais tout ») :
+  `decor.js` room (mur, carrelage, plinthe, sol en perspective) + objets de la pièce. Bloc : carrelage, armoire
+  vitrée, lampe, moniteur au mur, poche, chariot d'instruments, bonnets de bloc (scrubCap, suivent la tête).
+  Réa : fenêtre à stores, fleurs, rideau sur rail, rampe de gaz O₂/Air/Vac, horloge. Tribunal : boiseries,
+  étagère de livres, plaque « Im Namen des Volkes », dossiers, micro, plaque du Senat. Extérieur : ciel, nuages
+  qui flottent, arbres, lampadaire, trottoir. Couloir : portes numérotées à hublot, main courante, panneau
+  « Gynäkologie → ». Les objets du décor restent hors des étiquettes et de la colonne des boutons.
 - **Bulles** : rectangle arrondi + petits ronds (pas de nuage déformé) ; jamais posées sur un objet.
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache
   les jambes) ; papa à gauche, soignant à droite ; jamais de personne allongée de travers. Extérieur : bâtiments

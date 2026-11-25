@@ -536,5 +536,153 @@
     return { screen: [0, -o.h + 75] };
   }
 
-  window.UnnaDecor = { bed2, monitorCart, bench, courthouse, opLamp, opTable, scope, fluidBag, uterusCam, vessel, wordCard, tape, ladder, stairs, iconMegaphone, iconQuestion, iconUp, ventilator, scalesEmblem, signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
+  // ══════════════════ décors complets (AKTE 03 v4 : « plus de détails ») ══════════════════
+  // mur + plinthe + sol en perspective — origine : coin haut-gauche du mur ; o.wall, o.tile (carreaux bas du mur), o.floor
+  function room(g, o) {
+    clear(g); o = Object.assign({ x0: 40, x1: 1040, top: 290, floorY: 1300, bottom: 1450, wall: "#EEF2F0", tileTop: null, tile: 52, floor: "#E2E4DE", floorLine: "#C9CCC4", seed: 501 }, o);
+    const { x0, x1, top, floorY, bottom } = o;
+    el("rect", { x: x0, y: top, width: x1 - x0, height: floorY - top, fill: o.wall }, g);
+    if (o.tileTop) {   // carrelage du bas du mur
+      el("rect", { x: x0, y: o.tileTop, width: x1 - x0, height: floorY - o.tileTop, fill: o.tileFill || "#E4ECE9" }, g);
+      for (let y = o.tileTop; y < floorY; y += o.tile * 0.7) ln(g, `M${x0} ${f(y)} L${x1} ${f(y)}`, 1.1, o.tileLine || "#C8D4D0");
+      for (let r = 0, y = o.tileTop; y < floorY; r++, y += o.tile * 0.7) for (let x = x0 + (r % 2) * o.tile / 2; x < x1; x += o.tile) ln(g, `M${f(x)} ${f(y)} L${f(x)} ${f(Math.min(floorY, y + o.tile * 0.7))}`, 1.1, o.tileLine || "#C8D4D0");
+      ln(g, `M${x0} ${o.tileTop} L${x1} ${o.tileTop}`, 2.4, "#9FB2AC");
+    }
+    el("rect", { x: x0, y: floorY - 14, width: x1 - x0, height: 14, fill: "#D7DAD3" }, g);       // plinthe
+    ln(g, `M${x0} ${floorY - 14} L${x1} ${floorY - 14}`, 1.6, "#A9ADA5");
+    el("rect", { x: x0, y: floorY, width: x1 - x0, height: bottom - floorY, fill: o.floor }, g);
+    const cx = (x0 + x1) / 2;
+    for (let i = -8; i <= 8; i++) ln(g, `M${f(cx + i * 70)} ${floorY} L${f(cx + i * 150)} ${bottom}`, 1.2, o.floorLine);
+    [0.3, 0.62].forEach((t) => ln(g, `M${x0} ${f(floorY + (bottom - floorY) * t)} L${x1} ${f(floorY + (bottom - floorY) * t)}`, 1.2, o.floorLine));
+    ln(g, `M${x0} ${floorY} L${x1} ${floorY}`, 3, INK);
+    // bord inférieur du sol : fondu vers le papier
+    el("rect", { x: x0, y: bottom - 10, width: x1 - x0, height: 10, fill: "#F7F7F1", opacity: 0.6 }, g);
+  }
+  // armoire murale vitrée avec boîtes — origine : coin haut-gauche
+  function wallCabinet(g, o) {
+    clear(g); o = Object.assign({ w: 180, h: 150, seed: 503 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, h = o.h;
+    el("path", { d: U.rrect(0, 0, w, h, 6), fill: "#D2D2CB", transform: "translate(6 7)" }, g);
+    U.shape(C, "box", U.rrect(0, 0, w, h, 6), MAT.white, { sw: 2.6 });
+    [[8, 8], [w / 2 + 2, 8]].forEach(([x, y], i) => {
+      el("rect", { x, y, width: w / 2 - 10, height: h - 16, rx: 4, fill: "#EAF3F6", stroke: INK, "stroke-width": 2 }, g);
+      ln(g, `M${x + 6} ${y + (h - 16) / 2} L${x + w / 2 - 16} ${y + (h - 16) / 2}`, 1.8, "#8FA9B3");
+      const cols = ["#F8CE4E", "#FFFFFF", "#CFE4EE", "#F2C6BF"];
+      for (let r = 0; r < 2; r++) for (let k = 0; k < 3; k++) { const bx = x + 8 + k * ((w / 2 - 26) / 3), by = y + 8 + r * ((h - 16) / 2), bh = (h - 16) / 2 - 14 - (k % 2) * 8;
+        el("rect", { x: f(bx), y: f(by + (h - 16) / 2 - 10 - bh), width: f((w / 2 - 30) / 3), height: f(bh), fill: cols[(r * 3 + k + i) % 4], stroke: INK, "stroke-width": 1.4 }, g); }
+      ln(g, `M${x + w / 2 - 16} ${y + 10} L${x + w / 2 - 30} ${y + 30}`, 2, "#FFFFFF");   // reflet de la vitre
+    });
+    el("circle", { cx: w / 2 - 8, cy: h / 2, r: 3, fill: INK }, g); el("circle", { cx: w / 2 + 6, cy: h / 2, r: 3, fill: INK }, g);
+  }
+  // chariot d'instruments (deux plateaux) — origine : sol, centre
+  function instrumentCart(g, o) {
+    clear(g); o = Object.assign({ w: 150, h: 150, seed: 505 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, h = o.h;
+    [-w / 2 + 12, w / 2 - 12].forEach((x, i) => { U.stroke(C, "leg" + i, `M${x} ${-h} L${x} -14`, { sw: 3.4 }); el("circle", { cx: x, cy: -8, r: 8, fill: "#3A3A37", stroke: INK, "stroke-width": 1.8 }, g); });
+    U.shape(C, "tray", U.rrect(-w / 2, -h - 12, w, 14, 4), { base: "#E6E6E1", hatch: "#96968F", gap: 6, fw: 1 }, { sw: 2.4 });
+    U.shape(C, "low", U.rrect(-w / 2 + 6, -62, w - 12, 10, 3), MAT.grey, { sw: 2 });
+    el("path", { d: `M${-w / 2 + 6} ${-h - 12} L${w / 2 - 6} ${-h - 12} L${w / 2 - 14} ${-h - 22} L${-w / 2 + 14} ${-h - 22} Z`, fill: "#BFD9C9", stroke: INK, "stroke-width": 1.6 }, g);   // champ stérile
+    // instruments : ciseaux, pince, bistouri, compresses
+    ln(g, `M${-w / 2 + 20} ${-h - 28} l 34 -6 M${-w / 2 + 20} ${-h - 22} l 34 -10`, 2.4);
+    el("circle", { cx: -w / 2 + 16, cy: -h - 28, r: 5, fill: "none", stroke: INK, "stroke-width": 2 }, g); el("circle", { cx: -w / 2 + 16, cy: -h - 20, r: 5, fill: "none", stroke: INK, "stroke-width": 2 }, g);
+    ln(g, `M${-6} ${-h - 24} l 40 -4`, 3); ln(g, `M${34} ${-h - 28} l 10 -2`, 3, "#8A8A84");
+    el("rect", { x: w / 2 - 44, y: -h - 38, width: 28, height: 16, rx: 3, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+    ln(g, `M${w / 2 - 40} ${-h - 31} l 20 0`, 1.2, "#C9625A");
+    el("rect", { x: -w / 2 + 16, y: -56, width: 40, height: 16, rx: 3, fill: "#CFE4EE", stroke: INK, "stroke-width": 1.4 }, g);
+  }
+  // panneau de gaz médicaux (O₂ / Air / Vac) — origine : coin haut-gauche
+  function gasPanel(g, o) {
+    clear(g); o = Object.assign({ w: 230, seed: 507 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w;
+    U.shape(C, "rail", U.rrect(0, 0, w, 46, 8), MAT.white, { sw: 2.4 });
+    [["O₂", "#FFFFFF"], ["Air", "#F8CE4E"], ["Vac", "#CFE4EE"]].forEach(([t, col], i) => { const x = 30 + i * 70;
+      el("circle", { cx: x, cy: 23, r: 13, fill: col, stroke: INK, "stroke-width": 2 }, g); el("circle", { cx: x, cy: 23, r: 4, fill: INK }, g); U.text(g, t, x + 26, 30, 15, {}); });
+  }
+  // rideau d'hôpital sur rail — origine : coin haut-gauche ; o.w, o.h
+  function curtain(g, o) {
+    clear(g); o = Object.assign({ w: 170, h: 700, seed: 509 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, h = o.h;
+    U.stroke(C, "rail", `M-20 0 L${w + 30} 0`, { sw: 5 });
+    let d = `M0 6`; const n = 6; for (let i = 0; i < n; i++) { const xa = i * w / n, xb = (i + 1) * w / n; d += ` Q ${f((xa + xb) / 2)} 18 ${f(xb)} 6`; }
+    d += ` L${w + 8} ${h} Q ${w * 0.5} ${h + 14} -6 ${h} Z`;
+    U.shape(C, "c", d, { base: "#DCEBE4", hatch: "#9FC2B2", gap: 7, fw: 1 }, { sw: 2.4 });
+    for (let i = 1; i < n; i++) ln(g, `M${f(i * w / n)} 14 C ${f(i * w / n + 6)} ${h * 0.4}, ${f(i * w / n - 6)} ${h * 0.7}, ${f(i * w / n + 2)} ${h - 6}`, 1.6, "#7FA394");
+    for (let i = 0; i <= n; i++) el("circle", { cx: f(i * w / n), cy: 2, r: 4, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+  }
+  // fenêtre à stores (jour) — origine : centre
+  function blindsWindow(g, o) {
+    clear(g); o = Object.assign({ w: 240, h: 220, open: 0.45, sky: "#D6E8F0", seed: 511 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, h = o.h;
+    el("rect", { x: -w / 2, y: -h / 2, width: w, height: h, fill: o.sky }, g);
+    el("ellipse", { cx: -40, cy: -40, rx: 46, ry: 16, fill: "#FFFFFF", opacity: 0.85 }, g); el("ellipse", { cx: 50, cy: 10, rx: 36, ry: 12, fill: "#FFFFFF", opacity: 0.8 }, g);
+    const nb = Math.round(16 * (1 - o.open)); for (let i = 0; i < nb; i++) { const y = -h / 2 + 6 + i * 12; el("rect", { x: -w / 2 + 4, y, width: w - 8, height: 9, fill: "#F4F4EF", stroke: "#B4B4AE", "stroke-width": 1 }, g); }
+    ln(g, `M${w / 2 - 20} ${-h / 2} L${w / 2 - 20} ${-h / 2 + 6 + nb * 12 + 30}`, 1.4, "#77776F");
+    U.shape(C, "frame", U.rrect(-w / 2, -h / 2, w, h, 6), {}, { sw: 4 });
+    U.stroke(C, "mid", `M0 ${-h / 2} L0 ${h / 2}`, { sw: 3 });
+    U.shape(C, "sill", U.rrect(-w / 2 - 14, h / 2, w + 28, 14, 4), MAT.grey, { sw: 2.4 });
+  }
+  // vase de fleurs (posé) — origine : base
+  function flowers(g, o) {
+    clear(g); o = Object.assign({ seed: 513 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    [[-14, -86, YEL], [10, -96, "#F2C6BF"], [26, -78, "#FFFFFF"], [-2, -104, YEL]].forEach(([x, y, col], i) => {
+      ln(g, `M0 -40 Q ${x * 0.6} ${(y - 40) / 2} ${x} ${y}`, 2, "#5F8F6E");
+      for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; el("ellipse", { cx: f(x + Math.cos(a) * 7), cy: f(y + Math.sin(a) * 7), rx: 6, ry: 4, transform: `rotate(${f(a * 57.3)} ${f(x + Math.cos(a) * 7)} ${f(y + Math.sin(a) * 7)})`, fill: col, stroke: INK, "stroke-width": 1.2 }, g); }
+      el("circle", { cx: x, cy: y, r: 3.5, fill: "#E0A93A", stroke: INK, "stroke-width": 1 }, g);
+    });
+    U.shape(C, "vase", "M-16 0 C -22 -20, -14 -36, -10 -44 L10 -44 C 14 -36, 22 -20, 16 0 Z", { base: "#CFE4EE", hatch: "#8FB5C4", gap: 5, fw: 1 }, { sw: 2.2 });
+  }
+  // étagère de livres de droit — origine : coin haut-gauche
+  function bookshelf(g, o) {
+    clear(g); o = Object.assign({ w: 200, h: 420, rows: 4, seed: 515 }, o);
+    const C = U.ctx(g, o.seed, false, 1), w = o.w, h = o.h, rh = h / o.rows;
+    U.shape(C, "case", U.rrect(0, 0, w, h, 4), { base: "#E4D9C6", hatch: "#B9A98C", gap: 7, fw: 1 }, { sw: 2.6 });
+    const cols = ["#C9625A", "#8E9AAF", "#F8CE4E", "#6E8B6B", "#E6E6E1", "#A3896B"];
+    for (let r = 0; r < o.rows; r++) {
+      let x = 10; const y0 = r * rh + rh - 8; let k = r * 3;
+      while (x < w - 22) { const bw = 12 + ((k * 7) % 9), bh = rh - 22 - ((k * 5) % 14), lean = (k % 7 === 3) ? 8 : 0;
+        el("rect", { x: f(x), y: f(y0 - bh), width: bw, height: bh, fill: cols[k % cols.length], stroke: INK, "stroke-width": 1.4, transform: lean ? `rotate(${lean} ${f(x)} ${f(y0)})` : null }, g);
+        ln(g, `M${f(x + 3)} ${f(y0 - bh + 8)} l ${bw - 6} 0 M${f(x + 3)} ${f(y0 - 12)} l ${bw - 6} 0`, 1, "#FFFFFF"); x += bw + 2; k++; }
+      U.stroke(C, "sh" + r, `M4 ${f(y0)} L${w - 4} ${f(y0)}`, { sw: 3 });
+    }
+    U.text(g, "§", w - 26, rh - 22, 22, {});
+  }
+  // arbre, nuage, lampadaire (extérieur)
+  function tree(g, o) {
+    clear(g); o = Object.assign({ h: 300, seed: 517 }, o);
+    const C = U.ctx(g, o.seed, false, 1), h = o.h;
+    U.shape(C, "trunk", `M-12 0 L-8 ${-h * 0.45} L8 ${-h * 0.45} L12 0 Z`, { base: "#C7B79C", hatch: "#8A7458", gap: 5, fw: 1 }, { sw: 2.4 });
+    U.shape(C, "crown", `M${-h * 0.28} ${-h * 0.5} C ${-h * 0.42} ${-h * 0.7}, ${-h * 0.2} ${-h * 1.02}, 0 ${-h} C ${h * 0.24} ${-h * 1.02}, ${h * 0.42} ${-h * 0.72}, ${h * 0.28} ${-h * 0.5} C ${h * 0.18} ${-h * 0.4}, ${-h * 0.18} ${-h * 0.4}, ${-h * 0.28} ${-h * 0.5} Z`, { base: "#CFE2C6", hatch: "#7FA76E", gap: 6, fw: 1.1 }, { sw: 2.6 });
+  }
+  function cloud(g, o) { clear(g); o = Object.assign({ w: 160 }, o); const k = o.w / 160; el("path", { d: `M${-70 * k} ${10 * k} C ${-90 * k} ${-14 * k}, ${-50 * k} ${-36 * k}, ${-28 * k} ${-22 * k} C ${-20 * k} ${-50 * k}, ${30 * k} ${-50 * k}, ${36 * k} ${-20 * k} C ${70 * k} ${-30 * k}, ${90 * k} ${10 * k}, ${60 * k} ${14 * k} Z`, fill: "#FFFFFF", stroke: "#B9C9D0", "stroke-width": 2.4 }, g); }
+  function lamppost(g, o) {
+    clear(g); o = Object.assign({ h: 360, seed: 519 }, o);
+    const C = U.ctx(g, o.seed, false, 1), h = o.h;
+    U.stroke(C, "p", `M0 0 L0 ${-h} Q 0 ${-h - 30} 34 ${-h - 30}`, { sw: 5 });
+    U.shape(C, "l", `M20 ${-h - 34} L52 ${-h - 34} L46 ${-h - 18} L26 ${-h - 18} Z`, MAT.yellow, { sw: 2.2 });
+    U.shape(C, "b", U.rrect(-12, -20, 24, 20, 4), MAT.mid, { sw: 2 });
+  }
+  // porte de couloir avec hublot et numéro — origine : sol, centre
+  function corridorDoor(g, o) {
+    clear(g); o = Object.assign({ label: "OP 2", seed: 521 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    U.shape(C, "frame", U.rrect(-62, -250, 124, 250, 6), MAT.mid, { sw: 2.6 });
+    U.shape(C, "door", U.rrect(-52, -240, 104, 240, 4), { base: "#E4ECE9", hatch: "#9FB2AC", gap: 8, fw: 1 }, { sw: 2.4 });
+    el("circle", { cx: 0, cy: -170, r: 22, fill: "#EAF3F6", stroke: INK, "stroke-width": 2.4 }, g);
+    ln(g, "M-8 -180 L4 -166", 1.8, "#FFFFFF");
+    el("rect", { x: 34, y: -128, width: 10, height: 30, rx: 4, fill: "#B4B4AE", stroke: INK, "stroke-width": 1.6 }, g);
+    U.shape(C, "plate", U.rrect(-36, -296, 72, 30, 6), MAT.white, { sw: 2 });
+    U.text(g, o.label, 0, -274, 18, {});
+  }
+  // bonnet de bloc (posé sur une tête Persona : origine = centre de la tête, échelle de la personne)
+  function scrubCap(g, o) {
+    clear(g); o = Object.assign({ col: "#CFE4EE", hatch: "#8FB5C4", seed: 523 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    U.shape(C, "cap", "M-70 -14 C -76 -58, -40 -88, 0 -88 C 40 -88, 76 -58, 70 -14 C 52 -30, 26 -38, 0 -38 C -26 -38, -52 -30, -70 -14 Z", { base: o.col, hatch: o.hatch, gap: 7, fw: 0.9 }, { sw: 2.4 });
+    U.stroke(C, "band", "M-68 -18 C -50 -32, -24 -42, 0 -42 C 24 -42, 50 -32, 68 -18", { sw: 1.6 });
+    ln(g, "M-40 -70 q 10 -6 20 -2 M14 -76 q 10 -4 18 2", 1.4, "#FFFFFF");
+    [[-34, -58], [6, -66], [40, -52], [-10, -50], [24, -48]].forEach(([x, y]) => el("circle", { cx: x, cy: y, r: 2.6, fill: o.dot || "#FFFFFF", stroke: o.hatch, "stroke-width": 0.9 }, g));
+  }
+
+  window.UnnaDecor = { room, wallCabinet, instrumentCart, gasPanel, curtain, blindsWindow, flowers, bookshelf, tree, cloud, lamppost, corridorDoor, scrubCap, bed2, monitorCart, bench, courthouse, opLamp, opTable, scope, fluidBag, uterusCam, vessel, wordCard, tape, ladder, stairs, iconMegaphone, iconQuestion, iconUp, ventilator, scalesEmblem, signpost, clipboard, bedBack, bedFront, cellWall, cellBars, uterus, monitor, wings, halo, iconBars, iconBan, iconMoney, banknote };
 })();
