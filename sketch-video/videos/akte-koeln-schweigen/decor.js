@@ -440,11 +440,70 @@
     for (let i = 1; i < 4; i++) ln(g, `M-26 ${f(-140 + bh * i / 4)} L26 ${f(-140 + bh * i / 4)}`, 1.4, "#77776F");
   }
 
-  // ───────── table d'opération / lit de réa v2, vue de côté : vraie patiente allongée sous le drap (corps visible),
-  //   tête à DROITE si flip (par défaut à gauche) ; la tête se dessine à part (Persona.head, profil vers le haut) aux
-  //   ancres renvoyées. o.kind "op" | "icu" ; o.arm : bras posé SUR la couverture (icu) → ancre hand.
+  // ───────── patiente allongée (dessinée à la main, pas une tête pivotée) — repère local du lit, tête à GAUCHE
+  //   tête de profil tournée vers le haut (front, nez, lèvres, menton, œil fermé + cils, oreille), cheveux bouclés
+  //   étalés sur l'oreiller, cou → épaule en blouse, drap replié sur la poitrine, corps (poitrine qui respire,
+  //   ventre, cuisses, genoux, pieds), bras sur la couverture (option), tube du respirateur à la bouche (option).
+  function lyingPatient(root, x0, x1, y, o) {
+    const PM = (window.Persona && Persona.MAT) || {}, SKIN = PM.skin || { base: "#FBE9DA", hatch: "#E2B9A0", gap: 7, fw: 1 };
+    const HAIR = PM.hairBrown || { base: "#A3A39C", hatch: "#44443F", gap: 4.6, fw: 1.35 };
+    const GOWN = { base: "#E3EEF3", hatch: "#A9C3CF", gap: 6, fw: 1 };
+    const k = 0.95, hx = x0 + 88, hy = y - 70, b = 4 * (o.breath || 0);
+    // oreiller
+    const C0 = U.ctx(root, (o.seed || 451) + 3, false, 1);
+    U.shape(C0, "pillow", `M${x0 + 6} ${y + 2} C ${x0 + 2} ${y - 34}, ${x0 + 30} ${y - 46}, ${x0 + 80} ${y - 44} C ${x0 + 130} ${y - 44}, ${x0 + 150} ${y - 30}, ${x0 + 148} ${y + 2} Z`, MAT.white, { sw: 2.4 });
+    ln(root, `M${x0 + 26} ${y - 30} q 14 6 26 4 M${x0 + 116} ${y - 32} q 10 8 22 6`, 1.4, "#B4B4AE");
+    // tête (coordonnées « debout, de profil vers la droite », puis tournée de −90° : le visage regarde le plafond)
+    const H = el("g", { transform: `translate(${f(hx)} ${f(hy)}) rotate(-90) scale(${k})` }, root), CH = U.ctx(H, (o.seed || 451) + 5, false, 1);
+    // cheveux de derrière (sur l'oreiller)
+    const bumps = (cx, cy, rx, ry, a0, a1, n, amp) => { let d = ""; for (let i = 0; i <= n; i++) { const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180, px = cx + rx * Math.cos(a), py = cy + ry * Math.sin(a);
+        if (!i) d += `M${f(px)} ${f(py)}`; else { const am = (a0 + (a1 - a0) * (i - 0.5) / n) * Math.PI / 180; d += ` Q${f(cx + (rx + amp) * Math.cos(am))} ${f(cy + (ry + amp) * Math.sin(am))} ${f(px)} ${f(py)}`; } } return d; };
+    const hairBack = bumps(-6, -4, 66, 74, -48, -244, 11, 13) + " C -30 44, -18 30, -14 16 C -10 -6, 4 -24, 22 -34 C 32 -40, 40 -46, 44 -52 Z";
+    U.shape(CH, "hairB", hairBack, HAIR, { sw: 2.4 });
+    // cou (la blouse le recouvre plus bas)
+    U.shape(CH, "neck", "M -18 30 C -10 40, 16 46, 30 48 L 32 88 L -18 88 Z", SKIN, { sw: 2.3 });
+    // visage de profil
+    U.shape(CH, "face", "M 0 -70 C 30 -70, 50 -54, 54 -32 C 57 -21, 58 -13, 56 -7 C 55 -3, 56 1, 60 7 C 66 14, 72 20, 68 24 C 64 27, 60 26, 58 28 C 60 31, 61 34, 58 36 C 60 39, 60 42, 57 44 C 58 50, 56 56, 48 60 C 36 64, 20 60, 10 52 C 0 46, -12 44, -18 38 C -40 40, -58 22, -60 0 C -62 -30, -40 -68, 0 -70 Z", SKIN, { sw: 2.6 });
+    el("ellipse", { cx: 34, cy: 18, rx: 11, ry: 7, fill: "#F0A99F", opacity: 0.45 }, H);
+    ln(H, "M 30 -3 Q 40 5 50 -2", 2.4);                                   // paupière fermée
+    [[33, 0], [38, 2.5], [43, 2.5], [48, 0]].forEach(([x, yy]) => ln(H, `M${x} ${yy} l -1.5 5`, 1.4));   // cils
+    ln(H, "M 31 -16 Q 42 -22 53 -14", 2, "#55524B");                      // sourcil
+    ln(H, "M 60 22 Q 63 24 66 22", 1.6);                                  // narine
+    ln(H, "M 50 38 Q 55 40 58 37", 2);                                    // bouche fermée
+    // cheveux sur le côté de la tête (ils cachent l'oreille) : bord avant = tempe → derrière la joue → nuque
+    U.shape(CH, "hairS", bumps(-6, -4, 64, 72, -52, -238, 10, 10) + " C -34 40, -20 30, -12 18 C -6 6, -4 -10, 4 -24 C 14 -38, 30 -48, 42 -56 Z", HAIR, { sw: 2.3 });
+    [[-30, -30], [-40, 4], [-18, -50], [-22, 22]].forEach(([cx, cy]) => ln(H, `M${cx} ${cy} q 8 -8 14 2 q 4 8 -4 12`, 1.6, "#2E2E2B"));
+    // épaule en blouse d'hôpital, à la sortie du cou
+    const C = U.ctx(root, (o.seed || 451) + 7, false, 1);
+    U.shape(C, "gown", `M${x0 + 158} ${y - 98} C ${x0 + 176} ${y - 104}, ${x0 + 200} ${y - 100}, ${x0 + 214} ${y - 84} C ${x0 + 222} ${y - 74}, ${x0 + 224} ${y - 40}, ${x0 + 222} ${y} L${x0 + 150} ${y} C ${x0 + 146} ${y - 40}, ${x0 + 150} ${y - 84}, ${x0 + 158} ${y - 98} Z`, GOWN, { sw: 2.4 });
+    ln(root, `M${x0 + 168} ${y - 96} C ${x0 + 178} ${y - 88}, ${x0 + 192} ${y - 86}, ${x0 + 204} ${y - 90}`, 2, "#7FA3B3");   // encolure
+    [[x0 + 180, y - 72], [x0 + 202, y - 62], [x0 + 178, y - 52]].forEach(([px, py]) => el("circle", { cx: px, cy: py, r: 2.6, fill: "#7FA3B3" }, root));
+    // le corps sous le drap
+    const body = `M${x0 + 214} ${y} L${x0 + 214} ${y - 70} C ${x0 + 236} ${y - 82 - b}, ${x0 + 270} ${y - 84 - b}, ${x0 + 292} ${y - 72 - b} C ${x0 + 312} ${y - 62}, ${x0 + 330} ${y - 66}, ${x0 + 350} ${y - 62}`
+      + ` C ${x0 + 372} ${y - 58}, ${x0 + 384} ${y - 50}, ${x0 + 404} ${y - 48} C ${x1 - 74} ${y - 48}, ${x1 - 56} ${y - 52}, ${x1 - 42} ${y - 56} C ${x1 - 32} ${y - 60}, ${x1 - 28} ${y - 74}, ${x1 - 16} ${y - 72} C ${x1 - 6} ${y - 70}, ${x1 - 2} ${y - 40}, ${x1 - 2} ${y} Z`;
+    U.shape(C, "drape", body, o.drapeMat, { sw: 2.8 });
+    // le haut du drap replié : un revers qui suit le haut de la poitrine
+    U.shape(C, "hem", `M${x0 + 214} ${y - 70} C ${x0 + 236} ${y - 82 - b}, ${x0 + 270} ${y - 84 - b}, ${x0 + 292} ${y - 72 - b} L${x0 + 290} ${y - 60 - b} C ${x0 + 270} ${y - 70 - b}, ${x0 + 238} ${y - 70 - b}, ${x0 + 214} ${y - 58} Z`, MAT.white, { sw: 2 });
+    ln(root, `M${x0 + 300} ${y - 40} q 30 10 60 2 M${x1 - 120} ${y - 28} q 24 8 48 0 M${x0 + 262} ${y - 52} q 16 18 10 40`, 1.6, o.lineCol);
+    // le drap retombe sur le côté de la table
+    el("path", { d: `M${x0 + 204} ${y} L${x1 + 4} ${y} L${x1 + 4} ${y + 30} Q ${(x0 + x1) / 2 + 60} ${y + 38} ${x0 + 204} ${y + 30} Z`, fill: o.dropFill, stroke: INK, "stroke-width": 2.4, "stroke-linejoin": "round" }, root);
+    let hand = null;
+    if (o.arm) {   // bras posé le long du corps, SUR la couverture (loin du revers) : manche courte → avant-bras → main à plat
+      U.shape(C, "sleeve", `M${x0 + 186} ${y - 50} C ${x0 + 210} ${y - 54}, ${x0 + 240} ${y - 50}, ${x0 + 254} ${y - 44} L${x0 + 252} ${y - 22} C ${x0 + 236} ${y - 26}, ${x0 + 206} ${y - 26}, ${x0 + 188} ${y - 24} Z`, GOWN, { sw: 2.2 });
+      U.shape(C, "arm", `M${x0 + 250} ${y - 42} C ${x0 + 278} ${y - 40}, ${x0 + 306} ${y - 38}, ${x0 + 330} ${y - 40} L${x0 + 332} ${y - 24} C ${x0 + 306} ${y - 22}, ${x0 + 276} ${y - 22}, ${x0 + 250} ${y - 24} Z`, SKIN, { sw: 2.2 });
+      U.shape(C, "hand", `M${x0 + 326} ${y - 44} C ${x0 + 346} ${y - 50}, ${x0 + 364} ${y - 40}, ${x0 + 360} ${y - 30} C ${x0 + 356} ${y - 20}, ${x0 + 336} ${y - 18}, ${x0 + 326} ${y - 22} Z`, SKIN, { sw: 2.2 });
+      ln(root, `M${x0 + 352} ${y - 44} q 6 6 4 12`, 1.4, "#B98C77");
+      hand = [x0 + 344, y - 34];
+    }
+    // tube du respirateur jusqu'à la bouche (option)
+    const mouth = [hx + 37 * k, hy - 56 * k];   // bouche (debout : x 56, y 37) après rotation −90° : (y, −x)
+    if (o.tube) { el("path", { d: `M${f(mouth[0])} ${f(mouth[1] - 2)} l 0 -22`, fill: "none", stroke: "#6E8B99", "stroke-width": 7, "stroke-linecap": "round" }, root);
+      el("rect", { x: f(mouth[0] - 9), y: f(mouth[1] - 8), width: 18, height: 9, rx: 3, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.8 }, root); }
+    return { head: [hx, hy], mouth, hand, chest: [x0 + 266, y - 82], pelvis: [x0 + 350, y - 62], feet: [x1 - 20, y - 70], tubeIn: [mouth[0], mouth[1] - 24] };
+  }
+  // ───────── table d'opération / lit de réa v3 avec la patiente — origine : sol, centre ; flip : tête à DROITE
   function bed2(g, o) {
-    clear(g); o = Object.assign({ w: 480, kind: "op", flip: false, breath: 0, seed: 451, arm: false }, o);
+    clear(g); o = Object.assign({ w: 460, kind: "op", flip: false, breath: 0, seed: 451, arm: false, tube: false }, o);
     const root = el("g", o.flip ? { transform: "scale(-1,1)" } : null, g), C = U.ctx(root, o.seed, !!o.flip, 1), w = o.w, x0 = -w / 2, x1 = w / 2;
     const top = o.kind === "op" ? -190 : -200, sg = o.flip ? -1 : 1;
     el("ellipse", { cx: 0, cy: 4, rx: w * 0.45, ry: 10, fill: "rgba(28,26,28,.14)" }, root);
@@ -459,22 +518,13 @@
       U.shape(C, "fb", U.rrect(x1 - 6, top - 60, 22, 100, 8), MAT.grey, { sw: 2.6 });
       U.shape(C, "matt", U.rrect(x0 + 4, top - 12, w - 8, 22, 9), MAT.white, { sw: 2.4 });
     }
-    const y = o.kind === "op" ? top : top - 12, b = 3 * o.breath;
-    U.shape(C, "pillow", `M${x0 + 10} ${y} C ${x0 + 8} ${y - 30}, ${x0 + 120} ${y - 34}, ${x0 + 122} ${y} Z`, MAT.white, { sw: 2.4 });
-    // corps sous le drap : épaules → poitrine (respire) → ventre → cuisses → genoux → pieds
-    const body = `M${x0 + 98} ${y} C ${x0 + 100} ${y - 44 - b}, ${x0 + 170} ${y - 56 - b}, ${x0 + 210} ${y - 48 - b} C ${x0 + 250} ${y - 42}, ${x0 + 300} ${y - 50}, ${x0 + 330} ${y - 40}`
-      + ` C ${x0 + 360} ${y - 32}, ${x1 - 100} ${y - 46}, ${x1 - 70} ${y - 34} C ${x1 - 46} ${y - 26}, ${x1 - 40} ${y - 50}, ${x1 - 22} ${y - 46} C ${x1 - 6} ${y - 40}, ${x1 - 2} ${y - 16}, ${x1 - 4} ${y} Z`;
-    const drapeMat = o.kind === "op" ? { base: "#BFD9C9", hatch: "#7FA68E", gap: 7, fw: 1 } : { base: "#ECECE7", hatch: "#B4B4AE", gap: 8, fw: 1 };
-    U.shape(C, "drape", body, drapeMat, { sw: 2.8 });
-    el("path", { d: `M${x0 + 96} ${y + 8} L${x1 + 2} ${y + 8} L${x1 + 2} ${y + 34} L${x0 + 96} ${y + 34} Z`, fill: o.kind === "op" ? "#A9CDB6" : "#E2E2DC", stroke: INK, "stroke-width": 2.4 }, root);
-    ln(root, `M${x0 + 200} ${y - 30} q 30 10 60 2 M${x1 - 150} ${y - 24} q 24 8 48 0`, 1.6, o.kind === "op" ? "#6F957E" : "#A9A9A2");
-    let hand = null;
-    if (o.arm) {   // bras sur la couverture (manche + main en moufle)
-      U.shape(C, "arm", `M${x0 + 130} ${y - 34} C ${x0 + 170} ${y - 30}, ${x0 + 220} ${y - 22}, ${x0 + 262} ${y - 26} L${x0 + 264} ${y - 12} C ${x0 + 220} ${y - 8}, ${x0 + 170} ${y - 14}, ${x0 + 128} ${y - 18} Z`, { base: "#E9E3F1", hatch: "#B8AFC8", gap: 6, fw: 1 }, { sw: 2.2 });
-      U.shape(C, "hand", `M${x0 + 258} ${y - 30} C ${x0 + 284} ${y - 34}, ${x0 + 290} ${y - 8}, ${x0 + 266} ${y - 8} C ${x0 + 256} ${y - 8}, ${x0 + 254} ${y - 26}, ${x0 + 258} ${y - 30} Z`, MAT.skin || { base: "#FBE9DA" }, { sw: 2.2 });
-      hand = [sg * (x0 + 272), y - 20];
-    }
-    return { head: [sg * (x0 + 64), y - 30], top: y, pelvis: [sg * (x0 + 300), y - 44], feet: [sg * (x1 - 20), y - 30], chest: [sg * (x0 + 190), y - 52], hand };
+    const y = o.kind === "op" ? top : top - 12;
+    const op = o.kind === "op";
+    const a = lyingPatient(root, x0, x1, y, { seed: o.seed, breath: o.breath, arm: o.arm, tube: o.tube,
+      drapeMat: op ? { base: "#BFD9C9", hatch: "#7FA68E", gap: 7, fw: 1 } : { base: "#ECECE7", hatch: "#B4B4AE", gap: 8, fw: 1 },
+      dropFill: op ? "#A9CDB6" : "#E2E2DC", lineCol: op ? "#6F957E" : "#A9A9A2" });
+    const m = (p) => (p ? [f(sg * p[0]), f(p[1])] : null);
+    return { head: m(a.head), mouth: m(a.mouth), tubeIn: m(a.tubeIn), hand: m(a.hand), chest: m(a.chest), pelvis: m(a.pelvis), feet: m(a.feet), top: y };
   }
   // moniteur sur pied à roulettes — origine : sol ; renvoie le centre de l'écran
   function monitorCart(g, o) {

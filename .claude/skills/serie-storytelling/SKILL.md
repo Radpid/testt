@@ -136,6 +136,15 @@ videos/<episode>/
   isolée qui ressemble à un bébé), soignants derrière la table, étiquettes toutes dans la bande du haut (y ≈ 470),
   une à la fois. Une même mise en place pour toutes les scènes du bloc ; zooms ≤ ×1,3 qui ne poussent rien dans le
   logo ni dans la colonne des boutons ; rien à moins de 90 px des bords.
+- **Personne allongée** (retours AKTE 03 : « la tête et les bras de la femme allongée », « les corps déformés ») :
+  JAMAIS une tête Persona pivotée. Dessin dédié (`decor.js` lyingPatient / bed2) : profil tourné vers le plafond
+  (front, nez, lèvres, menton, œil fermé + cils), cheveux qui couvrent l'oreille et s'étalent sur l'oreiller, cou
+  court → épaule en blouse, drap avec revers, poitrine qui respire, bras posé le long du corps (même peau que le
+  visage), tube du respirateur à la bouche. Proportions des personnages Persona (grosse tête).
+- **Bras** : jamais de bras croisés en X ni tendus en « nouilles ». Viser les mains à une distance naturelle de
+  l'épaule (≈ 90–150 px à l'échelle 1), du BON côté (mesurer avec `Persona.util.rig` : en trois-quarts facing 1,
+  handR = côté droit de l'écran). Derrière une table : bras qui pendent, la table cache les mains. Massage
+  cardiaque : soignant sur un marchepied, épaules au-dessus de la poitrine, bras tendus vers le bas.
 - **Bulles** : rectangle arrondi + petits ronds (pas de nuage déformé) ; jamais posées sur un objet.
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache
   les jambes) ; papa à gauche, soignant à droite ; jamais de personne allongée de travers. Extérieur : bâtiments
