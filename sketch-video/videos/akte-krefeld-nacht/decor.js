@@ -9,8 +9,10 @@
  * Les grands décors (façade, coupe, salle) sont STATIQUES (m.obj) ; ce qui change vit dans de petits nœuds à part,
  * ou dans des éléments simples renvoyés par la fonction (les 105 vitres, les battants de la porte, la lampe).
  * Outils partagés avec decor-2.js / decor-3.js : window.EpDecor.outils (hachNuit, rect, circ, ombre, couleurs…).
+ * ORDRE DE CHARGEMENT : tools/essai_decor.mjs charge decor-2.js et decor-3.js AVANT ce fichier (ordre alphabétique) ; un fichier
+ * qui a besoin de D.outils met sa suite dans la file D._apres, que ce fichier lance à sa fin (voir decor-2.js, 1res lignes).
  *
- * INVENTAIRE COMPLET (storyboard § 2) — état après l'étape « socle et décors 1 »
+ * INVENTAIRE COMPLET (storyboard § 2) — état après l'étape « décors 2 » (decor-2.js : S8 à S21)
  * A. Ciel et tableau de bord (repère ÉCRAN, calque c.hud)
  *    bandeauNuit ........ fait (decor.js)      lune ............... fait (decor.js)      etoile ........... fait (decor.js)
  *    nuageNuit .......... fait (decor.js)      horloge ............ fait (decor.js)      jauge ............ fait (decor.js)
@@ -28,20 +30,31 @@
  *    ambulance .......... fait (decor.js)      brancardMini ....... fait (decor.js)      chariotMini ...... fait (decor.js)
  *    jaugeMurale ........ fait (decor.js)      tabouretMini ....... fait (decor.js)      trace ............ fait (decor.js)
  *    rideauRoulant ...... fait (decor.js) — AJOUT (absent de l'inventaire : le rideau de la Liegendanfahrt se lève en S7, S10)
- * E. Urgences (S8, S9)
- *    portesBattantes · lampeExamen · armoireMur · chariotUrgence · rideauBox · brancard · gisant · potence · seringue ·
- *    protocole ......................................................................................... à faire
- * F. Chambre du patient (S12, S15)
- *    litHopital · tableChevet · tubeLabo · porteChambre ................................................ à faire
+ * E. Urgences (S8, S9) — decor-2.js
+ *    portesBattantes .... fait (decor-2.js)   lampeExamen ........ fait (decor-2.js)   armoireMur ....... fait (decor-2.js)
+ *    chariotUrgence ..... fait (decor-2.js)   rideauBox .......... fait (decor-2.js)   brancard ......... fait (decor-2.js)
+ *    gisant ............. fait (decor-2.js) — DESSIN DÉLICAT : personne allongée, validée seule à grande taille (arm 0 / 0,5 / 1, dossier 12°)
+ *    potence ............ fait (decor-2.js)   seringue ........... fait (decor-2.js)   protocole ........ fait (decor-2.js)
+ * F. Chambre du patient (S12, S15) — decor-2.js
+ *    litHopital ......... fait (decor-2.js)   tableChevet ........ fait (decor-2.js)   tubeLabo ......... fait (decor-2.js)
+ *    porteChambre ....... fait (decor-2.js)
  * G. Poste de nuit, téléphone, formulaire (S13, S23, S24)
- *    telephoneMural · combine · cordon · listeGarde · cadreAbsent · mainPOV · stylo · formulaire · casierMural ·
- *    planchette ........................................................................................ à faire
- * H. Tribunal (S16–S21, S26)
- *    salleAudience · fenetreHaute · suspension · estrade · tableDefense · chaiseDos · dos · barre · dossierCarte ·
- *    tableBois · sachetPreuve · chemise · chevalet · schemaHopital · baguette · ailes · aureole · billet · porteSalle
- *    ................................................................................................... à faire
+ *    telephoneMural ..... fait (decor-2.js)   combine ............ fait (decor-2.js)   cordon ........... fait (decor-2.js)
+ *    listeGarde ......... fait (decor-2.js) — petit (S13) ET grand (o.big, S23 ; le fanion « نتا » est posé par la scène)
+ *    cadreAbsent ........ fait (decor-2.js)
+ *    mainPOV · stylo · formulaire · casierMural · planchette (S23, S24) .................................... à faire (decor-3.js)
+ * H. Tribunal (S16–S21, S26) — decor-2.js
+ *    salleAudience ...... fait (decor-2.js)   fenetreHaute ....... fait (decor-2.js)   suspension ....... fait (decor-2.js)
+ *    estrade ............ fait (decor-2.js)   tableDefense ....... fait (decor-2.js)   chaiseDos ........ fait (decor-2.js)
+ *    dos ................ fait (decor-2.js) — DESSIN DÉLICAT : personnage de dos (assis / debout, bow, slump, turn), validé seul
+ *    barre .............. fait (decor-2.js)   dossierCarte ....... fait (decor-2.js)   tableBois ........ fait (decor-2.js)
+ *    sachetPreuve ....... fait (decor-2.js)   chemise ............ fait (decor-2.js)   chevalet ......... fait (decor-2.js)
+ *    schemaHopital ...... fait (decor-2.js)   baguette ........... fait (decor-2.js)   ailes, aureole ... fait (decor-2.js)
+ *    billet ............. fait (decor-2.js)   porteSalle ......... fait (decor-2.js) — ouverte (S20) ou fermée et petite (S17)
+ *    bancsPublic ........ fait (decor-2.js) — AJOUT (S17 : les bancs du public au fond de la salle)
+ *    ombreJour .......... fait (decor-2.js) — AJOUT (S21 : hachures d'ombre sur la table, effacées dans la tache de la fenêtre)
  * I. Règle médicale (S22)
- *    regle · tubeSang · cadranHoraire · caseEtage · pictoMedecin ....................................... à faire
+ *    regle · tubeSang · cadranHoraire · caseEtage · pictoMedecin ....................................... à faire (decor-3.js)
  * J. Intro et carte
  *    badge .............. fait (decor.js)      pinFenetre ......... fait (decor.js)      fenetreVille ..... fait (decor.js)
  *    coupure ............ fait (decor.js)
@@ -937,4 +950,7 @@
     el("ellipse", { cx: 0, cy: L + 36, rx: 22, ry: 8, fill: "#FFF6C9", stroke: INK, "stroke-width": 2 }, g);
     return { ampoule: [0, L + 36] };
   };
+
+  // decor-2.js / decor-3.js chargés AVANT ce fichier (ordre alphabétique de tools/essai_decor.mjs) ont mis leur suite en attente.
+  (D._apres || []).splice(0).forEach((fn) => fn());
 })();

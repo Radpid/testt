@@ -1469,3 +1469,51 @@ contrôle). Les mises en place (`X.lieux`) et les scènes doivent appliquer ces 
   y 842 ; le caisson du store reste sous le plafond, y ≥ 617).
 - **S1** : avec `reachR [40, -235]` / `reachL [4, -228]`, les mains d'`AZ` ne sont qu'à 48 et 68 px des épaules (ancres
   `Persona.util.rig`) : à régler dans la scène (90–130 px, comme le demande le storyboard).
+
+### Étape « décors 2 » (decor-2.js : S8 à S21)
+
+Ce qui a été fait autrement que l'inventaire (§ 2), et pourquoi :
+- **Chargement** : `tools/essai_decor.mjs` charge `decor-2.js` AVANT `decor.js` (ordre alphabétique) ; `decor-2.js` attend donc les
+  outils (`D.outils`) dans la file `D._apres`, que `decor.js` lance à sa fin (une ligne ajoutée). `decor-3.js` peut faire de même.
+- **`D.gisant`** : ancrage = coin haut du matelas côté TÊTE ; `o.flip` (tête à droite) est géré dans le dessin (hachures à −41°,
+  ancres déjà retournées), plutôt que « le parent retourne ». `o.dossier` = angle du dossier : tête, oreiller et épaules montent
+  avec le dossier du brancard (`D.brancard` renvoie `tete`, `hinge`, `tilt` pour le poser). Tête ≈ 130 px (proportions Persona,
+  comme les soignants à 0,95), corps sous le drap ≈ 460 px. Validé seul à grande taille : `arm` 0 / 0,5 / 1, `roll`, dossier 12°.
+- **`D.brancard`** : tête à GAUCHE par défaut, `o.flip` pour S8 ; dossier `o.tilt` (12°).
+- **`D.potence`** : le site en Y est SOUS la chambre compte-gouttes (là où passe le liquide) : local (±37, −250) ; en S8 (potence en
+  (668, 1300), poche côté patient `side: −1`) il est en **(631, 1050)**, pas en (668, 965).
+- **`D.dos`** : taille naturelle = l'échelle 1 des personnages Persona (assis : sommet de la tête à −349, debout : −437), à poser
+  à l'échelle 1 — c'est ce que donnent les positions de S16 (sommet y 941) et S19 (y 853) ; l'« échelle 0,8 » du tableau les
+  contredisait.
+- **`D.cadreAbsent`** : 184 de large (x 668–852 en S13) et note `Grund unbekannt` en 18 px : à 20 px elle débordait du cadre.
+- **`D.listeGarde`** : petit tableau 256 de large (x 182–438) pour que les ondes de la lucarne « ring » restent sur la feuille ;
+  grand tableau : titre à y 688 (local −212) au lieu de 680, sinon il touchait le haut de la feuille. Le fanion « نتا » de S23
+  n'est pas dans le dessin : la scène le pose (ancres `lignes[i].texte / fin / tel / lucarne`).
+- **`D.schemaHopital`** : 340 × 370 ; le téléphone et le « ? » sont sur la droite du toit (la pince du chevalet est au milieu) ;
+  le cercle au surligneur est une boucle arrondie qui serre l'immeuble (un cercle large traversait le téléphone ou le texte) ;
+  « 2 Ärzte · 1 Nacht » à y +162 (monde 1052, dans le panneau).
+- **`D.salleAudience`** : les lames du parquet fuient vers (540, 640) (hauteur de l'œil) : vers (540, 1000) elles se seraient
+  toutes rejointes au pied du mur.
+- **`D.seringue`** : « Insulin » en 18 px sur un corps de 30 px (22 px ne tenait pas). **`D.protocole`** : titre sur deux lignes
+  (« Einsatz- » / « protokoll », 11,5 px) pour tenir sur la feuille de 58 px.
+- **`D.tubeLabo`** : `o.rack: false` (le tube seul, S17) et `o.note` (étiquette ficelée « Labor: keine Analyse », à droite ou à
+  gauche avec `o.noteSide: −1`) ; le bon de demande est DERRIÈRE le portoir (à côté, il chevauchait le pied du lit en S12).
+- **`D.litHopital`** : barrière du fond levée (derrière le patient), barrière côté spectateur baissée (le bras peut pendre en
+  S15) ; carter sous le cadre qui cache les jambes de `AZ` (on voit ses chaussures sous le lit) ; feuille de soins de 30 px sur
+  le pied de lit (plus large, elle touchait le portoir sur la table de chevet).
+- **Ajouts** : `D.bancsPublic` (S17), `D.ombreJour` (S21 : hachures d'ombre sur la table, effacées dans la tache de la fenêtre,
+  la croix du croisillon reste à l'ombre ; sans rough, elle se redessine à chaque image). Parties séparées pour animer sans
+  redessiner : `portesBattantes` (`part` cadre / battants / lueur), `sachetPreuve` (fond / dessus / etiquette), `porteSalle`
+  (cadre / battant), `schemaHopital` (`part: "medecins"`).
+
+Mesuré sur les compositions à l'échelle réelle (Persona + décors aux positions du § 4, caméra STD) — à corriger dans les scènes :
+- **S9** : `AZ` pieds (735, 1300) → sa main droite au site en Y (631, 1050) n'est qu'à 62 px de l'épaule → **pieds (765, 1300)**
+  (91 px ; reste ≤ x 830). Cela écarte aussi son bras gauche du mât de la potence (x 668), qui la touchait.
+- **S12** : `AZ` pieds (500, 1300) → mains à 57 et 49 px des épaules → **pieds (590, 1300)** ; le poignet du patient est
+  `D.gisant(...).out.wrist` (≈ (445, 1048) avec `arm: 0`). En trois-quarts `facing: −1`, la main droite est du côté GAUCHE de
+  l'écran : main droite sur le poignet (97 px), main gauche au lecteur (478, 1078) (140 px) — l'inverse du texte du § 4, sinon
+  les bras se croisent.
+- **S15** : main sur le chambranle en (775, 1010) = 21 px de l'épaule → **(775, 935)** (≈ 93 px).
+- **S16** : la pastille `zwei Angeklagte` en (465, 850) tombe sur la façade du pupitre (y 800–960) : la monter ou la déplacer.
+- **S17** : la balustrade reculée (y 1060–1150) cache presque tous les bancs du public (y 1030–1100) : bancs à y 990–1060 ou
+  balustrade plus bas.
