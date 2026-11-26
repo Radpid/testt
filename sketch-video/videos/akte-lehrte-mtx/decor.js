@@ -263,13 +263,14 @@
       el("path", { d: U.rrect(x - 44, -46, 88, 112, 12), fill: mix("#FFFFFF", "#E9E9E4", o.grey) }, g);
       el("path", { d: `M${x - 38} 58 L${x - 38} -32 Q${x - 38} -40 ${x - 30} -40 L${x + 38} -40`, fill: "none", stroke: "#DADAD4", "stroke-width": 7, "stroke-linecap": "round" }, g);   // profondeur de l'alvéole
       U.shape(C, "alv" + i, U.rrect(x - 44, -46, 88, 112, 12), {}, { sw: 3, r: 0.6 });
-      // couvercle relevé (bande + deux points de charnière) avec le jour
-      const ch = i === o.clap ? 0.88 : 1, x0 = x - 44 - 22 * lg, w = 88 + 30 * lg, y0 = -52 - 26 * ch;
-      el("path", { d: U.rrect(x0, y0, w, 26 * ch, 6), fill: OMB, transform: "translate(3 4)" }, g);
-      U.shape(C, "couv" + i, U.rrect(x0, y0, w, 26 * ch, 6), gris(MAT.light, o.grey), { sw: 2.4, r: 0.6 });
+      // couvercle relevé (bande de 30 px + deux points de charnière) avec le jour (.tw 24, centré, marge de 5 px en haut) ;
+      // « Montag » (6 × 14,4 = 86 px) tient dans un couvercle élargi à 100 px qui reste dans le boîtier (x ≥ −344) et ne touche pas « Di »
+      const ch = i === o.clap ? 0.88 : 1, x0 = x - 44 - 6 * lg, w = 88 + 12 * lg, hc = 30 * ch, y0 = -52 - hc;
+      el("path", { d: U.rrect(x0, y0, w, hc, 6), fill: OMB, transform: "translate(3 4)" }, g);
+      U.shape(C, "couv" + i, U.rrect(x0, y0, w, hc, 6), gris(MAT.light, o.grey), { sw: 2.4, r: 0.6 });
       el("circle", { cx: x0 + 10, cy: -52, r: 3, fill: INK }, g); el("circle", { cx: x0 + w - 10, cy: -52, r: 3, fill: INK }, g);
       const txt = lg > 0 ? "Montag".slice(0, 2 + Math.round(4 * lg)) : j;
-      tw(g, txt, x0 + w / 2 - txt.length * 7.8, -58 + (1 - ch) * 3, 26);
+      tw(g, txt, x0 + w / 2, -60 + (1 - ch) * 3.5, 24, { anchor: "middle" });
       cases.push([x, 10]);
     });
     return { cases, w: 700, h: 170 };

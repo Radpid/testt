@@ -1541,3 +1541,32 @@ qui comptent.
       `AKTE 07 · قريبا`, deux rubans de statut, rien dans la colonne des boutons.
 - [ ] Les gloses arabes marquées « À VALIDER » (S14 : « بصفة عامة » ; S20 ; S23 ; S25) et les trois mots de la
       légende de S14 sont montrés à l'auteur avant le rendu.
+
+---
+
+## Écarts de construction
+
+### Étape « socle et décors 1 » (26.11.2026)
+
+**Dessins changés par rapport au § 2**
+- `D.pilulier` : couvercle des jours haut de 30 px (au lieu de 26) et jour en `.tw` 24 centré (au lieu de 26). Raison :
+  un texte de 26 px dans une bande de 26 px touchait le bord haut du couvercle. « Montag » (`long: 1`) : couvercle
+  élargi à 100 px (au lieu de 118), il reste dans le boîtier et ne touche pas « Di ».
+- Tout le reste (tailles, ancrages, paramètres, ancres renvoyées) suit le § 2 tel qu'écrit.
+
+**Mises en place à corriger à l'étape des scènes** (relevées en composant les décors aux positions du § 4 ; chaque
+correction ci-dessous a été vérifiée en image, sauf mention contraire)
+1. *Trombone de la fiche du patient* (bureau A, S6–S9) : en (312, 590), rot −50°, il tombe sur la photo et couvre la
+   casquette. Le poser VERTICAL dans la marge droite de la fiche, à côté de la photo : centre (355, 624), `a: 84`,
+   `k: 1.2`. Il pince la fiche sur la lettre sans toucher le visage, ni « 79 J. », ni le titre. Bureau B (S11–S13) :
+   même place relative à la fiche (≈ (283, 700), `a: 85`) — **à vérifier en image** : il passe à 1 ou 2 px du « E »
+   du titre ; au besoin `k: 1.1` ou fiche décalée de 6 px à gauche.
+2. *S1* : la tasse en (770, 1045) passe sous le bord droit de la lettre → la poser en (770, 1185) (sous le coin de la
+   lettre, anse à x 858 : hors colonne des boutons). Les deux trombones libres de la coupelle (215, 1045) touchent le
+   couvercle de l'encreur (215, 1190) → encreur en (215, 1215).
+3. *S5* : l'épingle à la pointe (812, 742) cache entièrement l'icône de l'hôpital → icône `D.iconeKlinik` ancre
+   (800, 800), épingle pointe (800, 734) (plantée sur l'enseigne « + », l'hôpital reste visible dessous), mini-lettre
+   du médaillon en (858, 760). La mini-lettre qui saute sur le point de Hannover (échelle 0,4) touche le mot
+   « Hannover » → la poser en (416, 862) au lieu de (400, 874).
+4. Bureau A : la fiche cache le libellé « Patient: » de la lettre (seuls la barre noire et « 79 J. » restent
+   visibles). Rien à faire : le titre reste lisible, comme prévu au § 4.
