@@ -28,9 +28,23 @@ ressemblance) : la lire avant d'écrire, et la tenir à jour.
 **Préparer avant la voix** (saison 2) : dossier → script → storyboard détaillé → décors et scènes animées sur un
 minutage PROVISOIRE (`tools/preview_timings.mjs`, débit de l'auteur ≈ 3,05 mots/s à ×1,3), contrôlés par captures ;
 la voix arrive ensuite, `montage_voix.py` remplace `timings.js` et les repères (« bN@mot ») recalent tout.
-Contrôles : `tools/planche.mjs <épisode> --beats --ig` (planches lisibles avec zones Instagram),
-`tools/planche.mjs --from --to --step 0.1` (début de scène image par image), `tools/mouvement.mjs` (décor figé),
-`tools/overlapscan.mjs`, `tools/errcheck.mjs`, `tools/cuetimes.mjs`.
+Contrôles : `tools/planche.mjs <épisode> [--entre bA,bB] [--ig]` (planches lisibles, zones Instagram),
+`tools/planche.mjs --from --to --step 0.1` (début de scène image par image), `tools/essai_decor.mjs` (chaque dessin
+de décor seul, avec son ancrage), `tools/mouvement.mjs` (décor figé), `tools/overlapscan.mjs`, `tools/errcheck.mjs`,
+`tools/cuetimes.mjs`. Un contrôle ne compte que si les images ont été REGARDÉES.
+
+**Grand chantier à plusieurs agents** (demande de l'auteur : « un grand workflow », puis « un autre workflow ») :
+1. *écriture*, un épisode par chaîne : dossier vérifié → scénario → relecture adverse (vérité, skill, darija) →
+   storyboard ; puis UN agent compare tous les épisodes entre eux (mêmes images, mêmes personnages, mêmes phrases) ;
+2. *construction*, un épisode par chaîne : décors en trois passes (objets signature d'abord, dessins délicats —
+   personne allongée, mains, dos — validés seuls à grande taille) → HUD et mises en place fixes (`X.lieux`) →
+   scènes en quatre parties → revue visuelle indépendante → contre-revue (débuts de scène image par image) ;
+3. *après la voix* : montage de la voix, synchronisation, son, rendu.
+Chaque agent n'écrit que dans le dossier de son épisode et sauvegarde avec `tools/sauvegarde.sh videos/<épisode>
+"message"` (commit + envoi sous verrou). Le texte dit (`scenario.md`, `beats.js`) est figé pendant la construction.
+La machine n'a que 4 cœurs : 2 agents à la fois par workflow → lancer plusieurs workflows de 2 épisodes.
+Les scripts à enregistrer sont donnés à l'auteur sur une page : `python3 tools/scripts_page.py` →
+`serie/saison-2-scripts.html` (une phrase par ligne, traduction française, silences, points à savoir).
 
 ```
 videos/<episode>/
@@ -39,9 +53,13 @@ videos/<episode>/
   montage_voix.py     montage de SA voix : sources, phrases (BEATS), corrections (FIX), pauses, tempo
   beats.js            une phrase = un beat = un sous-titre (texte exact de sa voix)
   timings.js          minutage mot par mot (généré par montage_voix.py)
-  index.html          réglages (SV_CONFIG), styles, logo, scripts (persona.js, decor.js)
-  decor.js            décors propres à l'épisode (cellule, lit vu de face, utérus en coupe, moniteur, icônes…)
-  story.js            les scènes (personnages, caméra, textes, animations)
+  storyboard.md       scène par scène : composition, cascade, vie du décor, jeu, caméra, repères (saison 2)
+  index.html          réglages (SV_CONFIG), styles, logo, scripts
+  decor.js, decor-2.js, decor-3.js   dessins propres à l'épisode (`window.EpDecor`), jamais repris d'un autre
+  story.js            socle (kit, carte, aides Persona), distribution `CAST`, HUD, `X.aides`, `X.lieux`, affiche
+  scenes-1.js … scenes-4.js   les scènes, une partie de l'épisode par fichier (registre `EP_PARTS`, `X.use(c)`)
+  glossaire-episode.js   mots allemands de l'épisode pour les sous-titres
+  revue.md            défauts trouvés par captures, corrections, état de l'épisode et suite (saison 2)
   assets/portrait.png photo de l'auteur pour l'intro — JAMAIS dans git (.gitignore)
   son/                musique_plan.json, plan_bruitages.py, bip_moniteur.py, mixage.py
   instagram.md        description prête à coller

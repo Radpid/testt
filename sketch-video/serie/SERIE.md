@@ -50,6 +50,23 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | — | Detmold 2019 (médecin 2 ans ½, infirmière acquittée ; appel, verdict déc. 2026) | script donné ; publier après l'appel — `videos/akte-detmold/` |
 | — | Transfusionsfehler (AG Köln 16.05.2012, 613 Ls 3/12) | maquette existante de l'auteur : `videos/transfusionsfehler/` (poster animé, sans voix) — à intégrer à la série ? |
 
+### Saison 2 — « ça peut t'arriver » (préparée avant la voix, direction dans `SAISON-2.md`)
+
+Numéros PROVISOIRES. Texte à enregistrer : `saison-2-scripts.html` (généré par `tools/scripts_page.py`).
+Ordre de publication conseillé (éloigner les histoires voisines) : 04, 07, 06, 08, 05, 09.
+
+| # | Titre | Source et statut de vérité | Dossier |
+|---|---|---|---|
+| 04 | « 63 ساعة » (transfusion, Köln 2011) | AG Köln 16.05.2012, 613 Ls 3/12, lu en entier ; coupable sans peine (§ 60 StGB) ; Rechtskraft non publiée | `videos/akte-koeln-transfusion/` |
+| 05 | « بوحدهم فالليل » (nuit de garde, Krefeld 2008) | UNE brève de presse (Ärzte Zeitung 01.10.2010) ; 7 500 €, collègue acquitté ; tribunal et statut inconnus → « حسب الصحافة » obligatoire | `videos/akte-krefeld-nacht/` |
+| 06 | « كلمة وحدة » (Methotrexat, Lehrte 2013) | presse (Ärzte Zeitung, dpa) ; Strafbefehle 9 000–13 500 € refusés, classement le 24.01.2017 contre 2 000–6 000 € à une association : PERSONNE condamné | `videos/akte-lehrte-mtx/` |
+| 07 | « الگروپ » (WhatsApp, Siegburg 2026) | ArbG Siegburg 22.05.2026, 1 Ca 1741/25, lu en entier ; 1 000 € + interdiction ; pas définitif en juillet 2026, rien trouvé depuis | `videos/akte-siegburg-whatsapp/` |
+| 08 | « جوج حروف » (titre « Dr. », Düsseldorf 2019) | AG Düsseldorf 02.08.2019 : 60 × 250 € en 1re instance, jamais définitif ; culpabilité pour le titre confirmée dans un autre procès du même médecin (LG 2021, BGH 02.11.2022, définitif) ; pseudo @dr.aguilo à vérifier par l'auteur avant publication | `videos/akte-duesseldorf-titel/` |
+| 09 | « غير سكران » (trauma crânien, Friedrichshafen 2023) | presse seulement ; AG Tettnang 04.05.2026 : 15 mois avec sursis + 20 000 € ; pas définitif en mai 2026 → publier après vérification | `videos/akte-friedrichshafen-nacht/` |
+
+État au 27.11.2026 : dossiers, scénarios relus et storyboards faits ; décors et scènes en construction sur minutage
+provisoire ; voix à enregistrer par l'auteur.
+
 ### Leçons d'AKTE 02 (détail dans le skill)
 - Accroche = la sanction + décor travaillé ; intro « Yassine » (photo, j'aime/abonne) juste après ; pas de question
   au milieu. Voix ×1,5, rythme rapide, pauses seulement aux changements de contexte ; mots inutiles coupés.

@@ -1,0 +1,421 @@
+<title>Scripts AKTE Saison 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,500&family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=Kalam:wght@700&family=Lalezar&display=swap">
+<style>
+/* Mise en page : une feuille d'enregistrement par épisode. Onglets collants en haut ; sous l'en-tête de l'épisode,
+   les points à savoir, puis la feuille : une phrase par ligne, l'arabe en grand, le français dessous. */
+:root {
+  --paper: #F7F7F1; --sheet: #FFFFFF; --ink: #1C1A1C; --soft: #57544C; --line: #CDCDC6; --shadow: #D2D2CB;
+  --mark: #F8CE4E; --on-mark: #1C1A1C; --mute: #ECECE4; --done: #8A877E;
+  --f-ui: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-ar: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Geeza Pro", Tahoma, sans-serif;
+  --f-hand: "Kalam", "Comic Sans MS", cursive;
+  --f-title: "Lalezar", "IBM Plex Sans Arabic", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #1A191B; --sheet: #242226; --ink: #F3F2EB; --soft: #BAB7AD; --line: #4A474E; --shadow: #0E0D0F;
+  --mark: #F8CE4E; --on-mark: #1C1A1C; --mute: #2E2C31; --done: #7C7972; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #1A191B; --sheet: #242226; --ink: #F3F2EB; --soft: #BAB7AD; --line: #4A474E; --shadow: #0E0D0F;
+  --mark: #F8CE4E; --on-mark: #1C1A1C; --mute: #2E2C31; --done: #7C7972; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-ui); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap { max-width: 46rem; margin: 0 auto; padding-block: 1.25rem 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+.top h1 { font-family: var(--f-hand); font-size: 1.9rem; line-height: 1.15; margin: 0; text-wrap: balance; }
+.top h1 span { box-shadow: inset 0 -0.42em 0 var(--mark); }
+:root[data-theme="dark"] .top h1 span { box-shadow: inset 0 -0.16em 0 var(--mark); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .top h1 span { box-shadow: inset 0 -0.16em 0 var(--mark); } }
+.top p { margin: 0; color: var(--soft); max-width: 62ch; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); margin: 0 -4px 1.25rem;
+  padding: .5rem 4px; overflow-x: auto; border-bottom: 2px solid var(--ink); }
+nav.tabs ul { display: flex; gap: .5rem; list-style: none; margin: 0; padding: 0; width: max-content; }
+nav.tabs a { display: flex; align-items: baseline; gap: .45rem; padding: .35rem .7rem; border: 2px solid var(--ink); border-radius: 999px;
+  color: var(--ink); text-decoration: none; background: var(--sheet); white-space: nowrap; }
+nav.tabs a b { font-family: var(--f-hand); font-size: 1.05rem; }
+nav.tabs a span { font-family: var(--f-ar); font-weight: 600; font-size: .95rem; }
+nav.tabs a[aria-current="true"] { background: var(--mark); color: var(--on-mark); }
+nav.tabs a:focus-visible, .num:focus-visible, .opts button:focus-visible { outline: 3px solid var(--mark); outline-offset: 3px; }
+.opts { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin-bottom: 1.5rem; color: var(--soft); font-size: .9rem; }
+.opts button { font: inherit; color: var(--ink); background: none; border: 2px solid var(--line); border-radius: 8px; padding: .3rem .65rem; cursor: pointer; }
+.opts button[aria-pressed="true"] { border-color: var(--ink); }
+.ep { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3.5rem; }
+.ep-head { display: flex; flex-direction: column; gap: .3rem; }
+.ep-no { font-family: var(--f-hand); font-size: 1.05rem; letter-spacing: .06em; margin: 0; color: var(--soft); }
+.ep-title { font-family: var(--f-title); font-weight: 400; font-size: clamp(2.4rem, 11vw, 3.6rem); line-height: 1.25; margin: 0; text-align: right; }
+.ep-meta { margin: 0; color: var(--soft); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.ep-pitch { margin: .35rem 0 0; font-size: 1.05rem; max-width: 60ch; }
+.ep-source, .mots { margin: 0; color: var(--soft); font-size: .88rem; }
+.ep-source span, .mots span { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; font-weight: 600; color: var(--ink); margin-right: .4rem; }
+.notes h3, .sheet-h { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 .6rem; }
+.notes ul { margin: 0 0 .9rem; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+.notes li { padding-left: 1.15rem; position: relative; max-width: 66ch; }
+.notes li::before { content: ""; position: absolute; left: 0; top: .55em; width: .5rem; height: .5rem; background: var(--mark); border: 1.5px solid var(--ink); }
+.sheet { background: var(--sheet); border: 2.5px solid var(--ink); border-radius: 14px; box-shadow: 6px 8px 0 var(--shadow); padding: .4rem 0; }
+.lines { list-style: none; margin: 0; padding: 0; }
+.line { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: .75rem; padding: .85rem 1rem; border-bottom: 1.5px dashed var(--line); align-items: start; }
+.lines > li:last-child { border-bottom: 0; }
+.num { font-family: var(--f-hand); font-size: 1.05rem; line-height: 1; width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 2px solid var(--ink);
+  background: var(--sheet); color: var(--ink); cursor: pointer; font-variant-numeric: tabular-nums; padding-top: .2rem; }
+.num[aria-pressed="true"] { background: var(--mark); color: var(--on-mark); }
+.txt { min-width: 0; }
+.say { margin: 0; font-family: var(--f-ar); font-weight: 600; font-size: clamp(1.3rem, 5.2vw, 1.62rem); line-height: 1.75; }
+.fr-line .say { font-family: var(--f-ui); font-style: italic; font-weight: 500; font-size: 1.2rem; line-height: 1.5; }
+.tr { margin: .25rem 0 0; color: var(--soft); font-size: .93rem; max-width: 62ch; }
+.line.done .say, .line.done .tr { color: var(--done); }
+.no-tr .tr { display: none; }
+.ar-in { font-family: var(--f-ar); font-weight: 600; color: var(--ink); }
+.intro { background: var(--mute); padding: .8rem 1rem; border-bottom: 1.5px dashed var(--line); display: flex; flex-direction: column; gap: .2rem; }
+.intro .tag { margin: 0 0 .2rem; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; color: var(--soft); }
+.intro p[dir] { margin: 0; font-family: var(--f-ar); font-weight: 500; font-size: 1.02rem; color: var(--soft); line-height: 1.7; }
+.silence { padding: .7rem 1rem; border-bottom: 1.5px dashed var(--line); display: flex; justify-content: center; }
+.silence span { font-family: var(--f-hand); font-size: 1rem; background: var(--mark); color: var(--on-mark); border: 2px solid var(--ink); border-radius: 8px; padding: .2rem .7rem .05rem; text-align: center; }
+.foot { color: var(--soft); font-size: .9rem; border-top: 2px solid var(--ink); padding-top: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+.foot p { margin: 0; max-width: 66ch; }
+@media (max-width: 420px) { .line { grid-template-columns: 2.3rem minmax(0, 1fr); gap: .55rem; padding: .8rem .7rem; } .num { width: 2.1rem; height: 2.1rem; font-size: .95rem; } }
+</style>
+<div class="wrap">
+<div class="top">
+<h1><span>AKTE · saison 2</span> — les six textes à enregistrer</h1>
+<p>Une phrase par ligne, dans l'ordre. Lis la phrase arabe ; le français dessous est seulement sa traduction. L'intro est déjà enregistrée : ne la redis pas. Touche le numéro quand une phrase est dans la boîte.</p>
+</div>
+<nav class="tabs" aria-label="Épisodes"><ul>
+<li><a href="#akte-04"><b>04</b><span dir="rtl" lang="ar">63 ساعة</span></a></li>
+<li><a href="#akte-05"><b>05</b><span dir="rtl" lang="ar">بوحدهم فالليل</span></a></li>
+<li><a href="#akte-06"><b>06</b><span dir="rtl" lang="ar">كلمة وحدة</span></a></li>
+<li><a href="#akte-07"><b>07</b><span dir="rtl" lang="ar">الگروپ</span></a></li>
+<li><a href="#akte-08"><b>08</b><span dir="rtl" lang="ar">جوج حروف</span></a></li>
+<li><a href="#akte-09"><b>09</b><span dir="rtl" lang="ar">غير سكران</span></a></li>
+</ul></nav>
+<div class="opts">
+<button type="button" id="opt-tr" aria-pressed="true">Traduction française</button>
+<button type="button" id="opt-raz">Décocher cet épisode</button>
+</div>
+<section class="ep" data-id="akte-04" data-ep="04">
+<header class="ep-head">
+<p class="ep-no">AKTE 04</p>
+<h2 class="ep-title" dir="rtl" lang="ar">63 ساعة</h2>
+<p class="ep-meta">Köln · 2011 · 29 phrases · ≈ 96 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Une Assistenzärztin épuisée accroche la mauvaise poche de sang. Coupable, mais aucune peine : le tribunal met en cause l&#x27;organisation de l&#x27;hôpital.</p>
+<p class="ep-source"><span>Source</span> Amtsgericht Köln, 16.05.2012, 613 Ls 3/12 — jugement lu en entier.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>On ne sait pas si le jugement est définitif : la phrase 25 doit rester.</li>
+<li>Phrase 21 : les 90 Tagessätze sont une demande du parquet, pas une peine. Si tu préfères ne citer aucune peine non prononcée, dis seulement « <bdi dir="rtl" lang="ar" class="ar-in">دابا نرجعو للمحكمة.</bdi> »</li>
+<li>Ne dis ni « <bdi dir="rtl" lang="ar" class="ar-in">الغد ليه</bdi> » ni « <bdi dir="rtl" lang="ar" class="ar-in">بزز</bdi> » pour la feuille signée : le jugement dit seulement qu&#x27;elle a été convoquée et qu&#x27;on lui a fait signer.</li>
+<li>Phrase 2 : dure, mais c&#x27;est le verdict. Version plus douce : « <bdi dir="rtl" lang="ar" class="ar-in">مريض مات من بعد غلطة ديالها</bdi> ».</li>
+<li>Phrase 12 : garde « <bdi dir="rtl" lang="ar" class="ar-in">وحسب الحكم</bdi> » (on répète le jugement, on ne l&#x27;affirme pas nous-mêmes).</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> Organisationsverschulden · Blutführerschein · Tagessätze · genug bestraft · Assistenzärztin · Köln</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="04-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">مذنبة… والعقوبة صفر: هاكا حكمات محكمة فألمانيا على طبيبة صغيرة.</p><p class="tr" lang="fr">Coupable… et la peine : zéro. C&#x27;est ainsi qu&#x27;un tribunal en Allemagne a jugé une jeune médecin.</p></div></li>
+<li class="line" data-k="04-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">مريض مات بغلطة ديالها: لا حبس، لا غرامة.</p><p class="tr" lang="fr">Un patient est mort par son erreur : ni prison, ni amende.</p></div></li>
+<li class="line" data-k="04-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">علاش؟ باش نفهمو، نرجعو اللور.</p><p class="tr" lang="fr">Pourquoi ? Pour comprendre, on revient en arrière.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="04-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">قبل الحكم ديال Köln في 2012، ورقة سنات عليها.</p><p class="tr" lang="fr">Avant le jugement de Köln, en 2012 : une feuille qu&#x27;elle a signée.</p></div></li>
+<li class="line" data-k="04-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">وقبل الورقة، جوج poches ديال الدم.</p><p class="tr" lang="fr">Et avant la feuille : deux poches de sang.</p></div></li>
+<li class="line" data-k="04-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">وقبل كلشي: 63 ساعة ديال الخدمة فسيمانة وحدة.</p><p class="tr" lang="fr">Et avant tout le reste : 63 heures de travail en une seule semaine.</p></div></li>
+<li class="line" data-k="04-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">والإدارة ديال السبيطار زادت ليها garde ديال 24 ساعة.</p><p class="tr" lang="fr">Et l&#x27;administration de l&#x27;hôpital lui a ajouté une garde de 24 heures.</p></div></li>
+<li class="line" data-k="04-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">السبت بالليل، دازت منها كثر من 12 ساعة.</p><p class="tr" lang="fr">Le samedi soir, plus de 12 heures de cette garde étaient déjà passées.</p></div></li>
+<li class="line" data-k="04-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">وهي غير Assistenzärztin، طبيبة عاد بدات: 9 شهور فهاد السبيطار.</p><p class="tr" lang="fr">Et elle n&#x27;est qu&#x27;Assistenzärztin, une médecin qui vient de commencer : 9 mois dans cet hôpital.</p></div></li>
+<li class="line" data-k="04-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" dir="rtl" lang="ar">ومازال ناقصاها formation ديال الدم، كيسميوها Blutführerschein.</p><p class="tr" lang="fr">Et il lui manque encore la formation du sang, qu&#x27;on appelle Blutführerschein.</p></div></li>
+<li class="line" data-k="04-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">الـlabo عطاها جوج poches بحال بحال، فدقة وحدة، لجوج مرضى.</p><p class="tr" lang="fr">Le labo lui a donné deux poches pareilles, en une seule fois, pour deux patients.</p></div></li>
+<li class="line" data-k="04-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">وحسب الحكم، الـgroupe مكتوب غير فورقة عامرة بالمعلومات.</p><p class="tr" lang="fr">Et selon le jugement, le groupe n&#x27;est écrit que sur une feuille pleine d&#x27;informations.</p></div></li>
+<li class="line" data-k="04-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">مع 21:50، علقات poche لمريض عندو 63 عام.</p><p class="tr" lang="fr">Vers 21 h 50, elle a accroché une poche à un patient de 63 ans.</p></div></li>
+<li class="line" data-k="04-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">هو groupe 0، والـpoche A: ديال مريضة أخرى.</p><p class="tr" lang="fr">Lui : groupe 0. Et la poche : A — celle d&#x27;une autre patiente.</p></div></li>
+<li class="line" data-k="04-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">من بعد شي 10 دقايق بدا كيتقيا، ووقفو ليه الدم.</p><p class="tr" lang="fr">Au bout d&#x27;une dizaine de minutes, il s&#x27;est mis à vomir, et on lui a arrêté le sang.</p></div></li>
+<li class="line" data-k="04-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">ونهار الأحد، فـ13:37…</p><p class="tr" lang="fr">Et le dimanche, à 13 h 37…</p></div></li>
+<li class="silence"><span>Silence, environ 3 secondes : scène muette.</span></li>
+<li class="line" data-k="04-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">الطبيبة جاها انهيار عصبي.</p><p class="tr" lang="fr">La médecin a fait un effondrement nerveux.</p></div></li>
+<li class="line" data-k="04-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">وهي فهاد الحالة، الإدارة عيطات عليها.</p><p class="tr" lang="fr">Et alors qu&#x27;elle était dans cet état, l&#x27;administration l&#x27;a convoquée.</p></div></li>
+<li class="line" data-k="04-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">وخلاتها تسني على ورقة: بلي دارت الـformation. وهادشي ماشي صحيح.</p><p class="tr" lang="fr">Et elle lui a fait signer une feuille : qu&#x27;elle avait fait la formation. Et ce n&#x27;est pas vrai.</p></div></li>
+<li class="line" data-k="04-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">والطبيبة دوزات شهور كتداوى.</p><p class="tr" lang="fr">Et la médecin a passé des mois à se soigner.</p></div></li>
+<li class="line" data-k="04-21"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 21 enregistrée">21</button><div class="txt"><p class="say" dir="rtl" lang="ar">دابا نرجعو للمحكمة: النيابة طلبات غرامة ديال 90 Tagessätze.</p><p class="tr" lang="fr">Maintenant, on revient au tribunal : le parquet a demandé une amende de 90 Tagessätze.</p></div></li>
+<li class="line" data-k="04-22"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 22 enregistrée">22</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولكن المحكمة شافت Organisationsverschulden، يعني غلطة كبيرة فالتنظيم، ديال الإدارة.</p><p class="tr" lang="fr">Mais le tribunal a vu un Organisationsverschulden, c&#x27;est-à-dire une grosse faute d&#x27;organisation, celle de l&#x27;administration.</p></div></li>
+<li class="line" data-k="04-23"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 23 enregistrée">23</button><div class="txt"><p class="say" dir="rtl" lang="ar">وغلطة الطبيبة صغيرة: ما تأكداتش مزيان من الـpoche. داكشي علاش مذنبة.</p><p class="tr" lang="fr">Et la faute de la médecin est petite : elle n&#x27;a pas assez bien vérifié la poche. C&#x27;est pour ça qu&#x27;elle est coupable.</p></div></li>
+<li class="line" data-k="04-24"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 24 enregistrée">24</button><div class="txt"><p class="say" dir="rtl" lang="ar">والمحكمة ما عاقباتهاش: كتبات genug bestraft، يعني اللي داز عليها كافي.</p><p class="tr" lang="fr">Et le tribunal ne l&#x27;a pas punie : il a écrit « genug bestraft », c&#x27;est-à-dire que ce qu&#x27;elle a traversé suffit.</p></div></li>
+<li class="line" data-k="04-25"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 25 enregistrée">25</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما لقيناش واش الحكم نهائي.</p><p class="tr" lang="fr">Et nous n&#x27;avons pas trouvé si le jugement est définitif.</p></div></li>
+<li class="line" data-k="04-26"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 26 enregistrée">26</button><div class="txt"><p class="say" dir="rtl" lang="ar">قبل كل poche، حدا المريض، شوف براسك: السمية، الـgroupe، والنمرة.</p><p class="tr" lang="fr">Avant chaque poche, à côté du patient, regarde toi-même : le nom, le groupe et le numéro.</p></div></li>
+<li class="line" data-k="04-27"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 27 enregistrée">27</button><div class="txt"><p class="say" dir="rtl" lang="ar">ودير Bedside-Test: تأكد من الـgroupe ديال المريض.</p><p class="tr" lang="fr">Et fais le Bedside-Test : assure-toi du groupe du patient.</p></div></li>
+<li class="line" data-k="04-28"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 28 enregistrée">28</button><div class="txt"><p class="say" dir="rtl" lang="ar">وعمرك ما تسني على formation ما درتيهاش.</p><p class="tr" lang="fr">Et ne signe jamais pour une formation que tu n&#x27;as pas faite.</p></div></li>
+<li class="line" data-k="04-29"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 29 enregistrée">29</button><div class="txt"><p class="say" dir="rtl" lang="ar">هاد القصة رجعناها اللور… الدم إلا دخل، ما كيرجعش.</p><p class="tr" lang="fr">Cette histoire, nous l&#x27;avons rembobinée… Le sang, une fois entré, ne revient pas.</p></div></li>
+</ol></div>
+</section>
+<section class="ep" data-id="akte-05" data-ep="05">
+<header class="ep-head">
+<p class="ep-no">AKTE 05</p>
+<h2 class="ep-title" dir="rtl" lang="ar">بوحدهم فالليل</h2>
+<p class="ep-meta">Krefeld · 2008 · 25 phrases · ≈ 95 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Deux Assistenzärzte seuls la nuit pour plus de 100 patients. Un patient diabétique meurt : elle est condamnée à 7 500 €, son collègue est acquitté.</p>
+<p class="ep-source"><span>Source</span> Une seule source : une brève de l&#x27;Ärzte Zeitung du 01.10.2010. Aucun jugement publié.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>Une seule source, en partie au conditionnel : garde les trois « <bdi dir="rtl" lang="ar" class="ar-in">حسب الصحافة</bdi> » (phrases 5, 13 et 16) et la phrase 20.</li>
+<li>Le titre a changé : « <bdi dir="rtl" lang="ar" class="ar-in">بوحدهم</bdi> » (ils étaient deux cette nuit-là), et non « <bdi dir="rtl" lang="ar" class="ar-in">بوحدها</bdi> ».</li>
+<li>Phrase 2 : 32 ans, c&#x27;est son âge au jugement (2010), pas la nuit des faits.</li>
+<li>Phrase 4, « <bdi dir="rtl" lang="ar" class="ar-in">كنديروه كاملين كل نهار</bdi> » : c&#x27;est ta phrase de médecin, pas un fait du dossier. À garder seulement si tu l&#x27;assumes.</li>
+<li>Phrase 16 : le reproche est de ne pas avoir fait ASSEZ. Si tu changes les mots, ne dis pas « rien ».</li>
+<li>Phrases 6 à 14 au présent, sans s&#x27;arrêter.</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> schweres Organisationsverschulden · Überlastungsanzeige · fahrlässige Tötung · Assistenzärzte · Intensivstation · Schnelltest · Freispruch · Krefeld</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="05-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">7500 أورو ديال الغرامة، على القتل غير العمد.</p><p class="tr" lang="fr">7 500 euros d&#x27;amende, pour homicide par négligence.</p></div></li>
+<li class="line" data-k="05-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">هادا حكم على طبيبة فألمانيا، عندها 32 عام.</p><p class="tr" lang="fr">C&#x27;est un jugement contre une médecin en Allemagne ; elle a 32 ans.</p></div></li>
+<li class="line" data-k="05-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">ديك الليلة: جوج أطباء على كثر من 100 مريض.</p><p class="tr" lang="fr">Cette nuit-là : deux médecins pour plus de 100 patients.</p></div></li>
+<li class="line" data-k="05-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولاموها حيت تاقت فواحد التيست، كنديروه كاملين كل نهار.</p><p class="tr" lang="fr">Et on lui a reproché de s&#x27;être fiée à un test que nous faisons tous, chaque jour.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="05-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">مدينة Krefeld، 2008. هاد الليلة كنحكيها كيما كتباتها الصحافة.</p><p class="tr" lang="fr">Ville de Krefeld, 2008. Cette nuit, je la raconte comme la presse l&#x27;a écrite.</p></div></li>
+<li class="line" data-k="05-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">الليل كيبدا. فـla garde جوج Assistenzärzte، يعني أطباء فطور الاختصاص: هي وزميل ديالها.</p><p class="tr" lang="fr">La nuit commence. De garde, deux Assistenzärzte, c&#x27;est-à-dire des médecins en cours de spécialité : elle et un collègue.</p></div></li>
+<li class="line" data-k="05-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">عليهم كثر من 100 مريض، وزيد Intensivstation، يعني الإنعاش، وزيد المستعجلات.</p><p class="tr" lang="fr">Ils ont à leur charge plus de 100 patients, plus l&#x27;Intensivstation, c&#x27;est-à-dire la réanimation, plus les urgences.</p></div></li>
+<li class="line" data-k="05-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">كيجيبو واحد الراجل عندو 47 عام، فيه السكر، وطالع ليه بزاف.</p><p class="tr" lang="fr">On amène un homme de 47 ans, diabétique, et son sucre est monté très haut.</p></div></li>
+<li class="line" data-k="05-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">شوية من بعد، كيدخل فـcoma، والطبيبة كتعطيه Insulin.</p><p class="tr" lang="fr">Peu après, il tombe dans le coma, et la médecin lui donne de l&#x27;insuline.</p></div></li>
+<li class="line" data-k="05-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" dir="rtl" lang="ar">وحيت المرضى بزاف، ما كتقدر تشوفو غير كل جوج سوايع تقريبا.</p><p class="tr" lang="fr">Et comme les patients sont nombreux, elle ne peut le voir qu&#x27;environ toutes les deux heures.</p></div></li>
+<li class="line" data-k="05-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">الساعات كدوز، وهي ما حداهش… والسكر ما كيرجعش normal.</p><p class="tr" lang="fr">Les heures passent, et elle n&#x27;est pas à côté de lui… et le sucre ne redevient pas normal.</p></div></li>
+<li class="line" data-k="05-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">وكتقيسو غير بـSchnelltest، يعني تيست سريع وماشي دقيق، بلا laboratoire.</p><p class="tr" lang="fr">Et elle ne le mesure qu&#x27;avec un Schnelltest, c&#x27;est-à-dire un test rapide et pas précis, sans laboratoire.</p></div></li>
+<li class="line" data-k="05-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">والـOberarzt، يعني الطبيب المسؤول عليهم، حسب الصحافة ما بقاش joignable.</p><p class="tr" lang="fr">Et l&#x27;Oberarzt, c&#x27;est-à-dire le médecin responsable d&#x27;eux, selon la presse, n&#x27;est plus joignable.</p></div></li>
+<li class="line" data-k="05-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">بقاو بوحدهم. الساعات كدوز… ومن بعد شوية…</p><p class="tr" lang="fr">Ils restent seuls. Les heures passent… et peu après…</p></div></li>
+<li class="silence"><span>Silence, environ 3 secondes : scène muette.</span></li>
+<li class="line" data-k="05-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">فـ2010، جوج Assistenzärzte متهمين قدام المحكمة فـKrefeld.</p><p class="tr" lang="fr">En 2010, deux Assistenzärzte sont accusés devant le tribunal, à Krefeld.</p></div></li>
+<li class="line" data-k="05-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">حسب الصحافة، لاموها حيت تاقت فـSchnelltest، وما دارتش اللي خاص.</p><p class="tr" lang="fr">Selon la presse, on lui a reproché de s&#x27;être fiée au Schnelltest et de ne pas avoir fait ce qu&#x27;il fallait.</p></div></li>
+<li class="line" data-k="05-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">والخبير لام السبيطار: schweres Organisationsverschulden، يعني غلط كبير فالتنظيم.</p><p class="tr" lang="fr">Et l&#x27;expert a mis en cause l&#x27;hôpital : schweres Organisationsverschulden, c&#x27;est-à-dire une grosse faute d&#x27;organisation.</p></div></li>
+<li class="line" data-k="05-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولكن المحكمة حكمات عليها بـfahrlässige Tötung، يعني القتل غير العمد.</p><p class="tr" lang="fr">Mais le tribunal l&#x27;a condamnée, elle, pour fahrlässige Tötung, c&#x27;est-à-dire homicide par négligence.</p></div></li>
+<li class="line" data-k="05-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">هي 7500 أورو، والـAssistenzarzt الآخر Freispruch، يعني براءة.</p><p class="tr" lang="fr">Elle : 7 500 euros ; l&#x27;autre Assistenzarzt : Freispruch, c&#x27;est-à-dire acquitté.</p></div></li>
+<li class="line" data-k="05-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما لقيناش واش هاد الحكم نهائي.</p><p class="tr" lang="fr">Et nous n&#x27;avons pas trouvé si ce jugement est définitif.</p></div></li>
+<li class="line" data-k="05-21"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 21 enregistrée">21</button><div class="txt"><p class="say" dir="rtl" lang="ar">اليوم القواعد كتقول: coma ديال السكر خاصو laboratoire،</p><p class="tr" lang="fr">Aujourd&#x27;hui, les règles disent : un coma diabétique a besoin du laboratoire,</p></div></li>
+<li class="line" data-k="05-22"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 22 enregistrée">22</button><div class="txt"><p class="say" dir="rtl" lang="ar">ومراقبة كل ساعة، فـIntensivstation.</p><p class="tr" lang="fr">et d&#x27;une surveillance toutes les heures, en Intensivstation.</p></div></li>
+<li class="line" data-k="05-23"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 23 enregistrée">23</button><div class="txt"><p class="say" dir="rtl" lang="ar">وإلا كنتو قلال: عيّط للـOberarzt، ما لقيتيهش، طلع للي فوق منو،</p><p class="tr" lang="fr">Et si vous êtes trop peu : appelle l&#x27;Oberarzt ; tu ne le trouves pas, monte chez celui qui est au-dessus de lui,</p></div></li>
+<li class="line" data-k="05-24"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 24 enregistrée">24</button><div class="txt"><p class="say" dir="rtl" lang="ar">وكتبها: Überlastungsanzeige، يعني ورقة كتقول للإدارة بلي المرضى فخطر.</p><p class="tr" lang="fr">et écris-le : Überlastungsanzeige, c&#x27;est-à-dire un papier qui dit à l&#x27;administration que les patients sont en danger.</p></div></li>
+<li class="line" data-k="05-25"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 25 enregistrée">25</button><div class="txt"><p class="say" dir="rtl" lang="ar">قلة الأطباء غلط ديال السبيطار… ولكن قدام المحكمة، نتا اللي كتوقف.</p><p class="tr" lang="fr">Le manque de médecins, c&#x27;est la faute de l&#x27;hôpital… mais devant le tribunal, c&#x27;est toi qui es debout.</p></div></li>
+</ol></div>
+</section>
+<section class="ep" data-id="akte-06" data-ep="06">
+<header class="ep-head">
+<p class="ep-no">AKTE 06</p>
+<h2 class="ep-title" dir="rtl" lang="ar">كلمة وحدة</h2>
+<p class="ep-meta">Lehrte · 2013 · 29 phrases · ≈ 91 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Un seul mot faux dans une lettre de sortie : Methotrexat chaque jour au lieu de chaque semaine. Quatre médecins l&#x27;écrivent, le signent ou le recopient sans le voir.</p>
+<p class="ep-source"><span>Source</span> Presse seulement : Ärzte Zeitung et dépêche dpa (2016–2017). Aucun jugement.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>Personne n&#x27;a été condamné. Les amendes de 9 000 à 13 500 € ont été refusées ; le dossier a été classé contre 2 000 à 6 000 € versés à une association. La phrase 2 « <bdi dir="rtl" lang="ar" class="ar-in">وما قبلوهاش</bdi> » rend l&#x27;accroche honnête : garde-la.</li>
+<li>Garde « <bdi dir="rtl" lang="ar" class="ar-in">حسب النيابة والصحافة</bdi> » (phrase 17) et la phrase 25.</li>
+<li>Phrase 10 : ne dis ni « <bdi dir="rtl" lang="ar" class="ar-in">هو</bdi> » ni « <bdi dir="rtl" lang="ar" class="ar-in">هي</bdi> », les sources se contredisent sur ce médecin.</li>
+<li>Phrase 14, « <bdi dir="rtl" lang="ar" class="ar-in">سبع مرات la dose</bdi> » : c&#x27;est un calcul. Ne dis ni « 21 comprimés » ni « trois semaines de traitement ».</li>
+<li>Si c&#x27;est trop long : la phrase 20 (vorbestraft) peut rester seulement à l&#x27;écran.</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> Entlassungsbrief · Stationsärztin · Methotrexat · Strafbefehl · fahrlässige Tötung · vorbestraft · Einspruch · eingestellt · Lehrte</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="06-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">ورقة وحدة جابت غرامة حتى لـ13500 أورو لربعة ديال الأطباء فألمانيا.</p><p class="tr" lang="fr">Une seule feuille a valu une amende allant jusqu&#x27;à 13 500 euros à quatre médecins en Allemagne.</p></div></li>
+<li class="line" data-k="06-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما قبلوهاش.</p><p class="tr" lang="fr">Et ils ne l&#x27;ont pas acceptée.</p></div></li>
+<li class="line" data-k="06-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">فالورقة، دوا «كل نهار» فبلاصة «كل سيمانة»: الفرق كلمة وحدة.</p><p class="tr" lang="fr">Sur la feuille, un médicament « chaque jour » au lieu de « chaque semaine » : la différence, c&#x27;est un seul mot.</p></div></li>
+<li class="line" data-k="06-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">ودازت على ربعة ديال اليدين، وما وقفاتها حتى يد.</p><p class="tr" lang="fr">Et elle est passée par quatre mains, et aucune main ne l&#x27;a arrêtée.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="06-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">نتبعو هاد الورقة: 2013، سبيطار فمدينة Lehrte.</p><p class="tr" lang="fr">Suivons cette feuille : 2013, un hôpital dans la ville de Lehrte.</p></div></li>
+<li class="line" data-k="06-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">هي Entlassungsbrief، يعني ورقة الخروج،</p><p class="tr" lang="fr">C&#x27;est un Entlassungsbrief, c&#x27;est-à-dire la feuille de sortie,</p></div></li>
+<li class="line" data-k="06-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">ديال مريض عندو 79 عام، غادي يحولوه لسبيطار آخر.</p><p class="tr" lang="fr">d&#x27;un patient de 79 ans, qu&#x27;on va transférer dans un autre hôpital.</p></div></li>
+<li class="line" data-k="06-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">اليد الأولى: Stationsärztin، يعني طبيبة الـservice.</p><p class="tr" lang="fr">La première main : une Stationsärztin, c&#x27;est-à-dire la médecin du service.</p></div></li>
+<li class="line" data-k="06-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">الدوا Methotrexat: كان خاصو مرة فالسيمانة، وكتباتو كل نهار.</p><p class="tr" lang="fr">Le médicament, Methotrexat : il le fallait une fois par semaine, et elle l&#x27;a écrit chaque jour.</p></div></li>
+<li class="line" data-k="06-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" dir="rtl" lang="ar">اليد الثانية سنات عليها، وما شافتش الغلطة.</p><p class="tr" lang="fr">La deuxième main a signé dessus, et n&#x27;a pas vu l&#x27;erreur.</p></div></li>
+<li class="line" data-k="06-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">الورقة مشات معاه للسبيطار الثاني.</p><p class="tr" lang="fr">La feuille est partie avec lui au deuxième hôpital.</p></div></li>
+<li class="line" data-k="06-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">اليد الثالثة: الطبيبة ديال l&#x27;admission. ما شافتهاش.</p><p class="tr" lang="fr">La troisième main : la médecin de l&#x27;admission. Elle ne l&#x27;a pas vue.</p></div></li>
+<li class="line" data-k="06-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">اليد الرابعة: Oberarzt، يعني الطبيب اللي فوقها. حتى هو.</p><p class="tr" lang="fr">La quatrième main : un Oberarzt, c&#x27;est-à-dire le médecin au-dessus d&#x27;elle. Lui non plus.</p></div></li>
+<li class="line" data-k="06-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">وبجوج تبعو الورقة: كل نهار، سبع مرات la dose.</p><p class="tr" lang="fr">Et tous les deux ont suivi la feuille : chaque jour, sept fois la dose.</p></div></li>
+<li class="line" data-k="06-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">والدوا إلا كثر كيضرب la moelle، المعمل ديال الدم.</p><p class="tr" lang="fr">Et le médicament, quand il y en a trop, frappe la moelle, l&#x27;usine du sang.</p></div></li>
+<li class="line" data-k="06-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">دازت سيمانة… جوج… تلاتة…</p><p class="tr" lang="fr">Une semaine a passé… deux… trois…</p></div></li>
+<li class="silence"><span>Silence, environ 3 secondes : scène muette.</span></li>
+<li class="line" data-k="06-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">حسب النيابة والصحافة، السبب هو الدوا.</p><p class="tr" lang="fr">Selon le parquet et la presse, la cause, c&#x27;est le médicament.</p></div></li>
+<li class="line" data-k="06-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">فـ2016، ربعة ديال الوراق من المحكمة: Strafbefehl، يعني عقوبة بلا جلسة.</p><p class="tr" lang="fr">En 2016, quatre feuilles du tribunal : Strafbefehl, c&#x27;est-à-dire une peine sans audience.</p></div></li>
+<li class="line" data-k="06-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">من 9000 حتى 13500 أورو، على fahrlässige Tötung: القتل غير العمد.</p><p class="tr" lang="fr">De 9 000 à 13 500 euros, pour fahrlässige Tötung : l&#x27;homicide par négligence.</p></div></li>
+<li class="line" data-k="06-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">وبهاد الغرامة كانو غادي يوليو vorbestraft، يعني عندهم سوابق.</p><p class="tr" lang="fr">Et avec cette amende, ils auraient eu un casier : vorbestraft.</p></div></li>
+<li class="line" data-k="06-21"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 21 enregistrée">21</button><div class="txt"><p class="say" dir="rtl" lang="ar">الربعة دارو Einspruch، يعني ما قبلوش.</p><p class="tr" lang="fr">Les quatre ont fait Einspruch, c&#x27;est-à-dire qu&#x27;ils n&#x27;ont pas accepté.</p></div></li>
+<li class="line" data-k="06-22"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 22 enregistrée">22</button><div class="txt"><p class="say" dir="rtl" lang="ar">فـ2017، فالجلسة، القاضي قال: كل واحد فيهم مسؤول.</p><p class="tr" lang="fr">En 2017, à l&#x27;audience, le juge a dit : chacun d&#x27;eux est responsable.</p></div></li>
+<li class="line" data-k="06-23"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 23 enregistrée">23</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولكن الملف eingestellt، يعني تسد بلا حكم،</p><p class="tr" lang="fr">Mais le dossier a été eingestellt, c&#x27;est-à-dire fermé sans jugement,</p></div></li>
+<li class="line" data-k="06-24"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 24 enregistrée">24</button><div class="txt"><p class="say" dir="rtl" lang="ar">بشرط كل واحد يخلص من 2000 حتى 6000 أورو لجمعية.</p><p class="tr" lang="fr">à condition que chacun paie de 2 000 à 6 000 euros à une association.</p></div></li>
+<li class="line" data-k="06-25"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 25 enregistrée">25</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما عرفناش واش هادشي نهائي.</p><p class="tr" lang="fr">Et nous ne savons pas si c&#x27;est définitif.</p></div></li>
+<li class="line" data-k="06-26"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 26 enregistrée">26</button><div class="txt"><p class="say" dir="rtl" lang="ar">القاعدة: Methotrexat فالروماتيزم، مرة فالسيمانة.</p><p class="tr" lang="fr">La règle : Methotrexat dans les rhumatismes, une fois par semaine.</p></div></li>
+<li class="line" data-k="06-27"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 27 enregistrée">27</button><div class="txt"><p class="say" dir="rtl" lang="ar">كتبها «einmal pro Woche»، والنهار بالحروف.</p><p class="tr" lang="fr">Écris-le « einmal pro Woche », et le jour en toutes lettres.</p></div></li>
+<li class="line" data-k="06-28"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 28 enregistrée">28</button><div class="txt"><p class="say" dir="rtl" lang="ar">وأي la dose كتنقلها ولا كتسني عليها، راجعها.</p><p class="tr" lang="fr">Et toute dose que tu recopies ou que tu signes, vérifie-la.</p></div></li>
+<li class="line" data-k="06-29"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 29 enregistrée">29</button><div class="txt"><p class="say" dir="rtl" lang="ar">ربعة ديال اليدين ما وقفوهاش. كون نتا اليد اللي كتوقفها.</p><p class="tr" lang="fr">Quatre mains ne l&#x27;ont pas arrêtée. Sois, toi, la main qui l&#x27;arrête.</p></div></li>
+</ol></div>
+</section>
+<section class="ep" data-id="akte-07" data-ep="07">
+<header class="ep-head">
+<p class="ep-no">AKTE 07</p>
+<h2 class="ep-title" dir="rtl" lang="ar">الگروپ</h2>
+<p class="ep-meta">Siegburg · 2026 · 20 phrases · ≈ 70 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Une Stationsärztin écrit les diagnostics d&#x27;un collègue malade dans le groupe WhatsApp du service. Le tribunal du travail : 1 000 € de dommages.</p>
+<p class="ep-source"><span>Source</span> Arbeitsgericht Siegburg, 22.05.2026, 1 Ca 1741/25 — jugement lu en entier.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>Phrase 10 : à dire avec tes mots, en gardant « <bdi dir="rtl" lang="ar" class="ar-in">غير</bdi> ». Sens : « Autrement dit, juste un gaz coincé. » Proposition : « <bdi dir="rtl" lang="ar" class="ar-in">يعني: غير شي ريح حاصل ليه.</bdi> »</li>
+<li>Le jugement n&#x27;était pas définitif en juillet 2026 et on n&#x27;a rien trouvé depuis : la phrase 17 doit rester.</li>
+<li>Phrases 6 et 7 : tu parles à sa place (« <bdi dir="rtl" lang="ar" class="ar-in">خديت… خلصت…</bdi> »). C&#x27;est un résumé fidèle de son message. Version à la 3e personne : « <bdi dir="rtl" lang="ar" class="ar-in">خدات les gardes ديالو، وخلصات 549 أورو على ويكاند، ومشى فيها.</bdi> »</li>
+<li>Ne nomme jamais les diagnostics, même en improvisant.</li>
+<li>N&#x27;ajoute rien sur les réactions des collègues ni sur le jour où il est sorti du groupe : rien n&#x27;est publié.</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> Vielleicht sitzt aber ein Pups quer (« quer » se dit « kvér ») · Arbeitsgericht · Siegburg (« Zîg-bourg ») · krank</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="07-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">المحكمة جاوبات بـ1000 أورو على ميساج فـWhatsApp.</p><p class="tr" lang="fr">Le tribunal a répondu par 1 000 euros à un message sur WhatsApp.</p></div></li>
+<li class="line" data-k="07-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">كتباتو طبيبة فألمانيا، والمحكمة حكمات عليها تخلصهم من جيبها.</p><p class="tr" lang="fr">C&#x27;est une médecin en Allemagne qui l&#x27;a écrit, et le tribunal l&#x27;a condamnée à les payer de sa poche.</p></div></li>
+<li class="line" data-k="07-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما كتباتش على مريض. كتبات على زميل ديالها.</p><p class="tr" lang="fr">Et elle n&#x27;a pas écrit sur un patient. Elle a écrit sur un collègue à elle.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="07-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">گروپ ديال الجراحة، 9 ديال الأطباء: les gardes، الكونجيات، وحتى الكادوات.</p><p class="tr" lang="fr">Un groupe de la chirurgie, 9 médecins : les gardes, les congés, et même les cadeaux.</p></div></li>
+<li class="line" data-k="07-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">الخميس، واحد فيهم مشى للمستعجلات ديال سبيطارهم، وكتب فالگروپ بلي مريض.</p><p class="tr" lang="fr">Le jeudi, l&#x27;un d&#x27;eux est allé aux urgences de leur hôpital, et a écrit dans le groupe qu&#x27;il était malade.</p></div></li>
+<li class="line" data-k="07-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">السبت، زميلتو كتبات حتى هي: خديت les gardes ديالو،</p><p class="tr" lang="fr">Le samedi, sa collègue écrit à son tour : « j&#x27;ai pris ses gardes,</p></div></li>
+<li class="line" data-k="07-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">وخلصت 549 أورو على ويكاند، ومشى فيها.</p><p class="tr" lang="fr">et j&#x27;ai payé 549 euros pour un week-end, et il est fichu. »</p></div></li>
+<li class="line" data-k="07-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">وفنفس الميساج، كتبات les diagnostics ديالو: عاوداتهم ليها زميلة من المستعجلات.</p><p class="tr" lang="fr">Et dans le même message, elle a écrit ses diagnostics à lui : une collègue des urgences les lui avait racontés.</p></div></li>
+<li class="line" data-k="07-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">وزادت: Vielleicht sitzt aber ein Pups quer.</p><p class="tr" lang="fr">Et elle a ajouté : « Vielleicht sitzt aber ein Pups quer. »</p></div></li>
+<li class="line fr-line" data-k="07-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" lang="fr">Autrement dit, juste un gaz coincé.</p><p class="tr">À dire en darija, avec tes mots (voir la note plus haut).</p></div></li>
+<li class="silence"><span>Petit silence, environ 1 seconde.</span></li>
+<li class="line" data-k="07-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">فالصيف، الطبيب طلب منها تكتب بلي ما تعاودهاش.</p><p class="tr" lang="fr">En été, le médecin lui a demandé d&#x27;écrire qu&#x27;elle ne recommencerait pas.</p></div></li>
+<li class="line" data-k="07-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">ما كتباتش. فمشى لـArbeitsgericht، يعني محكمة الشغل، فمدينة Siegburg.</p><p class="tr" lang="fr">Elle ne l&#x27;a pas écrit. Alors il est allé à l&#x27;Arbeitsgericht, c&#x27;est-à-dire le tribunal du travail, dans la ville de Siegburg.</p></div></li>
+<li class="line" data-k="07-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">وما بقاش فالگروپ. وفآخر العام، خلا حتى السبيطار.</p><p class="tr" lang="fr">Et il n&#x27;est pas resté dans le groupe. Et à la fin de l&#x27;année, il a même quitté l&#x27;hôpital.</p></div></li>
+<li class="line" data-k="07-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">قدام المحكمة، هي قالت: الگروپ 70% privé.</p><p class="tr" lang="fr">Devant le tribunal, elle, elle a dit : le groupe est privé à 70 %.</p></div></li>
+<li class="line" data-k="07-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">المحكمة جاوباتها: و30% خدمة. يعني ماشي privé.</p><p class="tr" lang="fr">Le tribunal lui a répondu : et 30 % de travail. Donc pas privé.</p></div></li>
+<li class="line" data-k="07-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">الحكم فـ2026: ممنوع تعاودها، و1000 أورو تعويض ليه.</p><p class="tr" lang="fr">Le jugement, en 2026 : interdiction de recommencer, et 1 000 euros de dédommagement pour lui.</p></div></li>
+<li class="line" data-k="07-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">وهاد الحكم ابتدائي: ما لقيناش واش ولى نهائي.</p><p class="tr" lang="fr">Et ce jugement est de première instance : nous n&#x27;avons pas trouvé s&#x27;il est devenu définitif.</p></div></li>
+<li class="line" data-k="07-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">فالگروپ، كتب غير krank، يعني مريض، وحتى لإمتى.</p><p class="tr" lang="fr">Dans le groupe, écris seulement « krank », c&#x27;est-à-dire malade, et jusqu&#x27;à quand.</p></div></li>
+<li class="line" data-k="07-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">الـdiagnostic ديال مريض ولا زميل ما كيتكتبش بلا الإذن ديالو.</p><p class="tr" lang="fr">Le diagnostic d&#x27;un patient ou d&#x27;un collègue ne s&#x27;écrit pas sans sa permission.</p></div></li>
+<li class="line" data-k="07-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">الميساج كيتكتب فدقيقة… وهادا بقى مكتوب فالحكم.</p><p class="tr" lang="fr">Un message s&#x27;écrit en une minute… et celui-ci est resté écrit dans le jugement.</p></div></li>
+</ol></div>
+</section>
+<section class="ep" data-id="akte-08" data-ep="08">
+<header class="ep-head">
+<p class="ep-no">AKTE 08</p>
+<h2 class="ep-title" dir="rtl" lang="ar">جوج حروف</h2>
+<p class="ep-meta">Düsseldorf · 2019 · 21 phrases · ≈ 77 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Un médecin au doctorat étranger écrit « Dr. » : 15 000 € d&#x27;amende en première instance. Et la règle pour le Doctorat en médecine du Maroc.</p>
+<p class="ep-source"><span>Source</span> Amtsgericht Düsseldorf, 02.08.2019, 119 Cs 426/19 ; Landgericht Düsseldorf, 16.11.2021 ; BGH, 02.11.2022.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>Les 15 000 € viennent de la première instance et ne sont jamais devenus définitifs. Ne dis ni « <bdi dir="rtl" lang="ar" class="ar-in">خلص</bdi> » ni « <bdi dir="rtl" lang="ar" class="ar-in">نهائي</bdi> » à côté du chiffre.</li>
+<li>Le même médecin a été condamné plus tard, dans un autre procès, à de la prison pour des faits bien plus graves, sans rapport avec le titre. Le script le dit en une phrase neutre (15) et s&#x27;arrête là, pour qu&#x27;on ne croie pas qu&#x27;on va en prison pour un titre. N&#x27;ajoute rien en improvisant.</li>
+<li>Ton pseudo @dr.aguilo : dans cette affaire, le tribunal a compté des noms de compte Instagram commençant par « dr » comme port du titre. La question viendra en commentaire : à vérifier pour toi (Ärztekammer ou avocat) avant de publier cet épisode.</li>
+<li>Phrase 7 : l&#x27;outil n&#x27;a pas pu relire la fiche anabin du Maroc. Ouvre-la une fois (anabin.kmk.org → Hochschulabschlüsse → Marokko → Doctorat en Médecine). Si le mot « Berufsdoktorat » n&#x27;y est pas, dis : « <bdi dir="rtl" lang="ar" class="ar-in">والدبلوم ديالك، وخا فيه thèse، عندهم ماشي Promotion، يعني ماشي «Dr.».</bdi> »</li>
+<li>Phrase 19 : c&#x27;est un conseil, pas une loi. Ne dis jamais que l&#x27;Ärztekammer « autorise ».</li>
+<li>« Promotion » se dit à l&#x27;allemande (« pro-mo-tsi-ôn ») : en français le mot veut dire autre chose.</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> Promotion · Berufsdoktorat · Ärztekammer · Tagessätze · Dr. med. (ir) : les lettres i, r bien détachées · Düsseldorf</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="08-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">تخيل غرامة ديال 15000 أورو، حيت كتبتي «Dr.» قدام سميتك فألمانيا.</p><p class="tr" lang="fr">Imagine une amende de 15 000 euros, parce que tu as écrit « Dr. » devant ton nom en Allemagne.</p></div></li>
+<li class="line" data-k="08-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">هادشي وقع لطبيب فـDüsseldorf، فالمحكمة الابتدائية.</p><p class="tr" lang="fr">C&#x27;est arrivé à un médecin de Düsseldorf, devant le tribunal de première instance.</p></div></li>
+<li class="line" data-k="08-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">وهو طبيب ديال بصح، بدكتوراه ديال بصح.</p><p class="tr" lang="fr">Et c&#x27;est un vrai médecin, avec un vrai doctorat.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="08-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">دابا نتا: عاد وصلتي لألمانيا بـDoctorat en médecine ديال المغرب.</p><p class="tr" lang="fr">Maintenant, toi : tu viens d&#x27;arriver en Allemagne avec le Doctorat en médecine du Maroc.</p></div></li>
+<li class="line" data-k="08-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">وأول حاجة: cachet، و«Dr.» قدام سميتك.</p><p class="tr" lang="fr">Et la première chose : un cachet, avec « Dr. » devant ton nom.</p></div></li>
+<li class="line" data-k="08-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولكن فألمانيا «Dr.» هي Promotion، يعني thèse ديال البحث زيادة على القراية.</p><p class="tr" lang="fr">Mais en Allemagne, « Dr. », c&#x27;est une Promotion, c&#x27;est-à-dire une thèse de recherche en plus des études.</p></div></li>
+<li class="line" data-k="08-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">والدبلوم ديالك، وخا فيه thèse، عندهم Berufsdoktorat: دكتوراه ديال المهنة، ماشي «Dr.».</p><p class="tr" lang="fr">Et ton diplôme, même avec une thèse dedans, c&#x27;est pour eux un Berufsdoktorat : un doctorat professionnel, pas un « Dr. ».</p></div></li>
+<li class="line" data-k="08-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">الطبيب ديال Düsseldorf قرا برا بحالك، فإيران.</p><p class="tr" lang="fr">Le médecin de Düsseldorf a étudié à l&#x27;étranger comme toi, en Iran.</p></div></li>
+<li class="line" data-k="08-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">والـbadge ديالو فالسبيطار كان فيه «Dr. med. (ir)»، يعني إيران.</p><p class="tr" lang="fr">Et son badge à l&#x27;hôpital portait « Dr. med. (ir) », c&#x27;est-à-dire Iran.</p></div></li>
+<li class="line" data-k="08-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" dir="rtl" lang="ar">في 2009، الـÄrztekammer، يعني هيئة الأطباء، كتبات ليه: Berufsdoktorat، ماشي «Dr. med.».</p><p class="tr" lang="fr">En 2009, l&#x27;Ärztekammer, c&#x27;est-à-dire l&#x27;Ordre des médecins, lui a écrit : Berufsdoktorat, pas « Dr. med. ».</p></div></li>
+<li class="line" data-k="08-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">ومن بعد، فـsite وفـInstagram، هاد الجوج حروف طاحو.</p><p class="tr" lang="fr">Ensuite, sur le site et sur Instagram, ces deux lettres sont tombées.</p></div></li>
+<li class="line" data-k="08-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">في 2017 عاودات كتبات ليه: حيدها. ما حيدهاش، ودارت بيه شكاية.</p><p class="tr" lang="fr">En 2017, elle lui a écrit de nouveau : enlève-le. Il ne l&#x27;a pas enlevé, et elle l&#x27;a dénoncé.</p></div></li>
+<li class="line" data-k="08-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">في 2019، المحكمة حكمات عليه بـ60 Tagessätze، يعني 60 يوم من خلصتو.</p><p class="tr" lang="fr">En 2019, le tribunal l&#x27;a condamné à 60 Tagessätze, c&#x27;est-à-dire 60 jours de sa paie.</p></div></li>
+<li class="line" data-k="08-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">ولكن دارو الاستئناف، وهاد الحكم عمره ما ولى نهائي.</p><p class="tr" lang="fr">Mais il y a eu appel, et ce jugement n&#x27;est jamais devenu définitif.</p></div></li>
+<li class="line" data-k="08-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">الملف دخل فمحاكمة أخرى ديالو.</p><p class="tr" lang="fr">Le dossier est entré dans un autre procès du même médecin.</p></div></li>
+<li class="line" data-k="08-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">وتما لقاوه مذنب فهاد «Dr.»: نهائي من 2022.</p><p class="tr" lang="fr">Et là, il a été reconnu coupable pour ce « Dr. » : définitif depuis 2022.</p></div></li>
+<li class="line" data-k="08-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">إيوا نتا: بـDoctorat ديال المغرب، لا «Dr.» لا «Dr. med.».</p><p class="tr" lang="fr">Alors toi : avec le Doctorat du Maroc, ni « Dr. » ni « Dr. med. ».</p></div></li>
+<li class="line" data-k="08-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">وشنو تكتب فبلاصتها، حتى المحاكم ما تفاهموش.</p><p class="tr" lang="fr">Et quoi écrire à la place : même les tribunaux n&#x27;ont pas été d&#x27;accord.</p></div></li>
+<li class="line" data-k="08-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">قبل ما تطبع cachet ولا تكتب bio، سول محامي ولا الـÄrztekammer، بالكتابة.</p><p class="tr" lang="fr">Avant d&#x27;imprimer un cachet ou d&#x27;écrire une bio, demande à un avocat ou à l&#x27;Ärztekammer, par écrit.</p></div></li>
+<li class="line" data-k="08-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">وإلا كتبات ليك، جاوبها.</p><p class="tr" lang="fr">Et si elle t&#x27;écrit, réponds-lui.</p></div></li>
+<li class="line" data-k="08-21"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 21 enregistrée">21</button><div class="txt"><p class="say" dir="rtl" lang="ar">نتا طبيب بالخدمة ديالك، ماشي بجوج حروف.</p><p class="tr" lang="fr">Tu es médecin par ton travail, pas par deux lettres.</p></div></li>
+</ol></div>
+</section>
+<section class="ep" data-id="akte-09" data-ep="09">
+<header class="ep-head">
+<p class="ep-no">AKTE 09</p>
+<h2 class="ep-title" dir="rtl" lang="ar">غير سكران</h2>
+<p class="ep-meta">Friedrichshafen · 2023 · 31 phrases · ≈ 102 s avec ta voix à ×1,3</p>
+<p class="ep-pitch">Un jeune de 18 ans, ivre après une chute à vélo, est gardé en observation sans scanner. La médecin de garde : 15 mois avec sursis.</p>
+<p class="ep-source"><span>Source</span> Presse seulement, presque tout d&#x27;un seul journal (mai 2026). Amtsgericht Tettnang ; aucun jugement publié.</p>
+</header>
+<div class="notes"><h3>À savoir avant d'enregistrer</h3><ul>
+<li>Le jugement n&#x27;était pas définitif en mai 2026 et on n&#x27;a rien trouvé depuis. À publier après avoir vérifié, ou en gardant la phrase 27.</li>
+<li>Ne dis ni « <bdi dir="rtl" lang="ar" class="ar-in">مات</bdi> » ni un délai : la presse donne deux versions. La phrase 19 s&#x27;arrête à « 8:40… » et la mort est montrée.</li>
+<li>Phrase 13 : l&#x27;heure où elle a demandé l&#x27;avis de l&#x27;anesthésiste n&#x27;est écrite nulle part. Dis « <bdi dir="rtl" lang="ar" class="ar-in">فديك الليلة</bdi> », jamais une heure.</li>
+<li>Phrase 14 : « <bdi dir="rtl" lang="ar" class="ar-in">خليوه ينعس</bdi> » est un propos rapporté à l&#x27;audience. Garde « <bdi dir="rtl" lang="ar" class="ar-in">حسب الصحافة</bdi> » dans la même phrase.</li>
+<li>Ne dis ni « Assistenzärztin » ni « jeune » : la presse se contredit sur son statut.</li>
+<li>Ton plus posé que les autres épisodes. Les phrases « <bdi dir="rtl" lang="ar" class="ar-in">من الداخل</bdi> » : un petit souffle avant, voix plus basse.</li>
+<li>Probablement 3 à 4 secondes de trop : trois coupes sont proposées à la fin de scenario.md.</li>
+</ul>
+<p class="mots"><span>Mots à bien prononcer</span> Anästhesist · Strafbefehl · auf Bewährung · Friedrichshafen · Tettnang · Bodensee</p>
+</div>
+<div class="sheet"><ol class="lines">
+<li class="line" data-k="09-1"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 1 enregistrée">1</button><div class="txt"><p class="say" dir="rtl" lang="ar">قالت «لا» لغرامة ديال 41250 أورو.</p><p class="tr" lang="fr">Elle a dit « non » à une amende de 41 250 euros.</p></div></li>
+<li class="line" data-k="09-2"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 2 enregistrée">2</button><div class="txt"><p class="say" dir="rtl" lang="ar">وتحكم عليها بـ15 شهر ديال الحبس avec sursis، فألمانيا.</p><p class="tr" lang="fr">Et elle a été condamnée à 15 mois de prison avec sursis, en Allemagne.</p></div></li>
+<li class="line" data-k="09-3"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 3 enregistrée">3</button><div class="txt"><p class="say" dir="rtl" lang="ar">وهي طبيبة فـla garde، سولات طبيب عندو الخبرة… وهادشي ما حماهاش.</p><p class="tr" lang="fr">C&#x27;est une médecin de garde ; elle a demandé l&#x27;avis d&#x27;un médecin expérimenté… et cela ne l&#x27;a pas protégée.</p></div></li>
+<li class="intro"><p class="tag">Intro — déjà enregistrée, à ne pas redire</p><p dir="rtl" lang="ar">أنا ياسين، طبيب فألمانيا.</p><p dir="rtl" lang="ar">فهاد السلسلة كنحكي ليكم قصص حقيقية من المحاكم الألمانية، باش نتعلمو منها.</p><p dir="rtl" lang="ar">إلا عجباتك، دير j&#x27;aime و abonne، باش ما تفوتكش القصة الجاية.</p></li>
+<li class="line" data-k="09-4"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 4 enregistrée">4</button><div class="txt"><p class="say" dir="rtl" lang="ar">القصة وقعات فـ2023 حدا بحيرة Bodensee، وكنعرفوها غير من الصحافة.</p><p class="tr" lang="fr">L&#x27;histoire s&#x27;est passée en 2023 au bord du lac Bodensee, et nous ne la connaissons que par la presse.</p></div></li>
+<li class="line" data-k="09-5"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 5 enregistrée">5</button><div class="txt"><p class="say" dir="rtl" lang="ar">من بعد نص الليل، شاب عندو 18 عام طاح بالـvélo.</p><p class="tr" lang="fr">Après minuit, un jeune de 18 ans est tombé à vélo.</p></div></li>
+<li class="line" data-k="09-6"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 6 enregistrée">6</button><div class="txt"><p class="say" dir="rtl" lang="ar">من برا: سكران، ناض ومشى كيتمايل.</p><p class="tr" lang="fr">Du dehors : ivre, il s&#x27;est relevé et il est parti en titubant.</p></div></li>
+<li class="line" data-k="09-7"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 7 enregistrée">7</button><div class="txt"><p class="say" dir="rtl" lang="ar">من الداخل: العظم ديال الراس تهرس.</p><p class="tr" lang="fr">Du dedans : l&#x27;os du crâne s&#x27;est cassé.</p></div></li>
+<li class="line" data-k="09-8"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 8 enregistrée">8</button><div class="txt"><p class="say" dir="rtl" lang="ar">مع 2، وصل للمستعجلات فـFriedrichshafen.</p><p class="tr" lang="fr">Vers 2 h, il est arrivé aux urgences, à Friedrichshafen.</p></div></li>
+<li class="line" data-k="09-9"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 9 enregistrée">9</button><div class="txt"><p class="say" dir="rtl" lang="ar">من برا: غير علامة ديال ضربة.</p><p class="tr" lang="fr">Du dehors : seulement la marque d&#x27;un coup.</p></div></li>
+<li class="line" data-k="09-10"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 10 enregistrée">10</button><div class="txt"><p class="say" dir="rtl" lang="ar">الطبيبة شكات فالراس وكتباتها… ولكن بلا Scanner: غير المراقبة.</p><p class="tr" lang="fr">La médecin a soupçonné la tête et l&#x27;a écrit… mais sans scanner : seulement la surveillance.</p></div></li>
+<li class="line" data-k="09-11"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 11 enregistrée">11</button><div class="txt"><p class="say" dir="rtl" lang="ar">من الداخل: الدم كيتجمع تحت العظم.</p><p class="tr" lang="fr">Du dedans : le sang s&#x27;accumule sous l&#x27;os.</p></div></li>
+<li class="line" data-k="09-12"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 12 enregistrée">12</button><div class="txt"><p class="say" dir="rtl" lang="ar">مع 3، الفرملية شافتو ولى agité كثر.</p><p class="tr" lang="fr">Vers 3 h, l&#x27;infirmière l&#x27;a vu devenir plus agité.</p></div></li>
+<li class="line" data-k="09-13"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 13 enregistrée">13</button><div class="txt"><p class="say" dir="rtl" lang="ar">فديك الليلة، الطبيبة سولات Anästhesist، يعني طبيب البنج.</p><p class="tr" lang="fr">Cette nuit-là, la médecin a demandé l&#x27;avis d&#x27;un Anästhesist, c&#x27;est-à-dire un anesthésiste.</p></div></li>
+<li class="line" data-k="09-14"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 14 enregistrée">14</button><div class="txt"><p class="say" dir="rtl" lang="ar">حسب الصحافة، جا شافو، ما قبلوش فالإنعاش، وقال: خليوه ينعس.</p><p class="tr" lang="fr">Selon la presse, il est venu le voir, il ne l&#x27;a pas accepté en réanimation, et il a dit : laissez-le dormir.</p></div></li>
+<li class="line" data-k="09-15"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 15 enregistrée">15</button><div class="txt"><p class="say" dir="rtl" lang="ar">من الداخل: الدم ما كينعسش، كيضغط على المخ.</p><p class="tr" lang="fr">Du dedans : le sang, lui, ne dort pas : il appuie sur le cerveau.</p></div></li>
+<li class="line" data-k="09-16"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 16 enregistrée">16</button><div class="txt"><p class="say" dir="rtl" lang="ar">3 سوايع، حتى واحد ما وقف عليه مزيان.</p><p class="tr" lang="fr">Trois heures : personne ne s&#x27;est vraiment occupé de lui.</p></div></li>
+<li class="silence"><span>Petite respiration, presque une seconde.</span></li>
+<li class="line" data-k="09-17"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 17 enregistrée">17</button><div class="txt"><p class="say" dir="rtl" lang="ar">مع 6، الطبيبة والفرملية دارو alarme ديال Réanimation.</p><p class="tr" lang="fr">À 6 h, la médecin et l&#x27;infirmière ont déclenché l&#x27;alarme de réanimation.</p></div></li>
+<li class="line" data-k="09-18"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 18 enregistrée">18</button><div class="txt"><p class="say" dir="rtl" lang="ar">وعاد ديك الساعة دارو Scanner: بان اللي من الداخل.</p><p class="tr" lang="fr">Et c&#x27;est seulement à ce moment-là qu&#x27;on a fait le scanner : ce qui était dedans est apparu.</p></div></li>
+<li class="line" data-k="09-19"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 19 enregistrée">19</button><div class="txt"><p class="say" dir="rtl" lang="ar">داوه لسبيطار آخر، ودخل للبلوك مع 8:40…</p><p class="tr" lang="fr">On l&#x27;a emmené dans un autre hôpital, et il est entré au bloc à 8 h 40…</p></div></li>
+<li class="silence"><span>Silence, environ 3 secondes : scène muette.</span></li>
+<li class="line" data-k="09-20"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 20 enregistrée">20</button><div class="txt"><p class="say" dir="rtl" lang="ar">فـ2026، الطبيبة قدام المحكمة فـTettnang،</p><p class="tr" lang="fr">En 2026, la médecin est devant le tribunal de Tettnang,</p></div></li>
+<li class="line" data-k="09-21"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 21 enregistrée">21</button><div class="txt"><p class="say" dir="rtl" lang="ar">حيت ما قبلاتش Strafbefehl، يعني غرامة بلا جلسة.</p><p class="tr" lang="fr">parce qu&#x27;elle n&#x27;a pas accepté le Strafbefehl, c&#x27;est-à-dire une amende sans audience.</p></div></li>
+<li class="line" data-k="09-22"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 22 enregistrée">22</button><div class="txt"><p class="say" dir="rtl" lang="ar">المتهمة غير هي. والوالدين كيسمعو شنو وقع، وكيبكيو.</p><p class="tr" lang="fr">La seule accusée, c&#x27;est elle. Et les parents écoutent ce qui s&#x27;est passé, et ils pleurent.</p></div></li>
+<li class="line" data-k="09-23"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 23 enregistrée">23</button><div class="txt"><p class="say" dir="rtl" lang="ar">الخبرا قالو: من برا، الشراب والدم فالراس بحال بحال.</p><p class="tr" lang="fr">Les experts ont dit : du dehors, l&#x27;alcool et le sang dans la tête, c&#x27;est pareil.</p></div></li>
+<li class="line" data-k="09-24"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 24 enregistrée">24</button><div class="txt"><p class="say" dir="rtl" lang="ar">والقاضية قالت: مع 3 بالكثير، Scanner كان ضروري.</p><p class="tr" lang="fr">Et la juge a dit : à 3 h au plus tard, le scanner était indispensable.</p></div></li>
+<li class="line" data-k="09-25"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 25 enregistrée">25</button><div class="txt"><p class="say" dir="rtl" lang="ar">الحكم: القتل غير العمد. 15 شهر auf Bewährung، يعني sursis،</p><p class="tr" lang="fr">Le jugement : homicide par négligence. 15 mois auf Bewährung, c&#x27;est-à-dire avec sursis,</p></div></li>
+<li class="line" data-k="09-26"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 26 enregistrée">26</button><div class="txt"><p class="say" dir="rtl" lang="ar">و20000 أورو للوالدين.</p><p class="tr" lang="fr">et 20 000 euros pour les parents.</p></div></li>
+<li class="line" data-k="09-27"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 27 enregistrée">27</button><div class="txt"><p class="say" dir="rtl" lang="ar">والحكم ما كانش نهائي… وما لقيناش واش ولى نهائي.</p><p class="tr" lang="fr">Et le jugement n&#x27;était pas définitif… et nous n&#x27;avons pas trouvé s&#x27;il l&#x27;est devenu.</p></div></li>
+<li class="line" data-k="09-28"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 28 enregistrée">28</button><div class="txt"><p class="say" dir="rtl" lang="ar">ضربة فالراس مع الشراب: إلا شكيتي، ولا تبدلات حالتو، دير Scanner.</p><p class="tr" lang="fr">Coup à la tête avec de l&#x27;alcool : si tu as un doute, ou si son état change, fais un scanner.</p></div></li>
+<li class="line" data-k="09-29"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 29 enregistrée">29</button><div class="txt"><p class="say" dir="rtl" lang="ar">وبلا Scanner: كل شوية فيّقو، شوف les pupilles، وكتب الساعة.</p><p class="tr" lang="fr">Et sans scanner : à intervalles rapprochés, réveille-le, regarde les pupilles, et note l&#x27;heure.</p></div></li>
+<li class="line" data-k="09-30"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 30 enregistrée">30</button><div class="txt"><p class="say" dir="rtl" lang="ar">والقاضية قالتها: وخا تسول زميل، المسؤولية كتبقى ديالك.</p><p class="tr" lang="fr">Et la juge l&#x27;a dit : même si tu demandes l&#x27;avis d&#x27;un collègue, la responsabilité reste la tienne.</p></div></li>
+<li class="line" data-k="09-31"><button class="num" type="button" aria-pressed="false" aria-label="Phrase 31 enregistrée">31</button><div class="txt"><p class="say" dir="rtl" lang="ar">السكران كيفيق… إلا كان غير سكران.</p><p class="tr" lang="fr">L&#x27;homme ivre se réveille… s&#x27;il n&#x27;est qu&#x27;ivre.</p></div></li>
+</ol></div>
+</section>
+<div class="foot">
+<p>Si tu changes un mot en enregistrant, ce n'est pas grave : dis-le-moi, les sous-titres suivront ta voix.</p>
+<p>Les numéros d'épisode sont provisoires. Ordre de publication conseillé pour éloigner les histoires qui se ressemblent : 04, 07, 06, 08, 05, 09.</p>
+</div>
+</div>
+<script>
+(function () {
+  var eps = [].slice.call(document.querySelectorAll('.ep')), tabs = [].slice.call(document.querySelectorAll('nav.tabs a'));
+  var nav = document.querySelector('nav.tabs');
+  function show() {
+    var id = (location.hash || '').slice(1), ok = eps.some(function (s) { return s.getAttribute('data-id') === id; });
+    if (!ok) id = eps[0].getAttribute('data-id');
+    eps.forEach(function (s) { s.hidden = s.getAttribute('data-id') !== id; });
+    tabs.forEach(function (a) {
+      var on = a.getAttribute('href') === '#' + id; a.setAttribute('aria-current', on ? 'true' : 'false');
+      if (on) nav.scrollLeft = Math.max(0, a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2);
+    });
+  }
+  window.addEventListener('hashchange', function () { show(); window.scrollTo(0, 0); }); show();
+  var store = {}; try { store = JSON.parse(localStorage.getItem('akte-s2-faites') || '{}') || {}; } catch (e) {}
+  function save() { try { localStorage.setItem('akte-s2-faites', JSON.stringify(store)); } catch (e) {} }
+  [].forEach.call(document.querySelectorAll('.line'), function (li) {
+    var b = li.querySelector('.num'), k = li.getAttribute('data-k');
+    function paint() { b.setAttribute('aria-pressed', store[k] ? 'true' : 'false'); li.classList.toggle('done', !!store[k]); }
+    b.addEventListener('click', function () { if (store[k]) delete store[k]; else store[k] = 1; save(); paint(); }); paint();
+  });
+  var t = document.getElementById('opt-tr'), noTr = false; try { noTr = localStorage.getItem('akte-s2-sans-fr') === '1'; } catch (e) {}
+  function paintTr() { document.body.classList.toggle('no-tr', noTr); t.setAttribute('aria-pressed', noTr ? 'false' : 'true'); }
+  t.addEventListener('click', function () { noTr = !noTr; try { localStorage.setItem('akte-s2-sans-fr', noTr ? '1' : '0'); } catch (e) {} paintTr(); }); paintTr();
+  document.getElementById('opt-raz').addEventListener('click', function () {
+    var id = (eps.filter(function (s) { return !s.hidden; })[0] || eps[0]).getAttribute('data-ep');
+    Object.keys(store).forEach(function (k) { if (k.indexOf(id + '-') === 0) delete store[k]; }); save();
+    [].forEach.call(document.querySelectorAll('.line'), function (li) { var on = !!store[li.getAttribute('data-k')]; li.classList.toggle('done', on); li.querySelector('.num').setAttribute('aria-pressed', on ? 'true' : 'false'); });
+  });
+})();
+</script>
