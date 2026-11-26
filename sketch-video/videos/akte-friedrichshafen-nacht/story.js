@@ -1,5 +1,7 @@
-/* GABARIT d'épisode AKTE — saison 2 (voir serie/SAISON-2.md).
- * Copier ce dossier en videos/akte-<ville>-<sujet>/, puis remplacer tout ce qui est marqué « À REMPLACER ».
+/* AKTE 09 (numéro provisoire) — « غير سكران » · Friedrichshafen 2023, AG Tettnang 04.05.2026 (presse seulement, pas définitif).
+ * Référence pour l'image : storyboard.md (il fait foi). Ce fichier = socle + distribution + HUD + affiche ;
+ * les scènes sont dans scenes-1.js … scenes-4.js, les dessins dans decor.js, decor-2.js, decor-3.js (window.EpDecor).
+ * CADRES FIXES : la vue est à l'échelle 1 (une coordonnée du storyboard = un pixel de la vidéo), aucun c.kick.
  * Les blocs marqués « SOCLE » appliquent le skill et restent les mêmes dans tous les épisodes :
  *   kit (rubans, pastilles avec arabe détaché, cartes), carte de l'Allemagne + épingle, aides Persona,
  *   éléments obligatoires de l'intro (photo + anneau jaune + Instagram + « Yassine » + j'aime / s'abonner),
@@ -11,8 +13,10 @@
  */
 (function () {
   "use strict";
-  const AKTE_NO = "00", AKTE_NEXT = "00", TITRE = "عنوان الحلقة";      // À REMPLACER (le numéro n'apparaît qu'ici)
-  const QUESTION = "السؤال المكتوب فالآخر؟";                            // À REMPLACER : question ÉCRITE de l'affiche (jamais dite)
+  const AKTE_NO = "09", AKTE_NEXT = "10", TITRE = "غير سكران";          // numéro PROVISOIRE (il n'apparaît qu'ici)
+  // question ÉCRITE de l'affiche (jamais dite) — scenario.md § Fin ; le storyboard (S30) la pose sur DEUX lignes
+  const QUESTION_LIGNES = ["سكران طاح على راسو:", "عندكم Scanner ديما، ولا مراقبة؟"];
+  const QUESTION = QUESTION_LIGNES.join(" ");
   const SC = SketchCast, K = Cast, W = 1080, U = SC.util, MAT = SC.MAT, INK = SC.INK;
   const NS = "http://www.w3.org/2000/svg";
   const el = (tag, a, p) => { const n = document.createElementNS(NS, tag); for (const k in a || {}) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
@@ -20,7 +24,8 @@
   const BEAT_IDS = window.BEATS.map((b) => b[0]), LAST = BEAT_IDS[BEAT_IDS.length - 1], AFTER_INTRO = BEAT_IDS[BEAT_IDS.indexOf("i3") + 1];
 
   window.SV_BUILD = (sv) => {
-    const st = Stage.create(sv, { view: { s: 1.06, oy: -20, breathe: 0.04 } }), T = (x) => st.T(x), E = Stage.E, prog = Stage.prog, lerp = Stage.lerp, clamp = Stage.clamp;
+    // storyboard § Conventions : cadres fixes, monde = écran (pas 1.06 / -20 / 0.04 comme les autres épisodes)
+    const st = Stage.create(sv, { view: { s: 1, oy: 0, breathe: 0 } }), T = (x) => st.T(x), E = Stage.E, prog = Stage.prog, lerp = Stage.lerp, clamp = Stage.clamp;
 
     /* ───────── SOCLE : kit (rubans, pastilles allemand + arabe détaché, cartes, titres, marcheur) ───────── */
     function kit(c) {
@@ -124,11 +129,27 @@
     const rl = (o, sc, pt) => [rnd((pt[0] - o[0]) / sc, 2), rnd((pt[1] - o[1]) / sc, 2)];                 // point monde -> repère du personnage (reachL / reachR)
     const walkTo = (base, t, a, d, facing) => Object.assign({}, base, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? PP.walk(rnd((((t - a) * 1.7) % 1 + 1) % 1, 16)) : PP.stand, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? { view: "side", facing } : {});
 
-    /* ───────── DISTRIBUTION — À REMPLACER : personnages NEUFS (jamais ceux d'un autre épisode) ─────────
-     * Paramètres Persona de chaque personnage (storyboard § 1) ; les scènes y ajoutent pose, tenue du moment, expression. */
+    /* ───────── DISTRIBUTION (storyboard § 1) — douze personnages Persona, tous neufs ─────────
+     * Paramètres EXACTS du storyboard ; les scènes y ajoutent pose, tenue du moment, expression, clignement (blinkAt(t, k)).
+     * Personne ne porte « jacket » (se lit comme une blouse) ; seule DOC porte du blanc (« coat »), et seulement la nuit.
+     * Le garçon n'est en Persona qu'en S5 ; partout ailleurs il est allongé : D.gisant (dessin dédié, jamais une tête pivotée).
+     * Les parents sont de dos en S21 : D.dos (dessin dédié). Figurants sans visage : D.silhouette. */
     const CAST = {
-      DOC: { look: "woman", hair: "bob", hairTone: "dark", outfit: "coat", seed: 11 },
+      DOC: { look: "woman",    hair: "bun",        hairTone: "dark",  glasses: false,                     seed: 901 },   // la médecin de garde — tenue par scène : « coat » la nuit, « sweater » chez elle et au tribunal ; k = 1
+      GAR: { look: "man",      hair: "shortcurly", hairTone: "blond", beard: "none",  outfit: "sweater", seed: 902 },   // le garçon, 18 ans (S5 seulement, + D.capuche) ; k = 2
+      PFL: { look: "oldwoman", hair: "short",      hairTone: "dark",  glasses: false, outfit: "scrubs",  seed: 903 },   // la soignante de nuit (+ D.montreBroche) ; k = 3
+      ANA: { look: "oldman",   hair: "short",      hairTone: "grey",  beard: "none",  glasses: true,  outfit: "scrubs",  seed: 904 },   // l'anesthésiste consulté (+ D.masqueCou) ; k = 4
+      VEL: { look: "man",      hair: "short",      hairTone: "brown", beard: "moustache", glasses: true, outfit: "casual", seed: 905 },  // le cycliste au vélo électrique (+ D.casque, D.sacDos) ; k = 5
+      JUG: { look: "woman",    hair: "shortcurly", hairTone: "grey",  glasses: false, outfit: "robe",    seed: 906 },   // la juge (seule sur l'estrade) ; k = 6
+      PRO: { look: "man",      hair: "short",      hairTone: "brown", beard: "none",  glasses: true,  outfit: "robe",    seed: 907 },   // le procureur (figurant muet) ; k = 7
+      AVO: { look: "man",      hair: "shortcurly", hairTone: "dark",  beard: "short", glasses: false, outfit: "robe",    seed: 908 },   // l'avocat de la défense (figurant muet) ; k = 8
+      EX1: { look: "man",      hair: "short",      hairTone: "blond", beard: "moustache", glasses: false, outfit: "suit", seed: 909 },   // expert, le légiste ; k = 9
+      EX2: { look: "oldman",   hair: "crown",      hairTone: "dark",  beard: "none",  glasses: true,  outfit: "sweater", seed: 910 },   // expert, le neurologue (+ D.marteauReflexes) ; k = 10
+      MER: { look: "woman",    hair: "bob",        hairTone: "grey",  glasses: false, outfit: "sweater", seed: 911 },   // la mère (+ D.foulard) — seulement au tribunal ; k = 11
+      PER: { look: "man",      hair: "crown",      hairTone: "brown", beard: "moustache", glasses: false, outfit: "suit", seed: 912 },   // le père — seulement au tribunal ; k = 12
     };
+    // numéro de clignement / de respiration de chaque personnage (storyboard § 1, « Réglages communs »)
+    const CAST_K = { DOC: 1, GAR: 2, PFL: 3, ANA: 4, VEL: 5, JUG: 6, PRO: 7, AVO: 8, EX1: 9, EX2: 10, MER: 11, PER: 12 };
 
     /* ───────── SCÈNES : elles sont écrites dans scenes-1.js … scenes-4.js (une partie de l'épisode par fichier) ─────────
      * Chaque fichier fait : (window.EP_PARTS = window.EP_PARTS || []).push(function (X) { … X.st.scene({ … }) … });
@@ -136,7 +157,7 @@
      * X.lieux = mises en place FIXES partagées entre les parties (ex. X.lieux.chambre = (c, o) => { … }). */
     const X = { sv, st, T, E, prog, lerp, clamp, el, isLatin, SC, K, U, MAT, INK, W, NS, PE, PP, D, M,
       kit, drawDE, geoAt, pinAt, blinkAt, talkAt, rnd, pp, ph, breathe, rl, walkTo,
-      CAST, BEAT_IDS, LAST, AFTER_INTRO, AKTE_NO, AKTE_NEXT, TITRE, QUESTION,
+      CAST, CAST_K, BEAT_IDS, LAST, AFTER_INTRO, AKTE_NO, AKTE_NEXT, TITRE, QUESTION, QUESTION_LIGNES,
       lieux: {}, aides: {},
       use(c) { c_ = c; return kit(c); } };
     (window.EP_PARTS || []).forEach((part) => part(X));
