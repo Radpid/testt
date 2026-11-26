@@ -1476,3 +1476,28 @@ Ajouté pendant la construction (le storyboard ci-dessus n'est pas modifié). Ch
 | HUD, `D.dayTab` | texte `.tw` 26 px | le texte rétrécit s'il est trop long (« ◀◀ » + « Mi · 16.05.2012 » = 21 px) ; `o.blur` / `o.streak` pour « les chiffres défilent à l'envers, flous » | à 26 px, « ◀◀ » + 15 signes sortait de l'onglet de 262 px |
 | scène 2, `D.folder` | « le juge tourne une page du dossier » | `o.page` 0 → 1 : une feuille qui pivote sur le pli | aucune autre pièce ne permettait le geste |
 | scènes 3 et 6, cadre alu | « reflet qui glisse sur le cadre alu (8 s) » | `D.glint` : petit reflet dessiné une fois, seul son transform bouge | redessiner tout le tableau à chaque image coûterait trop cher |
+| `D.slab` (scène 18) | plaque grise 140 × 26 | 150 × 26, même matière sombre que le bloc | les quatre tranches remplacent le bloc `SCHULDIG` (150 × 104) au même endroit : sans saut de taille ni de couleur |
+| `D.pebble` `leaf` (scène 20) | « feuille de calendrier » | une feuille d'arbre (celle qui tombe de la fenêtre des saisons, scène 16) | calendrier et feuillets sont réservés à AKTE 06 (`SAISON-2.md`, objets réservés) |
+| `D.loupeSmall` (scène 10) | dans la loupe R 70, `Blutgruppe:` en `.tw` 26 | le texte grossi est ajusté au verre (≈ 17 px à R 70 ; 26 px à partir de R 105) | 11 signes à 26 px = 172 px, plus large que le verre (140 px) |
+| `D.coatHung` / `D.coatRack` (scène 16) | blouse de y 660 à 1000 (340 px) | blouse ≈ 141 × 240 (`o.s` 0,72), patère de 600 | à 340 px, la blouse faisait les trois quarts de la médecin assise à côté (Persona : de l'épaule au genou ≈ 190 px) |
+| `D.weight90` (scènes 18–20) | étiquette à ficelle `beantragt` | elle pend SOUS l'extrémité droite de la console (x ≈ 840–942, y 714–740) ; à part (`D.stringTag`) pour tomber à `b24@عاقباتهاش` | partant vers la gauche, elle passait dans les chaînes du plateau droit (x ≤ 833) |
+| `D.rack`, ancre `grip` (scène 9) | `[-110, -20]` | `[-130, -3]` : poignée au ras du socle, à gauche | depuis son épaule (x 345, échelle 1,05), la cible du storyboard (455, 925) est à ≈ 105 px (portée 118) ; `[-110, -20]` donnait (470, 900), à 141 px : bras raide dans le vide |
+| `D.loupe` (scène 12) | globules « découpés » par la loupe | aucun clipPath : les globules entrent par le haut en s'estompant près du bord, le cerclage recouvre le reste | un id de clipPath serait recopié en double par l'affiche-résumé |
+| `D.licenceCard` (scène 8) | carte 300 × 180 | pochette 300 × 180 (x 490–790, y 950–1130), carte 244 × 146 dedans | la taille donnée est celle de la place : la pochette la remplit |
+| `D.clock04`, `D.nightWindow`, `D.seasonWindow`, `D.bedFront04`, `D.labHatch`, `D.blinds`, `D.cart` | — | `o.part` sépare le fixe (tracé rough) de ce qui bouge à chaque image ; ordre des nœuds dans l'en-tête de `decor-2.js` | coût de dessin (R12) ; les cadres de fenêtre sont des anneaux : le nœud « frame » se pose sur le nœud « sky » sans le cacher |
+| `decor-2.js`, `decor-3.js` | — | ils attendent `D.kit` (file `D._later`, relancée par `decor.js`) | l'outil d'essai charge `decor-2.js` avant `decor.js` (tri alphabétique) : sans ce garde, rien ne se dessinait |
+
+**Placements à régler au montage des scènes** (mesurés le 26.11 sur des compositions à l'échelle : décors + Persona aux coordonnées
+ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`) :
+
+| scène | storyboard | à faire | pourquoi |
+|---|---|---|---|
+| 7 | appliques à (340, 640) et (620, 640) | les mettre entre les portes : (415, 640) et (695, 640) | portes de x 200 à 350, 480 à 630, 760 à 910 (huisserie ± 10) : les appliques tombaient sur les huisseries |
+| 7 | voyants d'appel à (200, 660) … | utiliser les ancres `calls` de `D.corridor04` (au-dessus de chaque porte, y 578) | y 660 est sur l'imposte vitrée |
+| 7 | horloge à (850, 560) | (850, 520) | à 560, son bord (y 610) touche le haut de l'huisserie de la porte 3 (y 604) |
+| 8 | en-tête `TEAM` (635, 580) et zoom ×1,12 (cy 990) à `b10` | effacer l'en-tête avant le zoom, ou ne pas l'écrire | après le zoom il passe à l'écran y ≈ 453, dans la bande des pastilles (pastille `Blutführerschein`) |
+| 10 | feuille x 400–900 | contrôler la fin de scène sur planche `--ig` | son bord droit arrive à l'écran x ≈ 905–921 |
+| 11 | elle à x 835, bras levé vers le crochet | rien au dessin | la poche (x 712–800) frôle son visage (x ≈ 790) tant que le bras est levé ; elle recule à 858 à `b13@عام` |
+| 12 | zoom ×1,12 (cy 990) à `b15@بدا` ; horloge (165, 500), `≈ 10 min` (255, 470) | descendre le zoom (cy ≥ 1040) ou effacer `≈ 10 min` avant | après le zoom ils passent à l'écran y ≈ 300–330, sous le compteur du HUD ; le bord de la loupe touche aussi l'horloge |
+| 15 | fauteuil x 690–910, y 1060–1470 | décaler la mise en place d'≈ 30 px vers la gauche | en fin de scène (×1,03 + respiration) son bord droit arrive à l'écran x ≈ 935 (colonne des boutons) ; son piètement passe sous y 1470 (décor sans importance) |
+| 16 | patère : pied (160, 1300) | pied à x ≥ 240 | la blouse (± 70) sortait par le bord gauche rogné (écran x ≈ 40) |

@@ -1,5 +1,6 @@
 /* decor.js — AKTE 04 « 63 ساعة » : décors et objets PROPRES à l'épisode, 1re partie (aucun dessin repris d'un autre épisode).
- * Suite dans decor-2.js et decor-3.js. Référence : storyboard.md § 2 (inventaire) — il fait foi.
+ * Suite dans decor-2.js (scènes 7 à 20) et decor-3.js (scènes 21 à 25). decor-2/3 attendent D.kit (D._later) : l'outil d'essai les charge
+ * avant ce fichier (tri alphabétique). Référence : storyboard.md § 2 (inventaire) — il fait foi.
  * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-koeln-transfusion [--only nom1,nom2]
  *   D.nom.essais = [{ … }, { … }] : jeux de paramètres montrés sur la planche.
  * Convention : D.nom(g, o) dessine dans le groupe SVG g autour de son ancrage (0,0) ; o = paramètres animés (valeurs arrondies : le moteur
@@ -22,7 +23,7 @@
  *    10 D.loopTag ................ fait (decor.js)   rond jaune « ؟ » au bout d'une ficelle
  *    11 D.rewindMark ............. fait (decor.js)   « ◀◀ » (+ D.scanLines : lignes de balayage plein cadre)
  * B. Tribunal
- *    12 D.courtRoom .............. fait (decor.js)   ·  D.wardRoom (la chambre) ............ à faire
+ *    12 D.courtRoom .............. fait (decor.js)   ·  D.wardRoom (la chambre ; o.band false = mur nu, sc. 16) ... fait (decor-2.js)
  *    13 D.tallWindow, D.lightShaft  fait (decor.js)
  *    14 D.plaque04 ............... fait (decor.js)
  *    15 D.bench04 ................ fait (decor.js)   (+ D.carafe, D.glass à part pour l'eau qui frémit)
@@ -30,36 +31,36 @@
  *    16b D.dockTable ............. fait (decor.js)
  *    17 D.scale04, D.scaleGeom ... fait (decor.js)   la balance (part: "base" | "beam" pour ne redessiner que le fléau et les plateaux)
  *    18 D.guiltBlock ............. fait (decor.js)
- *    19 D.slab ................... à faire
- *    20 D.coreWeight ............. à faire
- *    21 D.weight90 ............... à faire
+ *    19 D.slab ................... fait (decor-2.js)   150 × 26 (largeur du bloc), icon hours | licence | twins | sheet
+ *    20 D.coreWeight ............. fait (decor-2.js)   (+ D.checkIcon : pictogramme poche + loupe, sc. 19)
+ *    21 D.weight90 ............... fait (decor-2.js)   pointillés, console ; étiquette = D.stringTag (à part pour tomber)
  *    22 D.folder ................. fait (decor.js)
- *    23 D.pebble ................. à faire
- *    24 D.cart ................... à faire
- *    25 D.caseFile, D.deskLamp, D.loupeSmall  à faire
+ *    23 D.pebble ................. fait (decor-2.js)   crack | leaf (feuille d'arbre, pas de calendrier) | coat
+ *    24 D.cart ................... fait (decor-2.js)   part body | wheels
+ *    25 D.loupeSmall ............. fait (decor-2.js)   ·  D.caseFile, D.deskLamp ........... à faire (decor-3.js)
  *    25b D.typedCard ............. fait (decor.js)
  * C. Hôpital
- *    26 D.labHatch ............... à faire
- *    27 D.rack ................... à faire
- *    28 D.docSheet ............... à faire
+ *    26 D.labHatch ............... fait (decor-2.js)   part inside | shutter | front ; + D.labSign (enseigne qui grésille) ; voyant = D.callLight
+ *    27 D.rack ................... fait (decor-2.js)
+ *    28 D.docSheet ............... fait (decor-2.js)   o.blur = filtre CSS (il marche sur un <g>)
  *    29 D.corridor04, D.callLight, D.sconce  fait (decor.js)   (scène 6 : le mur long, sans porte ; portes et voyants prêts pour 7, 8, 14)
- *    30 D.clock04 ................ à faire
- *    31 D.bedBack04, D.bedFront04, D.wristband  à faire
- *    32 D.ivPole ................. à faire
- *    33 D.nightstand04 ........... à faire   ·  33b D.nightWindow ... à faire   ·  33c D.kidneyDish ... à faire
- *    34 D.loupe .................. à faire
- *    35 D.officeBack, D.blinds, D.binders  à faire
- *    36 D.desk04 ................. à faire
- *    37 D.chairBack .............. à faire
- *    38 D.suitArm ................ à faire
- *    39 D.formSheet, D.pen ....... fait (decor.js)   ·  D.binderLying ........... à faire
- *    40 D.chair04, D.coatRack, D.seasonWindow  à faire
- *    41 D.staffCard, D.monthCell, D.licenceCard  à faire
- *    42 D.ruleCard, D.lessonCard, D.bedsideCard, D.sampleTube, D.bedIcon  à faire
+ *    30 D.clock04 ................ fait (decor-2.js)   part face | hands
+ *    31 D.bedBack04, D.bedFront04, D.wristband  fait (decor-2.js)   bedFront04 part duvet | frame
+ *    32 D.ivPole ................. fait (decor-2.js)   (+ D.ivHook : le crochet vide, à part pour m.pend)
+ *    33 D.nightstand04 ........... fait   ·  33b D.nightWindow (part frame | sky) + D.lightPatch ... fait   ·  33c D.kidneyDish ... fait (decor-2.js)
+ *    34 D.loupe .................. fait (decor-2.js)   (+ D.groupMark « 0 » / « A », D.womanIcon : annotations de la scène 12)
+ *    35 D.officeBack, D.blinds, D.binders  fait (decor-2.js)   (+ D.blindLight, D.plant04, D.binderSpine)
+ *    36 D.desk04 ................. fait (decor-2.js)
+ *    37 D.chairBack .............. fait (decor-2.js)
+ *    38 D.suitArm ................ fait (decor-2.js)
+ *    39 D.formSheet, D.pen ....... fait (decor.js)   ·  D.binderLying ........... fait (decor-2.js)
+ *    40 D.chair04, D.coatRack, D.seasonWindow  fait (decor-2.js)   (+ D.coatHung : la blouse, à part pour m.sway)
+ *    41 D.staffCard, D.monthCell, D.licenceCard  fait (decor-2.js)
+ *    42 D.bedIcon ................ fait (decor-2.js)   ·  D.ruleCard, D.lessonCard, D.bedsideCard, D.sampleTube ... à faire (decor-3.js)
  *    43 D.cernes ................. fait (decor.js)
- *    44 D.pillar, D.stetho, D.adminDoor, D.frame04  à faire
+ *    44 D.pillar, D.stetho, D.adminDoor, D.frame04  fait (decor-2.js)   (+ D.doorPlate, à part pour pulser)
  *    45 D.rhine, D.dom, D.riverWaves  fait (decor.js)
- *    46 D.rewKey, D.pageFlip, D.dripBig  à faire
+ *    46 D.rewKey, D.pageFlip, D.dripBig  à faire (decor-3.js)
  * Hors inventaire, demandés par les scènes 3 et 5 : D.note04 (note épinglée), D.hookKey (clé au crochet), D.markerString (feutre
  *    sur ficelle), D.magnet, D.feltPen, D.wallBar (barre murale à deux crochets), D.glint (reflet qui glisse sur le cadre alu du tableau,
  *    scènes 3 et 6) ........ fait (decor.js)
@@ -69,6 +70,9 @@
  *    texte long rétréci : « ◀◀ » + 15 signes tient dans l'onglet) ; D.folder o.page (le juge tourne une page, scène 2) ; D.hourGrid trait
  *    moins tremblé pour les cases de 16 px ; D.hookKey anneau passé dans la clé ; D.folder sangle hors de l'étiquette.
  *    Scène 2 : lignes de la carte tapée à y −56, −22, 14, 46 (repère de la carte) et tampon « § 60 » à (130, 88) : voir D.typedCard.essais.
+ * Étape « décors 2 » (26.11) : decor-2.js = tout ce que demandent les scènes 7 à 20 (voir son en-tête : pièces animées o.part, pièces à
+ *    part pour m.pend / m.sway) ; kit + segX et floorFade ; décors à l'échelle contrôlés avec Persona (lit + patient assis, chaise + sitEdge,
+ *    potence + main levée, fauteuil + manche, balance + chariot) ; écarts et placements à revoir : storyboard.md, « Écarts de construction ».
  * D.exemple : dessin d'exemple du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles.
  */
 (function () {
@@ -1064,5 +1068,7 @@
   };
 
   // aides partagées avec decor-2.js et decor-3.js (un objet, pas une fonction : la planche d'essai l'ignore)
-  D.kit = { el, ln, tw, TW, MAT, f, clamp, lerp, hs, mixc, circ, poly, sample, lens, at, cut, pin, gear, rollWindow, INK, YEL, SH, PAPER, RED, RED2 };
+  D.kit = { el, ln, tw, TW, MAT, f, clamp, lerp, hs, mixc, circ, poly, sample, lens, at, cut, pin, gear, rollWindow, segX, floorFade, INK, YEL, SH, PAPER, RED, RED2 };
+  // decor-2.js / decor-3.js chargés avant ce fichier (outil d'essai : tri alphabétique) attendent le kit : on les relance maintenant
+  const later = D._later || []; delete D._later; later.forEach((fn) => fn());
 })();
