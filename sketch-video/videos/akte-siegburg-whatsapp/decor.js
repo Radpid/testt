@@ -52,6 +52,9 @@
  *  - Textes : tx(g, texte, x, y, taille, "de" | "light" | "ar" | "ttl", côté VISUEL "start" (gauche) | "middle" | "end" (droite)).
  *  - Partagé avec decor-2.js / decor-3.js : D.TEL, D.VERT (constantes) et D.outils (aides : tx, mesure, ln, bullePath, papierTicket…).
  *  - Teinte de l'épisode : D.VERT (hachure #9CCB98) seulement sur SA bulle envoyée ; #DCEFD9 sur le bouton d'envoi ; aucun autre vert.
+ *  - ATTENTION decor-2.js / decor-3.js : tools/essai_decor.mjs les charge AVANT decor.js (ordre alphabétique) ; n'y lire
+ *    D.outils, D.TEL, D.VERT qu'À L'INTÉRIEUR des fonctions (jamais au chargement du fichier).
+ *  - Planches d'essai lisibles : --cols 2 --cell 540 --per 6 (le cadre #stage fait 1080 × 1920 et rogne le reste).
  */
 (function () {
   "use strict";
@@ -402,7 +405,9 @@
       const non = el("g", { transform: `translate(${w - 112} ${yb})` }, g);
       el("circle", { cx: 2.5, cy: 3.5, r: 25, fill: OMBRE }, non); el("circle", { cx: 0, cy: 0, r: 25, fill: "#FFFFFF", stroke: INK, "stroke-width": 2.6 }, non); ln(non, "M-8 -8 L8 8 M8 -8 L-8 8", 3.6);
       const oui = el("g", { transform: `translate(${w - 48} ${yb}) scale(${f(1 - 0.12 * ap)})` }, g);
-      el("circle", { cx: f(2.5 * (1 - ap)), cy: f(3.5 * (1 - ap)), r: 25, fill: OMBRE }, oui); el("circle", { cx: 0, cy: 0, r: 25, fill: YEL, stroke: INK, "stroke-width": 2.6 }, oui); ln(oui, "M-10 0 L-3 8 L10 -8", 3.8);
+      el("circle", { cx: f(2.5 * (1 - ap)), cy: f(3.5 * (1 - ap)), r: 25, fill: OMBRE }, oui); el("circle", { cx: 0, cy: 0, r: 25, fill: YEL, stroke: INK, "stroke-width": 2.6 }, oui);
+      // un combiné de téléphone (jamais une coche : aucune coche dans cet épisode)
+      el("path", { d: "M-11 -10 Q-14 -3 -9 4 Q-3 11 5 13 Q10 13 11 9 L8.5 5.5 Q6.5 3.8 4.2 5.6 Q-1.5 3.5 -4.5 -2.2 Q-2.6 -4.4 -4 -6.6 L-7 -10.6 Q-9.5 -12 -11 -10 Z", fill: INK, stroke: INK, "stroke-width": 1.2, "stroke-linejoin": "round", transform: "translate(1 0)" }, oui);
     }
     if (o.titre) {
       tx(g, o.titre, 76, o.ligne ? h / 2 - 4 : h / 2 + 10, 28, "de", "start");
@@ -425,6 +430,8 @@
     };
     el("path", { d: coup(1, 21, -2, 1), fill: INK, "stroke-linejoin": "round", stroke: INK, "stroke-width": 2 }, g);
     el("path", { d: coup(8, 29, 3, 9), fill: INK, "stroke-linejoin": "round", stroke: INK, "stroke-width": 2 }, g);
+    // passages du feutre : deux traînées un peu plus claires, dans le sens du geste (texture, sans rien laisser voir)
+    ln(g, `M${f(w * 0.06)} 7.5 L${f(w * 0.58)} 8.5 M${f(w * 0.34)} 21 L${f(w * 0.93)} 20`, 1.5, "#4A474A", { opacity: 0.9 });
     return { w };
   };
   D.caviar.essais = [{ w: 150 }, { w: 270 }, { w: 90 }];
@@ -506,17 +513,21 @@
   /* ═══════════════════════════ B. OBJETS DU FIL (scène 5) ═══════════════════════════ */
 
   /* D.icoDienst — « la garde » : grille de planning 3 × 2 dans un carré arrondi, une case jaune. 82 × 82, ancrage = centre.
-   * o.k 0 | 1 | 2 : la case jaune saute d'une case à l'autre toutes les 0,5 s. (Version 44 px en scène 16 : échelle 0,54.) */
+   * o.k 0 | 1 | 2 : la case jaune saute d'une case à l'autre toutes les 0,5 s. (Version 44 px en scène 16 : échelle 0,54.)
+   * PAS de calendrier (ni anneaux, ni bandeau de mois : le calendrier est réservé à AKTE 06) : une feuille de planning,
+   * trois têtes de colonne (petits bonshommes = les médecins de garde), une grille. */
   D.icoDienst = (g, o = {}) => {
-    const C = U.ctx(g, 4200, false, 1), k = ((o.k || 0) % 3 + 3) % 3, x0 = -31, y0 = -14, cw = 20.67, ch = 22;
+    const C = U.ctx(g, 4200, false, 1), k = ((o.k || 0) % 3 + 3) % 3, x0 = -31, y0 = -12, cw = 20.67, ch = 21;
     el("path", { d: U.rrect(-41 + 4, -41 + 5, 82, 82, 16), fill: OMBRE }, g);
     U.shape(C, "carre", U.rrect(-41, -41, 82, 82, 16), MAT.white, { sw: 2.8 });
-    U.shape(C, "bandeau", "M-41 -21 L-41 -27 Q-41 -41 -27 -41 L27 -41 Q41 -41 41 -27 L41 -21 Z", MAT.mid, { sw: 2.2 });
-    [-18, 18].forEach((x) => el("rect", { x: x - 3.5, y: -49, width: 7, height: 15, rx: 3.5, fill: "#FFFFFF", stroke: INK, "stroke-width": 2.2 }, g));   // deux anneaux
+    // têtes de colonne : un petit buste par colonne (qui est de garde)
+    [0, 1, 2].forEach((i) => { const cx = x0 + (i + 0.5) * cw;
+      el("circle", { cx: f(cx), cy: -29, r: 4.2, fill: i === 1 ? "#E1E1DC" : "#FFFFFF", stroke: INK, "stroke-width": 1.9 }, g);
+      el("path", { d: `M${f(cx - 7)} -17.5 Q${f(cx - 7)} -24 ${f(cx)} -24 Q${f(cx + 7)} -24 ${f(cx + 7)} -17.5 Z`, fill: i === 1 ? "#E1E1DC" : "#FFFFFF", stroke: INK, "stroke-width": 1.9, "stroke-linejoin": "round" }, g); });
     const [c, r] = [[0, 0], [1, 1], [2, 0]][k];
     el("rect", { x: f(x0 + c * cw + 2), y: f(y0 + r * ch + 2), width: f(cw - 4), height: f(ch - 4), rx: 3, fill: YEL, stroke: INK, "stroke-width": 1.8 }, g);
-    ln(g, `M${x0} ${y0} h62 v44 h-62 Z M${f(x0 + cw)} ${y0} v44 M${f(x0 + 2 * cw)} ${y0} v44 M${x0} ${y0 + ch} h62`, 1.9, "#55524B");
-    [[1, 0], [0, 1], [2, 1]].forEach(([cc, rr]) => ln(g, `M${f(x0 + cc * cw + 5)} ${f(y0 + rr * ch + 11)} h${f(cw - 10)}`, 2, "#B4B4AE"));
+    ln(g, `M${x0} ${y0} h62 v${2 * ch} h-62 Z M${f(x0 + cw)} ${y0} v${2 * ch} M${f(x0 + 2 * cw)} ${y0} v${2 * ch} M${x0} ${y0 + ch} h62`, 1.9, "#55524B");
+    [[1, 0], [0, 1], [2, 1]].forEach(([cc, rr]) => ln(g, `M${f(x0 + cc * cw + 5)} ${f(y0 + rr * ch + 10.5)} h${f(cw - 10)}`, 2, "#B4B4AE"));
     return { w: 82, h: 82 };
   };
   D.icoDienst.essais = [{ k: 0 }, { k: 1 }, { k: 2 }];
@@ -529,9 +540,12 @@
     for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4; ln(ra, `M${f(Math.cos(a) * 11.5)} ${f(Math.sin(a) * 11.5)} L${f(Math.cos(a) * 15.5)} ${f(Math.sin(a) * 15.5)}`, 2.4); }
     el("circle", { cx: 0, cy: 0, r: 7.5, fill: YEL, stroke: INK, "stroke-width": 2.4 }, so);
     ln(g, "M-40 35 Q-20 31 0 35 T40 34", 2.4);                                                             // le sable
-    // transat (de profil) : deux montants croisés + la toile
-    ln(g, "M-36 34 L-12 6 M-34 10 L-6 34", 3);
-    ln(g, "M-33 8 Q-24 27 -8 31", 5, "#8A8A84"); ln(g, "M-33 8 Q-24 27 -8 31", 1.6, INK, { "stroke-dasharray": "0.1 6" });
+    // chaise longue (de profil) : dossier relevé + couchette sur deux pieds ; toile rayée cernée d'encre
+    el("path", { d: "M-36 12 L-27 26 L-3 26", fill: "none", stroke: OMBRE, "stroke-width": 8, "stroke-linecap": "round", "stroke-linejoin": "round", transform: "translate(2 3)" }, g);
+    ln(g, "M-25 27 L-27 34 M-6 27 L-4 34 M-31 19 L-36 34", 2.6);                                                 // pieds + béquille du dossier
+    ln(g, "M-36 12 L-27 26 L-3 26", 8.5);                                                                          // contour de la toile
+    ln(g, "M-36 12 L-27 26 L-3 26", 4.6, "#FFFFFF");
+    ln(g, "M-36 12 L-27 26 L-3 26", 4.6, "#8A8A84", { "stroke-dasharray": "3 3.4", "stroke-linecap": "butt" });   // rayures de la toile
     // parasol : il pivote autour de son pied
     const pa = el("g", { transform: `rotate(${f(o.a || 0)} 12 35)` }, g), P = U.ctx(pa, 4211, false, 1);
     ln(pa, "M12 35 L12 -20", 3);
@@ -723,17 +737,18 @@
   };
   D.aimant.essais = [{ qui: "lui" }, { qui: "elle" }];
 
-  /* D.postit — feuillet jaune pâle à coin corné : o.de (15 px), o.ar (24 px gras), micro « laut Urteil ». 160 × 78 au moins
-   * (il s'élargit si le texte le demande), ancrage = centre ; monde : D.postit.at. Il se balance (m.sway ±3°, pivot = bord haut). */
+  /* D.postit — feuillet jaune pâle à coin corné : o.de (15 px), o.ar (26 px gras : la règle des traductions, ≥ 26 px — le storyboard
+   * disait 24), micro « laut Urteil ». 160 × 78 au moins (il s'élargit si le texte le demande), ancrage = centre ; monde :
+   * D.postit.at. Il se balance (m.sway ±3°, pivot = bord haut). */
   D.postit = (g, o = {}) => {
     const de = o.de == null ? "« zum wiederholten Male »" : o.de, ar = o.ar == null ? "ماشي أول مرة" : o.ar, micro = o.micro == null ? "laut Urteil" : o.micro;
-    const w = Math.max(160, Math.round(mesure(de, 15, "de")) + 24, Math.round(mesure(ar, 24, "ar")) + 24), h = micro ? 86 : 78, x = -w / 2, y = -h / 2, C = U.ctx(g, 4360, false, 1);
+    const w = Math.max(160, Math.round(mesure(de, 15, "de")) + 24, Math.round(mesure(ar, 26, "ar")) + 24), h = micro ? 86 : 78, x = -w / 2, y = -h / 2, C = U.ctx(g, 4360, false, 1);
     const d = `M${x} ${y} L${x + w} ${y} L${x + w} ${y + h - 16} L${x + w - 16} ${y + h} L${x} ${y + h} Z`;
     el("path", { d, fill: OMBRE, transform: "translate(5 6)" }, g);
     U.shape(C, "post", d, { base: "#FFF3B8" }, { sw: 2.2, r: 0.5 });
     el("path", { d: `M${x + w} ${y + h - 16} L${x + w - 16} ${y + h} L${x + w - 15} ${y + h - 15} Z`, fill: "#E9D98A", stroke: INK, "stroke-width": 1.6, "stroke-linejoin": "round" }, g);
     el("rect", { x: -17, y: y - 5, width: 34, height: 12, fill: "rgba(190,190,182,.9)" }, g);                   // un bout de scotch
-    tx(g, de, 0, y + 25, 15, "de"); tx(g, ar, 0, y + 55, 24, "ar");
+    tx(g, de, 0, y + 25, 15, "de"); tx(g, ar, 0, y + 56, 26, "ar");
     if (micro) tx(g, micro, x + 10, y + h - 8, 12.5, "light", "start", { fill: "#55524B" });
     return { w, h, haut: [0, y] };
   };

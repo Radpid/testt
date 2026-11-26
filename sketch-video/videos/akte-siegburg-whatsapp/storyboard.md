@@ -1788,3 +1788,39 @@ Notaufnahme », « … um den Kläger in der Abteilung bloßzustellen », « an 
   bulle »).
 - « quatre ou cinq collègues » → sept (les neuf membres moins eux deux).
 - « elle, agacée, téléphone en main » → tenu ; mais jamais hilare (R18).
+
+---
+
+## Écarts de construction
+
+Ce que la construction a fait autrement que ce document, et pourquoi (étape « socle et décors 1 », 26.11.2026).
+
+**Fonctions ajoutées hors inventaire** (dans `decor.js`, marquées « (ajout) ») :
+- `D.telVerre` — le bord d'encre de l'écran et l'encoche, reposés PAR-DESSUS la page découpée : sinon le papier de
+  l'écran recouvre la moitié intérieure du trait de `D.tel`. Ordre d'une scène ÉCRAN : `D.tel` → page → `D.telVerre`
+  → menton.
+- `D.bande` — la bande des pastilles (papier de l'écran + pointillé gris en bas), `{ y0, y1 }` pour l'appel vidéo.
+- `D.mention` — la mention de source, en deux formes : `"menton"` (ÉCRAN, centrée sur (525, 1422)) et
+  `"etiquette"` (PIÈCE / PAPIER, en bas à gauche) ; elle mesure les deux textes pour centrer l'ensemble.
+- `D.anneau` (anneau jaune à main levée, scènes 1 et 3) et `D.croix` (croix d'encre de la scène 3) : traits décrits
+  dans les scènes, écrits une fois comme dessins.
+- Partagé avec `decor-2.js` / `decor-3.js` : `D.TEL`, `D.VERT` et `D.outils` (tx, mesure, ln, bullePath,
+  papierTicket…). `D.outils.papierTicket` est le papier commun de `D.ticketPoche` et du futur `D.ticketCaisse`.
+
+**Dessins changés par rapport au § 2 :**
+- `D.icoDienst` — une feuille de planning SANS anneaux ni bandeau de mois (la première version ressemblait à un
+  calendrier, objet réservé à AKTE 06) : trois petits bustes en tête des colonnes, la grille 3 × 2, la case jaune.
+- `D.notif({ appel: true })` — le bouton « accepter » porte un combiné de téléphone, pas une coche (§ 0.3 et R17 :
+  aucune coche dans l'épisode) ; « refuser » garde sa croix.
+- `D.postit` — arabe en 26 px (le § 2 disait 24) : règle de la série, traductions ≥ 26 px gras.
+- `D.ticketPoche` — ancrage = la fente de la poche, réglable `o.ax` (part de la largeur à gauche de la fente) ;
+  défaut 0,05 : le ticket pend vers la droite, devant rien d'important (x 548 → 748 en scène 2, comme prévu) ;
+  `ax: 0.5` = le milieu du bord haut du § 2.
+- `D.icoUrlaub` — chaise longue (dossier relevé, couchette sur deux pieds, toile rayée) au lieu de deux montants
+  croisés : illisible à 82 px.
+
+**`glossaire-episode.js` n'est pas vide** (l'annexe A le voulait vide, R13) : il porte les gloses du tableau
+« Mots allemands à l'écran » du scénario (pour les pastilles, `Stage.gloss`), SAUF tout mot ou groupe de mots qui
+figure dans `beats.js`. Vérifié par script avec la règle du moteur (`engine/runtime.js`, mot par mot, paires de
+mots et phrase entière) : aucun sous-titre ne reçoit de traduction, donc rien ne monte sur le menton du téléphone.
+À ne pas casser : n'y ajouter aucune clé égale à un mot ou une paire de mots d'un beat.
