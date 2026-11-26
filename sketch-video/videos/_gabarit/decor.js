@@ -1,4 +1,4 @@
-/* decor.js — décors et objets PROPRES à l'épisode, 1re moitié (aucun dessin repris d'un autre épisode) ; suite dans decor-2.js.
+/* decor.js — décors et objets PROPRES à l'épisode, 1re partie (aucun dessin repris d'un autre épisode) ; suite dans decor-2.js et decor-3.js.
  * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/<episode> [--only nom1,nom2]
  *   D.nom.essais = [{ … }, { … }] (facultatif) : jeux de paramètres à montrer (états ouvert / fermé, 0 / 0.5 / 1…).
  * Convention : chaque fonction dessine dans le groupe SVG g, autour de son point d'ancrage (0,0), et reçoit ses

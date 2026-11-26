@@ -14,7 +14,7 @@ const outDir = path.resolve(opt("out", path.join(dir, "out", "essais"))); fs.mkd
 const cols = +opt("cols", 4), cell = +opt("cell", 500), per = +opt("per", 12), only = opt("only", null) ? opt("only").split(",") : null;
 const root = pathToFileURL(path.resolve(".")).href, ep = pathToFileURL(dir).href;
 const libs = ["engine/vendor/rough.js", "serie/lib/cast.js", "serie/lib/sketch-cast.js", "serie/lib/persona.js"].map((f) => `<script src="${root}/${f}"></script>`).join("");
-const decs = ["decor.js", "decor-2.js"].filter((f) => fs.existsSync(path.join(dir, f))).map((f) => `<script src="${ep}/${f}"></script>`).join("");
+const decs = fs.readdirSync(dir).filter((f) => /^decor(-\d+)?\.js$/.test(f)).sort().map((f) => `<script src="${ep}/${f}"></script>`).join("");
 const html = `<!doctype html><html lang="ar" data-palette="reference"><head><meta charset="utf-8">
 <link rel="stylesheet" href="${root}/engine/sketch.css"><link rel="stylesheet" href="${root}/serie/lib/palette.css">
 <style>html,body{margin:0;background:#F7F7F1}#stage{--skin:#FFFFFF}.de{font-family:Kalam;font-weight:700;fill:#1C1A1C}.ttl{font-family:Lalezar;fill:#1C1A1C;direction:rtl}
