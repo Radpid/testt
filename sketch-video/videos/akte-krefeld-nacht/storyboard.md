@@ -1434,3 +1434,38 @@ ni à `tools/`. Toutes les commandes se lancent depuis `sketch-video/`.
 - [ ] Règle : `Regel von heute`, citation exacte du Marburger Bund, `Keine Rechtsberatung`, rien sur le pénal.
 - [ ] Aucun nom de personne ni d'hôpital, nulle part (l'enseigne dit seulement « KRANKENHAUS »).
 - [ ] Teinte bleu nuit < 5 % ; pas de `git add`, pas de clé d'API.
+
+---
+
+## Écarts de construction
+
+### Étape « socle et décors 1 » (story.js, decor.js A–D + J)
+
+Ce qui a été fait autrement que l'inventaire (§ 2), et pourquoi :
+- **`D.trottoir`** : le banc (local x 578–702 → monde 688–812) et le panneau « Notaufnahme → » (mât local x 742, panneau
+  594–746 → monde 704–856) sont à DROITE de la porte, pas à x 175–295 / 95 : à gauche, ils tombaient derrière `AZ` (S1, pieds
+  (300, 1392)) et sous le disque « 2 » (S2, centre (300, 1290)). Ils restent sous monde x 880 (colonne des boutons). `o.sol` /
+  `o.mobilier` séparent la bande (à poser avant la façade) et le mobilier (après la façade) ; pas de mobilier dans la coupe.
+- **`D.rideauRoulant`** : ajouté (absent de l'inventaire) — le rideau de la Liegendanfahrt qui se lève en S7
+  (`b7@المستعجلات-0.2`) et S10. Ancrage monde (156, 1200) = `D.coupe().rideau`.
+- **`D.etiquetteQui`** : hauteur 1,62 × taille (au lieu de 1,5) et ligne de base remontée, sinon le ي final de « هي » et ses
+  points touchaient le bord ; largeur estimée pour l'arabe gras ((0,42 n + 0,3) × taille, mesuré) ; renvoie `x0` / `x1`.
+- **`D.trace`** : le pointillé jaune est cerné d'encre (le jaune seul disparaissait sur les pièces éclairées de la coupe).
+- **`D.litMini({ kind: "zimmer" })`** : la petite tête de profil (nez vers le plafond, couronne de cheveux, œil fermé) est
+  dessinée AVANT le drap, le cou entre dessous ; tête ≈ 26 px.
+- **`D.jauge`** : avec `pulse`, le liquide s'élargit de 1,2 px au plus (au-delà, le reflet du verre le coupait en deux).
+
+Conflits trouvés en montant les positions de ce storyboard à l'échelle réelle avec les personnages Persona (captures de
+contrôle). Les mises en place (`X.lieux`) et les scènes doivent appliquer ces positions corrigées :
+- **S6, fanions** : « هي » (pointe (650, 695)) et « زميل ديالها » (pointe (715, 695), corps centré x 752 = `dx: 37`) se
+  recouvrent → **`dx: 52`** (corps x 689–845, 10 px d'écart avec « هي », corps x 621–679). Les deux fanions (y 640–682)
+  cachaient aussi le panneau « Stationen » accroché en (680, 640) → **panneau « Stationen » en (505, 640)** (x 440–571, il ne
+  touche ni le linteau x 400–410 ni la lampe de la pièce x 576–594) et **tableau d'appel `D.rufanlage` en (470, 730)** (sous le
+  panneau, au-dessus des têtes des lits). Vérifié sur capture, avec le zoom ×1,6 de `b6@4`.
+- **S6–S7, Intensivstation** : moniteurs à y 960 → la tête de `NSW` (0,42, sommet ≈ y 945) passe dessus pendant sa marche →
+  **moniteurs à y 935**.
+- **S3** : `AZ` à l'échelle 1, pieds (250, 1300) : le haut des cheveux est vers y 855 ; la grande fenêtre centrée (215, 750),
+  170 × 230, a son appui jusqu'à y 877 → les cheveux passent dessus → **fenêtre centrée (215, 730), 170 × 200** (appui jusqu'à
+  y 842 ; le caisson du store reste sous le plafond, y ≥ 617).
+- **S1** : avec `reachR [40, -235]` / `reachL [4, -228]`, les mains d'`AZ` ne sont qu'à 48 et 68 px des épaules (ancres
+  `Persona.util.rig`) : à régler dans la scène (90–130 px, comme le demande le storyboard).

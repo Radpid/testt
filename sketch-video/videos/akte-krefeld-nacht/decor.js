@@ -1,6 +1,7 @@
 /* decor.js — AKTE 05 (Krefeld, « بوحدهم فالليل ») — décors et objets PROPRES à l'épisode, 1re partie.
  * Aucun dessin repris d'un autre épisode. Suite dans decor-2.js et decor-3.js (mêmes conventions).
- * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-krefeld-nacht [--only nom1,nom2]
+ * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-krefeld-nacht --cols 2 --cell 540 --per 6 [--only nom1,nom2]
+ *   (avec les réglages par défaut, 4 colonnes × 500 = 2000 px : la page fait 1080 px de large, les colonnes 3 et 4 sont ROGNÉES)
  *   D.nom.essais = [{ … }, { … }] : jeux de paramètres montrés sur la planche (états 0 / 1, allumé / éteint…).
  * Convention : chaque fonction dessine dans le groupe SVG g, autour de son point d'ancrage (0,0), reçoit ses paramètres
  * animés dans o (valeurs ARRONDIES par la scène : c.sk ne redessine que si o change) et renvoie des ancres (node.out).
@@ -176,7 +177,7 @@
   D.jauge = (g, o = {}) => {
     const C = U.ctx(g, 720, false, 1), H = o.h || 182, lv = clamp(o.level == null ? 0.5 : o.level, 0, 1), pu = o.pulse || 0, gr = o.grey || 0;
     const top = -(12 + H), tw = 12, R = 20, a = 16, yb = -12, yt = top + 9, yL = lerp(yb, yt, lv);
-    const liq = mixc(YEL, "#CFCFC8", gr), liq2 = mixc("#E3AE2C", "#9A9A94", gr), hw = 6.5 + 1.6 * pu;
+    const liq = mixc(YEL, "#CFCFC8", gr), liq2 = mixc("#E3AE2C", "#9A9A94", gr), hw = 6.5 + 1.2 * pu;   // ≤ 7,7 : reste à l'écart du reflet (x −9)
     const verre = `M${-tw} ${top + tw} A${tw} ${tw} 0 0 1 ${tw} ${top + tw} L${tw} ${-a} A${R} ${R} 0 1 1 ${-tw} ${-a} Z`;
     ombre(g, verre, 6, 6);
     el("path", { d: verre, fill: "#FFFFFF" }, g);
@@ -186,7 +187,7 @@
     let t = ""; for (let i = 1; i <= 9; i++) { const y = lerp(yb, yt, i / 10); t += `M${-tw - (i % 5 === 0 ? 10 : 7)} ${f(y)} L${-tw - 3} ${f(y)} `; }
     ln(g, t, 1.5, "#77776F");                                                                           // graduations muettes
     U.shape(C, "verre", verre, {}, { sw: 2.6, r: 0.5 });
-    ln(g, `M${-tw + 4.5} ${top + 16} L${-tw + 4.5} ${f(lerp(top + 16, -30, 0.55))}`, 2.2, "#FFFFFF");     // reflets du verre
+    ln(g, `M${-tw + 3} ${top + 16} L${-tw + 3} ${f(lerp(top + 16, -30, 0.55))}`, 2, "#FFFFFF");           // reflets du verre (hors du liquide)
     ln(g, "M-12 -3 A13 13 0 0 1 -4 -12", 2.4, "#FFFFFF");
     if (o.normal !== false) {
       const y1 = yb - 0.18 * H, y2 = yb - 0.32 * H, ym = (y1 + y2) / 2, x = tw + 5;
@@ -556,8 +557,9 @@
     const contenu = el("g", { "clip-path": `url(#${id})` }, g);
     const dessus = el("g", {}, g), T = U.ctx(dessus, 769, false, 1);
     U.shape(T, "anneau", circ(0, 0, r), {}, { sw: 5, r: 0.45 });
-    ln(dessus, `M${f(-r * 0.74)} ${f(-r * 0.4)} A${f(r * 0.84)} ${f(r * 0.84)} 0 0 1 ${f(-r * 0.36)} ${f(-r * 0.76)}`, 4, "#FFFFFF");
-    ln(dessus, `M${f(-r * 0.8)} ${f(-r * 0.2)} L${f(-r * 0.79)} ${f(-r * 0.12)}`, 4, "#FFFFFF");
+    // reflet du verre : liseré gris-bleu pâle sous un trait blanc (lisible sur le disque vide comme sur le contenu)
+    const ref1 = `M${f(-r * 0.74)} ${f(-r * 0.4)} A${f(r * 0.84)} ${f(r * 0.84)} 0 0 1 ${f(-r * 0.36)} ${f(-r * 0.76)}`, ref2 = `M${f(-r * 0.8)} ${f(-r * 0.2)} L${f(-r * 0.79)} ${f(-r * 0.12)}`;
+    ln(dessus, ref1 + " " + ref2, 7.5, "#D5DAE2"); ln(dessus, ref1 + " " + ref2, 3.6, "#FFFFFF");
     return { contenu, r, clip: id };
   };
   D.loupe.essais = [{ to: [-178, 275] }, { r: 70 }];
@@ -576,17 +578,22 @@
   D.biper.essais = [{ on: 0 }, { on: 1 }];
 
   // Fanion « qui est qui » : étiquette jaune à pointe vers le bas, texte arabe gras o.text, taille o.size (défaut 26).
-  // Ancrage : la POINTE ; o.dx décale le corps par rapport à la pointe (ex. corps centré x 752, pointe x 715 → dx 37).
+  // Ancrage : la POINTE ; o.dx décale le corps par rapport à la pointe. Renvoie x0 / x1 (bords du corps, repère local) pour
+  // vérifier l'écart entre deux fanions voisins. S6 : avec les pointes (650, 695) et (715, 695), « زميل ديالها » prend dx 52
+  // (corps centré x 767) — à dx 37 (storyboard) il recouvre « هي » (voir storyboard.md, « Écarts de construction »).
   D.etiquetteQui = (g, o = {}) => {
     const C = U.ctx(g, 772, false, 1), txt = o.text == null ? "هي" : o.text, size = o.size || 26, dx = o.dx || 0;
-    const w = Math.max(size * 2.2, txt.length * size * 0.5 + size * 1.1), h = size * 1.5, y1 = -13, y0 = y1 - h, x0 = dx - w / 2, x1 = dx + w / 2, px = clamp(0, x0 + 14, x1 - 14);
+    // h 1,62 × size et ligne de base à mi-hauteur + 0,2 × size : les lettres qui descendent (ي final et ses points) restent dans le fanion
+    // largeur : arabe gras ≈ (0,42 n + 0,3) × taille (mesuré dans Plex Arabic Bold), latin ≈ 0,5 n × taille ; + marge 1,1 × taille
+    const ar = /[؀-ۿ]/.test(txt), est = ar ? (0.42 * txt.length + 0.3) * size : 0.5 * txt.length * size;
+    const w = Math.max(size * 2.2, est + size * 1.1), h = size * 1.62, y1 = -13, y0 = y1 - h, x0 = dx - w / 2, x1 = dx + w / 2, px = clamp(0, x0 + 14, x1 - 14);
     const d = `M${f(x0 + 8)} ${f(y0)} L${f(x1 - 8)} ${f(y0)} Q${f(x1)} ${f(y0)} ${f(x1)} ${f(y0 + 8)} L${f(x1)} ${f(y1 - 8)} Q${f(x1)} ${f(y1)} ${f(x1 - 8)} ${f(y1)} L${f(px + 9)} ${f(y1)} L0 0 L${f(px - 9)} ${f(y1)} L${f(x0 + 8)} ${f(y1)} Q${f(x0)} ${f(y1)} ${f(x0)} ${f(y1 - 8)} L${f(x0)} ${f(y0 + 8)} Q${f(x0)} ${f(y0)} ${f(x0 + 8)} ${f(y0)} Z`;
     ombre(g, d, 4, 5);
     U.shape(C, "fanion", d, MAT.yellow, { sw: 2.4, r: 0.6 });
-    U.text(g, txt, dx, f(y0 + h * 0.5 + size * 0.34), size, { font: "'Plex Arabic', sans-serif", weight: 700, rtl: true });
-    return { w, h, centre: [dx, f(y0 + h / 2)] };
+    U.text(g, txt, dx, f(y0 + h * 0.5 + size * 0.2), size, { font: "'Plex Arabic', sans-serif", weight: 700, rtl: true });
+    return { w: f(w), h: f(h), x0: f(x0), x1: f(x1), top: f(y0), centre: [dx, f(y0 + h / 2)] };
   };
-  D.etiquetteQui.essais = [{ text: "هي" }, { text: "زميل ديالها", dx: 37 }, { text: "نتا", size: 40 }];
+  D.etiquetteQui.essais = [{ text: "هي" }, { text: "زميل ديالها", dx: 52 }, { text: "نتا", size: 40 }];
 
   /* ═════════════════════ D. LA COUPE DE L'HÔPITAL (maison de poupée) — coordonnées MONDE ═════════════════════
    *  x :  150 |mur| 162 ........ 400|410 ............ 760|772 ..... 888 |mur| 900
@@ -661,13 +668,17 @@
     el("ellipse", { cx: x0 + 19, cy: -28.5, rx: 13, ry: 5, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);          // oreiller
     if (kind === "vide") { U.shape(C, "plie", rr(x1 - 36, -32, 26, 7, 2), MAT.grey, { sw: 1.5, r: 0.4, gap: 3 }); return { L, top: -26 }; }
     const bx = x0 + 28, top = -38 - b;
+    if (kind === "zimmer") {   // tête de PROFIL tournée vers le plafond (jamais une tête Persona) : dessinée AVANT le drap, le cou entre dessous
+      const hx = x0 + 20, hy = -32.5, K = 1.2, P = (x, y) => `${f(hx + x * K)} ${f(hy + y * K)}`;     // tête ≈ 26 px (grosse tête, proportions Persona)
+      el("path", { d: `M${P(12, -2)} C${P(11, -4)} ${P(11.5, -7)} ${P(10, -8.5)} C${P(9, -9.4)} ${P(8.2, -9.6)} ${P(7.6, -10.4)} C${P(7.2, -11)} ${P(6.9, -11.3)} ${P(6.6, -11.6)} C${P(6.9, -13.4)} ${P(5.9, -14.9)} ${P(4.7, -14.8)} C${P(3.6, -14.6)} ${P(3, -12.7)} ${P(2, -12)} C${P(-3, -12.4)} ${P(-10, -8.5)} ${P(-10, -2.5)} C${P(-10, 2.5)} ${P(-5, 5)} ${P(1, 4.6)} C${P(5, 4.3)} ${P(9.5, 2.5)} ${P(12, -2)} Z`, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6, "stroke-linejoin": "round" }, g);   // front, nez arrondi vers le plafond, lèvres, menton
+      el("path", { d: `M${P(-9.8, -4.5)} C${P(-9, -9.5)} ${P(-5, -11.5)} ${P(-2.5, -11.6)} C${P(-5.5, -9)} ${P(-6.5, -5)} ${P(-5.6, -1)} C${P(-4.5, 2)} ${P(-1.5, 3.6)} ${P(1.5, 4.4)} C${P(-4, 5)} ${P(-10, 2.6)} ${P(-9.8, -4.5)} Z`, fill: "#8A8A84", stroke: INK, "stroke-width": 1 }, g);   // couronne de cheveux (dessus dégarni)
+      ln(g, `M${P(-3.4, -2.6)} A2.9 2.9 0 1 0 ${P(-1.2, 0.6)}`, 1.1, INK);                                  // oreille
+      ln(g, `M${P(1.1, -8.4)} Q${P(2.6, -7.3)} ${P(4.2, -8.4)}`, 1.3, INK);                                // œil fermé
+      ln(g, `M${P(7.9, -9.9)} L${P(9.2, -8.9)}`, 1.1, INK);                                                // bouche
+    }
     U.shape(C, "drap", `M${bx} -25.5 C${bx + 2} ${f(top - 1)} ${bx + 20} ${f(top - 4)} ${bx + 36} ${f(top - 1)} C${x1 - 40} ${f(top + 3)} ${x1 - 26} ${f(top + 2)} ${x1 - 18} ${f(top - 3)} C${x1 - 10} ${f(top - 2)} ${x1 - 7} -30 ${x1 - 7} -25.5 Z`, MAT.grey, { sw: 1.8, r: 0.4, gap: 3.6 });
-    if (kind === "zimmer") {                                                                            // tête de profil vers le plafond + bracelet jaune
-      const hx = x0 + 20, hy = -35;
-      el("path", { d: `M${hx - 9} ${hy + 1} C${hx - 9} ${hy - 9} ${hx + 2} ${hy - 11} ${hx + 6} ${hy - 7} L${hx + 9} ${hy - 9.5} L${hx + 9.5} ${hy - 5} C${hx + 11} ${hy - 1} ${hx + 9} ${hy + 5} ${hx + 3} ${hy + 6} C${hx - 4} ${hy + 7} ${hx - 9} ${hy + 5} ${hx - 9} ${hy + 1} Z`, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6, "stroke-linejoin": "round" }, g);
-      el("path", { d: `M${hx - 9} ${hy + 2} C${hx - 11} ${hy - 6} ${hx - 6} ${hy - 10} ${hx - 1} ${hy - 9} C${hx - 5} ${hy - 6} ${hx - 5} ${hy} ${hx - 7} ${hy + 4} Z`, fill: "#8A8A84", stroke: INK, "stroke-width": 1.1 }, g);
-      ln(g, `M${hx + 3} ${hy - 3.5} L${hx + 6} ${hy - 3.5}`, 1.3, INK);                                   // œil fermé
-      ln(g, `M${bx + 14} ${f(top + 2)} L${bx + 34} ${f(top + 4)}`, 5.5, INK); ln(g, `M${bx + 14} ${f(top + 2)} L${bx + 34} ${f(top + 4)}`, 3.2, "#FFFFFF");   // bras sur le drap
+    if (kind === "zimmer") {                                                                            // bras posé sur le drap + bracelet jaune
+      ln(g, `M${bx + 14} ${f(top + 2)} L${bx + 34} ${f(top + 4)}`, 5.5, INK); ln(g, `M${bx + 14} ${f(top + 2)} L${bx + 34} ${f(top + 4)}`, 3.2, "#FFFFFF");
       el("circle", { cx: bx + 30, cy: f(top + 3.6), r: 3.2, fill: YEL, stroke: INK, "stroke-width": 1.2 }, g);
     } else {
       el("circle", { cx: x0 + 19, cy: -34.5, r: 6.5, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
@@ -813,6 +824,7 @@
     const a = at(p0), b = at(p1); let d = `M${f(a[0])} ${f(a[1])}`;
     for (let i = a[2] + 1; i <= b[2]; i++) d += ` L${pts[i][0]} ${pts[i][1]}`;
     d += ` L${f(b[0])} ${f(b[1])}`;
+    ln(g, d, 7.6, INK, { "stroke-dasharray": "1 11" });                                                  // liseré d'encre : lisible sur une pièce éclairée en jaune
     ln(g, d, 5, YEL, { "stroke-dasharray": "1 11" });
     return { fin: [f(b[0]), f(b[1])] };
   };
