@@ -1727,3 +1727,31 @@ instant provisoire en secondes)
       `AKTE 09 · قريبا`, deux plaquettes de statut, rien dans la colonne des boutons.
 - [ ] Les gloses « À VALIDER » et les mots allemands ajoutés (risque 18), le globe sans frontières (risque 6) et le
       point « @dr.aguilo » (risque 7) sont montrés à l'auteur avec les premières planches.
+
+---
+
+## Écarts de construction
+
+Ajoutés pendant la construction (le reste du document est inchangé). Étape « socle et décors 1 » (S1 à S7, HUD, intro).
+
+- **`D.loupe`** : segments de 130 px (au lieu de 160) et bras attaché au côté haut-gauche de la tête. Avec 160 px, le
+  coude montait à y ≈ 497, sous la pastille du haut (zone nue y 380–535). Pied (150, 600) et lentille (270, 730)
+  inchangés ; coude en (274, 561).
+- **`D.rollkarte`** : coins repliés de 44 px (et non plus grands) : à 62 px, le coin gauche touchait la ligne arabe
+  « استعمال لقب بلا حق » (y 1272). Plis de la feuille placés à y monde 1100, 870, 690, 340 (baguette en (540, 1340)) :
+  aucun ne passe derrière la pastille du haut, ni à la caméra `AXE` ni au zoom ×1,25. Petite rose des vents grise
+  en (802, 600).
+- **`D.cadre`** (S3) : le sceau est à gauche à mi-hauteur et les gribouillis à droite ; la bande basse du document est
+  laissée libre pour les tampons `Arzt ✓` et `Doktortitel ✓` (sinon le tampon recouvrait le sceau).
+- **`D.atelier`** : bord avant de l'établi ramené à x 120–960 (règle « décor entre 110 et 960 »). Places des outils et
+  des bons dans `out.outils` / `out.bons` : quatre burins (362, 398, 434, 470 ; y 700), compas (522, 700), scie bocfil
+  (252, 808), équerre (800, 828) ; bons (394, 590), (468, 590), (872, 590).
+- **Ajouts hors inventaire** : `D.clou` (S2), `D.suspension` et `D.cartons` (S6), `D.outil` et `D.bon` (S7, S10, S26) ;
+  option `fil` de `D.silhouette` (le cordon balance avec le médaillon, pivot = `out.accroche`).
+- **À savoir pour les scènes** :
+  - S1 : la pointe du tournevis de `D.main` est à 172 px de la paume (`out.pointe`). Pour qu'elle touche la vis
+    (226, 1014) avec `a: 8`, la paume va vers (202, 1184), pas en (212, 1090).
+  - S6 : le petit diplôme (centre (420, 1150)) cache le buste de `TOI` ; ses mains doivent être redessinées
+    PAR-DESSUS (`only: "handL"` / `"handR"` après le diplôme). Le tube se pose avec une rotation de 35° (le dessin
+    est horizontal).
+  - S7 : l'avant-bras qui tient le cachet passe devant le bloc ; il doit ressortir avant `b5@Dr` (risque 17).

@@ -3,7 +3,7 @@
  * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-duesseldorf-titel [--only nom1,nom2]
  *   D.nom.essais = [{ … }, { … }] : jeux de paramètres montrés sur la planche.
  *
- * ÉTAT DE L'INVENTAIRE (storyboard § 2 : 76 fonctions) ─────────────────────────────────────────────────────────────
+ * ÉTAT DE L'INVENTAIRE (storyboard § 2 : 76 fonctions — 36 faites, 40 à faire) ──────────────────────────────────────────
  * A. Laiton, lettres, étiquettes, tampons (objets signature)
  *   D.plaque        fait (decor.js)      D.lettre        fait (decor.js)      D.etiquette     fait (decor.js)
  *   D.empreinte     fait (decor.js)      D.tampon        fait (decor.js)      D.barre         fait (decor.js)
@@ -13,21 +13,21 @@
  *   D.facade        fait (decor.js)      D.lanterne      fait (decor.js)      D.niveau        fait (decor.js)
  *   D.carton        fait (decor.js)      D.main          fait (decor.js)      D.tournevis     fait (decor.js)
  *   D.porteIntro    fait (decor.js)      D.interphone    fait (decor.js)      D.mur           fait (decor.js)
- *   D.porteBureau   à faire              D.corbeille     à faire
+ *   D.porteBureau   à faire (S29)        D.corbeille     à faire (S29)
  * C. Cartes
  *   D.rollkarte     fait (decor.js)      D.amtsgericht   fait (decor.js)      D.globe         fait (decor.js)
  *   D.arc           fait (decor.js)      D.tube          fait (decor.js)
  * D. Diplômes et explication en image
  *   D.cimaise       fait (decor.js)      D.cadre         fait (decor.js)      D.diplome       fait (decor.js)
  *   D.valise        fait (decor.js)      D.pochette      fait (decor.js)
- *   D.livre         à faire              D.table         à faire              D.fenetreArc    à faire
- *   D.nuage         à faire              D.lampeTable    à faire              D.ecran         à faire
- *   D.planche       à faire              D.socle         à faire
+ *   D.livre         à faire (S8, S9)     D.table         à faire (S8, S9)     D.fenetreArc    à faire (S8)
+ *   D.nuage         à faire (S8)         D.lampeTable    à faire (S8, S9)     D.ecran         à faire (S9)
+ *   D.planche       à faire (S9)         D.socle         à faire (S24)
  * E. Atelier du graveur
  *   D.atelier       fait (decor.js)      D.etau          fait (decor.js)      D.casse         fait (decor.js)
  *   D.bloc          fait (decor.js)      D.encreur       fait (decor.js)      D.cartes        fait (decor.js)
- *   D.loupe         fait (decor.js)      D.fiche         à faire
- * F. L'affaire (S12 à S23)
+ *   D.loupe         fait (decor.js)      D.fiche         à faire (S14, S15, S26)
+ * F. L'affaire (S12 à S23) — tout à faire
  *   D.patere        à faire              D.blouse        à faire              D.stetho        à faire
  *   D.sabots        à faire              D.badge         à faire              D.boite         à faire
  *   D.enveloppe     à faire              D.brief         à faire              D.navigateur    à faire
@@ -36,13 +36,15 @@
  *   D.tableProc     à faire              D.bureauGreffe  à faire              D.tableDefense  à faire
  *   D.platzschild   à faire              D.rebord        à faire              D.feuille       à faire
  *   D.chariot       à faire              D.ordner        à faire              D.chemise       à faire
- * G. La règle (S24 à S29)
+ * G. La règle (S24 à S29) — tout à faire
  *   D.potence       à faire              D.chaine        à faire              D.different     à faire
  *   D.loi           à faire              D.fleche        à faire
- * HORS INVENTAIRE, ajoutés ici parce que les scènes S1 à S7 en ont besoin (tous « fait (decor.js) ») :
+ * HORS INVENTAIRE, ajoutés parce que les scènes S1 à S7 en ont besoin (tous « fait (decor.js) ») :
  *   D.motDr (les trois lettres posées, version statique de l'aide motDr) · D.bandeReflet et D.etincelle (reflets du laiton
  *   sortis de D.plaque : risque 16) · D.visCouchee (vis de rechange, S1) · D.papillon (S1) · D.medaillon (S5, S11) ·
- *   D.porteEtiquette (S4) · D.suspension et D.cartons (S6) · D.outil et D.bon (outils et bons de l'atelier, nœuds séparés).
+ *   D.porteEtiquette (S4) · D.clou (S2 : le médaillon y pend) · D.suspension et D.cartons (S6) · D.outil et D.bon (outils et
+ *   bons de l'atelier, nœuds séparés : places dans out.outils / out.bons de D.atelier).
+ *   D.silhouette a une option fil (cordon qui pend au clou de S2, au rail de S3).
  *   D.exemple = dessin du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js : À SUPPRIMER avec elles.
  *   D.util (objet, pas une fonction) = aides partagées avec decor-2.js / decor-3.js (matières, gribouillis, vis, ombre…).
  *
@@ -431,11 +433,17 @@
   D.barre.essais = [{ rot: -16 }];
 
   /* ───────── D.silhouette — le médecin de l'affaire, SANS visage : toujours le même pictogramme ─────────
-   * o = { r: 56, cadre: "rond" | "aucun" } · ancrage = centre du médaillon. Ni yeux, ni bouche, ni cheveux, ni lunettes, ni barbe.
-   * Renvoie { haut: [0, −r], bas: [0, r] }. */
+   * o = { r: 56, cadre: "rond" | "aucun", fil: 0 } · ancrage = centre du médaillon. Ni yeux, ni bouche, ni cheveux, ni lunettes, ni barbe.
+   * fil > 0 : un piton en haut du médaillon et un cordon qui monte de fil px (jusqu'au clou de S2, au rail de S3) : il
+   * balance AVEC le médaillon (même nœud ; pivot de m.pend = (0, −r − fil)).
+   * Renvoie { haut: [0, −r], bas: [0, r], accroche: [0, −r − fil] }. */
   D.silhouette = (g, o) => {
-    o = Object.assign({ r: 56, cadre: "rond", seed: 861 }, o);
+    o = Object.assign({ r: 56, cadre: "rond", fil: 0, seed: 861 }, o);
     const r = o.r, rond = o.cadre !== "aucun", C = U.ctx(g, o.seed, false, clamp(r / 56, 0.5, 1.2));
+    if (o.fil > 0 && rond) {
+      ln(g, `M${f(-r * 0.16)} ${f(-r + 2)} L0 ${f(-r - o.fil)} L${f(r * 0.16)} ${f(-r + 2)}`, 2.2, "#55524B");
+      el("circle", { cx: 0, cy: f(-r - 3), r: 4.5, fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
+    }
     const ri = r * 0.955, sx = 0.65 * r, sy = rond ? Math.sqrt(Math.max(0, ri * ri - sx * sx)) : 0.8 * r;
     if (rond) { el("circle", { cx: f(r * 0.1), cy: f(r * 0.14), r: f(r), fill: OMBRE }, g); el("circle", { cx: 0, cy: 0, r: f(r), fill: "#FFFFFF" }, g); }
     // buste : cou + épaules (arc large de 1,3 r, de y 0,2 r jusqu'au bord du médaillon)
@@ -445,9 +453,9 @@
     U.shape(C, "bu", buste, MAT.sil, { sw: 2.4, r: rg });
     U.shape(C, "te", cercle(0, -0.18 * r, 0.3 * r), MAT.sil, { sw: 2.4, r: rg });
     if (rond) el("circle", { cx: 0, cy: 0, r: f(r), fill: "none", stroke: INK, "stroke-width": 3 }, g);
-    return { haut: [0, -r], bas: [0, r] };
+    return { haut: [0, -r], bas: [0, r], accroche: [0, f(-r - (o.fil || 0))] };
   };
-  D.silhouette.essais = [{ r: 62 }, { r: 30 }, { r: 22 }, { r: 56, cadre: "aucun" }];
+  D.silhouette.essais = [{ r: 62, fil: 18 }, { r: 30 }, { r: 22 }, { r: 56, cadre: "aucun" }];
 
   /* ───────── D.medaillon — disque blanc cerclé d'encre (le médaillon de « toi », S5 et S11 : la tête Persona est posée dedans) ─────────
    * o = { r: 50 } · ancrage = centre. */
@@ -916,5 +924,752 @@
   };
   D.mur.essais = [{ sol: 1385 }, { sol: 1375, motif: "rayures" }, { sol: 1390, motif: "carreaux", nu: [235, 380, 845, 535] }, { sol: 1390, motif: "carreaux", brique: true, lambris: 1180 }];
 
-  /*@@SUITE@@*/
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════════════════════
+   * C. LES CARTES — carte murale (S2), petit tribunal (S2), globe (S5, S11), trajets, tube à diplôme
+   * ═════════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+  let _uid = 0; const uid = (p) => "ep08" + p + (++_uid);                       // identifiants de clipPath (jamais deux fois le même)
+  const cone = (g, x, y, wHaut, wBas, H, op) => el("path", { d: `M${f(x - wHaut)} ${f(y)} L${f(x + wHaut)} ${f(y)} L${f(x + wBas)} ${f(y + H)} L${f(x - wBas)} ${f(y + H)} Z`, fill: HALO, opacity: f(op) }, g);
+
+  /* ───────── D.clou — un clou planté dans le mur ou la carte (S2 : le médaillon y pend par son cordon) ─────────
+   * o = { r: 6 } · ancrage = centre de la tête. */
+  D.clou = (g, o) => {
+    o = Object.assign({ r: 6 }, o);
+    const r = o.r;
+    el("ellipse", { cx: f(r * 0.8), cy: f(r * 1.2), rx: f(r * 1.2), ry: f(r * 0.7), fill: "rgba(28,26,28,.2)" }, g);
+    el("circle", { cx: 0, cy: 0, r, fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
+    ln(g, `M${f(-r * 0.55)} ${f(-r * 0.2)} A${f(r * 0.6)} ${f(r * 0.6)} 0 0 1 ${f(r * 0.05)} ${f(-r * 0.62)}`, 1.3, "#FFFFFF");
+    return { r };
+  };
+  D.clou.essais = [{ r: 6 }];
+
+  /* ───────── D.rollkarte — carte murale d'école : grande feuille qui descend d'AU-DESSUS du cadre, baguette de bois en bas ─────────
+   * o = { w: 700, h: 1400, partie: "tout" | "feuille" (feuille + baguette, sans les deux coins) | "coin" (un coin seul, côté cote),
+   *       cote: −1 (gauche) | 1 (droite), rose: true (petite rose des vents grise en haut à droite),
+   *       plis: [y, …] (plis légers ; par défaut placés pour qu'aucun ne passe derrière la pastille du haut, baguette en (540, 1340),
+   *       ni à la caméra AXE ni au zoom ×1,25 de S2 : monde y 1100, 870, 690, 340, 90) }
+   * Ancrage = centre de la baguette. Feuille x −350…+350, y −1400…−10 (bords à l'encre, plis légers, filet de cadre) ;
+   * baguette 724 × 20 (y −10…+10) + deux boutons tournés (jusqu'à x ±386).
+   * Les deux coins du bas se soulèvent (triangle replié de 44 px, dos du papier plus gris) : nœuds séparés (partie "coin"),
+   * pivot = out.pivot (milieu du pli). L'Allemagne (drawDE du socle), l'épingle, les textes sont des nœuds de story.js.
+   * Rien au-dessus de la feuille ne bouge : la feuille entière ne se balance pas (ce qui est posé dessus ne suivrait pas). */
+  D.rollkarte = (g, o) => {
+    o = Object.assign({ w: 700, h: 1400, partie: "tout", cote: -1, rose: true, plis: [-240, -470, -650, -1000, -1250], seed: 951 }, o);
+    const w = o.w, h = o.h, x0 = -w / 2, x1 = w / 2, yT = -h, yB = -10, K = 44;
+    const C = U.ctx(g, o.seed, false, 1);
+    const coin = (gg, s) => {                         // le coin replié du côté s : pli de A à B, pointe repliée en P
+      const cx = s * x1, A = [cx, yB - K], B = [cx - s * K, yB], P = [cx - s * K * 0.9, yB - K * 0.9];
+      el("path", { d: `M${A[0]} ${A[1]} L${B[0]} ${B[1]} L${f(P[0] + s * 4)} ${f(P[1] + 6)} Z`, fill: "rgba(28,26,28,.13)" }, gg);
+      const d = `M${A[0]} ${A[1]} L${B[0]} ${B[1]} Q${f(cx - s * K * 0.62)} ${f(yB - K * 0.35)} ${f(P[0])} ${f(P[1])} Q${f(cx - s * K * 0.36)} ${f(yB - K * 0.64)} ${A[0]} ${A[1]} Z`;
+      U.shape(U.ctx(gg, o.seed + (s < 0 ? 5 : 6), false, 1), "coin", d, { base: "#EAE8DE" }, { sw: 2.2, r: 0.4 });
+      ln(gg, `M${f(lerp(A[0], B[0], 0.3))} ${f(lerp(A[1], B[1], 0.3) - 5)} L${f(lerp(A[0], P[0], 0.55))} ${f(lerp(A[1], P[1], 0.55))}`, 1, "#C9C6BC");
+      return [f((A[0] + B[0]) / 2), f((A[1] + B[1]) / 2)];
+    };
+    if (o.partie === "coin") return { pivot: coin(g, o.cote < 0 ? -1 : 1) };
+    // la feuille (coins du bas coupés : ils sont repliés vers nous)
+    const feuille = `M${x0} ${yT} L${x1} ${yT} L${x1} ${yB - K} L${x1 - K} ${yB} L${x0 + K} ${yB} L${x0} ${yB - K} Z`;
+    ombre(g, feuille, 9, 11);
+    U.shape(C, "feuille", feuille, { base: "#FBFAF4" }, { sw: 2.5, r: 0.5 });
+    // plis légers (la feuille a été roulée) : un trait clair + une bande d'ombre très douce au-dessus
+    (o.plis || []).forEach((y) => {
+      el("rect", { x: x0 + 3, y: y - 16, width: w - 6, height: 16, fill: "#F2F0E6", opacity: 0.8 }, g);
+      ln(g, `M${x0 + 4} ${y} L${x1 - 4} ${y + 1.5}`, 1.6, "#DEDBD0");
+    });
+    // filet de cadre de la carte
+    ln(g, rr(x0 + 24, yT + 24, w - 48, h - 24 - 24 - 16, 2), 1.6, "#9A9A94");
+    ln(g, rr(x0 + 31, yT + 31, w - 62, h - 31 - 31 - 16, 2), 1, "#C9C6BC");
+    // rose des vents (grise, en haut à droite : monde (802, 600) quand la baguette est en (540, 1340))
+    if (o.rose) {
+      const rx = 262, ry = yB - 730, R = 30, rs = el("g", { transform: `translate(${rx} ${ry})` }, g);
+      el("circle", { cx: 0, cy: 0, r: R, fill: "none", stroke: "#9A9A94", "stroke-width": 1.6 }, rs);
+      el("path", { d: "M0 -36 L7 -7 L0 0 Z M0 36 L-7 7 L0 0 Z M36 0 L7 7 L0 0 Z M-36 0 L-7 -7 L0 0 Z", fill: "#9A9A94" }, rs);
+      el("path", { d: "M0 -36 L-7 -7 L0 0 Z M0 36 L7 7 L0 0 Z M36 0 L7 -7 L0 0 Z M-36 0 L-7 7 L0 0 Z", fill: "#FFFFFF", stroke: "#77776F", "stroke-width": 1.2, "stroke-linejoin": "round" }, rs);
+      el("path", { d: "M0 -36 L7 -7 L36 0 L7 7 L0 36 L-7 7 L-36 0 L-7 -7 Z", fill: "none", stroke: "#77776F", "stroke-width": 1.4, "stroke-linejoin": "round" }, rs);
+      txt(rs, "N", 0, -42, 18, { fill: "#77776F" });
+    }
+    // la baguette (la feuille s'enroule dessus) et ses deux boutons tournés
+    el("path", { d: rr(-362, -10, 724, 20, 9), fill: OMBRE, transform: "translate(6 7)" }, g);
+    U.shape(C, "bag", rr(-362, -10, 724, 20, 9), MAT.wood, { sw: 2.8 });
+    ln(g, "M-350 -4 L350 -4", 1.4, "#FFFFFF");
+    ln(g, `M${x0 + K - 4} -10 C${x0 + K} -16 ${x1 - K} -16 ${x1 - K + 4} -10`, 1.4, "#C9C6BC");
+    [-1, 1].forEach((s) => {
+      el("circle", { cx: s * 384 + 5, cy: 6, r: 14, fill: OMBRE }, g);
+      U.shape(C, "col" + s, rr(s < 0 ? -372 : 362, -13, 10, 26, 3), MAT.mid, { sw: 2.2 });
+      U.shape(C, "bou" + s, cercle(s * 384, 0, 13), MAT.wood, { sw: 2.6 });
+      ln(g, `M${s * 384 - 6} -6 A8 8 0 0 1 ${s * 384 + 2} -9`, 1.4, "#FFFFFF");
+    });
+    if (o.partie !== "feuille") { coin(g, -1); coin(g, 1); }
+    return { coinG: [f(x0 + K / 2), f(yB - K / 2)], coinD: [f(x1 - K / 2), f(yB - K / 2)], feuille: { x: x0, y: yT, w, h: h - 10 } };
+  };
+  D.rollkarte.essais = [{}, { partie: "coin", cote: -1 }];
+
+  /* ───────── D.amtsgericht — petite façade de tribunal (S2) : 3 marches, 4 pilastres, fronton « § », bandeau « Amtsgericht » ─────────
+   * o = { lampe: 0…1 (halo crème de la lampe de la porte : il frémit 0,85–1), partie: "tout" | "halo" (le halo seul, nœud à part) }
+   * 210 × 172 · ancrage = centre du bas. Elle pousse du sol (m.build "rise"). Aucun nom de ville sur le bâtiment. */
+  D.amtsgericht = (g, o) => {
+    o = Object.assign({ lampe: 1, partie: "tout", seed: 955 }, o);
+    const halo = (gg) => { el("ellipse", { cx: 0, cy: -84, rx: 30, ry: 22, fill: HALO, opacity: f(0.9 * clamp(o.lampe, 0, 1.2)) }, gg); el("ellipse", { cx: 0, cy: -84, rx: 15, ry: 11, fill: "#FFFFFF", opacity: f(0.8 * clamp(o.lampe, 0, 1.2)) }, gg); };
+    if (o.partie === "halo") { halo(g); return { lampe: [0, -84] }; }
+    const C = U.ctx(g, o.seed, false, 1);
+    ombre(g, "M-105 0 L105 0 L105 -8 L95 -8 L95 -16 L85 -16 L85 -24 L80 -24 L80 -132 L98 -132 L0 -172 L-98 -132 L-80 -132 L-80 -24 L-85 -24 L-85 -16 L-95 -16 L-95 -8 L-105 -8 Z", 7, 8);
+    // corps (mur hachuré clair)
+    U.shape(C, "corps", "M-80 -24 L80 -24 L80 -112 L-80 -112 Z", MAT.light, { sw: 2.6 });
+    // fenêtres (dans les travées extérieures)
+    [-1, 1].forEach((s) => {
+      const x = s * 48;
+      el("path", { d: rr(x - 12, -98, 24, 46, 2), fill: "#EEF3F4", stroke: INK, "stroke-width": 2.2 }, g);
+      ln(g, `M${x} -98 L${x} -52 M${x - 12} -76 L${x + 12} -76`, 1.6, INK);
+      ln(g, `M${x - 8} -94 L${x - 2} -86`, 1.4, "#FFFFFF");
+      el("path", { d: rr(x - 15, -53, 30, 5, 1), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+    });
+    // porte cintrée (travée centrale) + sa lampe
+    U.shape(C, "porte", "M-14 -24 L-14 -62 C-14 -72 14 -72 14 -62 L14 -24 Z", MAT.dark, { sw: 2.4 });
+    ln(g, "M0 -68 L0 -24", 1.4, "#9A9A94");
+    el("circle", { cx: 6, cy: -44, r: 1.8, fill: "#FFFFFF" }, g);
+    halo(g);
+    ln(g, "M0 -96 L0 -90", 1.8, INK);
+    el("path", { d: "M-5 -90 L5 -90 L4 -80 L-4 -80 Z", fill: "#FFFFFF", stroke: INK, "stroke-width": 1.8, "stroke-linejoin": "round" }, g);
+    // quatre pilastres
+    [-72, -24, 24, 72].forEach((x, i) => {
+      U.shape(C, "pil" + i, rr(x - 6, -106, 12, 82, 1), MAT.white, { sw: 2 });
+      el("path", { d: rr(x - 8, -110, 16, 6, 1), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+      el("path", { d: rr(x - 8, -28, 16, 5, 1), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+    });
+    // bandeau (entablement) avec le mot, corniche, fronton « § »
+    U.shape(C, "band", rr(-90, -132, 180, 22, 2), MAT.white, { sw: 2.4 });
+    txt(g, "Amtsgericht", 0, -115, 20, {});
+    U.shape(C, "front", "M-98 -132 L0 -172 L98 -132 Z", MAT.grey, { sw: 2.6 });
+    el("path", { d: "M-74 -137 L0 -165 L74 -137 Z", fill: "#F0F0EB", stroke: INK, "stroke-width": 1.6 }, g);
+    txt(g, "§", 0, -141, 22, {});
+    // trois marches
+    U.shape(C, "m3", rr(-85, -24, 170, 8, 1.5), MAT.light, { sw: 2 });
+    U.shape(C, "m2", rr(-95, -16, 190, 8, 1.5), MAT.light, { sw: 2 });
+    U.shape(C, "m1", rr(-105, -8, 210, 8, 1.5), MAT.light, { sw: 2 });
+    return { lampe: [0, -84], haut: [0, -172], porte: [0, -24] };
+  };
+  D.amtsgericht.essais = [{}, { partie: "halo", lampe: 0.85 }];
+
+  /* ───────── D.globe — globe d'école SCHÉMATIQUE (S5, S11) : aucune côte, aucune frontière (storyboard, risque 6) ─────────
+   * o = { R: 330, tour: −1…1 (les méridiens glissent de ± 6 px), partie: "tout" | "sphere" (le disque, son ombre propre et la grille) |
+   *       "pied" (demi-méridien de support GRIS à gauche, pivots, colonne, pied rond) }
+   * Ancrage = centre de la sphère. Sphère x ±R ; demi-méridien jusqu'à x −R − 40 ; colonne de y R + 40 à R + 130 ; pied jusqu'à y R + 182.
+   * La petite Allemagne (drawDE), les points de départ, les arcs et les médaillons sont posés par story.js.
+   * Zone claire (pas d'ombre propre) : tout le haut et la gauche de la sphère ; le croissant d'ombre est en bas à droite. */
+  D.globe = (g, o) => {
+    o = Object.assign({ R: 330, tour: 0, partie: "tout", seed: 961 }, o);
+    const R = o.R, C = U.ctx(g, o.seed, false, 1), r1 = R + 24, r2 = R + 40, rm = R + 32;
+    if (o.partie !== "sphere") {
+      const yc = r2, yf = r2 + 90;
+      // pied rond + colonne tournée
+      el("ellipse", { cx: 16, cy: f(yf + 50), rx: 130, ry: 14, fill: "rgba(28,26,28,.16)" }, g);
+      U.shape(C, "pied", `M-120 ${yf + 30} C-120 ${yf + 4} -62 ${yf - 6} 0 ${yf - 6} C62 ${yf - 6} 120 ${yf + 4} 120 ${yf + 30} L120 ${yf + 38} C120 ${yf + 54} -120 ${yf + 54} -120 ${yf + 38} Z`, MAT.wood, { sw: 3 });
+      ln(g, `M-114 ${yf + 31} C-60 ${yf + 44} 60 ${yf + 44} 114 ${yf + 31}`, 1.6, "#ABABA4");
+      ln(g, `M-70 ${yf + 6} C-30 ${yf} 30 ${yf} 70 ${yf + 6}`, 1.6, "#FFFFFF");
+      U.shape(C, "col", `M-17 ${yc} L17 ${yc} L22 ${yf} L-22 ${yf} Z`, MAT.wood, { sw: 2.8 });
+      U.shape(C, "bague", rr(-26, yc + 34, 52, 14, 5), MAT.mid, { sw: 2.4 });
+      ln(g, `M-8 ${yc + 6} L-10 ${yf - 6}`, 1.3, "#FFFFFF");
+      // demi-méridien de support, côté GAUCHE, gris (jamais de laiton), gradué
+      const band = `M0 ${-r2} A${r2} ${r2} 0 0 0 0 ${r2} L0 ${r1} A${r1} ${r1} 0 0 1 0 ${-r1} Z`;
+      el("path", { d: band, fill: OMBRE, transform: "translate(8 10)" }, g);
+      U.shape(C, "mer", band, MAT.mid, { sw: 2.6, r: 0.4 });
+      let d = "";
+      for (let a = 100; a <= 260; a += 10) { const c = Math.cos(rad(a)), s = Math.sin(rad(a)), L = a % 30 === 0 ? 9 : 5; d += `M${f(c * r2)} ${f(s * r2)} L${f(c * (r2 - L))} ${f(s * (r2 - L))}`; }
+      ln(g, d, 1.4, INK);
+      // pivots (haut et bas) : tige d'acier + écrou
+      [-1, 1].forEach((s) => {
+        el("path", { d: rr(-5, s < 0 ? -r1 - 2 : R - 4, 10, r1 - R + 6, 3), fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
+        el("circle", { cx: 0, cy: s * rm, r: 9, fill: ACIER, stroke: INK, "stroke-width": 2.4 }, g);
+        el("circle", { cx: 0, cy: s * rm, r: 3, fill: INK }, g);
+      });
+    }
+    if (o.partie !== "pied") {
+      el("circle", { cx: 11, cy: 14, r: R, fill: OMBRE }, g);
+      el("circle", { cx: 0, cy: 0, r: R, fill: "#FFFFFF" }, g);
+      const id = uid("gl"); el("circle", { cx: 0, cy: 0, r: R - 1.5 }, el("clipPath", { id }, g));
+      const cl = el("g", { "clip-path": `url(#${id})` }, g);
+      // ombre propre : croissant en bas à droite + quelques hachures qui suivent le bord
+      el("path", { d: `M${-R - 60} ${-R - 60} L${R + 60} ${-R - 60} L${R + 60} ${R + 60} L${-R - 60} ${R + 60} Z ` + cercle(-38, -44, R), fill: "#EEEEE9", "fill-rule": "evenodd" }, cl);
+      let hd = "";
+      for (let a = 8; a <= 92; a += 7) { const c = Math.cos(rad(a)), s = Math.sin(rad(a)); hd += `M${f(c * (R - 4))} ${f(s * (R - 4))} L${f(c * (R - 30))} ${f(s * (R - 30) - 6)}`; }
+      ln(cl, hd, 1.3, "#D2D2CC");
+      // graticule : 4 parallèles (moitié avant), 5 méridiens qui glissent avec « tour »
+      const dt = clamp(o.tour, -1, 1) * 1.1; let d = "";
+      [-0.68, -0.3, 0.3, 0.68].forEach((k) => { const y = k * R, rx = Math.sqrt(R * R - y * y), ry = rx * 0.16; d += `M${f(-rx)} ${f(y)} A${f(rx)} ${f(ry)} 0 0 0 ${f(rx)} ${f(y)}`; });
+      [-62, -31, 0, 31, 62].forEach((l) => { const lam = l + dt, rx = Math.abs(Math.sin(rad(lam))) * R; d += rx < 0.5 ? `M0 ${-R} L0 ${R}` : `M0 ${-R} A${f(rx)} ${R} 0 0 ${lam > 0 ? 1 : 0} 0 ${R}`; });
+      ln(cl, d, 2, "#C9C9C1");
+      U.stroke(C, "sph", cercle(0, 0, R), { sw: 3.2, r: 0.45 });
+      ln(g, `M${f(-R * 0.72)} ${f(-R * 0.52)} A${f(R * 0.9)} ${f(R * 0.9)} 0 0 1 ${f(-R * 0.42)} ${f(-R * 0.8)}`, 3, "#E6E6E1");
+    }
+    return { R, haut: [0, -R], bas: [0, R], pied: [0, r2 + 142] };
+  };
+  D.globe.essais = [{}, { partie: "sphere", tour: 1 }, { partie: "pied" }];
+
+  /* ───────── D.arc — trajet en pointillé : courbe quadratique A → C → B (coordonnées MONDE : poser en (0, 0)) ─────────
+   * o = { A, C, B, p: 0…1 (longueur déjà tracée), phase: px (défilement des tirets, 40 px/s), sw: 4, fleche: true (pointe quand p = 1),
+   *       fond: "#FFFFFF" | false (liseré clair sous les tirets : ils restent lisibles sur la grille du globe) }
+   * Tirets 14 / 10, encre. Renvoie { L, bout: [x, y] (le bout tracé), pos: (p) => [x, y] (pour faire suivre un médaillon) }. */
+  D.arc = (g, o) => {
+    o = Object.assign({ A: [350, 1000], C: [352, 770], B: [452, 730], p: 1, phase: 0, sw: 4, col: INK, fleche: true, fond: "#FFFFFF" }, o);
+    const N = 48, q = (t) => [(1 - t) * (1 - t) * o.A[0] + 2 * (1 - t) * t * o.C[0] + t * t * o.B[0], (1 - t) * (1 - t) * o.A[1] + 2 * (1 - t) * t * o.C[1] + t * t * o.B[1]];
+    const pts = []; for (let i = 0; i <= N; i++) pts.push(q(i / N));
+    const cum = [0]; for (let i = 1; i <= N; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    const L = cum[N];
+    const pos = (p) => { const c = clamp(p, 0, 1) * L; let i = 1; while (i < N && cum[i] < c) i++; const k = (c - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1); return [f(lerp(pts[i - 1][0], pts[i][0], k)), f(lerp(pts[i - 1][1], pts[i][1], k))]; };
+    const cut = clamp(o.p, 0, 1) * L;
+    if (cut < 1) return { L: f(L), bout: pos(0), pos };
+    let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+    for (let i = 1; i <= N && cum[i] < cut; i++) d += ` L${f(pts[i][0])} ${f(pts[i][1])}`;
+    const e = pos(o.p); d += ` L${e[0]} ${e[1]}`;
+    if (o.fond) ln(g, d, o.sw + 7, o.fond, { opacity: 0.9 });
+    ln(g, d, o.sw, o.col, { "stroke-dasharray": "14 10", "stroke-dashoffset": f(-(o.phase || 0) % 24), "stroke-linecap": "butt" });
+    if (o.fleche && o.p >= 0.999) {
+      const a = pos(0.94), b = o.B, ang = Math.atan2(b[1] - a[1], b[0] - a[0]), hp = (s) => `${f(b[0] - Math.cos(ang + s * 0.5) * 20)} ${f(b[1] - Math.sin(ang + s * 0.5) * 20)}`;
+      if (o.fond) ln(g, `M${hp(1)} L${b[0]} ${b[1]} L${hp(-1)}`, o.sw + 7, o.fond, { opacity: 0.9 });
+      ln(g, `M${hp(1)} L${b[0]} ${b[1]} L${hp(-1)}`, o.sw, o.col);
+    }
+    return { L: f(L), bout: e, pos };
+  };
+  D.arc.essais = [{ p: 0.55, phase: 10 }, { p: 1 }];
+
+  /* ───────── D.tube — tube à diplôme : cylindre gris, capuchon sombre, deux bagues, boucle de sangle ─────────
+   * o = { sangle: "boucle" | "aucune" } · 166 × 46 (+ la boucle, 40 au-dessus) · ancrage = centre.
+   * S6, S24 : en bandoulière DERRIÈRE « toi » (incliné de 35°) ; S11 : il glisse le long d'un arc. */
+  D.tube = (g, o) => {
+    o = Object.assign({ sangle: "boucle", seed: 965 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    if (o.sangle === "boucle") { ln(g, "M-42 -16 C-38 -64 42 -64 46 -16", 8, INK); ln(g, "M-42 -16 C-38 -64 42 -64 46 -16", 3.4, "#77776F"); }
+    ombre(g, rr(-82, -22, 162, 44, 12), 5, 7);
+    U.shape(C, "corps", rr(-70, -20, 146, 40, 9), MAT.mid, { sw: 2.8 });
+    ln(g, "M-60 -11 L68 -11", 2.2, "#FFFFFF", { opacity: 0.85 });
+    el("ellipse", { cx: 76, cy: 0, rx: 6, ry: 19, fill: "#B9B9B3", stroke: INK, "stroke-width": 2.4 }, g);
+    U.shape(C, "bouchon", rr(-82, -23, 26, 46, 7), MAT.dark, { sw: 2.8 });
+    ln(g, "M-75 -15 L-75 15", 1.4, "#9A9A94");
+    [-42, 46].forEach((x) => el("path", { d: rr(x - 5, -22, 10, 44, 3), fill: "#4A4A46", stroke: INK, "stroke-width": 2 }, g));
+    return { w: 166, h: 46, sangle: [[-42, -16], [46, -16]] };
+  };
+  D.tube.essais = [{}, { sangle: "aucune" }];
+
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════════════════════
+   * D. LES DIPLÔMES — mur de diplômes (S3), le diplôme de « toi » et le hall d'arrivée (S6)
+   * ═════════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+  // sceau en rosette GRIS (jamais doré : le jaune est réservé au laiton) + deux rubans ; (x, y) = centre, r = rayon
+  function sceau(g, C, x, y, r, key) {
+    [-1, 1].forEach((s) => el("path", { d: `M${f(x + s * r * 0.25)} ${f(y + r * 0.5)} L${f(x + s * r * 0.75)} ${f(y + r * 1.75)} L${f(x + s * r * 0.42)} ${f(y + r * 1.55)} L${f(x + s * r * 0.2)} ${f(y + r * 1.85)} L${f(x - s * r * 0.08)} ${f(y + r * 0.6)} Z`, fill: "#CFCFCA", stroke: INK, "stroke-width": f(clamp(r * 0.09, 1, 2)), "stroke-linejoin": "round" }, g));
+    let d = "";
+    for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2, rr2 = i % 2 ? r : r * 0.84; d += (i ? "L" : "M") + f(x + Math.cos(a) * rr2) + " " + f(y + Math.sin(a) * rr2); }
+    U.shape(C, key, d + "Z", MAT.grey, { sw: clamp(r * 0.1, 1.2, 2.4), r: 0.25 });
+    el("circle", { cx: f(x), cy: f(y), r: f(r * 0.55), fill: "#F0F0EB", stroke: INK, "stroke-width": f(clamp(r * 0.07, 0.9, 1.8)) }, g);
+    ln(g, `M${f(x - r * 0.25)} ${f(y)} L${f(x + r * 0.25)} ${f(y)} M${f(x)} ${f(y - r * 0.25)} L${f(x)} ${f(y + r * 0.25)}`, f(clamp(r * 0.07, 0.9, 1.6)), "#77776F");
+  }
+
+  /* ───────── D.cimaise — rail à tableaux (S3) : moulure claire, vis, crochets en S (coordonnées MONDE : poser en (0, 0)) ─────────
+   * o = { x0: 150, x1: 930, y: 566, crochets: [350, 730] } · renvoie { y, crochets: [[x, y + 24], …] } = où pendent les fils. */
+  D.cimaise = (g, o) => {
+    o = Object.assign({ x0: 150, x1: 930, y: 566, crochets: [350, 730], seed: 971 }, o);
+    const C = U.ctx(g, o.seed, false, 1), y = o.y;
+    el("rect", { x: o.x0 + 4, y: y + 6, width: o.x1 - o.x0, height: 9, fill: OMBRE }, g);
+    U.shape(C, "rail", rr(o.x0, y - 8, o.x1 - o.x0, 16, 4), MAT.light, { sw: 2.6, r: 0.4 });
+    ln(g, `M${o.x0 + 8} ${y - 3} L${o.x1 - 8} ${y - 3}`, 1.3, "#FFFFFF");
+    for (let x = o.x0 + 40; x < o.x1 - 20; x += 220) visTete(g, x, y + 1, 3.4, (x * 7) % 90, { ombre: false });
+    o.crochets.forEach((x) => ln(g, `M${x - 3} ${y - 9} C${x + 8} ${y - 13} ${x + 11} ${y + 3} ${x + 2} ${y + 8} L${x + 2} ${y + 17} C${x + 2} ${y + 28} ${x - 10} ${y + 28} ${x - 9} ${y + 18}`, 3, INK));
+    return { y, crochets: o.crochets.map((x) => [x, y + 24]) };
+  };
+  D.cimaise.essais = [{ x0: 150, x1: 930 }];
+
+  /* ───────── D.cadre — diplôme encadré (S3) : cadre bois 18 px, passe-partout 16 px, document, sceau gris, fils, lampe de tableau ─────────
+   * o = { w: 280, h: 360, t1 (34), t2 (24), t3 (22) (réduits s'ils ne tiennent pas), fil: 290 (du centre au crochet du rail),
+   *       lampe: true, cone: 0…1 (le cône crème frémit), partie: "tout" | "cone" (le cône seul, nœud à part pour le faire frémir) }
+   * Ancrage = centre ; pivot de m.pend = out.crochet. Le bas du document (y +70…+140) reste dégagé à droite : le tampon y frappe. */
+  D.cadre = (g, o) => {
+    o = Object.assign({ w: 280, h: 360, t1: "Approbation", t2: "Facharzt für", t3: "Innere Medizin", fil: 290, lampe: true, cone: 1, partie: "tout", seed: 973 }, o);
+    const w = o.w, h = o.h, x0 = -w / 2, y0 = -h / 2, yl = y0 - 28, C = U.ctx(g, o.seed + w, false, 1);
+    const coneD = (gg) => cone(gg, 0, yl + 8, 52, w / 2 - 12, h + 10, 0.24 * clamp(o.cone, 0, 1.2));
+    if (o.partie === "cone") { coneD(g); return { crochet: [0, -o.fil] }; }
+    // les deux fils jusqu'au crochet
+    ln(g, `M${f(x0 + 26)} ${f(y0 + 8)} L0 ${-o.fil} L${f(-x0 - 26)} ${f(y0 + 8)}`, 1.8, "#55524B");
+    ombre(g, rr(x0, y0, w, h, 4), 8, 10);
+    U.shape(C, "bois", rr(x0, y0, w, h, 4), MAT.wood, { sw: 3 });
+    ln(g, `M${x0 + 2} ${y0 + 2} L${x0 + 18} ${y0 + 18} M${-x0 - 2} ${y0 + 2} L${-x0 - 18} ${y0 + 18} M${x0 + 2} ${-y0 - 2} L${x0 + 18} ${-y0 - 18} M${-x0 - 2} ${-y0 - 2} L${-x0 - 18} ${-y0 - 18}`, 1.5, INK);
+    el("path", { d: rr(x0 + 18, y0 + 18, w - 36, h - 36, 2), fill: "#FBFAF4", stroke: INK, "stroke-width": 2 }, g);
+    el("path", { d: rr(x0 + 34, y0 + 34, w - 68, h - 68, 1), fill: "#FFFFFF", stroke: "#8A8A84", "stroke-width": 1.5 }, g);
+    ln(g, `M${x0 + 36} ${-y0 - 36} L${-x0 - 36} ${-y0 - 36} L${-x0 - 36} ${y0 + 36}`, 2, "#E4E2DA");
+    // textes du document
+    const dw = w - 68 - 22, fit = (t, s) => f(Math.min(s, dw / Math.max(1, String(t).length * 0.48)));
+    if (o.t1) txt(g, o.t1, 0, f(y0 + 90), fit(o.t1, 34), {});
+    ln(g, `M-42 ${f(y0 + 106)} C-16 ${f(y0 + 99)} 16 ${f(y0 + 112)} 42 ${f(y0 + 105)}`, 1.6, "#77776F");
+    if (o.t2) txt(g, o.t2, 0, f(y0 + 144), fit(o.t2, 24), {});
+    if (o.t3) txt(g, o.t3, 0, f(y0 + 174), fit(o.t3, 22), {});
+    // bas du document : sceau à gauche, gribouillis à droite (y +20…+60) ; la bande y +80…+140 reste aux tampons (S3)
+    grib(g, -26, y0 + 202, 104, { n: 3, pas: 15, seed: (o.seed + w) % 37 });
+    sceau(g, C, -72, y0 + 214, 17, "sceau");
+    ln(g, `M28 ${f(-y0 - 52)} C40 ${f(-y0 - 64)} 52 ${f(-y0 - 42)} 64 ${f(-y0 - 56)} C72 ${f(-y0 - 64)} 80 ${f(-y0 - 50)} 92 ${f(-y0 - 54)}`, 1.8, "#55524B");
+    ln(g, `M24 ${f(-y0 - 42)} L96 ${f(-y0 - 42)}`, 1.2, "#9A9A94");
+    // lampe de tableau (tube sur un petit bras, au-dessus du cadre) et son cône crème
+    if (o.lampe) {
+      coneD(g);
+      ln(g, `M0 ${y0 + 2} L0 ${y0 - 10} C0 ${yl + 4} 0 ${yl + 4} 0 ${yl + 2}`, 4, INK);
+      el("path", { d: rr(-10, y0 - 4, 20, 6, 2), fill: ACIER, stroke: INK, "stroke-width": 1.6 }, g);
+      U.shape(C, "lampe", rr(-60, yl - 7, 120, 15, 7), MAT.mid, { sw: 2.4 });
+      el("path", { d: rr(-54, yl + 5, 108, 5, 2), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.4 }, g);
+    }
+    return { crochet: [0, -o.fil], haut: [0, y0], bas: [0, -y0], lampe: [0, yl] };
+  };
+  D.cadre.essais = [{}, { t1: "Diplom", t2: "Universität · 1997", t3: "" }, { partie: "cone" }];
+
+  /* ───────── D.diplome — le diplôme de « toi », GÉNÉRIQUE : ni pays, ni université, ni nom ─────────
+   * o = { w: 560, h: 270, k: échelle des textes (défaut min(w/560, h/270)), roule: 0…1 (les deux bouts encore enroulés),
+   *       l1: "Diplôme de" (34 k), l2: "Doctorat en Médecine" (46 k) }
+   * Ancrage = centre. Formats : 560 × 270 (S6, grand) · 230 × 160 (S6, dans les mains) · 200 × 130 (S9) · 250 × 180 (S24).
+   * Grand format : « Doctorat en Médecine » centré, ligne de base y +14 (x −216…+216) ; son « D » est vers (−208, −5).
+   * Renvoie { D: centre du « D » de « Doctorat », l2: [y de la ligne de base, demi-largeur] }. */
+  D.diplome = (g, o) => {
+    o = Object.assign({ w: 560, h: 270, k: null, roule: 0, l1: "Diplôme de", l2: "Doctorat en Médecine", seed: 977 }, o);
+    const w = o.w, h = o.h, k = o.k || Math.min(w / 560, h / 270), R = clamp(o.roule, 0, 1);
+    const fw = w * (1 - R), rk = Math.max(k, 0.5), rr0 = (6 + 14 * R) * rk, C = U.ctx(g, o.seed + Math.round(w), false, 1);
+    const lw2 = Math.max(1, 2.4 * k), id = uid("dp");
+    ombre(g, rr(-fw / 2 - (R > 0.02 ? 2 * rr0 : 0), -h / 2, fw + (R > 0.02 ? 4 * rr0 : 0), h, 3), f(2 + 6 * k), f(3 + 7 * k));
+    if (fw > 0.5) {
+      el("rect", { x: f(-fw / 2), y: f(-h / 2 - 6), width: f(fw), height: f(h + 12) }, el("clipPath", { id }, g));
+      const cg = el("g", { "clip-path": `url(#${id})` }, g), Cc = U.ctx(cg, o.seed + 3, false, 1);
+      U.shape(Cc, "f", rr(-w / 2, -h / 2, w, h, 3), { base: "#FFFFFE" }, { sw: Math.max(1.6, 2.8 * k), r: 0.35 });
+      const i1 = 11 * k + 2, i2 = 19 * k + 3;
+      ln(cg, rr(-w / 2 + i1, -h / 2 + i1, w - 2 * i1, h - 2 * i1, 2), f(lw2), INK);
+      ln(cg, rr(-w / 2 + i2, -h / 2 + i2, w - 2 * i2, h - 2 * i2, 2), f(Math.max(0.8, 1.2 * k)), "#77776F");
+      // fleurons d'angle
+      [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
+        const cx = sx * (w / 2 - i2), cy = sy * (h / 2 - i2), L = 30 * k + 4, e = 5 * k + 1;       // (−sx, −sy) = vers l'intérieur
+        ln(cg, `M${f(cx - sx * L)} ${f(cy - sy * e)} Q${f(cx - sx * e)} ${f(cy - sy * e)} ${f(cx - sx * e)} ${f(cy - sy * L)}`, f(Math.max(0.9, 1.6 * k)), "#55524B");
+        ln(cg, `M${f(cx - sx * L * 0.62)} ${f(cy - sy * e * 2.2)} Q${f(cx - sx * e * 2.2)} ${f(cy - sy * e * 2.2)} ${f(cx - sx * e * 2.2)} ${f(cy - sy * L * 0.62)}`, f(Math.max(0.7, 1.1 * k)), "#9A9A94");
+        el("circle", { cx: f(cx - sx * e * 3.4), cy: f(cy - sy * e * 3.4), r: f(Math.max(1.2, 2.8 * k)), fill: "#55524B" }, cg);
+      });
+      // textes (français, libellé d'origine)
+      txt(cg, o.l1, 0, f(-h * 0.17), f(34 * k), { fill: "#3A3A37" });
+      txt(cg, o.l2, 0, f(h * 0.052), f(46 * k), {});
+      ln(cg, `M${f(-60 * k)} ${f(h * 0.052 + 14 * k)} C${f(-20 * k)} ${f(h * 0.052 + 8 * k)} ${f(20 * k)} ${f(h * 0.052 + 20 * k)} ${f(60 * k)} ${f(h * 0.052 + 13 * k)}`, f(Math.max(0.9, 1.6 * k)), "#77776F");
+      [0.2, 0.28, 0.36].forEach((t, i) => grib(cg, f(-w * 0.36), f(h * t), f(w * (i === 2 ? 0.34 : 0.46)), { seed: 5 + i, sw: Math.max(1.1, 2 * k) }));
+      sceau(cg, Cc, f(w / 2 - 66 * k - 4), f(h / 2 - 54 * k - 4), f(26 * k + 2), "sceau");
+      ln(cg, `M${f(w * 0.06)} ${f(h * 0.37)} C${f(w * 0.1)} ${f(h * 0.31)} ${f(w * 0.14)} ${f(h * 0.41)} ${f(w * 0.2)} ${f(h * 0.34)}`, f(Math.max(1, 1.8 * k)), "#55524B");
+    }
+    // les deux bouts encore enroulés
+    if (R > 0.02) [-1, 1].forEach((s) => {
+      const xe = s * fw / 2, xa = s < 0 ? xe - 2 * rr0 : xe;
+      U.shape(C, "rl" + s, rr(xa, -h / 2 - 3, 2 * rr0, h + 6, rr0), { base: "#FFFFFE" }, { sw: Math.max(1.5, 2.6 * k), r: 0.3 });
+      ln(g, `M${f(xe + s * rr0 * 1.3)} ${f(-h / 2 + rr0)} L${f(xe + s * rr0 * 1.3)} ${f(h / 2 - rr0)}`, f(Math.max(1, 2 * k)), "#DCDCD4");
+      ln(g, `M${f(xe + s * rr0 * 0.6)} ${f(-h / 2 + rr0 * 0.6)} L${f(xe + s * rr0 * 0.6)} ${f(h / 2 - rr0 * 0.6)}`, f(Math.max(0.8, 1.2 * k)), "#BDBDB6");
+      el("ellipse", { cx: f(xe + s * rr0), cy: f(-h / 2 + 1), rx: f(rr0 * 0.92), ry: f(rr0 * 0.34), fill: "#FFFFFE", stroke: INK, "stroke-width": f(Math.max(1, 1.8 * k)) }, g);
+      el("ellipse", { cx: f(xe + s * rr0), cy: f(-h / 2 + 1), rx: f(rr0 * 0.45), ry: f(rr0 * 0.16), fill: "none", stroke: "#77776F", "stroke-width": f(Math.max(0.8, 1.2 * k)) }, g);
+    });
+    return { D: [f(-216 * k + 8 * k), f(h * 0.052 - 19 * k)], l2: [f(h * 0.052), f(216 * k)] };
+  };
+  D.diplome.essais = [{}, { roule: 0.55 }, { w: 230, h: 160 }, { w: 230, h: 160, roule: 1 }, { w: 200, h: 130 }, { w: 250, h: 180 }];
+
+  /* ───────── D.valise — valise cabine à roulettes (S6) : poignée télescopique sortie, étiquette de bagage VIERGE ─────────
+   * o = { partie: "tout" | "corps" (sans l'étiquette) | "etiquette" (l'étiquette seule : pivot = out.pivot, m.pend repos 2°) }
+   * Corps 150 × 210 (y −222…−12), roulettes jusqu'à y 0, poignée jusqu'à y −346 · ancrage = centre du bas. */
+  D.valise = (g, o) => {
+    o = Object.assign({ partie: "tout", seed: 979 }, o);
+    const C = U.ctx(g, o.seed, false, 1), piv = [34, -236];
+    const etiq = (gg) => {
+      const Ce = U.ctx(gg, o.seed + 1, false, 1);
+      ln(gg, `M${piv[0]} ${piv[1]} C${piv[0] + 8} ${piv[1] + 14} ${piv[0] + 10} ${piv[1] + 26} ${piv[0] + 6} ${piv[1] + 36}`, 2.2, INK);
+      const d = `M${piv[0] - 12} ${piv[1] + 36} L${piv[0] + 22} ${piv[1] + 36} L${piv[0] + 22} ${piv[1] + 96} L${piv[0] - 12} ${piv[1] + 96} Z`;
+      ombre(gg, d, 4, 5);
+      U.shape(Ce, "et", d, { base: "#FFFFFF" }, { sw: 2.2, r: 0.4 });
+      el("circle", { cx: piv[0] + 5, cy: piv[1] + 44, r: 3.4, fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, gg);
+      ln(gg, `M${piv[0] - 6} ${piv[1] + 58} L${piv[0] + 16} ${piv[1] + 58} M${piv[0] - 6} ${piv[1] + 70} L${piv[0] + 16} ${piv[1] + 70} M${piv[0] - 6} ${piv[1] + 82} L${piv[0] + 10} ${piv[1] + 82}`, 1.2, "#C9C9C1");
+    };
+    if (o.partie === "etiquette") { etiq(g); return { pivot: piv }; }
+    el("ellipse", { cx: 8, cy: 2, rx: 86, ry: 9, fill: "rgba(28,26,28,.18)" }, g);
+    // poignée télescopique
+    [-30, 30].forEach((x) => { el("path", { d: rr(x - 4, -334, 8, 116, 3), fill: ACIER, stroke: INK, "stroke-width": 2 }, g); ln(g, `M${x - 1} -326 L${x - 1} -226`, 1, "#FFFFFF"); });
+    el("path", { d: rr(-34, -290, 68, 6, 2), fill: "none", stroke: "#8A8A84", "stroke-width": 1.4 }, g);
+    U.shape(C, "grip", rr(-42, -348, 84, 18, 9), MAT.dark, { sw: 2.4 });
+    // roulettes
+    [-50, 50].forEach((x) => { el("path", { d: rr(x - 11, -20, 22, 12, 3), fill: "#4A4A46", stroke: INK, "stroke-width": 1.8 }, g); el("circle", { cx: x, cy: -8, r: 8, fill: "#3A3A37", stroke: INK, "stroke-width": 2 }, g); el("circle", { cx: x, cy: -8, r: 2.6, fill: ACIER }, g); });
+    // coque
+    ombre(g, rr(-75, -222, 150, 210, 16), 7, 8);
+    U.shape(C, "coque", rr(-75, -222, 150, 210, 16), MAT.grey, { sw: 3 });
+    ln(g, "M-38 -214 L-38 -20 M0 -216 L0 -18 M38 -214 L38 -20", 2, "#8A8A84");
+    ln(g, "M-37 -214 L-37 -20 M1 -216 L1 -18 M39 -214 L39 -20", 1, "#FFFFFF");
+    ln(g, "M-66 -118 L66 -118", 1.8, INK, { "stroke-dasharray": "2 4" });                     // fermeture éclair
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => ln(g, `M${sx * 75} ${sy > 0 ? -40 : -194} Q${sx * 75} ${sy > 0 ? -12 : -222} ${sx * 47} ${sy > 0 ? -12 : -222}`, 6, "#4A4A46"));
+    el("path", { d: rr(-48, -226, 96, 10, 4), fill: "#4A4A46", stroke: INK, "stroke-width": 1.8 }, g);
+    if (o.partie !== "corps") etiq(g);
+    return { pivot: piv, poignee: [0, -340] };
+  };
+  D.valise.essais = [{}, { partie: "etiquette" }];
+
+  /* ───────── D.pochette — pochette à rabat et à élastique (S6, S24) : le diplôme de la collègue est dedans ─────────
+   * 110 × 80 · ancrage = centre (là où va la main de KOL). */
+  D.pochette = (g, o) => {
+    o = Object.assign({ seed: 985 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    ombre(g, rr(-55, -40, 110, 80, 7), 5, 6);
+    U.shape(C, "corps", rr(-55, -40, 110, 80, 7), MAT.mid, { sw: 2.6 });
+    el("path", { d: "M-50 30 L50 30", stroke: "#FFFFFF", "stroke-width": 1.2, fill: "none" }, g);
+    U.shape(C, "rabat", "M-55 -40 L55 -40 L55 -16 C40 -4 22 2 0 4 C-22 2 -40 -4 -55 -16 Z", MAT.light, { sw: 2.4 });
+    ln(g, "M-46 -34 L46 -34", 1.2, "#FFFFFF");
+    el("path", { d: rr(31, -42, 9, 84, 3), fill: "#4A4A46", stroke: INK, "stroke-width": 1.8 }, g);       // l'élastique
+    el("circle", { cx: 0, cy: -6, r: 5, fill: ACIER, stroke: INK, "stroke-width": 1.8 }, g);
+    return { w: 110, h: 80 };
+  };
+  D.pochette.essais = [{}];
+
+  /* ───────── D.suspension — suspension grise du hall (S6) : rosace, fil, abat-jour, ampoule, cône CRÈME ─────────
+   * o = { L: 100 (longueur du fil), cone: 0…1, coneH: 560 } · ancrage = point d'accroche au plafond = pivot de m.pend.
+   * Renvoie { abat: [0, L + 20] }. */
+  D.suspension = (g, o) => {
+    o = Object.assign({ L: 100, cone: 1, coneH: 560, seed: 989 }, o);
+    const L = o.L, C = U.ctx(g, o.seed, false, 1);
+    cone(g, 0, L + 40, 44, 230, o.coneH, 0.26 * clamp(o.cone, 0, 1.2));
+    U.shape(C, "rosace", rr(-18, -6, 36, 11, 4), MAT.mid, { sw: 2.2 });
+    ln(g, `M0 4 L0 ${L - 4}`, 2.4, INK);
+    el("path", { d: rr(-7, L - 6, 14, 12, 3), fill: "#4A4A46", stroke: INK, "stroke-width": 1.8 }, g);
+    const abat = `M-50 ${L + 40} C-48 ${L + 10} -26 ${L + 2} -8 ${L + 2} L8 ${L + 2} C26 ${L + 2} 48 ${L + 10} 50 ${L + 40} Z`;
+    el("path", { d: abat, fill: OMBRE, transform: "translate(5 6)" }, g);
+    U.shape(C, "abat", abat, MAT.grey, { sw: 2.6 });
+    ln(g, `M-32 ${L + 14} C-22 ${L + 8} -12 ${L + 7} -4 ${L + 7}`, 1.6, "#FFFFFF");
+    el("ellipse", { cx: 0, cy: L + 41, rx: 50, ry: 6, fill: "#4A4A46", stroke: INK, "stroke-width": 2 }, g);
+    el("ellipse", { cx: 0, cy: L + 45, rx: 13, ry: 9, fill: "#FFFFFF", stroke: INK, "stroke-width": 2 }, g);
+    return { abat: [0, L + 20], pivot: [0, 0] };
+  };
+  D.suspension.essais = [{}];
+
+  /* ───────── D.cartons — deux cartons de déménagement empilés (S6, à gauche de la valise) ─────────
+   * 130 × 170 (x −65…+65, y −170…0) · ancrage = centre du bas. Pictogramme « haut » (deux flèches), aucun mot. */
+  D.cartons = (g, o) => {
+    o = Object.assign({ seed: 991 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    el("ellipse", { cx: 8, cy: 2, rx: 74, ry: 7, fill: "rgba(28,26,28,.16)" }, g);
+    ombre(g, "M-65 -96 L65 -96 L65 0 L-65 0 Z M-50 -170 L60 -170 L60 -96 L-50 -96 Z", 7, 7);
+    // carton du bas
+    U.shape(C, "b", rr(-65, -96, 130, 96, 3), MAT.wood, { sw: 2.8 });
+    el("path", { d: "M-9 -96 L9 -96 L9 -52 L-9 -52 Z", fill: "#DADAD5", stroke: "#8A8A84", "stroke-width": 1.2 }, g);
+    ln(g, "M-65 -80 L-9 -80 M9 -80 L65 -80", 1.2, "#ABABA4");
+    ln(g, "M30 -34 L30 -14 M24 -28 L30 -36 L36 -28 M46 -34 L46 -14 M40 -28 L46 -36 L52 -28 M24 -10 L52 -10", 1.8, INK);
+    // carton du haut (un peu décalé), poignée découpée
+    U.shape(C, "h", rr(-50, -170, 110, 74, 3), MAT.wood, { sw: 2.8 });
+    el("path", { d: "M-4 -170 L12 -170 L12 -140 L-4 -140 Z", fill: "#DADAD5", stroke: "#8A8A84", "stroke-width": 1.2 }, g);
+    el("path", { d: rr(-38, -132, 26, 9, 4.5), fill: "#4A4A46" }, g);
+    ln(g, "M-46 -110 L54 -110", 1.2, "#ABABA4");
+    return { haut: [5, -170] };
+  };
+  D.cartons.essais = [{}];
+
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════════════════════
+   * E. L'ATELIER DU GRAVEUR (S7, S10, S26) — mise en place FIXE (storyboard § 4, « Atelier du graveur »)
+   * ═════════════════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+  // places des outils pendus et des bons de commande (coordonnées MONDE) : mêmes valeurs pour D.atelier et pour les scènes
+  const ATELIER_OUTILS = [
+    { kind: "burin", v: 0, x: 362, y: 700 }, { kind: "burin", v: 1, x: 398, y: 700 }, { kind: "burin", v: 2, x: 434, y: 700 },
+    { kind: "burin", v: 3, x: 470, y: 700 }, { kind: "compas", v: 0, x: 522, y: 700 }, { kind: "scie", v: 0, x: 252, y: 808 },
+    { kind: "equerre", v: 0, x: 800, y: 828 }];
+  const ATELIER_BONS = [{ v: 0, x: 394, y: 590 }, { v: 1, x: 468, y: 590 }, { v: 2, x: 872, y: 590 }];
+
+  /* ───────── D.atelier — fond complet de l'atelier (coordonnées MONDE : poser en (0, 0)) ─────────
+   * Mur uni (y 250–940), PANNEAU PERFORÉ x 170–910, y 560–900 (trous tous les 40 px) ; fil tendu à y 590 (pitons aux deux bouts) ;
+   * ÉTABLI : dessus de y 940 (fond, x 150–930) à 1200 (bord avant, x 120–960), chant 1200–1228, façade à trois tiroirs
+   * à poignée coquille jusqu'à 1400 ; sol 1400–1470. PAS de marteau ni de maillet.
+   * o = { outils: true, bons: true } : false pour poser les outils (D.outil, m.pend repos 0,5°) et les bons (D.bon, m.sway 2°)
+   * comme nœuds séparés, aux places renvoyées dans out.outils / out.bons (pivot = { x, y }).
+   * Renvoie { panneau: [x0, y0, x1, y1], fil: 590, etabli: { fond: 940, bord: 1200, face: 1400 }, outils, bons }. */
+  D.atelier = (g, o) => {
+    o = Object.assign({ outils: true, bons: true, x0: 40, x1: 1040, haut: 250, bas: 1470, seed: 981 }, o);
+    const C = U.ctx(g, o.seed, false, 1), x0 = o.x0, x1 = o.x1;
+    // mur
+    el("rect", { x: x0, y: o.haut, width: x1 - x0, height: 960 - o.haut, fill: "#F2F0EA" }, g);
+    ln(g, "M78 420 l28 4 M960 470 l-30 6 M84 860 l22 -6 M972 820 l-26 2", 1.5, "#D5D2C7");
+    // panneau perforé
+    ombre(g, rr(170, 560, 740, 340, 6), 8, 10);
+    U.shape(C, "pan", rr(170, 560, 740, 340, 6), { base: "#ECE8DC" }, { sw: 3, r: 0.5 });
+    ln(g, rr(178, 568, 724, 324, 4), 1.4, "#B9B4A4");
+    let d = ""; for (let y = 580; y <= 880; y += 40) for (let x = 190; x <= 890; x += 40) d += cercle(x, y, 3.2);
+    el("path", { d, fill: "#B3AE9E" }, g);
+    // fil tendu + pitons
+    ln(g, "M186 590 L894 590", 2, "#55524B");
+    [186, 894].forEach((x) => { el("circle", { cx: x, cy: 590, r: 5.5, fill: "none", stroke: INK, "stroke-width": 2.4 }, g); ln(g, `M${x} 584 L${x} 575`, 2.4, INK); });
+    // établi : le dessus en perspective
+    el("path", { d: "M150 940 L930 940 L932 952 L148 952 Z", fill: "rgba(28,26,28,.14)" }, g);
+    U.shape(C, "dessus", "M150 940 L930 940 L960 1200 L120 1200 Z", MAT.wood, { sw: 3, r: 0.5 });
+    let v = "";
+    [0.22, 0.5, 0.78].forEach((t, i) => { const yy = lerp(940, 1200, t), xa = lerp(150, 120, t) + 40, xb = lerp(930, 960, t) - 50; v += `M${f(xa)} ${f(yy)} C${f(lerp(xa, xb, 0.3))} ${f(yy - 5 + i * 2)} ${f(lerp(xa, xb, 0.65))} ${f(yy + 5)} ${f(xb)} ${f(yy - 1)}`; });
+    ln(g, v, 1.4, "#BDBAAE");
+    ln(g, "M860 1150 c10 -4 22 -2 30 4 M180 990 c6 -6 18 -6 24 0 M600 1186 l40 -3", 1.6, "#ABABA4");
+    // chant + façade à trois tiroirs
+    U.shape(C, "chant", rr(116, 1200, 848, 28, 4), MAT.wood, { sw: 2.8 });
+    ln(g, "M126 1207 L954 1207", 1.3, "#FFFFFF");
+    U.shape(C, "face", rr(128, 1228, 824, 172, 2), MAT.light, { sw: 2.8, r: 0.5 });
+    [[148, 392], [415, 665], [688, 932]].forEach(([a, b], i) => {
+      el("path", { d: rr(a + 4, 1250, b - a, 128, 5), fill: "rgba(28,26,28,.1)" }, g);
+      U.shape(C, "tir" + i, rr(a, 1246, b - a, 128, 5), { base: "#F4F3EE" }, { sw: 2.4 });
+      const m = (a + b) / 2;
+      el("path", { d: `M${m - 30} 1290 L${m + 30} 1290 C${m + 28} 1312 ${m - 28} 1312 ${m - 30} 1290 Z`, fill: ACIER, stroke: INK, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+      ln(g, `M${m - 20} 1296 C${m - 8} 1302 ${m + 8} 1302 ${m + 20} 1296`, 1.2, "#FFFFFF");
+      el("path", { d: rr(m - 22, 1334, 44, 18, 2), fill: "#FFFFFF", stroke: "#8A8A84", "stroke-width": 1.3 }, g);
+    });
+    // sol
+    el("rect", { x: x0, y: 1400, width: x1 - x0, height: o.bas - 1400, fill: "#E6E4DC" }, g);
+    ln(g, `M${x0} 1400 L${x1} 1400`, 3, INK);
+    ln(g, `M${x0} 1436 L${x1} 1436 M300 1400 L280 1470 M780 1400 L800 1470`, 1.3, "#C9C6BC");
+    el("rect", { x: x0, y: o.bas - 10, width: x1 - x0, height: 10, fill: PAPIER, opacity: 0.6 }, g);
+    // outils pendus et bons de commande (statiques ici ; en scène : nœuds séparés)
+    if (o.outils) ATELIER_OUTILS.forEach((t) => D.outil(el("g", { transform: `translate(${t.x} ${t.y})` }, g), t));
+    if (o.bons) ATELIER_BONS.forEach((b) => D.bon(el("g", { transform: `translate(${b.x} ${b.y})` }, g), b));
+    return { panneau: [170, 560, 910, 900], fil: 590, etabli: { fond: 940, bord: 1200, face: 1400 },
+      outils: ATELIER_OUTILS.map((t) => Object.assign({}, t)), bons: ATELIER_BONS.map((b) => Object.assign({}, b)) };
+  };
+  D.atelier.essais = [{}];
+
+  /* ───────── D.outil — un outil pendu au panneau perforé (jamais de marteau ni de maillet) ─────────
+   * o = { kind: "burin" (v 0…3 : quatre burins différents) | "compas" (compas à pointes) | "scie" (scie bocfil) | "equerre" }
+   * Ancrage = la cheville du panneau = pivot de m.pend. Tailles : burin 16 × 150 · compas 50 × 116 · scie 150 × 104 · équerre 106 × 84. */
+  D.outil = (g, o) => {
+    o = Object.assign({ kind: "burin", v: 0, seed: 983 }, o);
+    const C = U.ctx(g, o.seed + (o.v || 0) * 7 + o.kind.length, false, 1), sh = (d) => ombre(g, d, 5, 6, "rgba(28,26,28,.15)");
+    let bas = [0, 0];
+    if (o.kind === "burin") {
+      const v = (o.v || 0) % 4, bw = [12, 8, 15, 6][v], hl = [58, 52, 62, 56][v], L = [150, 140, 156, 146][v], yb = 14 + hl + 8;
+      const manche = rr(-8, 12, 16, hl, 6), lame = `M${-bw / 2} ${yb} L${bw / 2} ${yb} L${bw / 2} ${L - 10} L${-bw / 2 + 1} ${L} L${-bw / 2} ${L} Z`;
+      sh(manche + " " + lame);
+      ln(g, "M0 0 C-8 3 -8 11 -3 14 M0 0 C8 3 8 11 3 14", 2, "#55524B");                    // boucle de cuir
+      U.shape(C, "manche", manche, MAT.wood, { sw: 2.4, r: 0.4 });
+      ln(g, `M-3 20 L-3 ${8 + hl}`, 1.2, "#FFFFFF");
+      el("path", { d: rr(-9, 10 + hl, 18, 10, 2), fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
+      el("path", { d: lame, fill: ACIER, stroke: INK, "stroke-width": 2.2, "stroke-linejoin": "round" }, g);
+      ln(g, `M${f(-bw / 2 + 2.5)} ${yb + 4} L${f(-bw / 2 + 2.5)} ${L - 14}`, 1.1, "#FFFFFF");
+      bas = [0, L];
+    } else if (o.kind === "compas") {
+      const legs = "M-4 18 L-21 112 M4 18 L21 112";
+      ln(g, legs, 8, "rgba(28,26,28,.15)", { transform: "translate(5 6)" });
+      ln(g, legs, 6.5, INK); ln(g, legs, 3, ACIER);
+      ln(g, "M-21 112 L-22 118 M21 112 L22 118", 2, INK);
+      ln(g, "M-15 70 C-5 66 5 66 15 70", 2.6, INK);
+      el("circle", { cx: 0, cy: 16, r: 9, fill: ACIER, stroke: INK, "stroke-width": 2.4 }, g);
+      el("circle", { cx: 0, cy: 16, r: 2.6, fill: INK }, g);
+      el("circle", { cx: 0, cy: 4, r: 4.5, fill: "none", stroke: INK, "stroke-width": 2 }, g);
+      bas = [0, 118];
+    } else if (o.kind === "scie") {
+      const cadre = "M-62 58 L-62 10 C-62 3 -56 0 -48 0 L48 0 C56 0 62 3 62 10 L62 58";
+      ln(g, cadre, 8, "rgba(28,26,28,.15)", { transform: "translate(5 6)" });
+      ln(g, cadre, 6.5, INK); ln(g, cadre, 2.8, ACIER);
+      ln(g, "M-62 58 L62 58", 1.8, INK);
+      ln(g, "M-56 58 l3 3 l3 -3 l3 3 l3 -3", 1, "#55524B");
+      U.shape(C, "poignee", "M-66 58 C-72 70 -78 86 -82 98 C-85 106 -76 110 -72 103 C-66 90 -60 74 -56 62 Z", MAT.wood, { sw: 2.4 });
+      el("circle", { cx: 62, cy: 58, r: 4.5, fill: ACIER, stroke: INK, "stroke-width": 1.8 }, g);
+      ln(g, "M56 56 L52 50 M68 56 L72 50", 2, INK);
+      bas = [0, 106];
+    } else {     // équerre : crosse en bois (verticale) + lame d'acier graduée ; pendue par le trou de la crosse
+      const crosse = rr(-10, -8, 20, 90, 3), lame = "M10 60 L104 60 L104 76 L10 76 Z";
+      sh(crosse + " " + lame);
+      el("path", { d: lame, fill: ACIER, stroke: INK, "stroke-width": 2.2 }, g);
+      let t = ""; for (let x = 20; x <= 98; x += 8) t += `M${x} 60 L${x} ${(x - 20) % 16 === 0 ? 69 : 65}`;
+      ln(g, t, 1.1, INK);
+      U.shape(C, "crosse", crosse, MAT.wood, { sw: 2.4, r: 0.4 });
+      el("circle", { cx: 0, cy: 0, r: 4.2, fill: "#3A3A37" }, g);
+      [44, 68].forEach((y) => el("circle", { cx: 0, cy: y, r: 2.4, fill: ACIER, stroke: INK, "stroke-width": 1.2 }, g));
+      bas = [50, 82];
+    }
+    // la cheville du panneau (par-dessus)
+    el("circle", { cx: 0, cy: 0, r: 3.4, fill: "#55524B" }, g);
+    return { pivot: [0, 0], bas };
+  };
+  D.outil.essais = [{ kind: "burin", v: 0 }, { kind: "burin", v: 3 }, { kind: "compas" }, { kind: "scie" }, { kind: "equerre" }];
+
+  /* ───────── D.bon — bon de commande pincé sur le fil (S7, S10, S26) ─────────
+   * o = { v: 0 | 1 | 2 } (croquis de la commande : plaque, cachet, cartes) · 56 × 84 · ancrage = la pince sur le fil = pivot de m.sway. */
+  D.bon = (g, o) => {
+    o = Object.assign({ v: 0, seed: 987 }, o);
+    const v = (o.v || 0) % 3, b = el("g", { transform: `rotate(${[-3, 2.5, -1.5][v]})` }, g), C = U.ctx(b, o.seed + v, false, 1);
+    ombre(b, rr(-28, 6, 56, 70, 2), 4, 5);
+    U.shape(C, "p", rr(-28, 6, 56, 70, 2), MAT.white, { sw: 2.2, r: 0.4 });
+    ln(b, "M-21 17 L6 17", 2.6, "#77776F");
+    if (v === 0) { el("path", { d: rr(-17, 26, 34, 15, 3), fill: "none", stroke: INK, "stroke-width": 1.6 }, b); [-8, 0, 8].forEach((x) => el("circle", { cx: x, cy: 33.5, r: 1.6, fill: INK }, b)); }
+    else if (v === 1) ln(b, "M-4 24 L4 24 L4 32 L13 32 L13 40 L-13 40 L-13 32 L-4 32 Z", 1.6, INK);
+    else { el("path", { d: rr(-15, 25, 30, 17, 2), fill: "none", stroke: INK, "stroke-width": 1.6 }, b); ln(b, "M-10 31 L2 31 M-10 36 L8 36", 1.2, "#77776F"); }
+    grib(b, -21, 52, 42, { n: 2, pas: 10, seed: v + 3, sw: 1.8 });
+    U.shape(C, "pince", rr(-5, -9, 10, 25, 3), MAT.wood, { sw: 2 });
+    ln(b, "M-5 3 L5 3", 1.6, INK);
+    return { pivot: [0, 0] };
+  };
+  D.bon.essais = [{ v: 0 }, { v: 1 }, { v: 2 }];
+
+  /* ───────── D.etau — étau d'établi vu de face : mors (avant mobile), corps de fonte, vis à barre et boules, socle boulonné ─────────
+   * o = { serre: 0…1 (1 = serré ; ouvert, le mors avant descend de 10 px et laisse voir le mors fixe), barre: degrés (la barre frémit),
+   *       partie: "tout" | "corps" (sans la barre) | "barre" (la barre seule : pivot = out.pivot) }
+   * Ancrage = milieu du HAUT des mors (S7 : (330, 1035) ; la petite plaque 200 × 84 dépasse au-dessus). 230 × 146. */
+  D.etau = (g, o) => {
+    o = Object.assign({ serre: 1, barre: 0, partie: "tout", seed: 993 }, o);
+    const C = U.ctx(g, o.seed, false, 1), dj = f((1 - clamp(o.serre, 0, 1)) * 10), pv = [0, 82];
+    const barre = (gg) => {
+      const b = el("g", { transform: `rotate(${f(o.barre || 0)} ${pv[0]} ${pv[1]})` }, gg);
+      ln(b, `M-100 ${pv[1]} L100 ${pv[1]}`, 9, INK); ln(b, `M-98 ${pv[1]} L98 ${pv[1]}`, 5, ACIER);
+      ln(b, `M-90 ${pv[1] - 1.5} L90 ${pv[1] - 1.5}`, 1.2, "#FFFFFF");
+      [-1, 1].forEach((s) => { el("circle", { cx: s * 106, cy: pv[1], r: 11, fill: ACIER, stroke: INK, "stroke-width": 2.4 }, b); ln(b, `M${s * 106 - 6} ${pv[1] - 4} A6 6 0 0 1 ${s * 106} ${pv[1] - 8}`, 1.4, "#FFFFFF"); });
+    };
+    if (o.partie === "barre") { barre(g); return { pivot: pv }; }
+    el("ellipse", { cx: 14, cy: 146, rx: 104, ry: 12, fill: "rgba(28,26,28,.2)" }, g);
+    // mors fixe (derrière) puis corps de fonte
+    U.shape(C, "fixe", rr(-90, -2, 180, 16, 3), MAT.dark, { sw: 2.2 });
+    ombre(g, "M-60 34 L60 34 L52 120 L-52 120 Z", 6, 6);
+    U.shape(C, "corps", "M-60 34 L60 34 L52 120 L-52 120 Z", MAT.mid, { sw: 2.8 });
+    ln(g, "M-40 44 L-34 112 M40 44 L34 112", 1.6, "#FFFFFF");
+    // socle boulonné
+    U.shape(C, "socle", rr(-84, 118, 168, 28, 6), MAT.dark, { sw: 2.6 });
+    [-64, 64].forEach((x) => {
+      let h = ""; for (let i = 0; i < 6; i++) { const a = rad(30 + i * 60); h += (i ? "L" : "M") + f(x + Math.cos(a) * 9) + " " + f(126 + Math.sin(a) * 9); }
+      el("path", { d: h + "Z", fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
+      el("circle", { cx: x, cy: 126, r: 3, fill: "#9A9A94" }, g);
+    });
+    // mors avant (mobile) : plaquettes striées, deux vis
+    U.shape(C, "mors", rr(-94, dj, 188, 38, 4), MAT.mid, { sw: 2.8 });
+    el("path", { d: rr(-88, dj + 3, 176, 11, 2), fill: "#B9B9B3", stroke: INK, "stroke-width": 1.6 }, g);
+    let s = ""; for (let x = -84; x <= 84; x += 6) s += `M${x} ${dj + 4} L${x + 3} ${dj + 13}`;
+    ln(g, s, 1, "#55524B");
+    [-64, 64].forEach((x) => visTete(g, x, dj + 26, 4.2, x > 0 ? 30 : -20, { ombre: false }));
+    // bossage de la vis
+    el("circle", { cx: 0, cy: pv[1], r: 23, fill: "#B9B9B3", stroke: INK, "stroke-width": 2.6 }, g);
+    el("circle", { cx: 0, cy: pv[1], r: 12, fill: ACIER, stroke: INK, "stroke-width": 2.2 }, g);
+    if (o.partie !== "corps") barre(g);
+    return { pivot: pv, mors: [0, 0], socle: [0, 146] };
+  };
+  D.etau.essais = [{}, { serre: 0, barre: 14 }, { partie: "barre", barre: -10 }];
+
+  /* ───────── D.casse — casier à lettres en bois, 6 × 3 cases, minuscules lettres de LAITON en vrac (S7) ─────────
+   * 260 × 160 · ancrage = centre ; pendu par un cordon à un clou en (0, −114) = pivot. Renvoie { lettres: deux points où poser
+   * une étincelle (D.etincelle, s 6), pivot }. */
+  D.casse = (g, o) => {
+    o = Object.assign({ seed: 995 }, o);
+    const C = U.ctx(g, o.seed, false, 1), W = 260, H = 160, x0 = -130, y0 = -80, cw = (W - 20) / 6, ch = (H - 20) / 3;
+    ln(g, "M-112 -76 L0 -114 L112 -76", 2.4, "#55524B");
+    D.clou(el("g", { transform: "translate(0 -114)" }, g), { r: 5 });
+    ombre(g, rr(x0, y0, W, H, 6), 7, 9);
+    U.shape(C, "bois", rr(x0, y0, W, H, 6), MAT.wood, { sw: 3 });
+    el("path", { d: rr(x0 + 10, y0 + 10, W - 20, H - 20, 2), fill: "#E4E0D2" }, g);
+    const LET = "ABDKMRSTENOLPGHIUZ", R = rng(o.seed), pts = [];
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 6; c++) {
+      const cx = x0 + 10 + c * cw + cw / 2, cy = y0 + 10 + r * ch + ch / 2, n = R() < 0.55 ? 1 : 2;
+      for (let i = 0; i < n; i++) {
+        const x = cx + (n > 1 ? (i - 0.5) * 14 : (R() - 0.5) * 6), y = cy + 7 + (n > 1 ? (i ? 4 : -3) : (R() - 0.5) * 6), a = Math.round((R() - 0.5) * 50);
+        const t = txt(g, LET[(r * 6 + c + i * 7) % LET.length], f(x), f(y), 18, { fill: YEL, transform: `rotate(${a} ${f(x)} ${f(y - 6)})` });
+        t.setAttribute("stroke", INK); t.setAttribute("stroke-width", "1.4"); t.setAttribute("stroke-linejoin", "round"); t.setAttribute("paint-order", "stroke");
+        pts.push([f(x + 4), f(y - 12)]);
+      }
+    }
+    let d = "";
+    for (let c = 1; c < 6; c++) d += `M${f(x0 + 10 + c * cw)} ${y0 + 10} L${f(x0 + 10 + c * cw)} ${y0 + H - 10}`;
+    for (let r = 1; r < 3; r++) d += `M${x0 + 10} ${f(y0 + 10 + r * ch)} L${x0 + W - 10} ${f(y0 + 10 + r * ch)}`;
+    ln(g, d, 5, "#D9D5C6"); ln(g, d, 1.4, INK);
+    ln(g, rr(x0 + 10, y0 + 10, W - 20, H - 20, 2), 2, INK);
+    return { lettres: [pts[2], pts[pts.length - 4]], pivot: [0, -114] };
+  };
+  D.casse.essais = [{}];
+
+  /* ───────── D.bloc — bloc de papier collé en tête (S7, S26) : c'est là que le cachet frappe ─────────
+   * o = { empreinte: 0…1 (opacité de l'empreinte : cadre + « Dr. » + nom en pointillé + « Arzt »), dr: 0…1 (force de l'encre sur
+   *       « Dr. » : 0,6 → 1 quand il bat), onde: indice du point grossi (l'onde qui court), n: 6 points } · 220 × 170 · ancrage = centre.
+   * Le pointillé du nom n'est pas « ……… » (caractère absent de Kalam) : ce sont des points dessinés. */
+  D.bloc = (g, o) => {
+    o = Object.assign({ empreinte: 1, dr: 1, onde: null, n: 6, seed: 997 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    ombre(g, rr(-110, -85, 224, 176, 3), 7, 9);
+    ln(g, "M-104 89 L115 89 L115 -76", 1.8, "#9A9A94"); ln(g, "M-100 93 L119 93 L119 -70", 1.3, "#BDBDB6");
+    U.shape(C, "f", rr(-110, -85, 220, 170, 3), { base: "#FFFFFF" }, { sw: 2.6, r: 0.4 });
+    U.shape(C, "tete", rr(-113, -90, 226, 20, 3), MAT.dark, { sw: 2.4 });
+    ln(g, "M-104 -83 L104 -83", 1.2, "#77776F");
+    el("path", { d: "M110 62 L110 85 L87 85 Z", fill: "#EDEDE8", stroke: INK, "stroke-width": 1.6, "stroke-linejoin": "round" }, g);
+    const e = clamp(o.empreinte, 0, 1);
+    if (e > 0) {
+      const b = el("g", { opacity: f(0.92 * e) }, g), Cb = U.ctx(b, o.seed + 1, false, 1);
+      U.stroke(Cb, "o", rr(-92, -50, 184, 122, 12), { sw: 4.5, r: 0.5, single: true });
+      ln(b, rr(-84, -42, 168, 106, 8), 1.8, INK);
+      txt(b, "Dr.", -74, -2, 34, { anchor: "start", fill: mix("#A9A9A2", INK, clamp(o.dr, 0, 1)) });
+      for (let i = 0; i < o.n; i++) { const gros = o.onde != null && o.onde >= 0 && Math.floor(o.onde) === i; el("circle", { cx: f(-14 + i * 15), cy: -12, r: gros ? 4.6 : 2.8, fill: INK }, b); }
+      txt(b, "Arzt", 0, 48, 30, {});
+      const Rn = rng(o.seed + 5);
+      [[-60, -50], [30, -50], [80, 10], [-90, 30], [-20, 72], [50, 72]].forEach(([x, y]) => el("ellipse", { cx: f(x + (Rn() - 0.5) * 10), cy: y, rx: f(3 + Rn() * 3), ry: f(1.8 + Rn() * 1.4), fill: "#FFFFFF" }, b));
+    }
+    return { centre: [0, 10], dr: [-50, -14] };
+  };
+  D.bloc.essais = [{ empreinte: 0 }, { empreinte: 1, dr: 0.6, onde: 2 }];
+
+  /* ───────── D.encreur — boîte à encre en fer, couvercle ouvert (S7, S26) ─────────
+   * 150 × 78 · ancrage = centre du bas. Renvoie { pad: centre du tampon encreur (où le cachet se pose) }. */
+  D.encreur = (g, o) => {
+    o = Object.assign({ seed: 999 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    el("ellipse", { cx: 8, cy: 2, rx: 86, ry: 7, fill: "rgba(28,26,28,.18)" }, g);
+    // couvercle ouvert, rabattu en arrière : on voit son INTÉRIEUR (clair, avec un rebord), charnière au fond du dessus
+    U.shape(C, "couv", "M-70 -40 L70 -40 L80 -84 L-60 -84 Z", MAT.grey, { sw: 2.6 });
+    el("path", { d: "M-60 -44 L60 -44 L68 -78 L-52 -78 Z", fill: "#F0F0EB", stroke: "#8A8A84", "stroke-width": 1.4 }, g);
+    ln(g, "M-46 -70 L52 -70", 1.3, "#FFFFFF");
+    [-44, 44].forEach((x) => el("path", { d: rr(x - 9, -44, 18, 7, 2), fill: "#9A9A94", stroke: INK, "stroke-width": 1.4 }, g));
+    el("path", { d: "M-75 -24 L75 -24 L70 -40 L-70 -40 Z", fill: ACIER, stroke: INK, "stroke-width": 2.4, "stroke-linejoin": "round" }, g);
+    el("path", { d: "M-64 -27 L64 -27 L60 -37 L-60 -37 Z", fill: "#2E2C28", stroke: INK, "stroke-width": 1.4 }, g);
+    ln(g, "M-48 -33 L-12 -33", 1.4, "#6E6E68");
+    U.shape(C, "face", rr(-75, -24, 150, 24, 3), MAT.mid, { sw: 2.6 });
+    ln(g, "M-68 -18 L68 -18", 1.2, "#FFFFFF");
+    return { pad: [0, -32] };
+  };
+  D.encreur.essais = [{}];
+
+  /* ───────── D.cartes — cartes de visite en éventail sur un petit socle (S7) ─────────
+   * o = { dr: 0…1 (force de l'encre sur « Dr. »), onde, n: 5 } · 168 × 124 · ancrage = centre du bas.
+   * La carte de devant porte « Dr. » + le nom en pointillé + deux lignes de gribouillis : rien d'autre (exemple, plaquette Beispiel). */
+  D.cartes = (g, o) => {
+    o = Object.assign({ dr: 1, onde: null, n: 5, seed: 1001 }, o);
+    const C = U.ctx(g, o.seed, false, 1);
+    el("ellipse", { cx: 8, cy: 2, rx: 90, ry: 7, fill: "rgba(28,26,28,.18)" }, g);
+    [-13, -6].forEach((a, i) => {
+      const b = el("g", { transform: `rotate(${a} 0 -14)` }, g);
+      el("path", { d: rr(-70, -104, 140, 86, 4), fill: i ? "#FAFAF6" : "#F0F0EB", stroke: INK, "stroke-width": 2 }, b);
+      ln(b, "M-56 -86 L-20 -86", 2, "#C9C9C1");
+    });
+    const fr = el("g", { transform: "rotate(3 0 -14)" }, g), Cf = U.ctx(fr, o.seed + 2, false, 1);
+    ombre(fr, rr(-70, -108, 140, 88, 4), 3, 4);
+    U.shape(Cf, "c", rr(-70, -108, 140, 88, 4), MAT.white, { sw: 2.4, r: 0.4 });
+    txt(fr, "Dr.", -58, -78, 24, { anchor: "start", fill: mix("#A9A9A2", INK, clamp(o.dr, 0, 1)) });
+    for (let i = 0; i < o.n; i++) { const gros = o.onde != null && o.onde >= 0 && Math.floor(o.onde) === i; el("circle", { cx: f(-16 + i * 11), cy: -85, r: gros ? 3.6 : 2.2, fill: INK }, fr); }
+    ln(fr, "M-58 -70 L58 -70", 1.2, "#9A9A94");
+    grib(fr, -58, -56, 104, { n: 2, pas: 12, sw: 1.6, seed: 9 });
+    U.shape(C, "socle", "M-80 -20 L80 -20 L86 0 L-86 0 Z", MAT.wood, { sw: 2.6 });
+    ln(g, "M-66 -14 L66 -14", 2.2, INK);
+    return { carte: [0, -64], dr: [-44, -86] };
+  };
+  D.cartes.essais = [{}, { dr: 0.6, onde: 1 }];
+
+  /* ───────── D.loupe — lampe-loupe sur bras articulé (S7, S10, S26) ─────────
+   * o = { vers: [120, 130] (centre de la lentille depuis le pied), r: 60 (lentille), L: 130 (longueur de chaque segment) }
+   * Ancrage = le pied (platine murale) = pivot de m.sway 1°. Le bras rejoint la tête par son côté haut-gauche et le coude monte
+   * à droite : avec le pied en (150, 600), le coude est vers (274, 561) — sous la zone nue de la pastille (y ≤ 535).
+   * Renvoie { tete: centre de la lentille, coude }. */
+  D.loupe = (g, o) => {
+    o = Object.assign({ vers: [120, 130], r: 60, L: 130, seed: 1003 }, o);
+    const C = U.ctx(g, o.seed, false, 1), r = o.r, V = o.vers, rb = r + 14;
+    const E2 = [V[0] - 0.707 * rb, V[1] - 0.707 * rb], d = Math.hypot(E2[0], E2[1]), u = [E2[0] / d, E2[1] / d];
+    const hh = Math.sqrt(Math.max(0, o.L * o.L - (d / 2) * (d / 2))), E = [f(E2[0] / 2 + u[1] * hh), f(E2[1] / 2 - u[0] * hh)];
+    const bras = `M0 0 L${E[0]} ${E[1]} L${f(E2[0])} ${f(E2[1])}`;
+    // ombres
+    ln(g, bras, 10, "rgba(28,26,28,.14)", { transform: "translate(8 10)" });
+    el("circle", { cx: V[0] + 8, cy: V[1] + 10, r: rb, fill: "rgba(28,26,28,.14)" }, g);
+    // platine murale
+    U.shape(C, "plat", rr(-15, -30, 30, 60, 6), MAT.mid, { sw: 2.4 });
+    visTete(g, 0, -20, 3.4, 20, { ombre: false }); visTete(g, 0, 20, 3.4, -30, { ombre: false });
+    // bras : deux tiges parallèles + ressort sur le premier segment
+    ln(g, bras, 10, INK); ln(g, bras, 5.5, ACIER);
+    const n1 = [-E[1] / o.L, E[0] / o.L]; let rs = "";
+    for (let i = 0; i <= 12; i++) { const t = 0.25 + (i / 12) * 0.5, s = i % 2 ? 7 : -7; rs += (i ? "L" : "M") + f(E[0] * t + n1[0] * s) + " " + f(E[1] * t + n1[1] * s); }
+    ln(g, rs, 1.6, INK);
+    [[0, 0, 10], [E[0], E[1], 11], [E2[0], E2[1], 8]].forEach(([x, y, rr2]) => { el("circle", { cx: f(x), cy: f(y), r: rr2, fill: ACIER, stroke: INK, "stroke-width": 2.4 }, g); el("circle", { cx: f(x), cy: f(y), r: 3, fill: INK }, g); });
+    // tête : couronne (la lampe annulaire) + lentille
+    U.shape(C, "cour", cercle(V[0], V[1], rb), MAT.mid, { sw: 2.8 });
+    el("circle", { cx: V[0], cy: V[1], r, fill: "#EEF3F4", stroke: INK, "stroke-width": 2.6 }, g);
+    el("circle", { cx: V[0], cy: V[1], r: r - 8, fill: "none", stroke: "#FFFFFF", "stroke-width": 2, opacity: 0.8 }, g);
+    ln(g, `M${f(V[0] - r * 0.6)} ${f(V[1] - r * 0.15)} A${f(r * 0.62)} ${f(r * 0.62)} 0 0 1 ${f(V[0] - r * 0.15)} ${f(V[1] - r * 0.6)}`, 5, "#FFFFFF", { opacity: 0.9 });
+    el("path", { d: rr(V[0] + rb * 0.62 - 6, V[1] - rb * 0.62 - 6, 14, 10, 3), fill: "#4A4A46", stroke: INK, "stroke-width": 1.6, transform: `rotate(45 ${f(V[0] + rb * 0.62)} ${f(V[1] - rb * 0.62)})` }, g);
+    return { tete: [V[0], V[1]], coude: E, pied: [0, 0] };
+  };
+  D.loupe.essais = [{}];
+
+  /* Suite de l'inventaire (S8 et après) : decor-2.js, decor-3.js. */
 })();
