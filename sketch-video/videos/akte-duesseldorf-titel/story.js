@@ -1,5 +1,6 @@
-/* GABARIT d'épisode AKTE — saison 2 (voir serie/SAISON-2.md).
- * Copier ce dossier en videos/akte-<ville>-<sujet>/, puis remplacer tout ce qui est marqué « À REMPLACER ».
+/* AKTE 08 (numéro provisoire) — Düsseldorf · « جوج حروف » — socle, distribution, HUD, affiche (voir storyboard.md).
+ * Copie du gabarit de la saison 2 (videos/_gabarit/, serie/SAISON-2.md). Cadrage global INCHANGÉ (storyboard, Conventions) :
+ *   view { s: 1.06, oy: -20, breathe: 0.04 } ; caméra de base AXE = { s: 1.0, cx: 540, cy: 930 }, cx = 540 TOUJOURS.
  * Les blocs marqués « SOCLE » appliquent le skill et restent les mêmes dans tous les épisodes :
  *   kit (rubans, pastilles avec arabe détaché, cartes), carte de l'Allemagne + épingle, aides Persona,
  *   éléments obligatoires de l'intro (photo + anneau jaune + Instagram + « Yassine » + j'aime / s'abonner),
@@ -11,8 +12,8 @@
  */
 (function () {
   "use strict";
-  const AKTE_NO = "00", AKTE_NEXT = "00", TITRE = "عنوان الحلقة";      // À REMPLACER (le numéro n'apparaît qu'ici)
-  const QUESTION = "السؤال المكتوب فالآخر؟";                            // À REMPLACER : question ÉCRITE de l'affiche (jamais dite)
+  const AKTE_NO = "08", AKTE_NEXT = "09", TITRE = "جوج حروف";         // numéro PROVISOIRE (il n'apparaît qu'ici et dans le teaser)
+  const QUESTION = "واش كنتي عارف هاد القاعدة؟";                        // question ÉCRITE de l'affiche (jamais dite) — scenario.md, « Fin »
   const SC = SketchCast, K = Cast, W = 1080, U = SC.util, MAT = SC.MAT, INK = SC.INK;
   const NS = "http://www.w3.org/2000/svg";
   const el = (tag, a, p) => { const n = document.createElementNS(NS, tag); for (const k in a || {}) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
@@ -124,10 +125,22 @@
     const rl = (o, sc, pt) => [rnd((pt[0] - o[0]) / sc, 2), rnd((pt[1] - o[1]) / sc, 2)];                 // point monde -> repère du personnage (reachL / reachR)
     const walkTo = (base, t, a, d, facing) => Object.assign({}, base, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? PP.walk(rnd((((t - a) * 1.7) % 1 + 1) % 1, 16)) : PP.stand, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? { view: "side", facing } : {});
 
-    /* ───────── DISTRIBUTION — À REMPLACER : personnages NEUFS (jamais ceux d'un autre épisode) ─────────
-     * Paramètres Persona de chaque personnage (storyboard § 1) ; les scènes y ajoutent pose, tenue du moment, expression. */
+    /* ───────── DISTRIBUTION (storyboard § 1.1) — cinq personnages Persona NEUFS ─────────
+     * Paramètres EXACTS du storyboard ; les scènes y ajoutent la pose, la tenue du moment (colonne « Tenue par scène »),
+     * l'expression (§ 1.4) et l'échelle. Personne ne parle : talk: 0 partout, aucune bulle (§ 1.3).
+     * Le médecin de l'affaire n'est PAS un personnage : il n'a jamais de visage (D.silhouette, D.badge, D.platzschild — § 1.2). */
     const CAST = {
-      DOC: { look: "woman", hair: "bob", hairTone: "dark", outfit: "coat", seed: 11 },
+      // « نتا » : jeune médecin qui vient d'arriver du Maroc (figure générique, plaquette « Beispiel ») — rasé, jamais de pull.
+      //   S6, S24 : outfit "jacket" · S29 : outfit "coat", badge " " · S1, S10, S25 : tête seule (reflet) · S5, S11 : tête dans un médaillon
+      TOI: { look: "man", hair: "short", hairTone: "dark", beard: "none", glasses: false, seed: 801 },
+      // sa collègue, même diplôme — S6, S24 : outfit "sweater" · S29 : outfit "coat", badge " "
+      KOL: { look: "woman", hair: "ponytail", hairTone: "dark", glasses: true, seed: 802 },
+      // le juge de l'Amtsgericht : il siège SEUL (S19 seulement, « Rekonstruktion ») — cheveux et barbe blancs, sans lunettes
+      RIC: { look: "oldman", hair: "short", hairTone: "blond", beard: "short", glasses: false, outfit: "robe", seed: 806 },
+      // la procureure, figurante muette (S19)
+      STA: { look: "woman", hair: "bob", hairTone: "blond", glasses: false, outfit: "robe", seed: 807 },
+      // la greffière, figurante muette (S19) : elle tape
+      GRE: { look: "oldwoman", hair: "shortcurly", hairTone: "blond", glasses: true, outfit: "sweater", seed: 808 },
     };
 
     /* ───────── SCÈNES : elles sont écrites dans scenes-1.js … scenes-4.js (une partie de l'épisode par fichier) ─────────
