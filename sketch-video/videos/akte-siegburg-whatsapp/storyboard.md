@@ -1857,3 +1857,43 @@ sans pictogramme de la scène 14).
   10 à 15 px si elle la touche sur la capture.
 - Scène 16 — la plaque « uneinsichtig » (380 px) garde son micro « laut Gericht » collé dessous : il passe sur le bord de la
   tuile B (contour papier, lisible).
+
+### Étape « décors 3, HUD, mises en place » (scènes 17 à 22, `decor-3.js`, `story.js`, 26.11.2026)
+
+**Dessins (`decor-3.js`) changés par rapport au § 2 :**
+- `D.interdit` — deux parties (`partie: "bulle"` / `"panneau"`) : le panneau claque sur la bulle (deux nœuds) ; liseré papier autour du
+  panneau pour qu'il se détache. Aucun rouge.
+- `D.aPayer` — horloge À GAUCHE, étiquette « zu zahlen » à droite ; l'étiquette se pousse quand le cadran grossit (r 22 → 34).
+- `D.ticketCaisse` — présenté en colonnes de ticket (« Wochenende » … « 549 € », « Nachricht » … « 1.000 € », points de conduite) : ce
+  sont les mots du storyboard et du scénario, lettre pour lettre, sans le « · » ; la somme de la ligne 2 est surlignée de jaune (règle :
+  le jaune pour la somme) ; `lignes` 0..2 (la 2e en fondu), `fente` (fente sous la bulle).
+- `D.compteRecherche` — à droite de « 0 / 0 », les deux flèches « précédent / suivant », grises (rien à parcourir).
+- `D.pointInterro` — 62 px (et non 90) : le « ? » de Kalam est très haut (90 px donnaient 150 px de haut).
+- `D.coffre` — 360 × 356 ; la porte s'ouvre de 0 à 100° : sa face se resserre vers la charnière, puis on voit son REVERS à gauche de la
+  charnière (plus juste qu'une porte qui se réduit) ; texte de loi réduit à la largeur de la porte si besoin (jamais sous 13,5 px).
+- `D.cle` — l'étiquette pend VERTICALEMENT le long de la tige (texte dans le sens de l'étiquette) : à l'horizontale, « Einwilligung »
+  sortait de l'écran (clé à x 770) ou passait sur le coffre. Ajout : `D.cle({ partie: "crochet" })`, le crochet (vis + crochet) sur lequel
+  la clé tombe.
+- `D.pageJugement` — trombone en haut à gauche, incliné vers la gauche (il touchait le « A » de l'en-tête) ; l'emplacement du § 8 est
+  VIDE, sans cadre ni pointillé (un cadre vide ressemblait au « tampon vide » réservé).
+- `D.pouce` (`decor-2.js`) — contour continu ajouté sous le trait rough : à grande taille, le contour s'ouvrait aux jonctions pouce / main.
+
+**`story.js` — trois blocs nouveaux, avant `(window.EP_PARTS || []).forEach(…)` (le HUD du socle et l'affiche restent après) :**
+- `X.hud` (HUD propre, § 3) : `telephone` (le squelette ÉCRAN des Conventions : fond troué en T-NOTIF, coque, page découpée en couches
+  `ecran · contenu · barre · tete · bande · saisie · asc · reflet`, verre, `dessus`, `menton`, `notif`), `pastille`, `mention`,
+  `banniere`, `ascenseur`, `compteur`, `fantome`. Le fond des scènes ÉCRAN est TOUJOURS dans `c.hud` (papier à points + 4 formes), troué
+  ou non : il peut ainsi apparaître en fondu (plongée, montée) ; ne PAS appeler `k.bg()` dans une scène ÉCRAN.
+- `X.aides` : en plus de celles des Conventions, `jaillit` (pop à pivot donné), `dans` (re-parenter un nœud de Motion), `val`,
+  `avatarVif`, `bulleFil`, `tape`, `curseur`, et `brouillon` (le brouillon des scènes 8 → 11, d'un seul tenant, annexe D).
+- `X.lieux` : `fil`, `contact`, `plans`, `appel`, `regle` (ÉCRAN, tous bâtis sur `X.hud.telephone`), `salle`, `salon` (PIÈCE), `papier`.
+  Les personnages qui jouent (ELLE, LUI) sont posés par les scènes dans les places prévues (`R.lui` du salon, `P.elle` de l'appel) ; les
+  trois juges sont dessinés par le lieu (R23), surchargeables par `o.jug` / `o.as1` / `o.as2`.
+- L'ascenseur suit les SAUTS du fil (0,3 px par px de saut), pas le glissement continu du semis.
+- Affiche (scène 22) : réglée sur le § 4 (5 colonnes, `crop: [262, 1470]`, `freezeAt`, carte (110, 1160, 760, 290), question sur deux
+  lignes 46 / 52 px, « كتب ليا فالكومنتير » 40 px, flèche vers le bouton « commentaire »). Les textes passent par `c.text` (et non `k.ar`,
+  qui multiplie la taille par 1,3).
+
+**Vu sur captures (scènes d'essai provisoires, retirées ensuite) :** T-NOTIF (l'ancienne page visible sous la nouvelle, sur fil, appel,
+contact, règle), plongée et montée, sortie du téléphone vers une main, salle en cascade, salon (LUI assis derrière le plaid), salle de la
+scène 14 (deux blouses, machine éteinte, aimants, LUI qui marche avec son carton : le carton suit `out.handR`), appel vidéo (juge main
+levée : la manche ne cache pas AS2), brouillon L9 mot à mot + envoi (la mesure du vert, R11, reste à faire sur la vraie scène 11), page du jugement, coffre ouvert / fermé.

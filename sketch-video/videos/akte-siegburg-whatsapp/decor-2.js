@@ -435,7 +435,8 @@
     const main = "M0 0 C-1 -9 7 -15 18 -15 L44 -17 C56 -34 98 -40 128 -31 L128 37 C100 45 62 42 48 23 L18 15 C7 15 0 9 0 0 Z";
     el("path", { d: main, fill: OMBRE, transform: "translate(5 7)" }, b);
     U.shape(C, "main", main, MAT.skin, { sw: 2.6, r: 0.6 });
-    ln(b, "M44 -12 Q53 -1 46 13", 2.2, "#55524B");                                                                  // pli à la base du pouce
+    el("path", { d: main, fill: "none", stroke: INK, "stroke-width": 2.4, "stroke-linejoin": "round" }, b);          // contour continu : le trait rough s'ouvrait aux jonctions pouce / main
+    ln(b, "M44 -12 Q53 -1 46 13", 2.2, "#55524B");                                                                // pli à la base du pouce
     ln(b, "M78 -30 Q86 -22 96 -32", 1.6, "#8A8A84");
     U.shape(C, "manche", "M126 -36 L162 -40 L162 44 L126 40 Q120 2 126 -36 Z", MAT.white, { sw: 2.6, r: 0.5 });
     ln(b, "M135 -35 Q129 2 135 39", 1.6, "#8A8A84");

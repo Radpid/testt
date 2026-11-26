@@ -2,29 +2,29 @@
  * Suite dans decor-2.js et decor-3.js. Référence : storyboard.md § 2 (inventaire), § 3 (HUD), « Conventions » (constantes TEL).
  * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-siegburg-whatsapp [--only nom1,nom2]
  *
- * ÉTAT DE L'INVENTAIRE (storyboard § 2) — « fait (decor.js) », « fait (decor-2.js) » ou « à faire »
+ * ÉTAT DE L'INVENTAIRE (storyboard § 2) — TOUT EST FAIT (decor.js, decor-2.js, decor-3.js) ; rien d'abandonné
  *  A. Le téléphone et son interface
  *   D.tel               fait (decor.js)      D.semis           fait (decor.js)      D.reflet          fait (decor.js)
  *   D.telMini           fait (decor.js)      D.barreEtat       fait (decor.js)      D.enTete          fait (decor.js)
  *   D.saisie            fait (decor.js)      D.bulle           fait (decor.js)      D.avatar          fait (decor.js)
- *   D.avatarSil         fait (decor-2.js)    D.avatarPatient   fait (decor.js)      D.avatarToi       à faire (sc. 19)
+ *   D.avatarSil         fait (decor-2.js)    D.avatarPatient   fait (decor.js)      D.avatarToi       fait (decor-3.js)
  *   D.sceau             fait (decor.js)      D.sepDate         fait (decor.js)      D.ligneSysteme    fait (decor-2.js)
  *   D.notif             fait (decor.js)      D.caviar          fait (decor.js)      D.gribouillis     fait (decor.js)
  *   D.pouce             fait (decor-2.js)    D.ascenseur       fait (decor.js)      D.loupeCitation   fait (decor-2.js)
  *  B. Objets du fil
  *   D.icoDienst         fait (decor.js)      D.icoUrlaub       fait (decor.js)      D.icoCadeau       fait (decor.js)
- *   D.billetWeekend     fait (decor-2.js)    D.interdit        à faire (sc. 17)     D.aPayer          à faire (sc. 17)
- *   D.ticketCaisse      à faire (sc. 17 ; le papier commun existe : D.outils.papierTicket)   D.compteRecherche à faire (sc. 18)
- *   D.pointInterro      à faire (sc. 18)     D.camembert       fait (decor-2.js)
+ *   D.billetWeekend     fait (decor-2.js)    D.interdit        fait (decor-3.js)    D.aPayer          fait (decor-3.js)
+ *   D.ticketCaisse      fait (decor-3.js)    D.compteRecherche fait (decor-3.js)
+ *   D.pointInterro      fait (decor-3.js)     D.camembert       fait (decor-2.js)
  *  C. Appel vidéo, « Plans », fiche contact, coffre
  *   D.tuile             fait (decor-2.js)    D.salleAudience   fait (decor-2.js)    D.fondNeutre      fait (decor-2.js)
  *   D.commandes         fait (decor-2.js)    D.plaqueNom       fait (decor-2.js)    D.champRecherche  fait (decor-2.js)
  *   D.plansUI           fait (decor-2.js)    D.ficheLieu       fait (decor-2.js)    D.ficheContact    fait (decor.js)
- *   D.coffre            à faire (sc. 20)     D.cle             à faire (sc. 20)     D.feuilleDiag     à faire (sc. 20)
+ *   D.coffre            fait (decor-3.js)    D.cle             fait (decor-3.js)    D.feuilleDiag     fait (decor-3.js)
  *  D. Papier (scènes 12 et 21) — et le widget date (7, 12, 14)
  *   D.widgetDate        fait (decor-2.js)    D.soleilEte       fait (decor-2.js)    D.enveloppe       fait (decor-2.js)
- *   D.lettre            fait (decor-2.js)    D.stylo           fait (decor-2.js)    D.pageJugement    à faire (sc. 21)
- *   D.chrono            à faire (sc. 21)
+ *   D.lettre            fait (decor-2.js)    D.stylo           fait (decor-2.js)    D.pageJugement    fait (decor-3.js)
+ *   D.chrono            fait (decor-3.js)
  *  E. La salle des médecins (scènes 2, 7, 14)
  *   D.piece             fait (decor.js)      D.porte           fait (decor.js)      D.pateres         fait (decor.js)
  *   D.blouse            fait (decor.js)      D.tableauGardes   fait (decor.js)      D.aimant          fait (decor.js, + « gris » sc. 14)
@@ -39,8 +39,10 @@
  *  AJOUTS (pièces du HUD et traits à main levée, hors inventaire — voir storyboard.md « Écarts de construction »)
  *   D.telVerre  D.bande  D.mention  D.anneau  D.croix                                  faits (decor.js)
  *   D.accolade  D.fleche                                                               faits (decor-2.js)
- *  RESTE (scènes 17 à 21, decor-3.js) : D.avatarToi, D.interdit, D.aPayer, D.ticketCaisse, D.compteRecherche, D.pointInterro,
- *   D.coffre, D.cle, D.feuilleDiag, D.pageJugement, D.chrono.
+ *   D.cle({ partie: "crochet" }) : le crochet seul (ajout, decor-3.js) ; D.pouce : contour continu ajouté (decor-2.js, étape 3)
+ *  Scène 22 (affiche-résumé) : aucun dessin (socle, st.summary dans story.js). D.exemple (fin de ce fichier) : à SUPPRIMER par
+ *   l'étape des scènes, avec les scènes d'exemple de scenes-1.js.
+ *  HUD propre à l'épisode, aides partagées et mises en place fixes : story.js (X.hud, X.aides, X.lieux).
  *
  * CONVENTIONS
  *  - Chaque fonction dessine dans le groupe SVG g et reçoit ses paramètres animés dans o (valeurs arrondies : le moteur ne
