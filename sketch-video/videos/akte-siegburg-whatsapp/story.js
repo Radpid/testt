@@ -1,18 +1,21 @@
-/* GABARIT d'épisode AKTE — saison 2 (voir serie/SAISON-2.md).
- * Copier ce dossier en videos/akte-<ville>-<sujet>/, puis remplacer tout ce qui est marqué « À REMPLACER ».
- * Les blocs marqués « SOCLE » appliquent le skill et restent les mêmes dans tous les épisodes :
+/* AKTE 07 — « الگروپ » (ArbG Siegburg, 22.05.2026, 1 Ca 1741/25) — socle, distribution, HUD et affiche.
+ * Copie du gabarit (videos/_gabarit/story.js). Les blocs « SOCLE » appliquent le skill et ne changent pas :
  *   kit (rubans, pastilles avec arabe détaché, cartes), carte de l'Allemagne + épingle, aides Persona,
- *   éléments obligatoires de l'intro (photo + anneau jaune + Instagram + « Yassine » + j'aime / s'abonner),
  *   HUD (barre de progression + logo masqué pendant l'intro), affiche-résumé finale.
- * Tout le reste — décors (decor.js, decor-2.js), personnages, scènes (scenes-1.js … scenes-4.js), caméra, transitions,
- * HUD propre — est PROPRE à l'épisode. Ce fichier ne contient QUE le socle, la distribution, le HUD et l'affiche.
+ * PROPRE à l'épisode (storyboard.md) : la distribution (§ 1), les constantes du téléphone et les aides des scènes ÉCRAN
+ *   (X.aides : TEL, VERT, MEMBRES, punch, buzz, defileur, semisY, zoomTel, decoupe — « Conventions » du storyboard),
+ *   les décors (decor.js, decor-2.js, decor-3.js) et les scènes (scenes-1.js … scenes-4.js).
+ * Trois familles de scènes : ÉCRAN (tout dans c.hud, pixels exacts de la vidéo), PIÈCE (c.cam, cadrage global habituel),
+ *   PAPIER (c.cam, scène déclarée avec view: false). Le cadrage global reste donc celui du gabarit.
  * Zones Instagram : contenu entre x 90 et 990 (décor entre 110 et 960) ; rien d'important au-dessus de y 250, sous y 1470,
  * ni dans la colonne des boutons (x > 915, y 980–1650).
  */
 (function () {
   "use strict";
-  const AKTE_NO = "00", AKTE_NEXT = "00", TITRE = "عنوان الحلقة";      // À REMPLACER (le numéro n'apparaît qu'ici)
-  const QUESTION = "السؤال المكتوب فالآخر؟";                            // À REMPLACER : question ÉCRITE de l'affiche (jamais dite)
+  const AKTE_NO = "07", AKTE_NEXT = "08", TITRE = "الگروپ";            // numéro PROVISOIRE : il n'apparaît qu'ici (et dans le teaser de l'affiche)
+  const QUESTION = "الگروپ ديال الخدمة ديالكم: privé ولا خدمة؟";        // question ÉCRITE de l'affiche (jamais dite) — scenario.md « Fin »
+  const QUESTION_LIGNES = ["الگروپ ديال الخدمة ديالكم:", "privé ولا خدمة؟"];   // la même, coupée en deux lignes pour l'affiche (storyboard, scène 22)
+  const GROS_MOT = true;   // false : « … mein WE eh im A… war … » (ligne L6 du message et sa pastille) — décision de l'auteur (storyboard § 7, R17)
   const SC = SketchCast, K = Cast, W = 1080, U = SC.util, MAT = SC.MAT, INK = SC.INK;
   const NS = "http://www.w3.org/2000/svg";
   const el = (tag, a, p) => { const n = document.createElementNS(NS, tag); for (const k in a || {}) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
@@ -124,11 +127,46 @@
     const rl = (o, sc, pt) => [rnd((pt[0] - o[0]) / sc, 2), rnd((pt[1] - o[1]) / sc, 2)];                 // point monde -> repère du personnage (reachL / reachR)
     const walkTo = (base, t, a, d, facing) => Object.assign({}, base, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? PP.walk(rnd((((t - a) * 1.7) % 1 + 1) % 1, 16)) : PP.stand, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? { view: "side", facing } : {});
 
-    /* ───────── DISTRIBUTION — À REMPLACER : personnages NEUFS (jamais ceux d'un autre épisode) ─────────
-     * Paramètres Persona de chaque personnage (storyboard § 1) ; les scènes y ajoutent pose, tenue du moment, expression. */
+    /* ───────── DISTRIBUTION (storyboard § 1) — personnages NEUFS, paramètres Persona EXACTS ─────────
+     * Les scènes y ajoutent pose, tenue du moment, expression, regard. Dans cet épisode : elle seule est blonde, lui seul est bouclé.
+     * talk : 0 pour tout le monde, sauf ELLE en b14 et JUG en b15 (§ 1.5). Écrire un message n'est pas parler. */
     const CAST = {
-      DOC: { look: "woman", hair: "bob", hairTone: "dark", outfit: "coat", seed: 11 },
+      ELLE: { look: "woman", hair: "longwave", hairTone: "blond", glasses: false, outfit: "coat", seed: 701 },                        // la Stationsärztin (l'expéditrice) — coat partout
+      LUI: { look: "man", hair: "shortcurly", hairTone: "brown", beard: "stubble", glasses: false, outfit: "sweater", seed: 702 },    // le médecin en formation — sweater (salon, sc. 6) ; outfit: "jacket" au départ (sc. 14)
+      K1: { look: "woman", hair: "bun", hairTone: "brown", glasses: false, seed: 711 },                                               // les sept collègues du groupe : têtes seules (avatars)
+      K2: { look: "man", hair: "bald", hairTone: "dark", beard: "short", glasses: true, seed: 712 },
+      K3: { look: "woman", hair: "bob", hairTone: "brown", glasses: false, seed: 713 },
+      K4: { look: "man", hair: "short", hairTone: "dark", beard: "moustache", glasses: false, seed: 714 },
+      K5: { look: "oldwoman", hair: "short", hairTone: "grey", glasses: true, seed: 715 },
+      K6: { look: "man", hair: "crown", hairTone: "brown", beard: "stubble", glasses: true, seed: 716 },
+      K7: { look: "woman", hair: "short", hairTone: "dark", glasses: false, seed: 717 },
+      JUG: { look: "woman", hair: "bun", hairTone: "dark", glasses: true, outfit: "robe", seed: 761 },                                // la présidente de la chambre (seule en robe)
+      AS1: { look: "oldman", hair: "crown", hairTone: "dark", beard: "short", glasses: false, outfit: "sweater", seed: 762 },         // assesseur (côté salariés), en civil
+      AS2: { look: "oldwoman", hair: "ponytail", hairTone: "grey", glasses: false, outfit: "suit", seed: 763 },                       // assesseure (côté employeurs), en civil
     };
+    // Sans visage (dessins de decor*.js, pas Persona) : D.avatarSil (la collègue des urgences), D.avatarPatient, D.avatarToi, D.sceau (le tribunal dans le fil).
+
+    /* ───────── AIDES DES SCÈNES ÉCRAN (storyboard « Conventions ») — écrites UNE fois ici, lues par toutes les parties ─────────
+     * Une scène ÉCRAN dessine tout dans c.hud : c.camera / c.kick / c.shake n'y font rien → punch (coup de zoom) et buzz (vibreur)
+     * sur le nœud-groupe du téléphone. Les nœuds de Motion (m.obj, m.speech, m.typing, m.dust, m.rays…) naissent dans c.cam :
+     * les re-parenter aussitôt (parent.appendChild(noeud.g)). */
+    const TEL = D.TEL, VERT = D.VERT;                                                   // constantes du téléphone et teinte de l'épisode (decor.js)
+    const MEMBRES = ["ELLE", "LUI", "K1", "K2", "K3", "K4", "K5", "K6", "K7"];          // les neuf membres du groupe, dans l'ordre de la rangée (scène 5)
+    const punch = (n, at, amt = 0.04, dur = 0.5) => { const a = T(at); n.on((t, s) => { const p = prog(t, a, dur);
+      if (p > 0 && p < 1) { s.px = 525; s.py = 860; s.s *= 1 + amt * (p < 0.18 ? E.out(p / 0.18) : 1 - E.inOut((p - 0.18) / 0.82)); } }); return n; };
+    const buzz = (n, at, amp = 8, dur = 0.38) => { const a = T(at); n.on((t, s) => { const p = prog(t, a, dur);   // le vibreur
+      if (p > 0 && p < 1) { s.x += Math.sin((t - a) * 150) * amp * (1 - p); s.px = 525; s.py = 860; s.r += Math.sin((t - a) * 120) * 0.45 * (1 - p); } }); return n; };
+    // défilement du fil : position de départ y0 + sauts amortis { at, dy, d } ; le glissement continu est celui du SEMIS
+    const defileur = (y0, sauts) => (t) => y0 + sauts.reduce((y, k) => y + k.dy * E.out(prog(t, T(k.at), k.d || 0.35)), 0);
+    const semisY = (t0, stop = 1e9) => (t) => ((Math.min(t, stop) - t0) * 6) % 240;     // motif de 240 px de haut, répété (D.semis)
+    // plongée dans le téléphone (ou sortie, avec sortie = true) : le nœud passe de (x0, y0, échelle k0) à sa place (525, 860, 1)
+    const zoomTel = (n, at, x0, y0, k0 = 0.072, dur = 0.4, sortie = false) => { const a = T(at); n.on((t, s) => {
+      const e = sortie ? 1 - E.inOut(prog(t, a, dur)) : E.out(prog(t, a, dur));
+      s.px = 525; s.py = 860; s.s *= lerp(k0, 1, e); s.x += (x0 - 525) * (1 - e); s.y += (y0 - 860) * (1 - e); }); return n; };
+    // découpe animée de la page (T-NOTIF) — NE PAS utiliser Node.wipe sur la page : son inset() se mesure sur la boîte englobante,
+    // qui déborde dès que le fil défile. id unique par scène ("pg" + numéro) ; at = null : découpe pleine dès le début.
+    const decoupe = (c, id, at, dur = 0.32) => { const cp = el("clipPath", { id }, st.defs), r = el("rect", { x: 172, y: 302, width: 706, height: 1082, rx: 42 }, cp);
+      if (at != null) { const a = T(at); c.tick((t) => r.setAttribute("height", Math.max(0.01, 1082 * E.out(prog(t, a, dur))).toFixed(1))); } return `url(#${id})`; };
 
     /* ───────── SCÈNES : elles sont écrites dans scenes-1.js … scenes-4.js (une partie de l'épisode par fichier) ─────────
      * Chaque fichier fait : (window.EP_PARTS = window.EP_PARTS || []).push(function (X) { … X.st.scene({ … }) … });
@@ -136,8 +174,8 @@
      * X.lieux = mises en place FIXES partagées entre les parties (ex. X.lieux.chambre = (c, o) => { … }). */
     const X = { sv, st, T, E, prog, lerp, clamp, el, isLatin, SC, K, U, MAT, INK, W, NS, PE, PP, D, M,
       kit, drawDE, geoAt, pinAt, blinkAt, talkAt, rnd, pp, ph, breathe, rl, walkTo,
-      CAST, BEAT_IDS, LAST, AFTER_INTRO, AKTE_NO, AKTE_NEXT, TITRE, QUESTION,
-      lieux: {}, aides: {},
+      CAST, BEAT_IDS, LAST, AFTER_INTRO, AKTE_NO, AKTE_NEXT, TITRE, QUESTION, QUESTION_LIGNES, GROS_MOT,
+      lieux: {}, aides: { TEL, VERT, MEMBRES, punch, buzz, defileur, semisY, zoomTel, decoupe },
       use(c) { c_ = c; return kit(c); } };
     (window.EP_PARTS || []).forEach((part) => part(X));
 
