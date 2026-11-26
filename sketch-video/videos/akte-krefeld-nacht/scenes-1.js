@@ -12,7 +12,7 @@
     const m = M.of(c);
     c.camera([{ at: 0, s: 1.0, cx: 540, cy: 860 }, { at: "b2@end", s: 1.03, cx: 540, cy: 860, ease: "lin" }]);   // poussée lente continue
     const lamp = m.obj(D.exemple, 540, 300, 1); m.build(lamp, 0.05, "drop", { dist: 160, dur: 0.45 }); m.pend(lamp, 0.5, 5, [540, 300], { idle: 1.2 });
-    pp(0, 0, 1.1, (t) => Object.assign({}, CAST.DOC, PP.stand, { view: "three-quarter", facing: 1, expr: t < T("b2") ? "worried" : "shock", blink: rnd(blinkAt(t, 1)) }))
+    pp(0, 0, 1.1, (t) => Object.assign({}, CAST.AZ, PP.stand, { view: "three-quarter", facing: 1, expr: t < T("b2") ? "worried" : "shock", blink: rnd(blinkAt(t, 1)) }))
       .on((t, s) => { s.x += 540; s.y += 1300; }).on(breathe(1));
     k.chip("Geldstrafe", "غرامة", 540, 470, 40, { yellow: true }).pop("b1", 0.3);
     c.kick("b2", 0.06);
