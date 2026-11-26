@@ -13,7 +13,24 @@ Lis d'abord `sketch-video/serie/SERIE.md` : format, règles de vérité, épisod
 **Modèle le plus récent : AKTE 02, `sketch-video/videos/akte-unna-geburt/`** (Persona, `decor.js`, intro avec
 photo, chambre vue de face, pauses ciblées, sons naturels). AKTE 01 (`videos/ep01-spritze/`, publié nov. 2026)
 reste la référence pour la carte, le moniteur et l'affiche finale.
-Copier le dossier le plus récent pour un nouvel épisode et remplacer le contenu ; ne pas repartir de zéro.
+Nouvel épisode : copier **`sketch-video/videos/_gabarit/`** (socle du skill : pastilles, carte, intro, HUD, affiche
+finale, glossaire de l'épisode) et écrire le reste ; ne pas repartir de zéro, ne pas recopier les décors d'un autre.
+
+**Chaque épisode a SA mise en scène** (demande de l'auteur, 26.11.2026 : « très différent de l'autre : pas la même
+tournure, pas les mêmes personnages, pas les mêmes décors, et surtout pas le même style — mais le même skill »).
+Les règles ci-dessous ne changent jamais ; ce qui change à chaque épisode : la tournure du récit (rembobinage, nuit
+heure par heure, objet qu'on suit, écran de téléphone, 2e personne, écran coupé en deux…), le dispositif visuel
+signature, la grammaire de caméra, la transition signature, une teinte discrète sur l'objet signature, le ton et la
+musique, la FORME des scènes obligées (tribunal, sanction, carte, intro, scène muette). La direction de la saison en
+cours est dans `sketch-video/serie/SAISON-2.md` (tableau des différences + fiche par épisode + interdits de
+ressemblance) : la lire avant d'écrire, et la tenir à jour.
+
+**Préparer avant la voix** (saison 2) : dossier → script → storyboard détaillé → décors et scènes animées sur un
+minutage PROVISOIRE (`tools/preview_timings.mjs`, débit de l'auteur ≈ 3,05 mots/s à ×1,3), contrôlés par captures ;
+la voix arrive ensuite, `montage_voix.py` remplace `timings.js` et les repères (« bN@mot ») recalent tout.
+Contrôles : `tools/planche.mjs <épisode> --beats --ig` (planches lisibles avec zones Instagram),
+`tools/planche.mjs --from --to --step 0.1` (début de scène image par image), `tools/mouvement.mjs` (décor figé),
+`tools/overlapscan.mjs`, `tools/errcheck.mjs`, `tools/cuetimes.mjs`.
 
 ```
 videos/<episode>/
