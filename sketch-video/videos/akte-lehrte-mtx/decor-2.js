@@ -582,9 +582,10 @@
     ligne(H, "M8 -22 q8 2 12 -4", 1.2, "#B4B4AE");                                                                                       // pli de la joue
     ligne(H, "M23 -71 q3 3 6 2", 1.6);                                                                                                  // narine
     ligne(H, "M20 -56 C26 -48 32 -42 40 -38", 1.3, "#B4B4AE");                                                                          // sillon
-    U.shape(CH, "moustache", "M26 -62 C30 -73 46 -74 56 -62 C60 -56 56 -48 49 -50 C46 -45 38 -45 34 -50 C28 -50 24 -56 26 -62 Z", poil, { sw: 2.2, r: 0.5 });
-    ligne(H, "M34 -62 q6 -4 12 0 M40 -56 q6 -3 10 1", 1.2, "#77776F");
-    U.shape(CH, "oreille", "M-20 8 C-20 -2 -6 -4 6 2 C14 6 14 18 4 20 C-6 22 -20 18 -20 8 Z", skin, { sw: 2.2 }); ligne(H, "M-12 8 q8 -6 14 2 q-4 6 -10 4", 1.4, "#77776F");
+    // grosse moustache blanche : un croissant épais qui part sous le nez et tombe sur la lèvre (vers le menton, à droite)
+    U.shape(CH, "moustache", "M27 -61 C29 -71 45 -72 55 -62 C59 -58 62 -53 63 -47 C58 -50 54 -51 50 -50 C46 -52 40 -53 35 -53 C30 -54 26 -57 27 -61 Z", poil, { sw: 2.2, r: 0.5 });
+    ligne(H, "M33 -62 q6 -5 13 -2 M40 -57 q7 -4 14 2 M50 -60 q5 1 8 7", 1.2, "#77776F");
+    U.shape(CH, "oreille", "M-10 8 C-10 -2 4 -4 16 2 C24 6 24 18 14 20 C4 22 -10 18 -10 8 Z", skin, { sw: 2.2 }); ligne(H, "M-2 8 q8 -6 14 2 q-4 6 -10 4", 1.4, "#77776F");
     U.shape(CH, "couronne", "M-55 -12 C-60 6 -56 26 -42 40 C-28 52 -6 56 18 50 L16 42 C-4 46 -24 42 -36 32 C-48 22 -50 4 -46 -10 Z", poil, { sw: 1.8, r: 0.6 });
     [[-50, 0], [-46, 22], [-30, 40], [-6, 48]].forEach(([x, y]) => ligne(H, `M${x} ${y} q5 -4 9 1`, 1.2, "#77776F"));
     // épaule en chemise de nuit (rayures fines)

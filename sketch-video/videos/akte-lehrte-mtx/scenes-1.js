@@ -1,71 +1,77 @@
-/* scenes-1.js — PARTIE 1 de l'épisode : accroche, intro de l'auteur, premières scènes (voir storyboard.md § 4).
- * Les exemples ci-dessous sont À REMPLACER. Une idée par scène ; le décor se construit en cascade puis il vit.
- * Dans chaque scène : const k = X.use(c);  puis  const m = M.of(c);
- */
+/* scenes-1.js — ESSAI PROVISOIRE des mises en place (étape « décors 3, HUD, mises en place ») : une scène de 3 s par lieu. */
 (window.EP_PARTS = window.EP_PARTS || []).push(function (X) {
   "use strict";
-  const { st, T, E, prog, lerp, clamp, el, U, MAT, INK, PE, PP, D, M, CAST, kit, drawDE, pinAt, blinkAt, talkAt, rnd, pp, ph, breathe, rl, walkTo, AFTER_INTRO, LAST } = X;
+  const { st, T, E, prog, lerp, clamp, el, U, MAT, INK, PE, PP, D, M, CAST, kit, blinkAt, talkAt, rnd, pp, ph, breathe, rl, lieux, aides, places } = X;
+  const { lettre, mainDe, mention, chaine, pastille, bord, frappe, comprime } = aides;
+  const LET = { titre: 16, cadre: 1, age: 1, verl: 1, lignes: 6, mtx: 17, freq: "t", nfreq: 7, points: 7, sig1: 1, sig2: 1, plis: 1 };
+  const cam = (c, cy) => c.camera([{ at: c.start, s: 1.0, cx: 540, cy }, { at: c.start + 0.2, s: 1.02, cx: 540, cy, d: 2.8, ease: "lin" }]);
 
-  /* ═══════ 1 · ACCROCHE — À REMPLACER : la sanction chiffrée, décor complet, mouvement fort dès la 1re image ═══════ */
-  st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
-    const k = X.use(c); k.bg();
-    const m = M.of(c);
-    c.camera([{ at: 0, s: 1.0, cx: 540, cy: 860 }, { at: "b2@end", s: 1.03, cx: 540, cy: 860, ease: "lin" }]);   // poussée lente continue
-    const lamp = m.obj(D.exemple, 540, 300, 1); m.build(lamp, 0.05, "drop", { dist: 160, dur: 0.45 }); m.pend(lamp, 0.5, 5, [540, 300], { idle: 1.2 });
-    pp(0, 0, 1.1, (t) => Object.assign({}, CAST.DOC, PP.stand, { view: "three-quarter", facing: 1, expr: t < T("b2") ? "worried" : "shock", blink: rnd(blinkAt(t, 1)) }))
-      .on((t, s) => { s.x += 540; s.y += 1300; }).on(breathe(1));
-    k.chip("Geldstrafe", "غرامة", 540, 470, 40, { yellow: true }).pop("b1", 0.3);
-    c.kick("b2", 0.06);
+  st.scene({ from: 0, in: "cut", inDur: 0, build(c) { const k = X.use(c), m = M.of(c); cam(c, 900);
+    const L = lieux.bureau(c, m, "A", { version: "accroche", haloR: (t) => lerp(420, 330, prog(t, 0.15, 0.5)), chocs: [0.15] });
+    lettre(c, () => LET, 540, 850, 0.74, -2, L.papier.g);
+    mention(c, "LAUT PRESSE"); pastille(c, "Strafbefehl · 9 000 – 13 500 € pro Arzt", "عقوبة مكتوبة: من 9000 حتى 13500 أورو لكل طبيب", 0, null, { size: 26, show: true });
   } });
-
-  /* ═══════ 2 · INTRO DE L'AUTEUR — SOCLE pour les éléments (photo, anneau, Instagram, « Yassine », @dr.aguilo, j'aime,
-   *  s'abonner, summary:false) ; le CADRE autour (tableau de garde, badge, téléphone, plaque, polaroïd…) est propre à l'épisode ═══════ */
-  st.scene({ from: "i1", in: "iris", inDur: 0.3, summary: false, build(c) {
-    const k = X.use(c); k.bg();
-    c.camera([{ at: "i1", s: 1.05, cx: 540, cy: 820 }, { at: "i2", s: 1.0, cx: 540, cy: 860, d: 0.5 }]);
-    const m = M.of(c); m.rays(540, 600, { op: 0.15, R: 560, speed: 6, at: "i1" });
-    const photo = el("g"), C = U.ctx(photo, 88, false, 1);
-    const cp = el("clipPath", { id: "clipPortrait" }, el("defs", {}, photo)); el("circle", { cx: 0, cy: 0, r: 208 }, cp);
-    el("circle", { cx: 9, cy: 12, r: 236, fill: "#D2D2CB" }, photo);
-    U.shape(C, "ring", "M-236 0 A236 236 0 1 1 236 0 A236 236 0 1 1 -236 0", MAT.yellow, { sw: 4 });
-    el("image", { href: "assets/portrait.png", x: -210, y: -210, width: 420, height: 420, "clip-path": "url(#clipPortrait)", preserveAspectRatio: "xMidYMid slice" }, photo);
-    U.shape(C, "ring1", "M-209 0 A209 209 0 1 1 209 0 A209 209 0 1 1 -209 0", {}, { sw: 5.5 });
-    U.stroke(C, "dash", "M-150 -196 C -90 -232, 60 -236, 140 -200", { sw: 3, stroke: "#FFFFFF" });
-    // badge Instagram dessiné, accroché au cadre
-    const ig = el("g", { transform: "translate(160 160)" }, photo), I = U.ctx(ig, 89, false, 1);
-    el("path", { d: U.rrect(-46, -46, 92, 92, 26), fill: "#D2D2CB", transform: "translate(5 6)" }, ig);
-    U.shape(I, "sq", U.rrect(-46, -46, 92, 92, 26), MAT.white, { sw: 4.2 });
-    U.shape(I, "c", "M-19 0 A19 19 0 1 1 19 0 A19 19 0 1 1 -19 0", MAT.yellow, { sw: 4.2 });
-    el("circle", { cx: 25, cy: -25, r: 6, fill: INK }, ig);
-    c.node(photo).on((t, s) => { s.x += 540; s.y += 600; }).pop("i1", 0.4);
-    k.ribbon("Yassine", 540, 905, { size: 60 }).wipe("i1@ياسين", 0.35);
-    const hd = el("g"), H = U.ctx(hd, 90, false, 1);
-    U.shape(H, "sq", U.rrect(-21, -21, 42, 42, 12), MAT.white, { sw: 3 }); U.stroke(H, "c", "M-9 0 A9 9 0 1 1 9 0 A9 9 0 1 1 -9 0", { sw: 3 }); el("circle", { cx: 12, cy: -12, r: 3, fill: INK }, hd);
-    c.node(hd).on((t, s) => { s.x += 410; s.y += 996; }).pop("i1@ياسين+0.15", 0.3);
-    c.text("@dr.aguilo", 560, 1012, 46, "de").fade("i1@ياسين+0.15", 0.3);
-    k.chip("Arzt in Deutschland", "طبيب فألمانيا", 540, 1078, 26).pop("i1@فألمانيا").hide("i2@حقيقية", 0.15);
-    k.chip("echte Fälle · deutsche Gerichte", "قصص حقيقية من المحاكم", 540, 1078, 26, { yellow: true }).pop("i2@حقيقية+0.15").hide("i3", 0.15);
-    // j'aime + s'abonner
-    const la = T("i3@j'aime"), fa = T("i3@abonne");
-    c.sk((g, p) => PE.props.heart(g, { size: 1.25, fill: p.on, beat: p.b }), (t) => ({ on: t >= la, b: rnd(Math.sin(Math.min(1, prog(t, la, 0.35)) * Math.PI), 10) }), 330, 1185, 1).pop("i3", 0.3);
-    c.text("j'aime", 330, 1258, 30, "de").pop("i3", 0.3);
-    c.sk((g, p) => {
-      while (g.firstChild) g.removeChild(g.firstChild);
-      const B = U.ctx(g, 91, false, 1);
-      el("path", { d: U.rrect(-150, -42, 300, 84, 22), fill: "#D2D2CB", transform: "translate(6 7)" }, g);
-      U.shape(B, "btn", U.rrect(-150, -42, 300, 84, 22), p.on ? MAT.yellow : MAT.white, { sw: 3.4 });
-      U.text(g, p.on ? "✓ abonné" : "+ s'abonner", 0, 14, 40, {});
-    }, (t) => ({ on: t >= fa }), 640, 1190, 1).pop("i3+0.1", 0.3);
-    c.kick(la, 0.05); c.kick(fa, 0.05);
+  st.scene({ from: 3, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 900);
+    const L = lieux.bureau(c, m, "A", { at: 3 }), P = places.A.lettre;
+    lettre(c, () => Object.assign({}, LET, { sig1: 0, sig2: 0, plis: 0 }), P.x, P.y, P.s, P.rot, L.papier.g);
+    mainDe(c, "M1", (t) => ({ x: 612, y: 1252, pose: "frappe" }), { parent: L.mains.g });
+    mainDe(c, "M1", (t) => ({ x: 388, y: 1252, pose: "frappe", miroir: true, montre: 1, sec: Math.floor(t) % 60, jeton: null }), { parent: L.mains.g });
+    mention(c, "LAUT PRESSE · REKONSTRUKTION"); chaine(c); bord(c);
   } });
-
-  /* ═══════ 3 · CARTE — exemple (À ADAPTER : forme propre à l'épisode, voir SAISON-2.md) ═══════ */
-  st.scene({ from: AFTER_INTRO, in: "iris", inDur: 0.3, build(c) {
-    const k = X.use(c); k.bg();
-    const m = M.of(c); m.shapes({ seed: 5 });
-    const geo = drawDE(c, 330, 860, 40, AFTER_INTRO), [x, y] = geo(6.96, 50.94);
-    pinAt(c, x, y, AFTER_INTRO + "+0.4"); m.ripple(x, y, T(AFTER_INTRO) + 0.8);
-    k.chip("Köln", "كولونيا", x + 150, y - 40, 34).pop(AFTER_INTRO + "+0.6");
-    c.camera([{ at: AFTER_INTRO, s: 1.0, cx: 540, cy: 860 }, { at: AFTER_INTRO + "+0.5", s: 1.25, cx: x + 80, cy: y, d: 0.6 }]);
+  st.scene({ from: 6, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 900);
+    const L = lieux.bureau(c, m, "B", { at: 6, coche: 3, enveloppe: true }), P = places.B.lettre;
+    lettre(c, () => Object.assign({}, LET, { plis: 1 }), P.x, P.y, P.s, P.rot, L.papier.g);
+    mainDe(c, "M3", () => ({ x: 860, y: 790, a: -90, pose: "stylo", stylo: "clic" }), { parent: L.mains.g });
+    mention(c, "LAUT PRESSE · REKONSTRUKTION"); chaine(c); bord(c);
+  } });
+  st.scene({ from: 9, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 900);
+    const L = lieux.bureau(c, m, "C", { at: 9 });
+    m.obj((g) => D.dossier(g, { ouvert: 1 }), 350, 900, 1, {});
+    m.obj((g) => D.coupure(g, {}), 715, 860, 1, {});
+    mention(c, "LAUT PRESSE"); chaine(c); bord(c);
+  } });
+  st.scene({ from: 12, in: "fade", inDur: 0.25, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    lieux.chambre(c, m, { calAt: 12, pendAt: 12, cal: (t) => ({ n: 2, coin: 0 }) });
+    mention(c, "LAUT PRESSE · REKONSTRUKTION"); chaine(c);
+    pastille(c, "3 Wochen", "تلت سيمانات", 12.5, null, { size: 32 });
+  } });
+  st.scene({ from: 15, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    const L = lieux.couloir(c, m, { at: 15, fiche: true });
+    L.x.forEach((x, i) => { const n = c.sk((g, p) => D.etiquette(g, p), (t) => ({ grey: 0 }), x, L.assise, 1, 0, L.devant.g); m.pend(n, 15.5 + 0.1 * i, 16, [x, L.assise], { idle: 1.5 }); });
+    const r = el("g", { transform: "translate(700 745)" }); D.ruban(r, { txt: "§ 222 StGB", size: 40, ancre: "centre" }); c.node(r);
+    mention(c, "LAUT PRESSE"); chaine(c); bord(c);
+    pastille(c, "9 000 – 13 500 € pro Arzt", "من 9000 حتى 13500 أورو لكل طبيب", 15.3, null, { size: 30 });
+  } });
+  st.scene({ from: 18, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    const L = lieux.hall(c, m, { at: 18, ouv: (i, t) => (t > 19 ? 0.3 : 0), claque: (i) => 19 + 0.14 * i });
+    L.boites.forEach((b, i) => { const n = c.sk((g, p) => D.enveloppeJaune(g, p), () => ({}), b.x, 772, 0.62, 0, b.courrier.g); m.build(n, 18.8 + 0.14 * i, "drop", { dist: 270, dur: 0.32 }); });
+    mention(c, "LAUT PRESSE"); chaine(c); bord(c);
+    pastille(c, "Amtsgericht Lehrte · Juli 2016", "المحكمة ديال Lehrte", 18.2, null, { size: 28 });
+  } });
+  st.scene({ from: 21, in: "slideLeft", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    const L = lieux.salle(c, m, { at: 21 });
+    pp(540, 1150, 0.9, (t) => Object.assign({}, CAST.RIC, { view: "front", expr: "focused", look2: [0, 0.35], blink: rnd(blinkAt(t, 2)), reachL: [-125, -250], reachR: [125, -250], bendL: 1, bendR: -1 }), L.juge.g).on(breathe(2));
+    const b = el("g", { transform: "translate(540 622)" }); D.bande(b, { l1: "„jeder der vier Ärzte habe", l2: "Verantwortung zu tragen\"", l3: "— laut Presse", size: 24, punaises: 1 }); c.node(b);
+    [240, 420, 600, 780].forEach((x, i) => { const r = el("g", { transform: `translate(${x} 1200)` }); D.ruban(r, { txt: "JEDER", size: 16, ancre: "centre" }); c.node(r, L.devant.g);
+      mainDe(c, ["M1", "M2", "M3", "M4"][i], () => ({ x, y: 1290 }), { k: 0.78, parent: L.devant.g }); });
+    mention(c, "LAUT PRESSE"); chaine(c); bord(c);
+    pastille(c, "Hauptverhandlung · 24.01.2017", "الجلسة", 21.3, null, { size: 28 });
+  } });
+  st.scene({ from: 24, in: "slideUp", inDur: 0.34, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    lieux.page(c, m);
+    m.obj((g) => D.pilulier(g, {}), 510, 900, 1, {});
+    for (let i = 0; i < 7; i++) comprime(c, 216 + 98 * i, 910, { at: 24.3 + 0.05 * i, i });
+    m.obj((g) => D.boiteMTX(g, {}), 330, 1200, 1, {});
+    mention(c, "REGEL VON HEUTE · KEINE RECHTSBERATUNG"); chaine(c); bord(c, "haut");
+    frappe(c, "1 × pro Woche", 300, 1060, 40, 24.4, 0.6);
+  } });
+  st.scene({ from: 27, in: "cut", inDur: 0, build(c) { const k = X.use(c), m = M.of(c); cam(c, 930);
+    lieux.page(c, m);
+    lettre(c, () => ({ titre: 16, cadre: 1, lignes: 6, mtx: 17, freq: "p", points: 1, sig1: 0, sig2: 0 }), 400, 930, 0.7, 0);
+    m.obj((g) => D.fiches3(g, { actif: 2 }), 750, 800, 1, {});
+    m.obj((g) => D.planSoins(g, { kind: "mini" }), 480, 1275, 1, {});
+    m.obj((g) => D.loupe(g, { txt: "1 × pro Woche" }), 519, 1008, 1, {});
+    mainDe(c, "MT", () => ({ x: 560, y: 1240, pose: "stylo" }));
+    mention(c, "REGEL VON HEUTE · KEINE RECHTSBERATUNG", { ar: null }); chaine(c);
   } });
 });
