@@ -117,6 +117,38 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 - Angle jeunes médecins : les « petits jobs » de télémédecine qui demandent de signer sans voir le patient.
 - Sources : justiz.hamburg.de …/3bs78-22-data.pdf ; Rheinisches Ärzteblatt 08/2023 ; zm-online.
 
+## Sélection « ça peut t'arriver » (recherche du 26.11.2026)
+
+Le type d'AKTE 01 (piège du quotidien, jeune médecin, système défaillant) est celui qui a le mieux marché.
+
+1. **Transfusion, 63 heures — AG Köln 16.05.2012, 613 Ls 3/12** (jugement complet : iww.de/quellenmaterial/id/91519).
+   Assistenzärztin depuis 9 mois (Approbation 01.12.2009, en poste depuis le 15.10.2010). 30.07.2011, 21 h 50, Köln :
+   semaine d'environ 63 h puis Notdienst de plus de 12 h, « Blutführerschein » pas encore reçu. Le laboratoire lui
+   remet en même temps deux poches pour deux patients ; le groupe n'est écrit que sur la feuille d'accompagnement.
+   Patient de 63 ans (0 Rh+, cirrhose, anémie) reçoit du A Rh+ ; vomit après 10 min ; un tiers de la poche passé ;
+   décès le lendemain à 13 h 37. Le lendemain, l'administration lui fait signer qu'elle avait reçu la formation
+   (faux). Verdict : « Die Angeklagte ist einer fahrlässigen Tötung schuldig. » mais « Von einer Bestrafung wird
+   abgesehen » (§ 60 StGB) ; le parquet demandait 90 Tagessätze ; « gravierendes Organisationsverschulden der
+   Krankenhausverwaltung » ; effondrement, mois de psychothérapie. Rechtskraft non indiquée (à vérifier).
+   Pas d'infirmière dans le jugement. Maquette : `videos/transfusionsfehler/`.
+   Complément possible : AG Duderstadt (Strafbefehl, article du 19.01.2017) — Oberarzt de 66 ans, même nom de
+   famille, données non comparées, Bedside-Test non documenté : 90 × 130 € = 11 700 €, licencié.
+2. **Seule la nuit — Krefeld, jugement fin sept. 2010** (une seule source : Ärzte Zeitung 01.10.2010, d'après la
+   Westdeutsche Zeitung). Nuit du 1er nov. 2008 : deux Assistenzärzte pour plus de 100 patients + réa + urgences ;
+   diabétique de 47 ans, glycémie très haute, insuline, test rapide sans laboratoire, vue « alle zwei Stunden » ;
+   Oberarzt de garde injoignable ; expert : « schweres Organisationsverschulden ». Assistenzärztin (32 ans) :
+   7 500 € pour fahrlässige Tötung ; le collègue acquitté. Manquent : tribunal, Az., Tagessätze, Rechtskraft.
+3. **« Il est juste bourré » — AG Tettnang, mai 2026** : voir fiche 02 ; toujours **non définitif**, appel inconnu.
+4. **« täglich » au lieu de « wöchentlich » — AG Lehrte** (Ärzte Zeitung 25.01.2017) : méthotrexate 15 mg écrit
+   « par jour » dans la lettre de sortie, contresignée, puis repris tel quel en gériatrie ; patient de 79 ans mort en
+   2013 ; Strafbefehle de 9 000 à 13 500 € contre quatre médecins (dont deux Stationsärzte) ; opposition, issue
+   inconnue. Même erreur à Dachau (2000) : deux Assistenzärzte, classement contre 5 000 € (LG München II, 2007).
+5. Formats légers, sans décès : **WhatsApp** — ArbG Siegburg 22.05.2026, 1 Ca 1741/25 : Stationsärztin écrit dans
+   le groupe du service les diagnostics d'un collègue malade (« einen Pups quer sitzen ») → 1 000 € + interdiction,
+   non définitif. **Titre « Dr. »** — AG Düsseldorf 02.08.2019, 119 Cs 426/19 : doctorat iranien, 60 × 250 € =
+   15 000 € (§ 132a StGB), dénoncé par l'Ärztekammer Nordrhein, appel annoncé ; protagoniste peu sympathique
+   (enquête pour décès de patientes) → plutôt un Reel d'information qu'une histoire.
+
 ## Réserve (autres cas trouvés, sources dans l'historique de recherche)
 
 - Gütersloh 2018/2022 : Assistenzarzt d'anesthésie (47 ans), appareil d'anesthésie non vérifié, ado de 14 ans
