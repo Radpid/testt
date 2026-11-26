@@ -55,6 +55,29 @@
     }
     return o;
   }
+  // contour fermé lissé (Catmull-Rom) puis rééchantillonné tous les `step` px (points à peu près équidistants)
+  function lisse(pts, step) {
+    const n = pts.length, dense = [];
+    for (let i = 0; i < n; i++) {
+      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+      for (let k = 0; k < 8; k++) { const t = k / 8, t2 = t * t, t3 = t2 * t, cr = (j) => 0.5 * (2 * p1[j] + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2 + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3); dense.push([cr(0), cr(1)]); }
+    }
+    const cum = [0]; for (let i = 1; i <= dense.length; i++) { const a = dense[i - 1], b = dense[i % dense.length]; cum.push(cum[i - 1] + Math.hypot(b[0] - a[0], b[1] - a[1])); }
+    const T = cum[cum.length - 1], N = Math.max(6, Math.round(T / step)), out = [];
+    for (let j = 0, i = 0; j < N; j++) { const L = j * T / N; while (cum[i + 1] < L) i++; const a = dense[i], b = dense[(i + 1) % dense.length], u = (L - cum[i]) / Math.max(1e-6, cum[i + 1] - cum[i]); out.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]); }
+    return out;
+  }
+  // bord en FESTONS (boucles serrées : petits arcs ronds tournés vers l'extérieur, jamais de pointes)
+  function festons(pts, step, amp) {
+    const q = lisse(pts, step), n = q.length; let cx = 0, cy = 0; q.forEach((p) => { cx += p[0] / n; cy += p[1] / n; });
+    let d = `M${f(q[0][0])} ${f(q[0][1])}`;
+    for (let i = 0; i < n; i++) {
+      const a = q[i], b = q[(i + 1) % n], m = mid(a, b), dd = norm(sub(b, a)); let nn = [dd[1], -dd[0]];
+      if ((m[0] - cx) * nn[0] + (m[1] - cy) * nn[1] < 0) nn = mul(nn, -1);
+      const c = add(m, mul(nn, amp * 2)); d += ` Q${f(c[0])} ${f(c[1])} ${f(b[0])} ${f(b[1])}`;
+    }
+    return d + " Z";
+  }
   // racine retournée (tête à droite) : hachures restent à −41° à l'écran (ctx flip), ancres renvoyées retournées
   const racine = (g, o, seed) => { const flip = !!o.flip, r = el("g", flip ? { transform: "scale(-1 1)" } : {}, g); return { r, C: U.ctx(r, seed, flip, 1), fx: (p) => [f(flip ? -p[0] : p[0]), f(p[1])], flip }; };
   const roue = (g, x, y, r, roll, col) => {                                                            // roue à 3 rayons
@@ -838,19 +861,21 @@
       }
       ln(ub, `M${f(s * (sw - 14))} ${f(sh + 2)} Q${f(s * (sw - 4))} ${f(sh + 14)} ${f(s * (sw - 6))} ${f(sh + 30)}`, 1.4, seam);
     });
-    // tête de dos : joue si elle tourne (jamais d'œil), oreilles, crâne, cheveux
+    // tête de dos : joue si elle tourne (jamais d'œil), crâne (plus étroit en bas : la nuque), cheveux qui couvrent tout le crâne
+    // jusqu'à la nuque (on ne voit qu'une nuque étroite, jamais une « face » de peau), puis les oreilles PAR-DESSUS les cheveux
     if (Math.abs(turn) > 0.05) { const s = Math.sign(turn), k = Math.abs(turn); U.shape(Cu, "joue", blob([[s * (hrx - 18) + tx, hc - 22], [s * (hrx + 2 + 9 * k) + tx, hc + 2], [s * (hrx - 2 + 7 * k) + tx, hc + 30], [s * (hrx - 20) + tx, hc + 52], [s * (hrx - 32) + tx, hc + 12]], 0.9), SKIN, { sw: 2.3, r: 0.5 }); }
-    [-1, 1].forEach((s, i) => { const near = Math.sign(turn) === s ? Math.abs(turn) : 0, far = Math.sign(turn) === -s ? Math.abs(turn) : 0; if (far > 0.85) return; const ex = s * (hrx - 3 - 9 * near + 3 * far) + tx; U.shape(Cu, "oreille" + i, blob(ell(ex, hc + 8, 9, 13.5, 8)), SKIN, { sw: 2.2, r: 0.5 }); ln(ub, `M${f(ex + s * 2)} ${f(hc + 1)} Q${f(ex + s * 6)} ${f(hc + 8)} ${f(ex + s * 2)} ${f(hc + 16)}`, 1.3, "#77776F"); });
-    U.shape(Cu, "crane", blob(ell(tx, hc, hrx, hry, 12)), SKIN, { sw: 2.6 });
-    const hl = fem ? 44 : 38, cap = [[-hrx - 3, -12], [-hrx - 5, -30], [-hrx + 6, -hry + 12], [-hrx * 0.5, -hry - 4], [0, -hry - 7], [hrx * 0.5, -hry - 4], [hrx - 6, -hry + 12], [hrx + 5, -30], [hrx + 3, -12], [hrx - 9, 2], [hrx - 11, 24], [hrx * 0.45, hl], [0, hl + 4], [-hrx * 0.45, hl], [-hrx + 11, 24], [-hrx + 9, 2]].map(([x, y]) => [x + tx, hc + y]);
+    const crane = []; for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, y = Math.sin(a) * hry, k = y > 0 ? 1 - 0.38 * Math.pow(y / hry, 2) : 1; crane.push([tx + Math.cos(a) * hrx * k, hc + y]); }
+    U.shape(Cu, "crane", blob(crane), SKIN, { sw: 2.6 });
+    const hl = fem ? 50 : 46, cap = [[-hrx - 3, -12], [-hrx - 5, -30], [-hrx + 6, -hry + 12], [-hrx * 0.5, -hry - 4], [0, -hry - 7], [hrx * 0.5, -hry - 4], [hrx - 6, -hry + 12], [hrx + 5, -30], [hrx + 3, -12], [hrx + 1, 10], [hrx - 4, 32], [hrx * 0.5, hl], [0, hl + 3], [-hrx * 0.5, hl], [-hrx + 4, 32], [-hrx - 1, 10]].map(([x, y]) => [x + tx, hc + y]);
     if (fem) {
-      U.shape(Cu, "cheveux", blob(bosses(cap, 14, 5.5), 0.8), MAT.hairDark, { sw: 2.4, r: 0.45 });
-      [[-30, -40], [-6, -50], [20, -44], [38, -24], [-40, -14], [-16, -22], [10, -18], [32, 6], [-26, 10], [0, 4], [18, 24], [-12, 30]].forEach(([x, y]) => { const cx = x + tx, cy = hc + y; ln(ub, `M${f(cx - 5)} ${f(cy + 2)} Q${f(cx - 2)} ${f(cy - 6)} ${f(cx + 4)} ${f(cy - 1)} Q${f(cx + 6)} ${f(cy + 4)} ${f(cx + 1)} ${f(cy + 4)}`, 1.6, "#9A9A94"); });
+      U.shape(Cu, "cheveux", festons(cap, 15, 4.2), MAT.hairDark, { sw: 2.4, r: 0.35 });
+      [[-30, -40], [-6, -50], [20, -44], [38, -24], [-40, -14], [-16, -22], [10, -18], [32, 6], [-26, 10], [0, 4], [18, 24], [-12, 30], [-34, 30], [30, 34]].forEach(([x, y]) => { const cx = x + tx, cy = hc + y; ln(ub, `M${f(cx - 5)} ${f(cy + 2)} Q${f(cx - 2)} ${f(cy - 6)} ${f(cx + 4)} ${f(cy - 1)} Q${f(cx + 6)} ${f(cy + 4)} ${f(cx + 1)} ${f(cy + 4)}`, 1.6, "#9A9A94"); });
     } else {
       U.shape(Cu, "cheveux", blob(cap, 0.9), hair === "court-blond" ? MAT.hairBlond : MAT.hairBrown, { sw: 2.4, r: 0.6 });
       const sc = hair === "court-blond" ? "#9C9886" : "#55554F";
-      [[[-30, -52], [-10, -40], [-4, -14]], [[24, -50], [14, -30], [10, -6]], [[-40, -20], [-30, 4], [-20, 26]], [[38, -18], [30, 8], [20, 30]]].forEach((s, i) => U.stroke(Cu, "brin" + i, curve(s.map(([x, y]) => [x + tx, hc + y])), { sw: 1.6, r: 0.6, single: true, stroke: sc }));
+      [[[-30, -52], [-10, -40], [-4, -14]], [[24, -50], [14, -30], [10, -6]], [[-40, -20], [-30, 4], [-20, 30]], [[38, -18], [30, 8], [20, 34]]].forEach((s, i) => U.stroke(Cu, "brin" + i, curve(s.map(([x, y]) => [x + tx, hc + y])), { sw: 1.6, r: 0.6, single: true, stroke: sc }));
     }
+    [-1, 1].forEach((s, i) => { const near = Math.sign(turn) === s ? Math.abs(turn) : 0, far = Math.sign(turn) === -s ? Math.abs(turn) : 0; if (far > 0.85) return; const ex = s * (hrx + 1 - 9 * near + 3 * far) + tx; U.shape(Cu, "oreille" + i, blob(ell(ex, hc + 10, 8.5, 13, 8)), SKIN, { sw: 2.2, r: 0.5 }); ln(ub, `M${f(ex + s * 1)} ${f(hc + 3)} Q${f(ex + s * 5)} ${f(hc + 10)} ${f(ex + s * 1)} ${f(hc + 18)}`, 1.3, "#77776F"); });
     if (o.glasses) [-1, 1].forEach((s) => ln(ub, `M${f(s * (hrx - 12) + tx)} ${f(hc - 3)} L${f(s * (hrx + 2) + tx)} ${f(hc + 1)} Q${f(s * (hrx + 5) + tx)} ${f(hc + 4)} ${f(s * (hrx + 3) + tx)} ${f(hc + 10)}`, 2.8, INK));
     return { head: [f(tx), f(hc)], top: [f(tx), f(hc - hry - 7)], hip: [0, f(hip)] };
   };
