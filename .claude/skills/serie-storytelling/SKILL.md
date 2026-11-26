@@ -152,7 +152,30 @@ videos/<episode>/
   étagère de livres, plaque « Im Namen des Volkes », dossiers, micro, plaque du Senat. Extérieur : ciel, nuages
   qui flottent, arbres, lampadaire, trottoir. Couloir : portes numérotées à hublot, main courante, panneau
   « Gynäkologie → ». Les objets du décor restent hors des étiquettes et de la colonne des boutons.
-- **Bulles** : rectangle arrondi + petits ronds (pas de nuage déformé) ; jamais posées sur un objet.
+- **Bulles** (retour AKTE 03 : « la bulle mal faite » = la pointe sortait du coin arrondi) : toujours
+  `Motion.bubble` / `m.speech` (`serie/lib/motion.js`) — UN seul tracé, la queue part du BAS de la bulle (jamais
+  d'un coin) et vise la tête/la bouche de celui qui parle ; pensée = rectangle arrondi + 3 petits ronds vers la
+  tête ; le texte est dans le même nœud ; la bulle jaillit de sa pointe ; « … » = `m.typing` (points qui
+  rebondissent). Jamais posée sur un objet ni sur une étiquette.
+- **MOTION DESIGN — le décor bouge, rien n'est figé** (retour AKTE 03 : « des animations encore mieux et un décor
+  qui bouge ») avec `const m = Motion.of(c)` :
+  - *le décor se construit* au début de la scène, en cascade (0,05–0,3 s d'écart) : `m.build(node, t, "drop" |
+    "rise" | "left" | "grow" | "growY" | "swing")` — la lampe descend, l'armoire tombe en place, le moniteur
+    pousse du mur, le chariot roule, les bâtiments et l'arbre poussent du sol, les cartes tombent ;
+  - *il vit ensuite* : `m.pend` / `m.sway` (lampes, panneaux suspendus, plaque, balance, arbre, rideau, fleurs,
+    drapeau), `m.dust` (poussière dans un faisceau, bulles dans un liquide), `m.drift` (nuages, oiseau), soleil
+    aux rayons qui tournent (`m.rays`), voiture qui passe, passante au fond du couloir (opacité 0,3, sortie
+    avant un zoom), plafonniers qui grésillent, voyant qui clignote, `m.alarm` (voile rouge qui pulse) ;
+  - *il réagit à l'histoire* : la lampe tremble à l'arrêt cardiaque, tout se fige au décès (amplitude × `live(t)`),
+    rayons + petit saut des têtes à la révélation, `m.ripple` sous l'épingle de la carte ;
+  - scènes-schémas sur papier : `m.shapes` (petites formes qui dérivent dans les marges) ;
+  - caméra : poussée lente continue (×1,00 → ×1,03, `ease: "lin"`) + les zooms sur les mots forts ;
+  - transitions entre lieux : `in: "swipe"` / `"swipeR"` (bord oblique + bande jaune, 0,42 s) ; `cut` dans un
+    même lieu ; `iris` / `zoom` pour l'intro, la carte, une révélation ;
+  - décor posé avec `m.obj(fn, x, y, s)` (coordonnées monde → pivots simples). Avec la dérive de caméra, garder
+    tout le décor entre x 110 et 960 (sinon il passe dans le bord rogné) ;
+  - contrôle : planche image par image (10 i/s) d'un début de scène + mesure du mouvement (≥ 5 % des pixels
+    changent en 0,4 s dans chaque scène).
 - **Chambre / lit : vu DE FACE** (`decor.js` : `bedBack` → personne assise dedans → `bedFront`, la couette cache
   les jambes) ; papa à gauche, soignant à droite ; jamais de personne allongée de travers. Extérieur : bâtiments
   au fond (plus petits) + trottoir, personnages devant.

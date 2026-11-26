@@ -330,6 +330,9 @@
       defs.innerHTML = `<radialGradient id="vig" cx="50%" cy="45%" r="75%"><stop offset="55%" stop-color="var(--accent)" stop-opacity="0"/><stop offset="100%" stop-color="var(--accent)" stop-opacity=".55"/></radialGradient>`;
       this.flashR = el("rect", { x: 0, y: 0, width: W, height: H, fill: "#fff", opacity: 0 }, this.fx);
       this.vigR = el("rect", { x: 0, y: 0, width: W, height: H, fill: "url(#vig)", opacity: 0 }, this.fx);
+      // bande de la transition « swipe » (motion design) : elle court le long du bord oblique qui révèle la nouvelle scène
+      this.bandG = el("g", { display: "none" }, this.fx);
+      this.bandG.innerHTML = `<path d="M96 -20 L206 -20 L-94 1940 L-204 1940 Z" fill="#F8CE4E" stroke="#1C1A1C" stroke-width="5" stroke-linejoin="round"/><path d="M222 -20 L240 -20 L-60 1940 L-78 1940 Z" fill="#1C1A1C"/><path d="M62 -20 L80 -20 L-220 1940 L-238 1940 Z" fill="#FFFFFF" stroke="#1C1A1C" stroke-width="3"/>`;
       this.flashes = []; this.vigs = [];
       // cadrage global : agrandit toutes les scènes (s), les descend (oy) et les pousse lentement (breathe)
       this.view = Object.assign({ s: 1, oy: 0, breathe: 0 }, (opts && opts.view) || {});
@@ -408,6 +411,7 @@
       return this;
     }
     update(t) {
+      let band = null;
       for (const sc of this.scenes) {
         const vis = t >= sc.start - 0.0001 && t < sc.end;
         sc.layer.style.display = vis ? "" : "none";
@@ -424,6 +428,15 @@
           case "wipe": clip = p < 1 ? `inset(0 ${((1 - p) * 100).toFixed(2)}% 0 0)` : ""; break;
           case "whip": tr = `translate(${((1 - p) * W * 0.85).toFixed(1)} 0) rotate(${((1 - p) * 3).toFixed(2)} ${W / 2} ${H / 2})`; op = Math.min(1, p * 2.5); break;
           case "whipUp": tr = `translate(0 ${((1 - p) * H * 0.5).toFixed(1)})`; op = Math.min(1, p * 2.5); break;
+          case "swipe": case "swipeR": {   // révélation par un bord oblique + bande jaune (gauche → droite, ou droite → gauche)
+            const dir = sc.inType === "swipe" ? 1 : -1, e = dir > 0 ? lerp(-420, W + 240, p) : lerp(W + 420, -240, p);
+            if (p < 1) {
+              clip = dir > 0 ? `polygon(0px 0px, ${(e + 150).toFixed(1)}px 0px, ${(e - 150).toFixed(1)}px ${H}px, 0px ${H}px) view-box`
+                             : `polygon(${W}px 0px, ${(e + 150).toFixed(1)}px 0px, ${(e - 150).toFixed(1)}px ${H}px, ${W}px ${H}px) view-box`;
+              if (p > 0) band = e;
+            }
+            break;
+          }
           default: break; // cut
         }
         sc.layer.setAttribute("transform", tr);
@@ -440,6 +453,8 @@
         for (const f of sc.every) f(t, t - sc.start);
         for (const n of sc.nodes) n.apply(t);
       }
+      if (band == null) this.bandG.setAttribute("display", "none");
+      else { this.bandG.removeAttribute("display"); this.bandG.setAttribute("transform", `translate(${band.toFixed(1)} 0)`); }
       let fo = 0;
       for (const f of this.flashes) { const q = prog(t, f.a, f.d); if (q > 0 && q < 1) fo = Math.max(fo, f.k * (1 - q)); }
       this.flashR.setAttribute("opacity", fo.toFixed(3));

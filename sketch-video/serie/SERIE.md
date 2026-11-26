@@ -44,7 +44,7 @@ Nom de travail : **AKTE** (le dossier du tribunal). Proposition : « Akte Assist
 | 01 | La seringue blanche (PJler, Bielefeld 2011) | **publié (nov. 2026)** — 1 min 32 ; ~11,7 k vues, 224 j'aime, 116 partages au 1er relevé — `videos/ep01-spritze/` (modèle) |
 | 02 | « Il est juste bourré » (Assistenzärztin, urgences, Friedrichshafen 2023) | à vérifier à fond |
 | 03 | Le procès-verbal de la KP (Berufserlaubnis retirée, Bavière 2023) | prêt (source primaire) |
-| **AKTE 03** | « ما قالت والو » (Remonstrationspflicht, OLG Köln 2025, Revision nicht zugelassen) | **v4 (décors complets dans chaque scène), à valider** — 1 min 30, sa voix (×1,3) + intro — `videos/akte-koeln-schweigen/` (l'ancienne version reste dans `videos/ep02-schweigen/`) |
+| **AKTE 03** | « ما قالت والو » (Remonstrationspflicht, OLG Köln 2025, Revision nicht zugelassen) | **v5 (motion design : décor qui bouge, bulles refaites, transitions swipe), à valider** — 1 min 30, sa voix (×1,3) + intro — `videos/akte-koeln-schweigen/` (l'ancienne version reste dans `videos/ep02-schweigen/`) |
 | 05 | Le certificat à 14 € (AU sans contact, Approbation retirée, Hamburg 2022) | prêt (source primaire) — protagoniste âgée de 80 ans : à dire clairement |
 | **AKTE 02** | « Die Hotelgeburt » (Unna 2008, LG Dortmund 2014, BGH 2016, définitif) | **v8 (voix ×1,3, scène « une décision » refaite), à valider** — 1 min 41, intro avec sa photo — `videos/akte-unna-geburt/` (nouveau modèle) |
 | — | Detmold 2019 (médecin 2 ans ½, infirmière acquittée ; appel, verdict déc. 2026) | script donné ; publier après l'appel — `videos/akte-detmold/` |
