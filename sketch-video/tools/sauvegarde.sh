@@ -13,7 +13,7 @@ branch=claude/awesome-shannon-2sa9g5
   if git diff --cached --quiet -- "$ep"; then echo "rien à sauvegarder"; exit 0; fi
   git commit -q -m "$msg
 
-Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01HH9xbJq9LK2mdwuvKd7BsG" -- "$ep" || exit 1
   for i in 1 2 3 4; do
     git push -q -u origin "$branch" 2>/dev/null && { echo "sauvegardé : $(git log -1 --format=%h) $msg"; exit 0; }
