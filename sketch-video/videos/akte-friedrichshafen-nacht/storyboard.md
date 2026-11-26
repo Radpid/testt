@@ -2152,3 +2152,48 @@ réelle à côté des personnages Persona, aux places des scènes S1 à S7.
 droite (`flip` = vers la gauche, ancres déjà retournées) ; le casque suit l'ancre `top` et doit tourner avec la tête ;
 le sac se pose AVANT le personnage. D.silhouette marche avec deux états, `ph` 0,25 et 0,75. Les grands décors ont des
 parties (`o.part`) : un fond statique (`m.obj`) et chaque partie mobile dans son propre nœud.
+
+### Étape « décors 2 » (26.11.2026) — S8 à S22, `decor-2.js`
+
+Tout a été vu sur `out/essais/` et à l'échelle réelle, avec les personnages Persona aux places des scènes S8 à S22
+(script hors dépôt : `compose2.mjs` dans le dossier de travail de la session, images dans `compo2/` à côté).
+
+| objet | storyboard | construit | pourquoi |
+|---|---|---|---|
+| E3 `D.lampeExamen` | une lampe | deux parties : `lumiere` (cône, halo, tache) à poser DERRIÈRE les personnages, `bras` devant | le cône passe sur la tête de `DOC` (x 430) : posé devant, il lui jaunissait le visage |
+| E4 `D.scope` | tracé qui défile, `plat` | + `o.ecg` (complexes donnés, comme `D.ligne`) et `o.cable` ; une 2e courbe grise (pouls), toujours sans chiffre | S18 : « le même complexe sur l'écran du moniteur » ; le câble suit le lit en S16 |
+| E6 `D.planchette` | 96 × 130, « Verdacht » Kalam 22, « Beobachtung » Kalam 16 | 104 × 130, Kalam 20 et 14 ; ancrage = haut de l'anneau (pivot de `m.pend`), accrochée au crochet du brancard (135, −150) → pince à h ≈ 230 | les deux mots ne tenaient pas dans la feuille |
+| E6 / A8 | autocollant centré (505, h 196) : il couvre « Verd » | à poser en **(492, h 196)** | à 505, son bord droit (rotation −8°) tombe à x ≈ 624 et cache aussi « a » ; l'ancre `mot` de la planchette donne l'étendue du mot |
+| E7 `D.porteFond` | voyant « sur chaque plaque » | voyant dans un petit boîtier AU-DESSUS de la plaque | sur la plaque, il n'avait que 9 px à côté de « Intensiv » |
+| E9 `D.ballon` | masque + valve + ballon | idem, `o.masque: false` si `D.gisant` porte déjà son masque (`masque: 1`) : poser alors l'ancrage sur l'ancre `bouche` | ne pas dessiner deux masques |
+| E10 `D.montreBroche` | « rond jaune + barrette » | cadran SANS aiguilles | aucune heure lisible à l'image en dehors de l'horloge |
+| E11 `D.feuilleGros` | « Verdacht: Schädelverletzung ? » en Kalam 30 | sur trois lignes (« Verdacht: » / « Schädel- » / « verletzung ? »), Kalam 26 ; « CT: — » décalé | en une ligne il sortait du rond (clip r 109) |
+| E11, mode `pupillen` | « Pupillen: — » | « Pupillen: » imprimé + une **case vide** entourée ; « Bewusstsein » et « Motorik » suivis de pointillés pâles, sans réponse | la source dit que l'indication MANQUE (F19) : on n'écrit rien dans la case, et on n'affirme rien pour les deux autres |
+| C4 `D.helico` | 190 × 110 | aire d'atterrissage cerclée sous les patins (jusqu'à y +17) ; rotor à y −113 | en S17, poser les patins en **(480, 940)** : à 950 l'aire touche la rive du lac |
+| C5 `D.horlogeGrande` | « la même horloge en grand » | dessin à part : boîtier hachuré, anneau de suspension, 60 graduations | le storyboard demande un boîtier ; `D.horlogeLigne` n'en a pas |
+| F1 `D.chambreNeutre` | ancrage coin bas gauche | (40, h 80) comme les autres décors « coin bas gauche » ; tache x 480–720 (écran 520–760) | même convention que `D.entree`, `D.couloirNuit` |
+| F3 `D.chaiseSweat` | 110 × 210 | ≈ 120 × 214, chaise de profil tournée vers le lit ; pan + manche derrière, pan + capuche devant ; partie `cordons` à balancer | lisibilité du sweat plié |
+| G1 `D.aube` | trois nuages | nuages en (160, 300), (540, 236), (930, 420) dans le repère (40, 270) | ils évitent la pastille, l'étiquette des dates et la mini-carte de S19 |
+| G2 `D.amtsgericht` | fronton non décrit | fronton à œil-de-bœuf (AUCUNE armoirie), chaînes d'angle, banc à droite | décor de province sans symbole officiel |
+| G5 `D.hall` | tableau x 130–330, y 560–800 (écran) | y 600–840 | l'étiquette « § 411 » fait trois lignes (y 430–580), voir ci-dessous |
+| S20, étiquette | « من بعد Einspruch، المحكمة ماشي مربوطة بالغرامة » sur une ligne, x 110–540 | deux lignes, mêmes mots : « من بعد Einspruch، » / « المحكمة ماشي مربوطة بالغرامة » (`D.etiquette`, y 430–580) | en Plex 26 la phrase fait ≈ 540 px |
+| S14, citation | 510 × 116 (x 110–620) | ≈ 605 × 126 (x 110–715) avec l'arabe en 28 | la ligne arabe fait ≈ 466 px ; le médaillon D est refermé quand elle arrive (`b16@مزيان+0.1`) |
+| G6 `D.porteSalle` | « chaque vantail se referme sur son gond » | vantaux en perspective (largeur × 1 → 0,25, bords haut et bas qui fuient) | un vantail qui tourne sur son gond se voit en fuite |
+| G7 `D.encreMontant` | `delave` | `delave` (les chiffres pâlissent) + `gouttes` (elles coulent, tombent, sèchent ; par défaut = `delave`), `bord` 70, `sol` 215 | les gouttes vont plus loin que le délavage |
+| G8 `D.salle`, `fond` | mur, fenêtres, estrade, tables, barrière | + une boiserie derrière l'estrade et le haut dossier du fauteuil de la juge ; fenêtres cintrées. Parties : `fond`, `rayons`, `estrade`, `halo`, `tables`, `barriere` | un mur nu derrière la juge ; ordre de pose : fond, rayons, [JUG], estrade, halo, [PRO, DOC, AVO], tables, barrière, [les deux dos], banc |
+| G8, `experts` / `nu` | « cadré sur l'estrade vide » / « mur nu » | `experts` : l'estrade vide est une marche basse (écran x 220–860, y 1240–1300) visible autour du pied du négatoscope ; `nu` : pas de fenêtre, une tache de lumière | S23 pose l'horloge et la plaque « CT » sur ce mur (y 450–700) |
+| G9 `D.dos` | 190 × 300 chacun | ≈ 150 × 330 : proportions Persona (tête ±57, épaules ±66 / ±74), sommet de la tête à −234 / −238, épaules à ≈ −98 | au premier essai (épaules ±94), les épaules faisaient 1,6 fois la tête, à côté de `DOC` et `AVO` dessinés en Persona |
+| G9, `bras` / `mouchoir` | main du père sur l'épaule de sa femme | main sur son omoplate, près de l'épaule lointaine (`ecart` + 40) ; la mère lève la main GAUCHE (côté écran gauche) | à l'épaule même, la main croisait l'avant-bras levé de la mère |
+| G11 `D.negatoscope` | « = » et « ≠ » tracés par la scène | tracés par la fonction (`o.egal`, `o.diff`) ; barre de balayage verticale qui traverse la rangée 2 | Kalam n'a pas « ≠ » (R14) |
+| hors inventaire | — | `D.carteQ` (S12), `D.cadreCT` (S16), `D.etiquette` (S14, S19, S20), `D.rond` (S21) | pièces de HUD décrites dans les scènes, sans dessin dans l'inventaire |
+
+À savoir pour les scènes (constaté sur les compositions, rien à changer dans les dessins) :
+- S20 : avec la pose « elle porte la lettre » (mains à y −230 / −236), la lettre (centre (470, 1060), 150 × 190) cache le
+  menton de `DOC` (y 1003). Descendre les mains vers y −200 : lettre centrée en (470, ≈ 1095), montant en (470, ≈ 1120).
+- S22 : `D.teteProfil` à × 0,85 remplit la case ; « Alkohol » / « Blutung » (y 700) tombent sur les boucles. Le poser à × 0,6,
+  centré en (375 / 625, 600), pour libérer le bas de la case (y 670–740) ; `EX1` en `PP.point` montre la rangée 2 : lui
+  donner un `reachR` vers la rangée 1 (y ≈ 640).
+- Le box : `D.lampeExamen` « lumiere » avant les personnages, « bras » après ; `D.dos` du père : partie `corps` avec la mère,
+  partie `bras` APRÈS la mère ; `D.bancParties` en dernier.
+- `decor-2.js` attend les aides de `decor.js` (`D._`) : il s'exécute tout de suite dans `index.html`, et plus tard (par
+  `D._attente`) dans l'outil d'essai, qui charge les fichiers par ordre alphabétique.

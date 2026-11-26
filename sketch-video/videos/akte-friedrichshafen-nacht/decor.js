@@ -3,8 +3,8 @@
  * Essai de chaque dessin : node tools/essai_decor.mjs videos/akte-friedrichshafen-nacht [--only nom1,nom2]
  *
  * ── INVENTAIRE COMPLET (storyboard § 2) ET ÉTAT ───────────────────────────────────────────────────────────────
- * État contrôlé à la fin de l'étape « socle et décors 1 » : chaque fonction « fait » existe, dessine sans erreur
- * (tools/essai_decor.mjs) et a été vue à l'échelle réelle à côté des personnages Persona, aux places des scènes S1 à S7.
+ * État contrôlé à la fin de l'étape « décors 2 » : chaque fonction « fait » existe, dessine sans erreur (tools/essai_decor.mjs)
+ * et a été vue à l'échelle réelle à côté des personnages Persona, aux places des scènes S1 à S7 (étape 1) et S8 à S22 (étape 2).
  * Les écarts avec le storyboard sont listés à la fin de storyboard.md (« Écarts de construction »).
  * A. Dispositif signature et HUD propre (§ 3)
  *   A1  D.ligne              fait (decor.js)      A7  D.lavis             fait (decor.js)
@@ -21,8 +21,8 @@
  *   B3  D.pretoireCoin       fait (decor.js)      B7  D.polaroid          fait (decor.js)
  *   B4  D.grillePointillee   fait (decor.js)
  * C. Cartes, presse, horloge
- *   C1  D.carteLac           fait (decor.js)      C4  D.helico            à faire
- *   C2  D.miniCarte          fait (decor.js)      C5  D.horlogeGrande     à faire (D.horlogeLigne accepte déjà o.r)
+ *   C1  D.carteLac           fait (decor.js)      C4  D.helico            fait (decor-2.js)
+ *   C2  D.miniCarte          fait (decor.js)      C5  D.horlogeGrande     fait (decor-2.js)
  *   C3  D.coupures           fait (decor.js)      C6  D.voilier           fait (decor.js)
  * D. La route, le pré, l'entrée des urgences
  *   D1  D.nuit               fait (decor.js)      D7  D.velo              fait (decor.js)
@@ -32,30 +32,33 @@
  *   D5  D.brume              fait (decor.js)      D11 D.rtw               fait (decor.js)
  *   D6  D.papillons          fait (decor.js)      D12 D.silhouette        fait (decor.js)
  * E. Le box des urgences
- *   E1  D.boxMur             à faire              E7  D.porteFond         à faire
- *   E2  D.rail, D.rideau     à faire              E8  D.alarmeMurale      à faire
- *   E3  D.lampeExamen        à faire              E9  D.ballon            à faire
- *   E4  D.scope              à faire              E10 D.styloChignon, D.masqueCou   faits (decor.js)
- *   E5  D.brancard           fait (decor.js)          D.lampeStylo, D.montreBroche  à faire
- *   E6  D.planchette         à faire              E11 D.feuilleGros       à faire
+ *   E1  D.boxMur             fait (decor-2.js)    E7  D.porteFond         fait (decor-2.js)
+ *   E2  D.rail, D.rideau     faits (decor-2.js)   E8  D.alarmeMurale      fait (decor-2.js)
+ *   E3  D.lampeExamen        fait (decor-2.js)    E9  D.ballon            fait (decor-2.js)
+ *   E4  D.scope              fait (decor-2.js)    E10 D.styloChignon, D.masqueCou   faits (decor.js)
+ *   E5  D.brancard           fait (decor.js)          D.lampeStylo, D.montreBroche  faits (decor-2.js)
+ *   E6  D.planchette         fait (decor-2.js)    E11 D.feuilleGros       fait (decor-2.js)
  *                                                 E12 ombres du couloir : pas de dessin (D.silhouette, fait)
  * F. La scène muette
- *   F1  D.chambreNeutre      à faire              F3  D.chaiseSweat       à faire
- *   F2  D.litNeutre          à faire              F4  D.veilleuse         à faire
+ *   F1  D.chambreNeutre      fait (decor-2.js)    F3  D.chaiseSweat       fait (decor-2.js)
+ *   F2  D.litNeutre          fait (decor-2.js)    F4  D.veilleuse         fait (decor-2.js)
  * G. Le tribunal
- *   G1  D.aube               à faire              G10 D.bancParties       à faire
- *   G2  D.amtsgericht        à faire              G11 D.negatoscope       à faire
- *   G3  D.tilleul            à faire              G12 D.marteauReflexes, D.lunettesLecture, D.plume, D.foulard   à faire
- *   G4  D.rue                à faire              G13 D.pupitreJuge       à faire
- *   G5  D.hall               à faire              G14 D.plaqueCT          à faire
- *   G6  D.porteSalle         à faire              G15 D.billet            à faire
- *   G7  D.encreMontant       à faire              G16 D.urteilBlatt       à faire
- *   G8  D.salle              à faire              G17 D.encrier           à faire
- *   G9  D.dos                à faire
+ *   G1  D.aube               fait (decor-2.js)    G10 D.bancParties       fait (decor-2.js)
+ *   G2  D.amtsgericht        fait (decor-2.js)    G11 D.negatoscope       fait (decor-2.js)
+ *   G3  D.tilleul            fait (decor-2.js)    G12 D.marteauReflexes, D.lunettesLecture, D.plume, D.foulard   faits (decor-2.js)
+ *   G4  D.rue                fait (decor-2.js)    G13 D.pupitreJuge       à faire (S23)
+ *   G5  D.hall               fait (decor-2.js)    G14 D.plaqueCT          à faire (S23, S26)
+ *   G6  D.porteSalle         fait (decor-2.js)    G15 D.billet            à faire (S24)
+ *   G7  D.encreMontant       fait (decor-2.js)    G16 D.urteilBlatt       à faire (S25)
+ *   G8  D.salle              fait (decor-2.js)    G17 D.encrier           à faire (S25)
+ *   G9  D.dos                fait (decor-2.js)  (+ D.dosCoupleEssai : essai seulement, le couple tel qu'en S21)
  * H. La règle
- *   H1  D.carteDeclencheur   à faire              H4  D.etiquetteBagage   à faire
- *   H2  D.porteCT            à faire              H5  D.pips              à faire
- *   H3  D.feuilleSurveillance à faire
+ *   H1  D.carteDeclencheur   à faire (S26)        H4  D.etiquetteBagage   à faire (S28)
+ *   H2  D.porteCT            à faire (S26)        H5  D.pips              à faire (S26–S28)
+ *   H3  D.feuilleSurveillance à faire (S27)
+ * Hors inventaire, faits (decor-2.js) — pièces de HUD des scènes : D.carteQ (S12, la carte « ? »), D.cadreCT (S16, le cadre
+ *   « CT » + la barre de balayage), D.etiquette (S14 citation, S19 dates, S20 « § 411 » : étiquette blanche à plusieurs lignes),
+ *   D.rond (S21 : rond jaune à main levée qui se trace).
  *   (D.exemple : dessin du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles.)
  *
  * ── CONVENTIONS ──────────────────────────────────────────────────────────────────────────────────────────────
@@ -70,7 +73,10 @@
  *   Contenu d'un médaillon : const cg = D._.clipRond(parent, out.clip) puis dessiner dans cg.
  * Trait à main levée : U.ctx / U.shape / U.stroke ; tracés nets (el("path")) pour ce qui se redessine en continu
  * (la ligne, l'encre, l'intérieur du crâne, les herbes, les papillons). Ombre décalée #D2D2CB. Jaune = lumière ou alerte.
- * Aides partagées avec decor-2.js / decor-3.js : D._ (un objet, pas une fonction : l'outil d'essai ne le dessine pas).
+ * Aides partagées avec decor-2.js / decor-3.js : D._ (un objet, pas une fonction : l'outil d'essai ne le dessine pas) ; il
+ * reçoit en fin de fichier partie, sol, membre, BLOUSE, MUR, NUIT_H, profilGar, TEMPE. L'outil d'essai charge les fichiers par
+ * ordre alphabétique (decor-2.js AVANT decor.js) : decor-2.js / decor-3.js mettent alors leur code dans D._attente, et ce fichier
+ * le lance à sa fin. Dans index.html l'ordre est decor.js, decor-2.js, decor-3.js : le code s'exécute tout de suite.
  */
 (function () {
   "use strict";
@@ -1428,6 +1434,10 @@
     ln(g, "M-26 25 L26 25 M-24 32 L24 32", 1.3, "#A1A19B");
     return {};
   };
+
+  // aides partagées avec decor-2.js / decor-3.js (mêmes matières, même sol, mêmes membres : UNE seule main)
+  Object.assign(D._, { partie, sol, membre, BLOUSE, MUR, NUIT_H, profilGar, TEMPE });
+  (D._attente || []).splice(0).forEach((suite) => suite());   // decor-2.js / decor-3.js chargés avant ce fichier (outil d'essai)
 
   /* @@SUITE@@ */
 
