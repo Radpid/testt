@@ -2119,3 +2119,36 @@ Contour simplifié du lac (longitude, latitude), dans l'ordre, à lisser par des
 (9,49 ; 47,48) (9,56 ; 47,49) (9,61 ; 47,52) (9,65 ; 47,51) (9,69 ; 47,495).
 Le bras ouest (Untersee) n'est pas dessiné : le cartouche s'arrête à Konstanz. Vu sur
 `out/essais/essai_carte.png` : la forme se lit comme le Bodensee.
+
+---
+
+## Écarts de construction
+
+### Étape « socle et décors 1 » (26.11.2026)
+
+Ce qui a été dessiné autrement que l'inventaire (§ 2), et pourquoi. Tout a été vu sur `out/essais/` et à l'échelle
+réelle à côté des personnages Persona, aux places des scènes S1 à S7.
+
+| objet | storyboard | construit | pourquoi |
+|---|---|---|---|
+| A2 `D.horlogeLigne`, mode fantôme | aiguilles grises en pointillés | **aucune aiguille**, un grand « ? » | les aiguilles grises montraient encore « 3 h » : une heure lisible pendant b13–b14 (interdit, § 3.2) |
+| A11 `D.teteProfil`, `cercle: 1` | cercle en pointillés complet | idem (corrigé) | l'arc fermé ne se dessinait pas : le cercle disparaissait à la fin du tracé |
+| B1 `D.entree` | blouse x 812–908 jusqu'à y 650 ; lampe (880, 585–660) | patère et blouse à gauche (crochet (836, 386) à l'écran), blouse plus courte (jusqu'à y 618) ; lampe en (912, 580–652) | la blouse cachait entièrement la lampe de la console |
+| B1 `D.entree` | — | pas de paillasson | il passait sous « ما قبلاتش » (300, 842) |
+| B1 `D.entree`, clapet | `m.pend` 22° | paramètre `ouv` (0..1) : le clapet se soulève vers nous | un clapet vu de face bat d'avant en arrière ; une rotation dans le plan le ferait tourner comme une aiguille |
+| B2 `D.lettre` | cachet rond en bas à droite ; « Einspruch » centré à +115 | cachet en haut à droite ; « Einspruch » centré à +136, montant remonté (ligne de base +72) | « Einspruch » (−9°) touchait le soulignement, le cachet et la goutte |
+| B2 `D.lettre`, `petit` | titre et montant en Kalam 30 | titre Kalam 18, montant Kalam 30, « Einspruch » Kalam 25, pas de cachet | « STRAFBEFEHL » en Kalam 30 ne tient pas dans 150 px |
+| B4 `D.grillePointillee`, `ouv` | 0 → 28° | portillon vu en perspective, 0 → 70° | à 28° la grille ne se lit pas comme ouverte |
+| B5 `D.feuilleRat` | 190 × 150 | ≈ 230 × 150 | « Rat vom Kollegen » en Kalam 26 ne tient pas dans 190 px |
+| B6 `D.couloirNuit` | — | plafonniers en x 250 et 860 (local), tout en haut | jamais derrière la pastille A (x 470–890, y 297–392) |
+| C1 `D.carteLac` | montagnes en ligne continue au sud | huit sommets groupés au sud-est (les Alpes) + collines basses à gauche | la ligne continue se lisait comme une frise décorative et touchait le bord du cartouche |
+| D7 `D.velo` | 250 × 150, roues r 50 | ≈ 390 × 250, roues r 77 à l'échelle 1 | géométrie de l'essai validé de la pose « à vélo » (hanche sur la selle, mains au guidon) : à r 50 le cycliste ne tient pas sur le vélo à la même échelle ; à 0,8 il fait 313 × 200 à l'écran |
+| D7 `D.velo`, phare | cône de 260 px | `o.phareL` (260 par défaut) | en S6, vélo garé, le cône traverse le ciel : le passer à ≈ 120 |
+| D11 `D.rtw` | 330 × 190 | ≈ 380 × 235 (x −70…310) | à 190 px l'ambulance était à peine plus haute que l'ambulancier (× 0,6 = 180 px) ; en S7 elle occupe x 190–570 au lieu de 240–570 |
+| E5 `D.brancard`, barrière | barrière latérale abaissée | partie `barriere` à mi-hauteur, côté pied, DEVANT le garçon, avec le crochet de la planchette en (135, −150) | la planchette pend à h 215 (au-dessus du matelas) : il lui faut un crochet à cette hauteur |
+| E10 `D.masqueCou` | sous le menton, ancre `neck` | dessiné de +12 à +48 sous l'ancre | l'ancre `neck` de Persona est à hauteur de bouche : le masque couvrait la bouche |
+
+À savoir pour les scènes : D.velo, D.rtw, D.silhouette, D.casque, D.capuche et D.sacDos sont dessinés de profil vers la
+droite (`flip` = vers la gauche, ancres déjà retournées) ; le casque suit l'ancre `top` et doit tourner avec la tête ;
+le sac se pose AVANT le personnage. D.silhouette marche avec deux états, `ph` 0,25 et 0,75. Les grands décors ont des
+parties (`o.part`) : un fond statique (`m.obj`) et chaque partie mobile dans son propre nœud.
