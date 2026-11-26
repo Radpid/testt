@@ -68,6 +68,31 @@ Numéros 04–09 PROVISOIRES (l'auteur choisit l'ordre de publication) : le num�
 - Trois phrases d'accroche ne doivent jamais avoir la même construction d'un épisode à l'autre (lire les
   accroches des autres épisodes avant d'écrire la sienne quand elles existent).
 
+### Objets réservés (contrôle croisé des six storyboards, 26.11.2026)
+
+Les six équipes ne se sont pas parlé ; à la relecture, plusieurs avaient trouvé la même image. Chaque objet
+ci-dessous appartient désormais à UN épisode ; les storyboards ont été corrigés, `story.js` / `decor.js` doivent
+les suivre (quand une fiche ci-dessous et un storyboard se contredisent, le storyboard fait foi).
+
+| Objet / image | Appartient à | Retiré de (remplacé par) |
+|---|---|---|
+| calendrier, éphéméride, feuillets qui s'arrachent | 06 | 04 sc. 8 et 16 (cases de planning ; fenêtre des saisons) · 05 S3 (fenêtre qui s'allume trois fois) · 07 sc. 7, 12, 14 (widget « date » du téléphone) · 08 S17 (tampon dateur à molette) |
+| étiquette de prix à ficelle (et ficelle qui casse) | 08 ; 06 seulement pour la sanction (quatre chaises) | 06 S1, S5 (feuillet daté) · 07 sc. 2 (ticket de caisse qui sort de la poche) · 09 S20 (le montant à l'encre se délave) |
+| tampon « EINSPRUCH » | 08 | 09 S1, S20 (« Einspruch » écrit à la plume) |
+| « définitif ? » = feuille + loupe + cadre de tampon vide + « ? » | personne | 04 sc. 21 (rouleau qui ne s'arrête pas + étiquette « ؟ ») · 05 S21 (la lumière de la fenêtre n'atteint pas la dernière ligne) · 07 sc. 18 (recherche dans le fil : « 0 / 0 ») |
+| salle d'audience vue du fond, personnes de dos | 05 (deux accusés) ; 09 (les parents) | 08 S19 (banc vu de face, la caméra à la place de l'accusé, deux chevalets de table) |
+| moniteur au mur, tracé qui ralentit, ligne plate, bip | AKTE 02 / 03 ; 09 (la ligne de l'écran) | 05 S12–S15 (la perfusion ne goutte plus, l'horloge et la jauge s'arrêtent) |
+| bureau vu de dessus, tasse, main qui écrit sur une feuille posée | 06 | 05 S24 (formulaire sur une planchette au mur) |
+| cadre ou plaque « § » pendu à un clou | 04 | 06 S19 (ruban d'étiqueteuse « § 222 StGB ») |
+| grille qui tombe et mains qui serrent les barreaux | AKTE 02 | 09 S1 (grille en pointillés : la main passe au travers) |
+
+Personnages changés pour doublon exact ou sosie : 06 le juge (était bouclé gris = la juge de 09) ; 07 `K3`
+(= la collègue de 08), `K5` (= la Schöffin de 04), `AS1` (sosie du juge de 04) ; 09 le cycliste (= le père d'AKTE 02).
+
+Reste à décider par l'auteur (texte dit, non modifié) : voir la relecture croisée livrée avec les scénarios —
+quatre accroches ouvrent sur « غرامة + montant », 08 et 09 (et AKTE 03) font leur 3e phrase en « وهو / وهي … »,
+cinq épisodes disent « وما لقيناش واش … نهائي » presque mot pour mot, 05 et 06 finissent sur « نتا … اللي كتوقف ».
+
 ---
 
 ## AKTE 04 — Köln · « 63 ساعة » (`videos/akte-koeln-transfusion/`)
