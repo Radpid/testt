@@ -40,8 +40,8 @@
  *   D.telVerre  D.bande  D.mention  D.anneau  D.croix                                  faits (decor.js)
  *   D.accolade  D.fleche                                                               faits (decor-2.js)
  *   D.cle({ partie: "crochet" }) : le crochet seul (ajout, decor-3.js) ; D.pouce : contour continu ajouté (decor-2.js, étape 3)
- *  Scène 22 (affiche-résumé) : aucun dessin (socle, st.summary dans story.js). D.exemple (fin de ce fichier) : à SUPPRIMER par
- *   l'étape des scènes, avec les scènes d'exemple de scenes-1.js.
+ *  Scène 22 (affiche-résumé) : aucun dessin (socle, st.summary dans story.js). D.exemple (lampe du gabarit) : supprimé par
+ *   l'étape « scènes, partie 1 », avec les scènes d'exemple de scenes-1.js.
  *  HUD propre à l'épisode, aides partagées et mises en place fixes : story.js (X.hud, X.aides, X.lieux).
  *
  * CONVENTIONS
@@ -907,15 +907,5 @@
 
   D.outils = { tx, mesure, ln, el, rond, ovale, rrectInv, bullePath, papierTicket, hash, nid, FONT, INK, YEL, OMBRE, ECRAN, PAPIER, GRIS, SOMBRE, MAT,
     poser: (m, nom, o) => m.obj(D[nom], D[nom].at[0], D[nom].at[1], 1, o) };   // meuble posé à sa place du storyboard
-
-  // EXEMPLE du gabarit (À SUPPRIMER par l'étape des scènes : il ne sert qu'aux scènes d'exemple de scenes-1.js)
-  D.exemple = (g, o = {}) => {
-    const C = U.ctx(g, 611, false, 1), L = o.len || 110;
-    el("path", { d: `M-40 ${L + 34} L40 ${L + 34} L240 ${L + 900} L-240 ${L + 900} Z`, fill: "#F8CE4E", opacity: 0.13 }, g);
-    U.stroke(C, "fil", `M0 0 L0 ${L}`, { sw: 3 });
-    U.shape(C, "abat", `M-16 ${L} L16 ${L} L46 ${L + 34} L-46 ${L + 34} Z`, MAT.grey, { sw: 2.6 });
-    el("ellipse", { cx: 0, cy: L + 36, rx: 22, ry: 8, fill: "#FFF6C9", stroke: INK, "stroke-width": 2 }, g);
-    return { ampoule: [0, L + 36] };
-  };
 
 })();
