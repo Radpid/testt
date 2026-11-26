@@ -61,7 +61,14 @@
  *    45 D.rhine, D.dom, D.riverWaves  fait (decor.js)
  *    46 D.rewKey, D.pageFlip, D.dripBig  à faire
  * Hors inventaire, demandés par les scènes 3 et 5 : D.note04 (note épinglée), D.hookKey (clé au crochet), D.markerString (feutre
- *    sur ficelle), D.magnet, D.feltPen, D.wallBar (barre murale à deux crochets) ........ fait (decor.js)
+ *    sur ficelle), D.magnet, D.feltPen, D.wallBar (barre murale à deux crochets), D.glint (reflet qui glisse sur le cadre alu du tableau,
+ *    scènes 3 et 6) ........ fait (decor.js)
+ * Réglages ajoutés au contrôle (étape « socle et décors 1 », 26.11) : D.courtRoom / D.corridor04 o.bottom + o.fade (le sol se prolonge et
+ *    se fond dans le papier ; scène 1 : bottom 1610 pour que la sellette et la barre restent posées) et fuyantes découpées au mur ;
+ *    D.tube o.k (×1,4 à côté des poches ×1,5 de la scène 5) ; D.dayTab o.blur / o.streak (chiffres qui défilent pendant le rembobinage,
+ *    texte long rétréci : « ◀◀ » + 15 signes tient dans l'onglet) ; D.folder o.page (le juge tourne une page, scène 2) ; D.hourGrid trait
+ *    moins tremblé pour les cases de 16 px ; D.hookKey anneau passé dans la clé ; D.folder sangle hors de l'étiquette.
+ *    Scène 2 : lignes de la carte tapée à y −56, −22, 14, 46 (repère de la carte) et tampon « § 60 » à (130, 88) : voir D.typedCard.essais.
  * D.exemple : dessin d'exemple du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles.
  */
 (function () {
@@ -117,6 +124,19 @@
     el("circle", { cx: x, cy: y, r, fill: col || YEL, stroke: INK, "stroke-width": 2.4 }, g);
     el("circle", { cx: x, cy: y, r: f(r * 0.42), fill: "none", stroke: INK, "stroke-width": 1.3, opacity: 0.55 }, g);
     ln(g, `M${f(x - r * 0.58)} ${f(y - r * 0.25)} A${f(r * 0.65)} ${f(r * 0.65)} 0 0 1 ${f(x - r * 0.05)} ${f(y - r * 0.62)}`, 2.2, "#FFFFFF");
+  }
+  // segment (xa, ya) → (xb, yb) découpé à la bande verticale [x0, x1] (fuyantes du sol) ; null s'il en sort
+  function segX(xa, ya, xb, yb, x0, x1) {
+    let t0 = 0, t1 = 1; const dx = xb - xa;
+    if (Math.abs(dx) < 1e-6) { if (xa < x0 || xa > x1) return null; }
+    else { const ta = (x0 - xa) / dx, tb = (x1 - xa) / dx; t0 = Math.max(t0, Math.min(ta, tb)); t1 = Math.min(t1, Math.max(ta, tb)); if (t0 >= t1) return null; }
+    return `M${f(xa + dx * t0)} ${f(ya + (yb - ya) * t0)} L${f(xa + dx * t1)} ${f(ya + (yb - ya) * t1)}`;
+  }
+  // bas d'un sol : fondu vers le papier (bandes empilées, aucun id de dégradé : l'affiche-résumé recopie le SVG)
+  function floorFade(g, x0, w, y, h) {
+    h = h == null ? 70 : h; if (h <= 0) return;
+    for (let i = 0; i < 7; i++) el("rect", { x: x0, y: f(y - h + (i * h) / 7), width: w, height: f(h / 7 + 0.6), fill: PAPER, opacity: f((0.14 * (i + 1)) * 100) / 100 }, g);
+    el("rect", { x: x0, y, width: w, height: 3, fill: PAPER }, g);
   }
   // roue crantée
   function gear(g, cx, cy, r, ang, ink) {
@@ -230,48 +250,53 @@
 
   /* 3 · tubulure — coordonnées du parent (monde) : o.pts = points de passage (lissés, 40 segments, longueurs calculées en JS)
    * o.fill 0..1 (front rouge depuis la poche) · o.flow (phase des reflets qui défilent) · o.drop (phase de la goutte ; négative ou o.back = elle
-   * remonte) · o.back (rembobinage : reflets et goutte à l'envers) · o.clamp 0..1 (la molette descend et pince) · o.chamberAt, o.clampAt (0..1) */
+   * remonte) · o.back (rembobinage : reflets et goutte à l'envers) · o.clamp 0..1 (la molette descend et pince) · o.chamberAt, o.clampAt (0..1)
+   * o.k : épaisseur du tuyau, chambre et roulette ×k (1,4 à côté des poches ×1,5 de la scène 5 ; 1 à côté d'une poche ×1) */
   D.tube = (g, o = {}) => {
-    o = Object.assign({ pts: [[0, 0], [10, 100], [-40, 220], [40, 340], [20, 570]], fill: 1, back: 0, drop: 0.5, flow: 0, clamp: 0, chamberAt: 0.14, clampAt: 0.62, tint: 1, chamber: true, roller: true, seed: 301 }, o);
-    const P = sample(o.pts, 40), L = lens(P), T = L[L.length - 1], fl = clamp(o.fill, 0, 1), back = o.back || o.drop < 0;
+    o = Object.assign({ pts: [[0, 0], [10, 100], [-40, 220], [40, 340], [20, 570]], fill: 1, back: 0, drop: 0.5, flow: 0, clamp: 0, chamberAt: 0.14, clampAt: 0.62, tint: 1, chamber: true, roller: true, k: 1, seed: 301 }, o);
+    const P = sample(o.pts, 40), L = lens(P), T = L[L.length - 1], fl = clamp(o.fill, 0, 1), back = o.back || o.drop < 0, K = o.k || 1;
     const col = mixc("#BDBDB7", RED, o.tint), dk = mixc("#77776F", RED2, o.tint);
-    ln(g, poly(P), 7.5, INK); ln(g, poly(P), 4.2, "#FFFFFF");
+    ln(g, poly(P), 7.5 * K, INK); ln(g, poly(P), 4.2 * K, "#FFFFFF");
     let front = P[0];
     if (fl > 0.004) {
       const R = cut(P, L, 0, fl * T); front = R[R.length - 1];
-      ln(g, poly(R), 4.2, col);
-      ln(g, poly(R), 1.5, mixc(col, "#FFFFFF", 0.5), { "stroke-dasharray": "9 21", "stroke-dashoffset": f((back ? 1 : -1) * ((((o.flow % 1) + 1) % 1) * 30)) });
-      if (fl < 0.996) el("circle", { cx: f(front[0]), cy: f(front[1]), r: 3.3, fill: dk }, g);
+      ln(g, poly(R), 4.2 * K, col);
+      ln(g, poly(R), 1.5 * K, mixc(col, "#FFFFFF", 0.5), { "stroke-dasharray": `${9 * K} ${21 * K}`, "stroke-dashoffset": f((back ? 1 : -1) * ((((o.flow % 1) + 1) % 1) * 30 * K)) });
+      if (fl < 0.996) el("circle", { cx: f(front[0]), cy: f(front[1]), r: 3.3 * K, fill: dk }, g);
     }
     const pc = at(P, L, o.chamberAt * T), pr = at(P, L, o.clampAt * T);
+    // o.k : la chambre et la roulette sont dessinées à l'échelle K autour de leur point (poches agrandies ×1,5 dans la scène 5)
+    const sub = (p) => (K === 1 ? g : el("g", { transform: `translate(${f(p[0])} ${f(p[1])}) scale(${K}) translate(${f(-p[0])} ${f(-p[1])})` }, g));
     if (o.chamber) {   // chambre compte-gouttes : petit cylindre, niveau, goutte
-      const x = pc[0], y = pc[1], wet = fl > o.chamberAt;
-      el("path", { d: U.rrect(x - 11, y - 24, 22, 48, 5), fill: "#D2D2CB", transform: "translate(4 5)" }, g);
-      el("path", { d: U.rrect(x - 11, y - 24, 22, 48, 5), fill: "#FFFFFF", stroke: INK, "stroke-width": 2.4 }, g);
-      if (wet) el("path", { d: `M${f(x - 8.5)} ${f(y + 5)} Q${f(x)} ${f(y + 7)} ${f(x + 8.5)} ${f(y + 5)} L${f(x + 8.5)} ${f(y + 18)} Q${f(x + 8.5)} ${f(y + 21.5)} ${f(x + 5)} ${f(y + 21.5)} L${f(x - 5)} ${f(y + 21.5)} Q${f(x - 8.5)} ${f(y + 21.5)} ${f(x - 8.5)} ${f(y + 18)} Z`, fill: col }, g);
-      el("rect", { x: f(x - 2.5), y: f(y - 20), width: 5, height: 7, fill: INK }, g);
+      const cg = sub(pc), x = pc[0], y = pc[1], wet = fl > o.chamberAt;
+      el("path", { d: U.rrect(x - 11, y - 24, 22, 48, 5), fill: "#D2D2CB", transform: "translate(4 5)" }, cg);
+      el("path", { d: U.rrect(x - 11, y - 24, 22, 48, 5), fill: "#FFFFFF", stroke: INK, "stroke-width": 2.4 }, cg);
+      if (wet) el("path", { d: `M${f(x - 8.5)} ${f(y + 5)} Q${f(x)} ${f(y + 7)} ${f(x + 8.5)} ${f(y + 5)} L${f(x + 8.5)} ${f(y + 18)} Q${f(x + 8.5)} ${f(y + 21.5)} ${f(x + 5)} ${f(y + 21.5)} L${f(x - 5)} ${f(y + 21.5)} Q${f(x - 8.5)} ${f(y + 21.5)} ${f(x - 8.5)} ${f(y + 18)} Z`, fill: col }, cg);
+      el("rect", { x: f(x - 2.5), y: f(y - 20), width: 5, height: 7, fill: INK }, cg);
       if (wet || fl > o.chamberAt * 0.6) {
         let ph = (((o.drop % 1) + 1) % 1); if (back) ph = 1 - ph;
         const dy = lerp(y - 11, y + 3, ph * ph);
-        el("path", { d: `M${f(x)} ${f(dy - 5)} Q${f(x + 3.6)} ${f(dy)} ${f(x)} ${f(dy + 2.6)} Q${f(x - 3.6)} ${f(dy)} ${f(x)} ${f(dy - 5)} Z`, fill: col, stroke: dk, "stroke-width": 0.8 }, g);
+        el("path", { d: `M${f(x)} ${f(dy - 5)} Q${f(x + 3.6)} ${f(dy)} ${f(x)} ${f(dy + 2.6)} Q${f(x - 3.6)} ${f(dy)} ${f(x)} ${f(dy - 5)} Z`, fill: col, stroke: dk, "stroke-width": 0.8 }, cg);
       }
-      el("path", { d: U.rrect(x - 13, y - 29, 26, 9, 3), fill: "#CFCFCA", stroke: INK, "stroke-width": 2.2 }, g);
-      ln(g, `M${f(x - 7)} ${f(y - 12)} L${f(x - 7)} ${f(y + 14)}`, 1.6, "#FFFFFF", { opacity: 0.9 });
+      el("path", { d: U.rrect(x - 13, y - 29, 26, 9, 3), fill: "#CFCFCA", stroke: INK, "stroke-width": 2.2 }, cg);
+      ln(cg, `M${f(x - 7)} ${f(y - 12)} L${f(x - 7)} ${f(y + 14)}`, 1.6, "#FFFFFF", { opacity: 0.9 });
     }
     let wheel = [pr[0], pr[1]];
     if (o.roller) {   // roulette de réglage : boîtier + molette
-      const x = pr[0], y = pr[1], c = clamp(o.clamp, 0, 1);
-      el("path", { d: U.rrect(x - 13, y - 26, 26, 52, 6), fill: "#D2D2CB", transform: "translate(4 5)" }, g);
-      el("path", { d: U.rrect(x - 13, y - 26, 26, 52, 6), fill: "#FFFFFF", stroke: INK, "stroke-width": 2.4 }, g);
-      ln(g, `M${f(x - 5)} ${f(y - 19)} L${f(x + 3)} ${f(y + 19)}`, 2.6, "#B9B9B2");
-      wheel = [x + lerp(-4, 2.5, c), y + lerp(-14, 14, c)];
-      el("circle", { cx: f(wheel[0]), cy: f(wheel[1]), r: 8.5, fill: "#CFCFCA", stroke: INK, "stroke-width": 2.2 }, g);
-      [-50, 0, 50].forEach((a) => { const r = (a + c * 200) * Math.PI / 180; ln(g, `M${f(wheel[0] + 3 * Math.cos(r))} ${f(wheel[1] + 3 * Math.sin(r))} L${f(wheel[0] + 7 * Math.cos(r))} ${f(wheel[1] + 7 * Math.sin(r))}`, 1.6, INK); });
-      if (c > 0.9) el("path", { d: `M${f(x - 9)} ${f(y + 26)} L${f(x + 9)} ${f(y + 26)} L${f(x + 3)} ${f(y + 33)} L${f(x - 3)} ${f(y + 33)} Z`, fill: INK }, g);   // le tuyau est pincé
+      const rg = sub(pr), x = pr[0], y = pr[1], c = clamp(o.clamp, 0, 1);
+      el("path", { d: U.rrect(x - 13, y - 26, 26, 52, 6), fill: "#D2D2CB", transform: "translate(4 5)" }, rg);
+      el("path", { d: U.rrect(x - 13, y - 26, 26, 52, 6), fill: "#FFFFFF", stroke: INK, "stroke-width": 2.4 }, rg);
+      ln(rg, `M${f(x - 5)} ${f(y - 19)} L${f(x + 3)} ${f(y + 19)}`, 2.6, "#B9B9B2");
+      const w0 = [x + lerp(-4, 2.5, c), y + lerp(-14, 14, c)];
+      el("circle", { cx: f(w0[0]), cy: f(w0[1]), r: 8.5, fill: "#CFCFCA", stroke: INK, "stroke-width": 2.2 }, rg);
+      [-50, 0, 50].forEach((a) => { const r = (a + c * 200) * Math.PI / 180; ln(rg, `M${f(w0[0] + 3 * Math.cos(r))} ${f(w0[1] + 3 * Math.sin(r))} L${f(w0[0] + 7 * Math.cos(r))} ${f(w0[1] + 7 * Math.sin(r))}`, 1.6, INK); });
+      if (c > 0.9) el("path", { d: `M${f(x - 9)} ${f(y + 26)} L${f(x + 9)} ${f(y + 26)} L${f(x + 3)} ${f(y + 33)} L${f(x - 3)} ${f(y + 33)} Z`, fill: INK }, rg);   // le tuyau est pincé
+      wheel = [x + (w0[0] - x) * K, y + (w0[1] - y) * K];   // ancre de la molette (là où pose la main), échelle K comprise
     }
     return { chamber: [pc[0], pc[1]], clamp: [pr[0], pr[1]], wheel, end: P[P.length - 1], front: [front[0], front[1]], len: T };
   };
-  D.tube.essais = [{ fill: 1, drop: 0.7 }, { fill: 0.45, drop: 0.3, back: 1, flow: 0.4 }, { fill: 0.08, clamp: 1, pts: [[0, 0], [30, 120], [-20, 260], [10, 420]] }];
+  D.tube.essais = [{ fill: 1, drop: 0.7 }, { fill: 0.45, drop: 0.3, back: 1, flow: 0.4 }, { fill: 0.08, clamp: 1, pts: [[0, 0], [30, 120], [-20, 260], [10, 420]] },
+    { k: 1.4, fill: 0.6, back: 1, pts: [[0, 0], [10, 100], [-40, 220], [40, 340], [20, 570]] }];
 
   /* 4 · grille VIDE de o.cols × o.rows cases (o.cell px), tracée à main levée — ancrage : coin haut gauche
    * frise de la semaine : 21 × 3 (966 × 138) ; garde : 12 × 2 ; mini (scène 3) : cell 16 ; filigrane (scène 5) : cell 140, paper false, col gris */
@@ -282,8 +307,9 @@
       el("rect", { x: -m + 5, y: -m + 6, width: w + 2 * m, height: h + 2 * m, fill: "rgba(28,26,28,.14)" }, g);
       el("rect", { x: -m, y: -m, width: w + 2 * m, height: h + 2 * m, fill: "#FFFFFF", stroke: "#A9A9A2", "stroke-width": 1.4 }, g);
     }
-    for (let i = 0; i <= o.cols; i++) U.stroke(C, "v" + i, `M${i * o.cell} 0 L${i * o.cell} ${h}`, { sw: o.sw, stroke: o.col, r: 0.6, single: true });
-    for (let j = 0; j <= o.rows; j++) U.stroke(C, "h" + j, `M0 ${j * o.cell} L${w} ${j * o.cell}`, { sw: o.sw, stroke: o.col, r: 0.6, single: true });
+    const r = Math.min(0.6, o.cell / 70);   // petites cases (mini-frise de 16 px) : trait moins tremblé, sinon les cases deviennent inégales
+    for (let i = 0; i <= o.cols; i++) U.stroke(C, "v" + i, `M${i * o.cell} 0 L${i * o.cell} ${h}`, { sw: o.sw, stroke: o.col, r, single: true });
+    for (let j = 0; j <= o.rows; j++) U.stroke(C, "h" + j, `M0 ${j * o.cell} L${w} ${j * o.cell}`, { sw: o.sw, stroke: o.col, r, single: true });
     return { w, h };
   };
   D.hourGrid.essais = [{}, { cols: 12, rows: 2 }, { cols: 7, rows: 3, cell: 16, sw: 1.3 }, { cols: 4, rows: 5, cell: 140, paper: false, col: "#9A9A94", sw: 2.4 }];
@@ -382,19 +408,44 @@
   D.magnetStrip.essais = [{}, { pop: 1.2 }];
 
   /* 9 · onglet du jour (HUD) — ancrage : coin haut gauche ; 262 × 56 ; texte .tw 26 px
-   * o.text · o.chars (nombre de signes déjà tapés ; le texte ne bouge pas pendant la frappe) · o.rew (petit « ◀◀ » devant, 0..1 = opacité) */
+   * o.text · o.chars (nombre de signes déjà tapés ; le texte ne bouge pas pendant la frappe) · o.rew (petit « ◀◀ » devant, 0..1 = opacité)
+   * o.blur 0..1 + o.streak : les chiffres défilent, flous (b3@نرجعو → i1) ; les points et les lettres restent */
   D.dayTab = (g, o = {}) => {
     o = Object.assign({ text: "Sa · 30.07.2011", chars: null, rew: 0, seed: 901 }, o);
     const C = U.ctx(g, o.seed, false, 1), w = 262, h = 56, d = `M0 ${h} L0 14 Q0 0 14 0 L${w - 14} 0 Q${w} 0 ${w} 14 L${w} ${h} Z`;
     el("path", { d, fill: SH, transform: "translate(6 7)" }, g);
     U.shape(C, "tab", d, MAT.white, { sw: 2.8 });
     ln(g, `M8 ${h - 7} L${w - 8} ${h - 7}`, 1.4, "#B9B9B2", { "stroke-dasharray": "6 5" });   // trait de pliure
-    const full = String(o.text), shown = o.chars == null ? full : full.slice(0, Math.max(0, Math.round(o.chars))), x0 = o.rew > 0.02 ? 58 : (w - full.length * 15.6) / 2;
+    const full = String(o.text), shown = o.chars == null ? full : full.slice(0, Math.max(0, Math.round(o.chars)));
+    const left = o.rew > 0.02 ? 58 : 12, fs = Math.min(26, (w - left - 12) / (Math.max(1, full.length) * 0.6)), cw = fs * 0.6;   // un texte long rétrécit
+    const x0 = o.rew > 0.02 ? left : (w - full.length * cw) / 2, by = 28 + fs * 0.35;
     if (o.rew > 0.02) { const rg = el("g", { opacity: f(clamp(o.rew, 0, 1)) }, g); el("path", { d: "M34 16 L16 28 L34 40 Z M54 16 L36 28 L54 40 Z", fill: INK }, rg); }
-    tw(g, shown, f(x0), 37, 26, { anchor: "start" });
+    const blur = clamp(o.blur || 0, 0, 1);
+    if (blur < 0.02) tw(g, shown, f(x0), f(by), f(fs), { anchor: "start" });
+    else {   // rembobinage : les CHIFFRES défilent, flous (2 traits par chiffre qui glissent ; o.streak = phase, décroissante = à l'envers)
+      const pre = (t) => { t.style.whiteSpace = "pre"; return t; };   // garder les espaces : chaque signe reste à sa place (chasse fixe)
+      pre(tw(g, shown.replace(/[0-9]/g, " "), f(x0), f(by), f(fs), { anchor: "start" }));
+      if (blur < 0.98) pre(tw(el("g", { opacity: f(1 - blur) }, g), shown.replace(/[^0-9]/g, " "), f(x0), f(by), f(fs), { anchor: "start" }));
+      const bg = el("g", { opacity: f(blur) }, g);
+      [...shown].forEach((ch, i) => {
+        if (!/[0-9]/.test(ch)) return;
+        for (let k = 0; k < 2; k++) {
+          const u = ((((k / 2 + (o.streak || 0) + i * 0.17) % 1) + 1) % 1), y = 12 + u * 30;
+          el("rect", { x: f(x0 + i * cw + cw * 0.13), y: f(y), width: f(cw * 0.74), height: 3.6, rx: 1.8, fill: INK, opacity: f(0.45 + 0.4 * Math.sin(u * Math.PI)) }, bg);
+        }
+      });
+    }
     return { w, h };
   };
-  D.dayTab.essais = [{}, { text: "Mi · 16.05.2012", chars: 9 }, { text: "30.07.2011", rew: 1 }, { text: "··.··.····", rew: 1 }];
+  D.dayTab.essais = [{}, { text: "Mi · 16.05.2012", chars: 9 }, { text: "30.07.2011", rew: 1 }, { text: "··.··.····", rew: 1 }, { text: "Mi · 16.05.2012", rew: 1, blur: 1, streak: 0.3 }];
+
+  /* reflet qui glisse sur un cadre alu (tableau de garde, scènes 3 et 6) — ancrage : centre ; o.h = épaisseur du montant (16) ; le nœud se
+   * déplace d'un bout à l'autre du cadre (8 s) : dessin fixe, seul le transform bouge */
+  D.glint = (g, o = {}) => {
+    o = Object.assign({ h: 16, w: 46 }, o); const hh = o.h / 2 - 2, hw = o.w / 2;
+    el("path", { d: `M${-hw + 8} ${-hh} L${hw} ${-hh} L${hw - 8} ${hh} L${-hw} ${hh} Z`, fill: "#FFFFFF", opacity: 0.85 }, g);
+    el("path", { d: `M${hw + 6} ${-hh} L${hw + 14} ${-hh} L${hw + 6} ${hh} L${hw - 2} ${hh} Z`, fill: "#FFFFFF", opacity: 0.6 }, g);
+  };
 
   /* 10 · rond jaune « ؟ » au bout d'une ficelle — ancrage : centre du rond (Ø 54) ; o.len = longueur de la ficelle ; ancre top = l'attache (pivot) */
   D.loopTag = (g, o = {}) => {
@@ -446,10 +497,11 @@
     const C = U.ctx(g, 3311, false, 1);
     el("circle", { cx: 0, cy: -6, r: 6.5, fill: "#DADAD4", stroke: INK, "stroke-width": 1.8 }, g); ln(g, "M-2.5 -8 L2.5 -4", 1.3);
     ln(g, "M0 -1 L0 7 Q0 14 -7 12", 4.5, INK);
-    el("circle", { cx: 1, cy: 20, r: 11, fill: "none", stroke: INK, "stroke-width": 2.6 }, g);                    // anneau
     el("path", { d: "M-5 44 L7 44 L7 92 L1 98 L-5 92 Z", fill: SH, transform: "translate(4 5)" }, g);
     U.shape(C, "bow", circ(1, 42, 14), MAT.brass, { sw: 2.4 });
     el("circle", { cx: 1, cy: 36, r: 4.2, fill: PAPER, stroke: INK, "stroke-width": 1.6 }, g);
+    ln(g, "M1 9 C-12 9 -14 30 -3 36 C3 39 8 36 8 30", 2.6, INK);   // l'anneau passe dans le trou de la clé
+    ln(g, "M1 9 C11 9 13 19 9 26", 2.6, INK);
     U.shape(C, "shaft", "M-3 55 L5 55 L5 96 L1 101 L-3 96 Z", MAT.brass, { sw: 2.2 });
     el("path", { d: "M5 74 L14 74 L14 80 L10 80 L10 86 L14 86 L14 92 L5 92 Z", fill: YEL, stroke: INK, "stroke-width": 2, "stroke-linejoin": "round" }, g);
     const tg = el("g", { transform: "rotate(24 10 24)" }, g);                                                     // étiquette vierge
@@ -488,9 +540,10 @@
   /* ═════════════════════════ B. TRIBUNAL ═════════════════════════ */
 
   /* 12 · salle d'audience (fond, coordonnées MONDE) : mur #F1ECE2, corniche à y 380, boiseries hachurées de y 700 au sol (cadres en creux
-   * tous les 150 px), plinthe, sol en perspective de y 1300 à 1420 */
+   * tous les 150 px), plinthe, sol en perspective de y 1300 à o.bottom (1420 par défaut), puis fondu vers le papier sur o.fade px (70).
+   * Scène 1 (sellette jusqu'à y 1570, barre jusqu'à 1600) : passer bottom 1610 pour que les meubles restent posés sur le sol. */
   D.courtRoom = (g, o = {}) => {
-    o = Object.assign({ x0: -140, x1: 1220, top: 380, wainY: 700, floorY: 1300, bottom: 1420, panel: 150, vx: 540, seed: 1201 }, o);
+    o = Object.assign({ x0: -140, x1: 1220, top: 380, wainY: 700, floorY: 1300, bottom: 1420, fade: 70, panel: 150, vx: 540, seed: 1201 }, o);
     const { x0, x1, top, wainY, floorY, bottom } = o, C = U.ctx(g, o.seed, false, 1), W = x1 - x0;
     el("rect", { x: x0, y: top, width: W, height: wainY - top, fill: "#F1ECE2" }, g);
     // corniche à denticules
@@ -501,7 +554,8 @@
     U.shape(C, "wain", `M${x0} ${wainY} L${x1} ${wainY} L${x1} ${floorY} L${x0} ${floorY} Z`, { base: "#E7E3D8", hatch: "#B3AD9F", gap: 7.5, fw: 1.1 }, { noStroke: true });
     el("rect", { x: x0, y: wainY, width: W, height: 20, fill: "#D6D0C2" }, g);
     ln(g, `M${x0} ${wainY} L${x1} ${wainY}`, 2.8); ln(g, `M${x0} ${wainY + 20} L${x1} ${wainY + 20}`, 1.6, "#6E695E");
-    for (let x = Math.floor(x0 / o.panel) * o.panel; x < x1; x += o.panel) {   // cadres en creux
+    for (let x = Math.floor(x0 / o.panel) * o.panel; x < x1; x += o.panel) {   // cadres en creux (seulement ceux qui tiennent dans le mur)
+      if (x + 14 < x0 || x + o.panel - 14 > x1) continue;
       const a = x + 14, b = x + o.panel - 14, t = wainY + 46, u = floorY - 58;
       U.stroke(C, "pn" + x, `M${a} ${t} L${b} ${t} L${b} ${u} L${a} ${u} Z`, { sw: 2, stroke: "#6E695E", r: 0.7 });
       ln(g, `M${a + 11} ${t + 11} L${b - 11} ${t + 11} L${b - 11} ${u - 11} L${a + 11} ${u - 11} Z`, 1.3, "#9C9587");
@@ -511,13 +565,16 @@
     el("rect", { x: x0, y: floorY - 30, width: W, height: 30, fill: "#C9C3B5" }, g); ln(g, `M${x0} ${floorY - 30} L${x1} ${floorY - 30}`, 1.8, "#6E695E");
     // sol en perspective
     el("rect", { x: x0, y: floorY, width: W, height: bottom - floorY, fill: "#E6E2D8" }, g);
-    for (let i = -11; i <= 11; i++) ln(g, `M${f(o.vx + i * 84)} ${floorY} L${f(o.vx + i * 178)} ${bottom}`, 1.3, "#C4BEB0");
-    [0.28, 0.62].forEach((t) => ln(g, `M${x0} ${f(floorY + (bottom - floorY) * t)} L${x1} ${f(floorY + (bottom - floorY) * t)}`, 1.2, "#C4BEB0"));
+    for (let i = -20; i <= 20; i++) {   // fuyantes : même pente quelle que soit la profondeur du sol (o.bottom), découpées à [x0, x1]
+      const xa = o.vx + i * 84, xb = o.vx + i * 178, k = (bottom - floorY) / 120, d = segX(xa, floorY, xa + (xb - xa) * k, bottom, x0, x1);
+      if (d) ln(g, d, 1.3, "#C4BEB0");
+    }
+    [34, 74, 130, 200, 290].forEach((d) => { if (floorY + d < bottom - 6) ln(g, `M${x0} ${floorY + d} L${x1} ${floorY + d}`, 1.2, "#C4BEB0"); });
     ln(g, `M${x0} ${floorY} L${x1} ${floorY}`, 3);
-    el("rect", { x: x0, y: bottom - 16, width: W, height: 16, fill: PAPER, opacity: 0.65 }, g);
-    return { top, wainY, floorY };
+    floorFade(g, x0, W, bottom, o.fade);
+    return { top, wainY, floorY, bottom };
   };
-  D.courtRoom.essais = [{ x0: 0, x1: 1080 }];
+  D.courtRoom.essais = [{ x0: 0, x1: 1080, vx: 540 }, { x0: 0, x1: 1080, bottom: 1610 }];
 
   /* 13 · fenêtre haute à 2 × 4 carreaux, appui, poignée — ancrage : coin haut gauche ; 140 × 280 */
   D.tallWindow = (g, o = {}) => {
@@ -765,20 +822,26 @@
   };
   D.guiltBlock.essais = [{}, { seams: 1 }];
 
-  /* 22 · chemise cartonnée, étiquette tapée — ancrage : centre ; 110 × 80 ; o.text (« 613 Ls 3/12 », « Gutachten »…) ; o.yellow */
+  /* 22 · chemise cartonnée, étiquette tapée — ancrage : centre ; 110 × 80 ; o.text (« 613 Ls 3/12 », « Gutachten »…) ; o.yellow
+   * o.page 0..1 : une feuille qui se tourne (le juge tourne une page, scène 2) */
   D.folder = (g, o = {}) => {
-    o = Object.assign({ text: "613 Ls 3/12", yellow: false, seed: 2201 }, o);
+    o = Object.assign({ text: "613 Ls 3/12", yellow: false, page: 0, seed: 2201 }, o);
     const C = U.ctx(g, o.seed, false, 1), d = "M-55 -30 L-55 -37 Q-55 -40 -52 -40 L-16 -40 L-9 -32 L52 -32 Q55 -32 55 -29 L55 37 Q55 40 52 40 L-52 40 Q-55 40 -55 37 Z";
     el("path", { d, fill: SH, transform: "translate(6 7)" }, g);
     el("path", { d: "M-48 -35 L50 -35 L50 30 L-48 30 Z", fill: "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);       // feuilles qui dépassent
     U.shape(C, "fold", d, o.yellow ? MAT.yellow : MAT.wood, { sw: 2.6 });
-    const n = String(o.text).length, lw = Math.max(64, n * 7.2 + 14);
-    el("path", { d: U.rrect(-lw / 2, -16, lw, 26, 3), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.8 }, g);
-    tw(g, o.text, 0, 2, 12, {});
-    ln(g, "M40 -32 L40 40", 3, "#3A3A37"); ln(g, "M-44 22 L10 22 M-44 30 L-6 30", 1.4, "#9A9A94");                      // sangle, lignes
+    const n = String(o.text).length, lw = Math.min(88, Math.max(64, n * 7.2 + 12)), lx = -5;   // l'étiquette s'arrête avant la sangle
+    ln(g, "M46 -32 L46 40", 3, "#3A3A37"); ln(g, "M-44 22 L10 22 M-44 30 L-6 30", 1.4, "#9A9A94");                      // sangle, lignes
+    el("path", { d: U.rrect(lx - lw / 2, -16, lw, 26, 3), fill: "#FFFFFF", stroke: INK, "stroke-width": 1.8 }, g);
+    tw(g, o.text, lx, 2, Math.min(12, (lw - 8) / (n * 0.6)), {});
+    if (o.page > 0.01) {   // une page qui se tourne (le juge lit : scène 2, b2 + 1,0) — o.page 0..1, le pli est à gauche
+      const p = clamp(o.page, 0, 1), xr = lerp(44, -96, p), lift = 10 * Math.sin(p * Math.PI);
+      el("path", { d: `M-48 -35 L${f(xr)} ${f(-35 - lift)} L${f(xr)} ${f(30 - lift)} L-48 30 Z`, fill: p < 0.5 ? "#FFFFFF" : "#F1F1EC", stroke: INK, "stroke-width": 1.6, "stroke-linejoin": "round" }, g);
+      ln(g, `M-40 ${f(-20 - lift * 0.5)} L${f(lerp(-40, xr, 0.8))} ${f(-20 - lift)} M-40 ${f(-8 - lift * 0.5)} L${f(lerp(-40, xr, 0.6))} ${f(-8 - lift)}`, 1.2, "#B9B9B2");
+    }
     return { w: 110, h: 80 };
   };
-  D.folder.essais = [{}, { text: "Gutachten", yellow: true }];
+  D.folder.essais = [{}, { text: "Gutachten", yellow: true }, { page: 0.35 }];
 
   /* 25 b · carte tapée (papier de machine : bord perforé EN HAUT pour laisser toute la largeur aux lignes) — ancrage : centre ; o.w × o.h
    * o.dashed : bord en pointillés (= une demande, pas une décision) · trombone · o.lines = [{ text, y, size, x, anchor }] pour un texte fixe
@@ -798,16 +861,19 @@
     (o.lines || []).forEach((l) => tw(g, l.text, l.x == null ? 0 : l.x, l.y, l.size || 22, { anchor: l.anchor || "middle" }));
     return { w, h, left: x0 + 18, top: y0 + 40 };
   };
-  D.typedCard.essais = [{ lines: [{ text: "Die Angeklagte ist einer", y: -46 }, { text: "fahrlässigen Tötung schuldig.", y: -12 }, { text: "Von einer Bestrafung", y: 38 }, { text: "wird abgesehen.", y: 72 }, { text: "laut Urteil", y: -92, x: 192, size: 15, anchor: "end" }] },
+  // scène 2 (carte 420 × 250) : lignes à y −56, −22, 14, 46 et « laut Urteil » à (192, −84) ; le coin bas droit reste libre pour le tampon
+  // « § 60 » (k.prop stamp, échelle 0,4 ≈ 108 × 69) centré à (130, 88) dans le repère de la carte
+  D.typedCard.essais = [{ lines: [{ text: "Die Angeklagte ist einer", y: -56 }, { text: "fahrlässigen Tötung schuldig.", y: -22 }, { text: "Von einer Bestrafung", y: 14 }, { text: "wird abgesehen.", y: 46 }, { text: "laut Urteil", y: -84, x: 192, size: 15, anchor: "end" }] },
     { w: 400, h: 240, dashed: true, lines: [{ text: "Staatsanwaltschaft:", y: -40 }, { text: "90 Tagessätze", y: 22, size: 46 }, { text: "— beantragt —", y: 76 }] }];
 
   /* ═════════════════════════ C. HÔPITAL (scènes 4 à 6) ═════════════════════════ */
 
-  /* 29 · couloir (fond, coordonnées MONDE) : mur, corniche à y 380, bande de protection, main courante à y 1120, plinthe, sol 1300–1420
+  /* 29 · couloir (fond, coordonnées MONDE) : mur, corniche à y 380, bande de protection, main courante à y 1120, plinthe, sol 1300 → o.bottom
+   * (1420), fondu vers le papier sur o.fade px
    * o.x0, o.x1 (scène 6 : −200 → 2200) · o.doors = [{ x, num }] : portes pleines 150 × 600 à imposte, numéro sur une plaquette ; ancres calls
    * (où poser D.callLight) · o.night 0..1 : hachure de nuit dans les angles hauts de la fenêtre [o.nx0, o.nx1] */
   D.corridor04 = (g, o = {}) => {
-    o = Object.assign({ x0: -140, x1: 1220, top: 380, railY: 1120, floorY: 1300, bottom: 1420, doors: [], night: 0, nx0: 0, nx1: 1080, seed: 2901 }, o);
+    o = Object.assign({ x0: -140, x1: 1220, top: 380, railY: 1120, floorY: 1300, bottom: 1420, fade: 70, doors: [], night: 0, nx0: 0, nx1: 1080, seed: 2901 }, o);
     const { x0, x1, top, railY, floorY, bottom } = o, C = U.ctx(g, o.seed, false, 1), W = x1 - x0, bandY = railY - 96;
     el("rect", { x: x0, y: top, width: W, height: floorY - top, fill: "#EFEFE8" }, g);
     el("rect", { x: x0, y: top, width: W, height: 24, fill: "#DFDFD8" }, g);                                           // corniche
@@ -824,11 +890,12 @@
     ln(g, `M${x0} ${railY - 3} L${x1} ${railY - 3}`, 1.5, "#C9C9C1");
     el("rect", { x: x0, y: floorY - 26, width: W, height: 26, fill: "#CBCBC4" }, g); ln(g, `M${x0} ${floorY - 26} L${x1} ${floorY - 26}`, 1.8, "#6E6E68");   // plinthe
     el("rect", { x: x0, y: floorY, width: W, height: bottom - floorY, fill: "#E4E4DD" }, g);                           // sol (lino à joints)
-    for (let x = Math.floor(x0 / 190) * 190; x < x1 + 60; x += 190) ln(g, `M${x} ${floorY} L${x - 44} ${bottom}`, 1.3, "#C6C6BF");
-    ln(g, `M${x0} ${f(floorY + (bottom - floorY) * 0.42)} L${x1} ${f(floorY + (bottom - floorY) * 0.42)}`, 1.2, "#C6C6BF");
+    const dk = (bottom - floorY) / 120;   // joints du lino : même pente quelle que soit la profondeur du sol (o.bottom)
+    for (let x = Math.floor(x0 / 190) * 190; x < x1 + 60 * dk; x += 190) { const d = segX(x, floorY, x - 44 * dk, bottom, x0, x1); if (d) ln(g, d, 1.3, "#C6C6BF"); }
+    [50, 120, 210].forEach((d) => { if (floorY + d < bottom - 6) ln(g, `M${x0} ${floorY + d} L${x1} ${floorY + d}`, 1.2, "#C6C6BF"); });
     for (let x = Math.floor(x0 / 420) * 420 + 120; x < x1; x += 420) el("path", { d: `M${x} ${floorY + 22} L${x + 150} ${floorY + 22} L${x + 132} ${floorY + 40} L${x - 18} ${floorY + 40} Z`, fill: "#FFFFFF", opacity: 0.5 }, g);   // reflets
     ln(g, `M${x0} ${floorY} L${x1} ${floorY}`, 3);
-    el("rect", { x: x0, y: bottom - 16, width: W, height: 16, fill: PAPER, opacity: 0.65 }, g);
+    floorFade(g, x0, W, bottom, o.fade);
     const calls = [];
     o.doors.forEach((dr, i) => {   // portes pleines à imposte
       const x = dr.x, dw = 150, dh = 600, y = floorY - dh, DC = U.ctx(g, o.seed + 10 + i, false, 1);
@@ -850,7 +917,7 @@
     }
     return { calls, railY, floorY };
   };
-  D.corridor04.essais = [{ x0: 0, x1: 1080 }, { x0: 0, x1: 1080, doors: [{ x: 200, num: 12 }, { x: 640, num: 14 }], night: 1 }];
+  D.corridor04.essais = [{ x0: 0, x1: 1080 }, { x0: 0, x1: 1080, doors: [{ x: 200, num: 12 }, { x: 640, num: 14 }], night: 1 }, { x0: 0, x1: 1080, bottom: 1600 }];
   /* voyant d'appel au-dessus d'une porte (JAUNE, jamais rouge) — ancrage : centre ; o.on 0..1 */
   D.callLight = (g, o = {}) => {
     o = Object.assign({ on: 0 }, o); const on = clamp(o.on, 0, 1);

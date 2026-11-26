@@ -1461,3 +1461,18 @@ pastilles `mehr als 12 Stunden`, `nervlich zusammengebrochen`, `unzutreffende Er
 | planning lun → dim dont les cases se noircissent | frise de 63 cases-heures sans jours | la répartition par jour est inconnue |
 | guichet du dépôt de sang (frigo, lampe, passe-plat) | passe-plat, frigo aperçu derrière la vitre | on ne sait pas où ni comment les poches ont été remises |
 | (scène muette de la série : moniteur) | pas de moniteur : la roue du compteur s'arrête | forme propre à l'épisode ; aucun bip à inventer |
+
+---
+
+## Écarts de construction
+
+Ajouté pendant la construction (le storyboard ci-dessus n'est pas modifié). Chaque ligne : ce qui est fait autrement, et pourquoi.
+
+| où | storyboard | construit | pourquoi |
+|---|---|---|---|
+| `D.courtRoom`, `D.corridor04` (sol) | sol de y 1300 à 1420 | même défaut (1420), mais `o.bottom` peut le prolonger et le bas se fond dans le papier (`o.fade`, 70 px) au lieu d'une bande nette | dans la scène 1 la sellette descend à y 1570 et la barre à 1600 : avec un sol arrêté à 1420 les pieds flottaient sur le papier. Scène 1 : `bottom: 1610` |
+| scène 2, carte tapée | lignes non placées ; tampon « § 60 » à (650, 1238) | lignes à y −56, −22, 14, 46 dans le repère de la carte (centre (530, 1175)), « laut Urteil » à (192, −84), tampon à (130, 88) dans le même repère (≈ (660, 1258) en monde) | mesuré : le tampon (≈ 108 × 69 à l'échelle 0,4) posé à (650, 1238) recouvrait « wird abgesehen. » |
+| scène 5, `D.tube` | tubulure dessinée au trait normal | `o.k: 1.4` (tuyau, chambre et roulette ×1,4) | à côté des poches ×1,5, la tubulure à ×1 paraissait un fil |
+| HUD, `D.dayTab` | texte `.tw` 26 px | le texte rétrécit s'il est trop long (« ◀◀ » + « Mi · 16.05.2012 » = 21 px) ; `o.blur` / `o.streak` pour « les chiffres défilent à l'envers, flous » | à 26 px, « ◀◀ » + 15 signes sortait de l'onglet de 262 px |
+| scène 2, `D.folder` | « le juge tourne une page du dossier » | `o.page` 0 → 1 : une feuille qui pivote sur le pli | aucune autre pièce ne permettait le geste |
+| scènes 3 et 6, cadre alu | « reflet qui glisse sur le cadre alu (8 s) » | `D.glint` : petit reflet dessiné une fois, seul son transform bouge | redessiner tout le tableau à chaque image coûterait trop cher |
