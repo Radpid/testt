@@ -1824,3 +1824,36 @@ Ce que la construction a fait autrement que ce document, et pourquoi (étape « 
 figure dans `beats.js`. Vérifié par script avec la règle du moteur (`engine/runtime.js`, mot par mot, paires de
 mots et phrase entière) : aucun sous-titre ne reçoit de traduction, donc rien ne monte sur le menton du téléphone.
 À ne pas casser : n'y ajouter aucune clé égale à un mot ou une paire de mots d'un beat.
+
+### Étape « décors 2 » (scènes 6 à 16, `decor-2.js`, 26.11.2026)
+
+**Fonctions ajoutées hors inventaire :** `D.accolade` (l'accolade de la scène 9) et `D.fleche` (flèches à main levée des
+scènes 9 et 10, pleines ou en pointillé, `o.p` pour la tracer) ; dans `decor.js`, `D.aimant({ qui: "gris" })` (les aimants
+sans pictogramme de la scène 14).
+
+**Dessins changés par rapport au § 2 :**
+- `D.enveloppe` — 460 × 240 (le § 2 disait 400 × 230) : la lettre fait 440 px de large, elle ne pouvait pas sortir d'une
+  enveloppe plus étroite. Vue côté adresse (timbre, oblitération, adresse illisible), rabat DERRIÈRE qui se relève ; en deux
+  appels (`partie: "dos"` → lettre → `partie: "devant"`).
+- `D.certificat` — « bis 02.06.2025 » ne tient pas en 26 px sur une feuille de 180 px : « bis » (18 px) au-dessus de
+  « 02.06.2025 » (26 px). Le tampon rond fait r 36 et « Notaufnahme » (14 px) suit son bord (à plat, il débordait du rond).
+- `D.widgetDate` — paramètres `haut` / `jour` / `bas` (alias `mois` / `an`) ; la roue qui tourne montre des traits
+  horizontaux flous (`roule` < 1, `pos` = position de la roue) : des formes verticales lisaient « pause ».
+- `D.camembert` — « 30 % » dans le bas de la part jaune, « mindestens » juste au-dessus. À r 96, la part ne loge pas en plus
+  l'icône « Dienst » : la fonction renvoie l'ancre `ico`, sur le bord haut de la part, où l'icône ne couvre aucun texte.
+- `D.tuile` — masque aussi les coins carrés du contenu (`c.clipped` découpe un rectangle) ; `lisere: "seul"` dessine
+  seulement le liseré jaune (les deux nœuds qui se croisent en fondu).
+- `D.salleAudience` — le fond a les dossiers des trois fauteuils (celui de la présidente plus haut) et deux appliques, pour
+  qu'il ne soit pas nu ; lambris clair à planches VERTICALES (rien de commun avec les boiseries d'AKTE 03).
+- `D.fondNeutre` — un petit cadre au mur, une étagère basse, le dossier de sa chaise.
+- `D.lampadaire` — `partie: "cone"` pour poser le cône de lumière par-dessus le canapé.
+
+**À savoir pour les scènes (vu sur maquettes, hors git, avec Persona et les zones Instagram) :**
+- `D.pouce` — la main dépasse le bord droit du téléphone : la découper à x 906 (colonne des boutons à partir de x 915).
+- Scène 12 — avec la caméra finale du § 4 (×1,06 centrée sur (590, 1010)), le widget (bord gauche x 155) et le soleil
+  (x 137 avec ses rayons) arrivent à x ≈ 79 et 60 à l'écran, dans la marge rognée : garder `cx: 540`, ou décaler widget et
+  soleil d'environ 40 px vers la droite.
+- Scène 14 — carton centré en (−120, −240) dans le repère de LUI : la feuille de plante arrive sous sa barbe ; le descendre de
+  10 à 15 px si elle la touche sur la capture.
+- Scène 16 — la plaque « uneinsichtig » (380 px) garde son micro « laut Gericht » collé dessous : il passe sur le bord de la
+  tuile B (contour papier, lisible).
