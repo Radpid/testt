@@ -702,14 +702,16 @@
   D.navigateur.essais = [{}, { rows: 0.5, recharge: 0.4 }, { bande: true }, { partie: "curseur" }];
 
   /* ───────── D.poste — poste de travail : écran (coque 632 × 452) sur pied, posé sur un bureau en perspective ─────────
-   * o = { w: 632, h: 452, fond: 50, bord: 284, face: 384, bureau: true }
+   * o = { w: 632, h: 452, fond: 50, bord: 284, face: 384, bureau: true, partie: "tout" | "bureau" (le bureau seul) | "ecran" (écran + pied seuls : X.lieux.site
+   *       fait tomber l'écran sur le bureau fixe) }
    * Ancrage = milieu du BAS de la coque (S14, S17 : (540, 1016) → coque x 224–856, y 564–1016). Pied : col 80 × 34, socle 240 × 16
    * posé sur le fond du plateau (y +50) ; plateau jusqu'au bord avant (y +284, x ±420) ; façade jusqu'à y +384.
    * D.navigateur se pose au centre de la dalle : out.dalle (inset 16 px), centre (0, −226).
    * Renvoie { dalle: { x, y, w, h }, centre: [0, −h/2], plateau: { fond, bord }, face }. */
   D.poste = (g, o) => {
-    o = Object.assign({ w: 632, h: 452, fond: 50, bord: 284, face: 384, bureau: true, seed: 1131 }, o);
+    o = Object.assign({ w: 632, h: 452, fond: 50, bord: 284, face: 384, bureau: true, partie: "tout", seed: 1131 }, o);
     const w = o.w, h = o.h, x0 = -w / 2, F = o.fond, B = o.bord, C = ctx(g, o.seed);
+    if (o.partie === "ecran") o.bureau = false;                     // partie "ecran" : l'écran et son pied seuls (ils tombent sur le bureau)
     if (o.bureau) {
       U.shape(C, "plateau", `M-392 ${F} L392 ${F} L420 ${B} L-420 ${B} Z`, MAT.wood, { sw: 3, r: 0.5 });
       ln(g, `M-330 ${F + 60} C-200 ${F + 54} -60 ${F + 66} 120 ${F + 58} M-360 ${F + 150} C-200 ${F + 144} 100 ${F + 156} 340 ${F + 148}`, 1.3, "#BDBAAE");
@@ -720,6 +722,7 @@
       el("path", { d: `M184 ${B + 56} L244 ${B + 56} C242 ${B + 74} 186 ${B + 74} 184 ${B + 56} Z`, fill: ACIER, stroke: INK, "stroke-width": 2 }, g);
       ln(g, `M-380 ${B + 40} L-380 ${o.face - 4} M66 ${B + 40} L66 ${o.face - 4}`, 1.2, "#BDBDB6");
     }
+    if (o.partie === "bureau") return { dalle: { x: x0 + 16, y: -h + 16, w: w - 32, h: h - 32 }, centre: [0, -h / 2], plateau: { fond: F, bord: B }, face: o.face };
     // pied
     el("ellipse", { cx: 8, cy: F + 2, rx: 132, ry: 8, fill: "rgba(28,26,28,.16)" }, g);
     U.shape(C, "socle", rr(-120, F - 16, 240, 16, 8), MAT.mid, { sw: 2.6 });
@@ -732,7 +735,7 @@
     el("circle", { cx: f(w / 2 - 26), cy: -6.5, r: 3, fill: "#9A9A94", stroke: INK, "stroke-width": 1 }, g);
     return { dalle: { x: x0 + 16, y: -h + 16, w: w - 32, h: h - 32 }, centre: [0, -h / 2], plateau: { fond: F, bord: B }, face: o.face };
   };
-  D.poste.essais = [{}, { bureau: false }];
+  D.poste.essais = [{}, { bureau: false }, { partie: "bureau" }];
 
   /* ───────── D.fiche — fiche de profil d'un réseau social DESSINÉ (une fiche cartonnée, pas un téléphone, aucun logo) ─────────
    * o = { kind: "fiche" (290 × 190) | "pilule" (280 × 90 : avatar r 30 + nom) | "bio" (200 × 240 : ton compte, avatar vide, nom en

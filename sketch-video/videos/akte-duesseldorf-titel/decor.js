@@ -178,6 +178,8 @@
     return { w: f(L.w * k), crochet: [f(L.crochet[0] * h), f(L.crochet[1] * h)], haut: [0, f(-L.top * k)], vis };
   };
   D.lettre.essais = [{ ch: "D", h: 220 }, { ch: "r", h: 220 }, { ch: ".", h: 220 }, { ch: "D", h: 64, vis: 90 }, { ch: "r", h: 46 }, { ch: "r", h: 28 }];
+  // contour (extérieur + trou) d'une lettre, dans le repère de D.lettre décalé de (ox, oy) : story.js y découpe le reflet du laiton
+  D.lettre.trace = (ch, h, ox, oy) => lettreTrace(ch, h, ox || 0, oy || 0);
 
   /* ───────── D.motDr — « D », « r », « . » posées à la suite (version statique de l'aide motDr de story.js) ─────────
    * o = { h: 120, point: true, vis: 0 } · ancrage = bord GAUCHE du mot, sur la ligne de base.
