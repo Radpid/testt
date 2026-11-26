@@ -1,4 +1,6 @@
-/* decor.js — décors et objets PROPRES à l'épisode (aucun dessin repris d'un autre épisode).
+/* decor.js — décors et objets PROPRES à l'épisode, 1re moitié (aucun dessin repris d'un autre épisode) ; suite dans decor-2.js.
+ * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/<episode> [--only nom1,nom2]
+ *   D.nom.essais = [{ … }, { … }] (facultatif) : jeux de paramètres à montrer (états ouvert / fermé, 0 / 0.5 / 1…).
  * Convention : chaque fonction dessine dans le groupe SVG g, autour de son point d'ancrage (0,0), et reçoit ses
  * paramètres animés dans o (valeurs arrondies : le moteur ne redessine que si o change). Elle peut renvoyer des ancres
  * (ex. { main: [x, y] }) que story.js lit ensuite dans node.out.
@@ -11,7 +13,7 @@
   "use strict";
   const SC = SketchCast, U = SC.util, MAT = SC.MAT, INK = SC.INK, NS = "http://www.w3.org/2000/svg";
   const el = (tag, a, p) => { const n = document.createElementNS(NS, tag); for (const k in a || {}) n.setAttribute(k, a[k]); if (p) p.appendChild(n); return n; };
-  const D = {};
+  const D = window.EpDecor = window.EpDecor || {};
 
   // EXEMPLE (à supprimer) : suspension avec son cône de lumière — ancrage = point d'accroche au plafond
   D.exemple = (g, o = {}) => {
@@ -23,5 +25,5 @@
     return { ampoule: [0, L + 36] };
   };
 
-  window.EpDecor = D;
+
 })();

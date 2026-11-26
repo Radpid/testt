@@ -3,6 +3,7 @@
 //                          [--ig] [--cols 4] [--per 12] [--w 400] [--out videos/<episode>/out/planches]
 //   --beats  : 2 images par beat (25 % et 80 % de sa durée) — défaut si rien n'est précisé
 //   --from/--to/--step : image par image (contrôle d'un début de scène, ex. --step 0.1)
+//   --entre b4,b9 : avec --beats, seulement les beats de b4 à b9 (une partie de l'épisode)
 //   --ig     : zones Instagram en rouge sur chaque image (bords rognés, barre du haut, boutons, légende)
 // Écrit planche_01.png, planche_02.png… (--per images par planche) et affiche la liste.
 import { createRequire } from "node:module"; import fs from "node:fs"; import path from "node:path"; import { pathToFileURL } from "node:url";
@@ -25,7 +26,8 @@ if (info.err) { console.error("Erreur dans la page : " + info.err); await b.clos
 let shots = [];
 if (opt("times", null)) shots = opt("times").split(",").map((x) => ({ t: +x }));
 else if (opt("from", null) != null) { const f = +opt("from"), to = +opt("to", info.dur), st = +opt("step", 0.1); for (let t = f; t <= to + 1e-6; t += st) shots.push({ t: +t.toFixed(3) }); }
-else { for (const be of info.beats) for (const k of [0.25, 0.8]) shots.push({ t: +(be.start + (be.end - be.start) * k).toFixed(2), id: be.id }); shots.push({ t: +(info.dur - 0.3).toFixed(2), id: "fin" }); }
+else { const en = opt("entre", null), ids = info.beats.map((x) => x.id), i0 = en ? Math.max(0, ids.indexOf(en.split(",")[0])) : 0, i1 = en && ids.indexOf(en.split(",")[1]) >= 0 ? ids.indexOf(en.split(",")[1]) : ids.length - 1;
+  for (const be of info.beats.slice(i0, i1 + 1)) for (const k of [0.25, 0.8]) shots.push({ t: +(be.start + (be.end - be.start) * k).toFixed(2), id: be.id }); if (!en || i1 === ids.length - 1) shots.push({ t: +(info.dur - 0.3).toFixed(2), id: "fin" }); }
 const beatAt = (t) => { let id = ""; for (const be of info.beats) if (t >= be.start - 0.05) id = be.id; return id; };
 const frames = [];
 for (const s of shots) {

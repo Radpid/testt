@@ -4,7 +4,8 @@
  *   kit (rubans, pastilles avec arabe détaché, cartes), carte de l'Allemagne + épingle, aides Persona,
  *   éléments obligatoires de l'intro (photo + anneau jaune + Instagram + « Yassine » + j'aime / s'abonner),
  *   HUD (barre de progression + logo masqué pendant l'intro), affiche-résumé finale.
- * Tout le reste — décors (decor.js), personnages, scènes, caméra, transitions, HUD propre — est PROPRE à l'épisode.
+ * Tout le reste — décors (decor.js, decor-2.js), personnages, scènes (scenes-1.js … scenes-4.js), caméra, transitions,
+ * HUD propre — est PROPRE à l'épisode. Ce fichier ne contient QUE le socle, la distribution, le HUD et l'affiche.
  * Zones Instagram : contenu entre x 90 et 990 (décor entre 110 et 960) ; rien d'important au-dessus de y 250, sous y 1470,
  * ni dans la colonne des boutons (x > 915, y 980–1650).
  */
@@ -123,73 +124,22 @@
     const rl = (o, sc, pt) => [rnd((pt[0] - o[0]) / sc, 2), rnd((pt[1] - o[1]) / sc, 2)];                 // point monde -> repère du personnage (reachL / reachR)
     const walkTo = (base, t, a, d, facing) => Object.assign({}, base, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? PP.walk(rnd((((t - a) * 1.7) % 1 + 1) % 1, 16)) : PP.stand, prog(t, a, d) > 0 && prog(t, a, d) < 1 ? { view: "side", facing } : {});
 
-    /* ───────── DISTRIBUTION — À REMPLACER : personnages NEUFS (jamais ceux d'un autre épisode) ───────── */
-    const DOC = { look: "woman", hair: "bob", hairTone: "dark", outfit: "coat", seed: 11 };
+    /* ───────── DISTRIBUTION — À REMPLACER : personnages NEUFS (jamais ceux d'un autre épisode) ─────────
+     * Paramètres Persona de chaque personnage (storyboard § 1) ; les scènes y ajoutent pose, tenue du moment, expression. */
+    const CAST = {
+      DOC: { look: "woman", hair: "bob", hairTone: "dark", outfit: "coat", seed: 11 },
+    };
 
-    /* ═══════ 1 · ACCROCHE — À REMPLACER : la sanction chiffrée, décor complet, mouvement fort dès la 1re image ═══════ */
-    st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
-      const k = kit(c); k.bg(); c_ = c;
-      const m = M.of(c);
-      c.camera([{ at: 0, s: 1.0, cx: 540, cy: 860 }, { at: "b2@end", s: 1.03, cx: 540, cy: 860, ease: "lin" }]);   // poussée lente continue
-      const lamp = m.obj(D.exemple, 540, 300, 1); m.build(lamp, 0.05, "drop", { dist: 160, dur: 0.45 }); m.pend(lamp, 0.5, 5, [540, 300], { idle: 1.2 });
-      pp(0, 0, 1.1, (t) => Object.assign({}, DOC, PP.stand, { view: "three-quarter", facing: 1, expr: t < T("b2") ? "worried" : "shock", blink: rnd(blinkAt(t, 1)) }))
-        .on((t, s) => { s.x += 540; s.y += 1300; }).on(breathe(1));
-      k.chip("Geldstrafe", "غرامة", 540, 470, 40, { yellow: true }).pop("b1", 0.3);
-      c.kick("b2", 0.06);
-    } });
-
-    /* ═══════ 2 · INTRO DE L'AUTEUR — SOCLE pour les éléments (photo, anneau, Instagram, « Yassine », @dr.aguilo, j'aime,
-     *  s'abonner, summary:false) ; le CADRE autour (tableau de garde, badge, téléphone, plaque, polaroïd…) est propre à l'épisode ═══════ */
-    st.scene({ from: "i1", in: "iris", inDur: 0.3, summary: false, build(c) {
-      const k = kit(c); k.bg(); c_ = c;
-      c.camera([{ at: "i1", s: 1.05, cx: 540, cy: 820 }, { at: "i2", s: 1.0, cx: 540, cy: 860, d: 0.5 }]);
-      const m = M.of(c); m.rays(540, 600, { op: 0.15, R: 560, speed: 6, at: "i1" });
-      const ph = el("g"), C = U.ctx(ph, 88, false, 1);
-      const cp = el("clipPath", { id: "clipPortrait" }, el("defs", {}, ph)); el("circle", { cx: 0, cy: 0, r: 208 }, cp);
-      el("circle", { cx: 9, cy: 12, r: 236, fill: "#D2D2CB" }, ph);
-      U.shape(C, "ring", "M-236 0 A236 236 0 1 1 236 0 A236 236 0 1 1 -236 0", MAT.yellow, { sw: 4 });
-      el("image", { href: "assets/portrait.png", x: -210, y: -210, width: 420, height: 420, "clip-path": "url(#clipPortrait)", preserveAspectRatio: "xMidYMid slice" }, ph);
-      U.shape(C, "ring1", "M-209 0 A209 209 0 1 1 209 0 A209 209 0 1 1 -209 0", {}, { sw: 5.5 });
-      U.stroke(C, "dash", "M-150 -196 C -90 -232, 60 -236, 140 -200", { sw: 3, stroke: "#FFFFFF" });
-      // badge Instagram dessiné, accroché au cadre
-      const ig = el("g", { transform: "translate(160 160)" }, ph), I = U.ctx(ig, 89, false, 1);
-      el("path", { d: U.rrect(-46, -46, 92, 92, 26), fill: "#D2D2CB", transform: "translate(5 6)" }, ig);
-      U.shape(I, "sq", U.rrect(-46, -46, 92, 92, 26), MAT.white, { sw: 4.2 });
-      U.shape(I, "c", "M-19 0 A19 19 0 1 1 19 0 A19 19 0 1 1 -19 0", MAT.yellow, { sw: 4.2 });
-      el("circle", { cx: 25, cy: -25, r: 6, fill: INK }, ig);
-      c.node(ph).on((t, s) => { s.x += 540; s.y += 600; }).pop("i1", 0.4);
-      k.ribbon("Yassine", 540, 905, { size: 60 }).wipe("i1@ياسين", 0.35);
-      const hd = el("g"), H = U.ctx(hd, 90, false, 1);
-      U.shape(H, "sq", U.rrect(-21, -21, 42, 42, 12), MAT.white, { sw: 3 }); U.stroke(H, "c", "M-9 0 A9 9 0 1 1 9 0 A9 9 0 1 1 -9 0", { sw: 3 }); el("circle", { cx: 12, cy: -12, r: 3, fill: INK }, hd);
-      c.node(hd).on((t, s) => { s.x += 410; s.y += 996; }).pop("i1@ياسين+0.15", 0.3);
-      c.text("@dr.aguilo", 560, 1012, 46, "de").fade("i1@ياسين+0.15", 0.3);
-      k.chip("Arzt in Deutschland", "طبيب فألمانيا", 540, 1078, 26).pop("i1@فألمانيا").hide("i2@حقيقية", 0.15);
-      k.chip("echte Fälle · deutsche Gerichte", "قصص حقيقية من المحاكم", 540, 1078, 26, { yellow: true }).pop("i2@حقيقية+0.15").hide("i3", 0.15);
-      // j'aime + s'abonner
-      const la = T("i3@j'aime"), fa = T("i3@abonne");
-      c.sk((g, p) => PE.props.heart(g, { size: 1.25, fill: p.on, beat: p.b }), (t) => ({ on: t >= la, b: rnd(Math.sin(Math.min(1, prog(t, la, 0.35)) * Math.PI), 10) }), 330, 1185, 1).pop("i3", 0.3);
-      c.text("j'aime", 330, 1258, 30, "de").pop("i3", 0.3);
-      c.sk((g, p) => {
-        while (g.firstChild) g.removeChild(g.firstChild);
-        const B = U.ctx(g, 91, false, 1);
-        el("path", { d: U.rrect(-150, -42, 300, 84, 22), fill: "#D2D2CB", transform: "translate(6 7)" }, g);
-        U.shape(B, "btn", U.rrect(-150, -42, 300, 84, 22), p.on ? MAT.yellow : MAT.white, { sw: 3.4 });
-        U.text(g, p.on ? "✓ abonné" : "+ s'abonner", 0, 14, 40, {});
-      }, (t) => ({ on: t >= fa }), 640, 1190, 1).pop("i3+0.1", 0.3);
-      c.kick(la, 0.05); c.kick(fa, 0.05);
-    } });
-
-    /* ═══════ 3 · CARTE — exemple (À ADAPTER : forme propre à l'épisode, voir SAISON-2.md) ═══════ */
-    st.scene({ from: AFTER_INTRO, in: "iris", inDur: 0.3, build(c) {
-      const k = kit(c); k.bg(); c_ = c;
-      const m = M.of(c); m.shapes({ seed: 5 });
-      const geo = drawDE(c, 330, 860, 40, AFTER_INTRO), [x, y] = geo(6.96, 50.94);
-      pinAt(c, x, y, AFTER_INTRO + "+0.4"); m.ripple(x, y, T(AFTER_INTRO) + 0.8);
-      k.chip("Köln", "كولونيا", x + 150, y - 40, 34).pop(AFTER_INTRO + "+0.6");
-      c.camera([{ at: AFTER_INTRO, s: 1.0, cx: 540, cy: 860 }, { at: AFTER_INTRO + "+0.5", s: 1.25, cx: x + 80, cy: y, d: 0.6 }]);
-    } });
-
-    /* ═══════ … SCÈNES DE L'ÉPISODE — À ÉCRIRE (une idée par scène, décor qui se construit puis qui vit) ═══════ */
+    /* ───────── SCÈNES : elles sont écrites dans scenes-1.js … scenes-4.js (une partie de l'épisode par fichier) ─────────
+     * Chaque fichier fait : (window.EP_PARTS = window.EP_PARTS || []).push(function (X) { … X.st.scene({ … }) … });
+     * X = tout le socle ci-dessus. Dans une scène : const k = X.use(c);  (pose la scène courante pour pp / ph et rend le kit).
+     * X.lieux = mises en place FIXES partagées entre les parties (ex. X.lieux.chambre = (c, o) => { … }). */
+    const X = { sv, st, T, E, prog, lerp, clamp, el, isLatin, SC, K, U, MAT, INK, W, NS, PE, PP, D, M,
+      kit, drawDE, geoAt, pinAt, blinkAt, talkAt, rnd, pp, ph, breathe, rl, walkTo,
+      CAST, BEAT_IDS, LAST, AFTER_INTRO, AKTE_NO, AKTE_NEXT, TITRE, QUESTION,
+      lieux: {}, aides: {},
+      use(c) { c_ = c; return kit(c); } };
+    (window.EP_PARTS || []).forEach((part) => part(X));
 
     /* ───────── SOCLE : HUD — barre de progression + logo (masqué pendant l'intro) ───────── */
     {
