@@ -1755,3 +1755,46 @@ Ajoutés pendant la construction (le reste du document est inchangé). Étape «
     PAR-DESSUS (`only: "handL"` / `"handR"` après le diplôme). Le tube se pose avec une rotation de 35° (le dessin
     est horizontal).
   - S7 : l'avant-bras qui tient le cachet passe devant le bloc ; il doit ressortir avant `b5@Dr` (risque 17).
+
+Étape « décors 2 » (S8 à S23, dans `decor-2.js` ; `D.fiche` aussi pour S26). Compositions S8 à S23 vérifiées aux
+coordonnées monde de ce document, caméra `AXE`, avec les textes principaux, les zones Instagram et, en S19, `RIC`, `STA`, `GRE`.
+
+- **Ordre de chargement** : `tools/essai_decor.mjs` charge `decor-2.js` avant `decor.js` (tri alphabétique). `decor-2.js` et
+  `decor-3.js` attendent donc `D.util` (`D._apres`, lancé à la fin de `decor.js`). Rien ne change pour `index.html`.
+- **`D.fenetreArc`** : appui remonté (y local 146–160) : la fenêtre tient dans y 560–880 comme écrit plus haut (au lieu de
+  320 × 335). Avec l'appui à y 895, il dépassait sous l'écran de S9 et touchait la glose « القاعدة الرسمية ديال الدبلومات » (918).
+- **`D.brief`** : en-tête en Kalam 33 (et non 36). Mesuré dans le navigateur, « Ärztekammer Nordrhein » fait 386 px à 36 et
+  touchait le tampon dateur (x 610) ; à 33, il finit à x 606. Plis à y local −88 et +104 (monde 1037 et 1229 en S13) au lieu
+  de ±90 : à +90 (monde 1215), le pli passait sous l'annotation arabe « ماشي «Dr. med.» ». Option `plis`.
+- **`D.stetho`** : la lyre pend au milieu et le pavillon à DROITE (x 820–905 en S12, et non 795–905) : à gauche, le pavillon
+  passait derrière le badge (qui finit à x 820).
+- **`D.salleFace`** : rais de lumière à l'opacité 0,24 (et non 0,10, invisible sur le mur clair), bords en tirets blancs.
+  Option `rais`.
+- **`D.badge({ mini: true })`** : un anneau d'acier autour de la petite tringle au lieu d'un cordon (32 px ne suffisent pas
+  pour un cordon lisible).
+- **`D.poste`** : tiroir du bureau ramené à x 636–872 (hors de la colonne des boutons).
+- **`D.etiquette`** (`decor.js`) : les textes trop grands pour l'étiquette sont réduits (largeur, puis hauteur utile) ; l'œillet
+  est plus petit sur une petite étiquette. Les étiquettes de S1 à S3, S20, S21, S23 ne changent pas ; celle de S18 (250 × 84,
+  40 + 20 px demandés) passe à 30 + 15 px : 40 + 20 ne tient pas sous l'œillet.
+- **Noms de compte** (`D.fiche`) : le corps est réduit pour tenir dans la fiche (« … » mesure 0,64 em dans Kalam, pas 0,47) :
+  « dr.med.……… » passe à ≈ 25 px dans la fiche, ≈ 28 px dans la pilule.
+- **Ajouts hors inventaire** : `D.lierre` (S13, S16 : treillage + lierre, partie `lierre` pour le balancement) et `D.dossier`
+  (S19 : le dossier qui tombe sur le banc ; ouvert : celui de `STA`).
+- **À savoir pour les scènes** (constaté sur les compositions, rien n'est changé dans le texte ci-dessus) :
+  - S9 : le tampon `Berufsdoktorat` en (360, 1262) couvre « Doctorat en Médecine » du petit diplôme (deux mots l'un sur l'autre).
+    Le poser plus bas, sur les gribouillis (≈ (360, 1290)), garde les deux lisibles.
+  - S13 : la glose « ماشي «Dr. med.» » s'affiche « «.Dr. med» » (ordre bidirectionnel) : isoler le latin (U+2066 … U+2069)
+    ou poser « «Dr. med.» » dans un nœud à part.
+  - S18 : la glose « حسب الصحافة » en (760, 905) est coupée par le bord droit de la feuille (x 760) : la poser en (822, 905).
+  - S19 : `Persona.util.rig` donne pour `RIC` (pieds (540, 1160), ×0,80) : haut de la tête 810, menton 922, épaules 930 (au ras
+    du banc). Une feuille de 90 × 120 tenue en (540, 880) cache tout son visage : la tenir basse (centre ≈ (540, 955), on en voit
+    le haut au-dessus du pupitre) et ne la lever que de 15 px. Mains de `GRE` : épaules (745 et 805, 1015), clavier en
+    (776, 1085) : portée ≈ 75 px, juste. Ordre : `GRE` → `D.bureauGreffe({ partie: "meuble" })` → `partie: "clavier"` →
+    mains de `GRE` (`only`).
+  - S21 et S23 : la dernière ligne arabe (y 1356 et 1342) tombe sur la plinthe de `D.mur` (sol par défaut 1385, plinthe
+    1355–1385) : poser `D.mur({ sol: 1420 })`.
+  - S23 : l'étiquette (corps x 175–355, y 981–1091) et la plaque des tribunaux (x 320–800, y 947–1003) se recouvrent sur
+    x 320–355 : décaler la plaque et sa glose de 40 px à droite, centres (600, 975) et (600, 1040) → plaque x 360–840
+    (l'étiquette reste pendue au bout du rebord, qui commence à x 250).
+  - S12 : le badge (x 260–820) passe devant la moitié droite de la blouse (x 130–330) : voulu (le badge pend devant).
+  - `D.rebord` en S23 : `consoles: [−180, 180]` (sinon une console tombe sous l'étiquette, en x 265).

@@ -3,7 +3,7 @@
  * Essai de chaque dessin, seul, sur une planche : node tools/essai_decor.mjs videos/akte-duesseldorf-titel [--only nom1,nom2]
  *   D.nom.essais = [{ … }, { … }] : jeux de paramètres montrés sur la planche.
  *
- * ÉTAT DE L'INVENTAIRE (storyboard § 2 : 76 fonctions — 36 faites, 40 à faire) ──────────────────────────────────────────
+ * ÉTAT DE L'INVENTAIRE (storyboard § 2 : 76 fonctions — 68 faites, 8 à faire) ──────────────────────────────────────────
  * A. Laiton, lettres, étiquettes, tampons (objets signature)
  *   D.plaque        fait (decor.js)      D.lettre        fait (decor.js)      D.etiquette     fait (decor.js)
  *   D.empreinte     fait (decor.js)      D.tampon        fait (decor.js)      D.barre         fait (decor.js)
@@ -20,23 +20,23 @@
  * D. Diplômes et explication en image
  *   D.cimaise       fait (decor.js)      D.cadre         fait (decor.js)      D.diplome       fait (decor.js)
  *   D.valise        fait (decor.js)      D.pochette      fait (decor.js)
- *   D.livre         à faire (S8, S9)     D.table         à faire (S8, S9)     D.fenetreArc    à faire (S8)
- *   D.nuage         à faire (S8)         D.lampeTable    à faire (S8, S9)     D.ecran         à faire (S9)
- *   D.planche       à faire (S9)         D.socle         à faire (S24)
+ *   D.livre         fait (decor-2.js)    D.table         fait (decor-2.js)    D.fenetreArc    fait (decor-2.js)
+ *   D.nuage         fait (decor-2.js)    D.lampeTable    fait (decor-2.js)    D.ecran         fait (decor-2.js)
+ *   D.planche       fait (decor-2.js)    D.socle         à faire (S24)
  * E. Atelier du graveur
  *   D.atelier       fait (decor.js)      D.etau          fait (decor.js)      D.casse         fait (decor.js)
  *   D.bloc          fait (decor.js)      D.encreur       fait (decor.js)      D.cartes        fait (decor.js)
- *   D.loupe         fait (decor.js)      D.fiche         à faire (S14, S15, S26)
- * F. L'affaire (S12 à S23) — tout à faire
- *   D.patere        à faire              D.blouse        à faire              D.stetho        à faire
- *   D.sabots        à faire              D.badge         à faire              D.boite         à faire
- *   D.enveloppe     à faire              D.brief         à faire              D.navigateur    à faire
- *   D.poste         à faire              D.dateur        à faire              D.bac           à faire
- *   D.strafbefehl   à faire              D.salleFace     à faire              D.banc          à faire
- *   D.tableProc     à faire              D.bureauGreffe  à faire              D.tableDefense  à faire
- *   D.platzschild   à faire              D.rebord        à faire              D.feuille       à faire
- *   D.chariot       à faire              D.ordner        à faire              D.chemise       à faire
- * G. La règle (S24 à S29) — tout à faire
+ *   D.loupe         fait (decor.js)      D.fiche         fait (decor-2.js : fiche, pilule et bio — S14, S15, S26)
+ * F. L'affaire (S12 à S23) — tout fait, dans decor-2.js
+ *   D.patere        fait (decor-2.js)    D.blouse        fait (decor-2.js)    D.stetho        fait (decor-2.js)
+ *   D.sabots        fait (decor-2.js)    D.badge         fait (decor-2.js)    D.boite         fait (decor-2.js : A et B)
+ *   D.enveloppe     fait (decor-2.js)    D.brief         fait (decor-2.js)    D.navigateur    fait (decor-2.js)
+ *   D.poste         fait (decor-2.js)    D.dateur        fait (decor-2.js)    D.bac           fait (decor-2.js)
+ *   D.strafbefehl   fait (decor-2.js)    D.salleFace     fait (decor-2.js)    D.banc          fait (decor-2.js)
+ *   D.tableProc     fait (decor-2.js)    D.bureauGreffe  fait (decor-2.js)    D.tableDefense  fait (decor-2.js)
+ *   D.platzschild   fait (decor-2.js)    D.rebord        fait (decor-2.js)    D.feuille       fait (decor-2.js : aussi S19, S27)
+ *   D.chariot       fait (decor-2.js)    D.ordner        fait (decor-2.js)    D.chemise       fait (decor-2.js)
+ * G. La règle (S24 à S29) — tout à faire (decor-3.js)
  *   D.potence       à faire              D.chaine        à faire              D.different     à faire
  *   D.loi           à faire              D.fleche        à faire
  * HORS INVENTAIRE, ajoutés parce que les scènes S1 à S7 en ont besoin (tous « fait (decor.js) ») :
@@ -45,8 +45,13 @@
  *   D.porteEtiquette (S4) · D.clou (S2 : le médaillon y pend) · D.suspension et D.cartons (S6) · D.outil et D.bon (outils et
  *   bons de l'atelier, nœuds séparés : places dans out.outils / out.bons de D.atelier).
  *   D.silhouette a une option fil (cordon qui pend au clou de S2, au rail de S3).
+ * HORS INVENTAIRE, pour S8 à S23 (« fait (decor-2.js) ») : D.lierre (lierre sur treillage de S13, S16 : le storyboard le
+ *   demande dans la scène, pas dans l'inventaire) · D.dossier (le dossier qui tombe sur le banc en S19 ; ouvert : celui de STA).
  *   D.exemple = dessin du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js : À SUPPRIMER avec elles.
  *   D.util (objet, pas une fonction) = aides partagées avec decor-2.js / decor-3.js (matières, gribouillis, vis, ombre…).
+ *   ORDRE DE CHARGEMENT : index.html charge decor.js, puis decor-2.js, puis decor-3.js ; tools/essai_decor.mjs les charge par
+ *   ordre alphabétique (decor-2.js d'abord) : decor-2.js / decor-3.js commencent donc par « if (D.util) init(); else
+ *   (D._apres = D._apres || []).push(init); » et decor.js lance D._apres à sa fin.
  *
  * CONVENTIONS
  *   Chaque fonction dessine dans le groupe SVG g autour de son ancrage (0,0), reçoit ses paramètres animés dans o (valeurs
@@ -331,15 +336,20 @@
       ombre(b, d, 6, 8);
       U.shape(C, "et", d, { base: pap }, { sw: 3, stroke: enc });
       ln(b, `M${f(x0 + 9)} ${f(top + c + 4)} L${f(x0 + 9)} ${top + h - 9} L${f(-x0 - 9)} ${top + h - 9} L${f(-x0 - 9)} ${f(top + c + 4)}`, 1.4, mix("#C9C3B2", "#BDBDB6", gz));
-      // œillet
-      el("circle", { cx: 0, cy: L, r: 15, fill: mix(ACIER, "#D6D6D1", gz), stroke: enc, "stroke-width": 1.8 }, b);
-      el("circle", { cx: 0, cy: L, r: 9, fill: "#FFFFFF", stroke: enc, "stroke-width": 2.5 }, b);
+      // œillet (plus petit sur une petite étiquette : il laisse la place au texte)
+      const rO = clamp(h * 0.2, 6, 15);
+      el("circle", { cx: 0, cy: L, r: f(rO), fill: mix(ACIER, "#D6D6D1", gz), stroke: enc, "stroke-width": 1.8 }, b);
+      el("circle", { cx: 0, cy: L, r: f(rO * 0.6), fill: "#FFFFFF", stroke: enc, "stroke-width": f(Math.min(2.5, rO * 0.17)) }, b);
       // textes : empilés et centrés dans la zone utile (sous l'œillet)
       const ls = [];
       if (o.l1) ls.push({ t: o.l1, s: o.s1, asc: 0.72, y: o.y1 });
       if (o.l2) ls.push({ t: o.l2, s: o.s2, asc: 0.72, y: o.y2 });
       if (o.ar) ls.push({ t: o.ar, s: o.sAr, asc: 0.8, ar: true, y: o.yAr });
-      const gap = (i) => (i ? ls[i].s * 0.3 + 4 : 0), tot = ls.reduce((a, l, i) => a + gap(i) + l.s * l.asc, 0), zone0 = top + 31, zone1 = top + h - 13;
+      // textes trop grands pour l'étiquette (petit format, ex. 250 × 84 de S18) : réduits à la largeur, puis à la hauteur utile
+      ls.forEach((l) => { if (!l.ar) l.s = Math.min(l.s, (w - Math.min(30, w * 0.18)) / Math.max(1, String(l.t).length * 0.5)); });
+      const gap = (i) => (i ? ls[i].s * 0.3 + 4 : 0), somme = () => ls.reduce((a, l, i) => a + gap(i) + l.s * l.asc, 0), zone0 = top + 16 + rO, zone1 = top + h - Math.min(13, h * 0.15);
+      let tot = somme(); const kz = (zone1 - zone0) / tot;
+      if (kz < 1) { ls.forEach((l) => { l.s = f(l.s * kz); }); tot = somme(); }
       let y = zone0 + Math.max(0, (zone1 - zone0 - tot) / 2);
       ls.forEach((l, i) => {
         y += gap(i) + l.s * l.asc;
@@ -1671,5 +1681,8 @@
   };
   D.loupe.essais = [{}];
 
-  /* Suite de l'inventaire (S8 et après) : decor-2.js, decor-3.js. */
+  /* Suite de l'inventaire (S8 et après) : decor-2.js, decor-3.js.
+   * Ces deux fichiers utilisent D.util. index.html les charge APRÈS decor.js, mais tools/essai_decor.mjs les charge par ordre
+   * alphabétique (decor-2.js avant decor.js) : un fichier chargé trop tôt se met en attente dans D._apres, lancé ici. */
+  (D._apres || []).splice(0).forEach((init) => init());
 })();
