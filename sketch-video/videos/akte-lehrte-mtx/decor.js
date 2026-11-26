@@ -8,45 +8,49 @@
  * Les rotations d'objets posés se font DANS le dessin (paramètre a, en degrés) : l'ombre reste du même côté.
  * Texte de machine à écrire : classe .tw (index.html) ; un caractère = 0,6 × corps de large.
  * Outils partagés avec decor-2.js et decor-3.js : D.outils (tw, frappe, trace, ombre, barre, mix, MAT, hash…).
- * Jaune (#F8CE4E) : seulement D.comprime / D.rangeeDoses / la tache de D.brief / D.enveloppeJaune / D.miniLettre (3 points).
+ * Jaune (#F8CE4E) : seulement D.comprime / D.rangeeDoses / la tache de D.brief / D.enveloppeJaune / D.miniLettre (3 points) / D.pilulierMini.
  *
- * INVENTAIRE COMPLET (storyboard § 2) — état
+ * INVENTAIRE COMPLET (storyboard § 2) — état (fait = dessiné ET contrôlé sur planche d'essai)
  *  A. Le papier
  *    D.brief            fait (decor.js)   la lettre de sortie (tous ses états)
  *    D.briefMacro       fait (decor.js)   l'insert sur la ligne du médicament
  *    D.frappe           fait (decor.js)   texte frappé caractère par caractère
- *    D.bande            à faire           bande de citation (S17, S20, S22, S25, S26)
+ *    D.bande            fait (decor-2.js) bande de citation, 1 à 3 lignes, punaises, mot souligné (S17, S20, S22, S25, S26)
  *    D.enveloppeJaune   fait (decor.js)
- *    D.enveloppeBlanche à faire           (S10, S11)
+ *    D.enveloppeBlanche fait (decor-2.js) rabat ouvert, la lettre pliée dépasse ; sortie, vide (S11)
  *    D.fichePatient     fait (decor.js)   portrait du patient (Persona.head + casquette)
- *    D.casquette        fait (decor.js)
+ *    D.casquette        fait (decor.js)   + variante « pendue » (decor-2.js, chambre S15–S16)
  *    D.trombone         fait (decor.js)
- *    D.etiquette        à faire           étiquette de prix à ficelle (S19, S24 seulement)
+ *    D.etiquette        fait (decor-2.js) étiquette de prix à ficelle, ancre = le nœud ; barre, sx (S19, S24 seulement)
  *  B. Les mains
  *    D.main             fait (decor.js)   avant-bras vu de dessus, six variantes, six poses, jeton
  *    D.stylo            fait (decor.js)   plume / clic / bille (+ « crayon » pour l'intro)
  *    D.paraphe          fait (decor.js)   sig1, sig2, oa, coche, croix, boucle, barre
- *    D.loupe            à faire           (S27)
+ *    D.loupe            à faire (decor-3.js)  (S27)
  *  C. Le pilulier, les comprimés, la moelle
  *    D.pilulier         fait (decor.js)   dispositif signature
  *    D.comprime         fait (decor.js)
  *    D.rangeeDoses      fait (decor.js)
- *    D.pilulierMini     à faire           (S15, S16)
- *    D.notice           à faire           (S14)
- *    D.usine            à faire           (S14)
+ *    D.pilulierMini     fait (decor-2.js) (S15, S16)
+ *    D.notice           fait (decor-2.js) plein cadre, coordonnées MONDE (S14)
+ *    D.usine            fait (decor-2.js) l'os + trois tapis + tuyau + jauges ; ph par tapis, stop, tuyau, jauge (S14)
+ *    D.pieceSang        fait (decor-2.js) pictogramme d'une pièce de l'usine, pour la légende de S14
  *  D. Les bureaux vus de dessus
  *    D.plateau          fait (decor.js)   kind A, B, C
  *    D.halo             fait (decor.js)
  *    D.lampe            fait (decor.js)   ronde ; kind "banquier" (+ kind "chainette" seule, pour m.pend)
  *    D.clavier          fait (decor.js)
  *    D.tasse            fait (decor.js)   (+ D.vapeur : les volutes, à part)
- *    D.plante           fait (decor.js)   vue de dessus ; kind "face" (S18) : à faire
+ *    D.plante           fait (decor.js)   vue de dessus ; kind "face" (S18) dans decor-2.js (a = angle du feuillage)
  *    D.encreur          fait (decor.js)
  *    D.tampon           fait (decor.js)
- *    D.empreinte        à faire           (S20)
+ *    D.empreinte        fait (decor-2.js) (S20) plein / pointillé
  *    D.coupelle         fait (decor.js)
- *    D.telephone, D.verre, D.formAufnahme, D.planSoins, D.dossier, D.coupure, D.porteTampons, D.casier,
- *    D.corbeille, D.formUrteil                                à faire (S11–S13, S17, S20, S21, S23)
+ *    D.telephone        fait (decor-2.js) (+ kind "cordon" seul, pour m.pend)   D.verre fait (decor-2.js)
+ *    D.formAufnahme     fait (decor-2.js) coche 0–3      D.planSoins fait (decor-2.js) nom, mot, croix ; kind "mini" (S27)
+ *    D.dossier          fait (decor-2.js) ouvert, sangle, titre frappé (S17, S23)
+ *    D.coupure          fait (decor-2.js)  D.porteTampons fait (decor-2.js)  D.casier fait (decor-2.js)  D.corbeille fait (decor-2.js)
+ *    D.formUrteil       à faire (decor-3.js)  (S23)
  *  E. La carte
  *    D.cartePapier      fait (decor.js)   (+ D.aiguille : l'aiguille de la rose des vents, à part)
  *    D.medaillon        fait (decor.js)
@@ -56,17 +60,20 @@
  *    D.feuillet         fait (decor.js)   kind "semaine" et kind "date"
  *    D.ruban            fait (decor.js)   ruban d'étiqueteuse (HUD + monde)
  *    D.calendrier       fait (decor.js)   kind "semaine" et kind "date"
- *    D.hall, D.boiteLettres, D.applique, D.interphone, D.paillasson, D.porteParapluies, D.couloir, D.chaise,
- *    D.blousePosee, D.maisonAsso, D.zahlschein, D.salleAG, D.fenetreLames, D.pupitreAG, D.tablePrevenus   à faire
+ *    D.hall, D.boiteLettres (couches fond / face / volet), D.applique, D.interphone, D.paillasson, D.porteParapluies   fait (decor-2.js, S18)
+ *    D.couloir, D.chaise, D.blousePosee (who 1–4 + jeton)                                                              fait (decor-2.js, S19, S24)
+ *    D.maisonAsso, D.zahlschein, D.salleAG, D.fenetreLames, D.pupitreAG, D.tablePrevenus                               à faire (decor-3.js, S22, S24)
  *  G. La chambre de gériatrie
- *    D.chambre, D.fenetre06, D.voilage, D.tasseTisane, D.litGeriatrie, D.potence, D.trapeze, D.chevet,
- *    D.lunettesPliees, D.canne, D.pantoufles                  à faire (S15, S16)
+ *    D.chambre, D.fenetre06, D.voilage, D.tasseTisane, D.litGeriatrie (patient allongé, dessin dédié), D.potence, D.trapeze,
+ *    D.chevet, D.lunettesPliees, D.canne, D.pantoufles                                                                 fait (decor-2.js, S15, S16)
  *  H. Intro, règle, transitions
  *    D.chemise          fait (decor.js)   cadre de l'intro
  *    D.bordFeuille      fait (decor.js)   bord de feuille des transitions slideLeft / slideUp
  *    D.chaineMains      fait (decor.js)   HUD : la chaîne des cinq ronds
- *    D.boiteMTX, D.fiches3                                    à faire (S25, S27)
+ *    D.boiteMTX, D.fiches3                                    à faire (decor-3.js, S25, S27)
  *  D.exemple : dessin d'exemple du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles.
+ *  Ordre de chargement : index.html charge decor.js puis decor-2.js ; l'essai de décors charge par ordre alphabétique (decor-2.js d'abord) :
+ *  decor-2.js attend alors D.outils (file D._apres, vidée à la fin de decor.js). decor-3.js devra faire de même.
  */
 (function () {
   "use strict";
@@ -920,4 +927,7 @@
     el("ellipse", { cx: 0, cy: L + 36, rx: 22, ry: 8, fill: "#FFF6C9", stroke: INK, "stroke-width": 2 }, g);
     return { ampoule: [0, L + 36] };
   };
+
+  // decor-2.js / decor-3.js chargés avant decor.js (essai de décors, ordre alphabétique) : leur contenu attendait D.outils
+  (D._apres || []).splice(0).forEach((fn) => fn());
 })();

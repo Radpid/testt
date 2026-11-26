@@ -1570,3 +1570,52 @@ correction ci-dessous a été vérifiée en image, sauf mention contraire)
    « Hannover » → la poser en (416, 862) au lieu de (400, 874).
 4. Bureau A : la fiche cache le libellé « Patient: » de la lettre (seuls la barre noire et « 79 J. » restent
    visibles). Rien à faire : le titre reste lisible, comme prévu au § 4.
+
+### Étape « décors 2 » (26.11.2026) — `decor-2.js`, S8 à S21
+
+**Dessins changés par rapport au § 2** (tout le reste suit le § 2 : tailles, ancrages, paramètres)
+- `D.formAufnahme` : 230 × 330 (au lieu de 310), pince au-dessus (y −190…−158). Six lignes à case aux y −80…120, case
+  à x −85 : les coches 1 à 3 tombent sur les lignes y −40, 0, 40 demandées (monde (685, 720 / 760 / 800)). Monde S11 :
+  x 655–885, y 570–915.
+- `D.planSoins` : 404 × 280 (au lieu de 380) : les sept cases de 19 px (x 54…187) touchaient le bord droit. Colonnes
+  inchangées. Monde S13 : x 488–892, y 640–920 (au-dessus de y 930 : hors colonne des boutons). Ajouts de papier réel :
+  titre `Medikationsplan`, ligne `Arzt:`. `kind: "mini"` : 466 × 80.
+- `D.usine` : fenêtre y −180…180 (au lieu de ±190) pour garder un bord d'os visible ; le défilement se lit par des lattes
+  qui avancent (au lieu de tirets) ; les trois jauges (sans chiffres) sont sur une petite platine posée sur le tuyau de
+  sortie (x 268–348, y −100…−12), sinon elles se mêlaient au contour de l'os. `ph` peut être un tableau `[p1, p2, p3]`
+  (pour figer chaque tapis à son arrêt) ; `flux` = phase du tuyau. Ajout `D.pieceSang({ kind: 0 | 1 | 2 })` : le
+  pictogramme de chaque pièce, pour la légende de S14 (mêmes formes que dans l'usine).
+- `D.notice` : plis horizontaux aussi en y 510 et 1510 (même pas de 250 px que 760 / 1010 / 1260) : le papier couvre
+  tout le cadre.
+- `D.litGeriatrie` : tête dessinée directement couchée (pas de rotation), centre (−172, −228) au lieu de (−172, −222)
+  pour qu'elle repose sur l'oreiller ; oreiller un peu plus grand que la tête. Ancres renvoyées : `tete`, `main` (62, −194),
+  `poitrine`, `oeil`, `nez`, `teteDeLit`.
+- `D.casquette({ pendue: 1 })` : variante pour la chambre (crochet + casquette pendue par son bouton), ancre = le crochet.
+- `D.boiteLettres` : 200 de haut en tout (fente y 0–34 sous le volet, corps y 30–200). Le volet s'ouvre par `ouv` 0–1
+  (il se raccourcit, son dessous sombre apparaît) ; il se balance avec `m.pend` comme prévu.
+- `D.blousePosee` : dessinée DEVANT la chaise ; corps x ±64, manches x ±60…±89 jusqu'à y 118 sous le haut du dossier
+  (le § 2 écrit « y −120 » : lu comme 120 px sous l'ancre) ; largeur 178 < pas de 185 entre les chaises. Le jeton est
+  noué au coin haut-gauche du dossier (−58, −8) et pend sur l'épaule ; `ms` = angle des manches (pour `m.sway`).
+- `D.dossier` : la couverture pivote autour de la charnière x = −w/2 + 24 (dos toilé de 24 px) ; étiquette =
+  max(0,62 · w ; texte + 32).
+- `D.bande` : accepte une 3e ligne (`l3`, corps 18, calée à droite : « — laut Presse » de S22) et `align1`.
+- `D.empreinte` en pointillé : lettres remplies d'un gris très clair + contour en tirets (le contour seul était
+  illisible à 20 px).
+- `D.chambre`, `D.hall`, `D.couloir` : plafond clair + corniche au-dessus de y 290 (le cadre monte jusqu'à y ≈ 40).
+- `D.plante({ kind: "face" })` : `a` = angle du feuillage autour du haut du pot (pour `m.sway` sans bouger le pot).
+
+**Chargement** : l'essai de décors charge les fichiers par ordre alphabétique (`decor-2.js` avant `decor.js`) ;
+`decor-2.js` attend donc `D.outils` (file `D._apres`, vidée à la fin de `decor.js`). `decor-3.js` doit faire de même.
+
+**Mises en place à corriger à l'étape des scènes** (relevées en composant S11, S15–S16, S17, S18, S19 aux positions du § 4)
+1. *Bureau B, trombone de la fiche* : en (283, 700), `a: 85`, il touche le « E » du titre (vu en image). Le poser en
+   (281, 652), `a: 85`, `k: 1.1` : il pince le coin haut-droit de la fiche, loin du titre et du visage (vérifié en image).
+2. *Chambre* : la casquette = `D.casquette({ pendue: 1 })`, crochet (356, 1004), échelle 0,5 : elle pend au montant de
+   la tête de lit, à gauche de la tête du patient, au-dessus du chevet (vérifié en image).
+3. *S17* : le bout de la chaînette de la lampe de banquier (≈ (267, 673)) arrive à 2 px du haut de la fiche en deuil
+   (262, 760 → haut 675) : poser la fiche en (262, 772).
+4. *S18* : l'interphone en (880, 700) finit à 8 px du rail et du coin de la boîte 4 : le poser en (900, 640).
+5. *S18* : « STRAFBEFEHL » se frappe sur la partie VISIBLE de l'enveloppe (au-dessus de la boîte, y ≈ 742–758) avec
+   `D.frappe` (`.tw` 15) ; le `mot` de `D.enveloppeJaune` est en bas du recto, caché par le corps de la boîte.
+6. *S20* : la bande de citation (`.tw` 22) compte 44 caractères guillemets compris : 625 px (x 187–812) au lieu de
+   x 216–784 ; elle reste dans la zone utile.
