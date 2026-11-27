@@ -135,3 +135,14 @@ Où en était l'agent (sa liste de tâches au moment de l'arrêt) :
 2) La classe .ar est en direction rtl : pour aligner un arabe à DROITE sur x, text-anchor "start".
 3) Une pastille posée à y 450 passe sous le bout du fléau quand la balance penche (scènes 18–20) : vérifier l'arabe des pastilles.
 4) Scène 6 : la marcheuse suit la caméra par une copie de la courbe de caméra SANS secousse (cx(t)) ; phase de marche = distance ÷ foulée (X.aides.stride).
+
+## Étape terminée : scènes, partie 2
+**Fait :** scenes-2.js : scènes 7 à 13 du storyboard (couloir du samedi soir ; tableau du personnel ; passe-plat du labo, Rekonstruktion ; Begleitdokument ; chambre 21:50 ; 0 contre A avec la loupe ; dimanche 13:37, muette, tout se fige et devient gris). Contrôles : errcheck sur 27 instants de tout l'épisode sans erreur ; planches --ig de b8 à b16 et images de fin de scène regardées ; image par image de la scène 11 (la poche qui passe de la main au crochet) ; overlapscan 27,4 → 55,6 : seulement des chevauchements de passage (transitions, rouleaux du compteur, chiffres des cases du mois en double par construction, loupe sur le champ « Blutgruppe: ») ; mouvement : aucun beat de b8 à b16 figé (b15 : 4 %). Écarts : storyboard.md, « Écarts de construction ».
+
+**Reste à faire :** scènes 14 à 26 (scenes-3.js, scenes-4.js). Tant qu'elles n'existent pas, la scène 13 dure jusqu'à la fin (b17+ « FIGÉ » : normal).
+
+**Notes pour la suite :**
+1) La scène 13 se termine quand la scène 14 commence (storyboard : `b16@end+1.9`) ; son gris (X.aides.grey) agit sur le calque de la scène 13 seulement.
+2) Scène 14 (muette 2) : le HUD est déjà gris et l'onglet masqué après `b16@end+1.9` (story.js) ; aucune horloge.
+3) scenes-2.js : bagLevel / tubeFill (niveau de la poche, sang dans la tubulure) sont des fonctions du temps partagées entre les scènes 11 et 12 ; pour une main sur un objet, viser l'objet en IK (reachR + bendR) depuis la position du personnage, et vérifier que la cible est à < 105 px × échelle de l'épaule.
+4) Points à surveiller : scène 12, après le zoom l'horloge est en partie dans la marge gauche (son rôle est fini) ; scène 11–12, le dos de l'héroïne (x 850) est à 0–5 px de la colonne des boutons.

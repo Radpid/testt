@@ -1516,3 +1516,24 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 5 | « ؟ » à (540, 720) | même place, ficelle de 123 px : il pend de la barre | avec la ficelle par défaut il flottait dans le vide |
 | 5 | niveaux non précisés pour la poche de gauche | gauche 1 ; droite 0,67 → 1 | à la fin les deux poches sont strictement identiques |
 | 6 | gouttière du tableau non placée | gouttière sous le bloc de garde (x ≈ 1376–1676) ; le feutre jaune y roule quand le bloc claque | sinon le feutre roulait hors du cadre ; bandeau, grille et date tombent ENSEMBLE (décalés, ils se chevauchaient pendant la chute) ; deux notes épinglées ajoutées au tableau (vie : un coin qui se soulève) |
+
+**Scènes 7 à 13 (étape « scènes, partie 2 », 27.11)** :
+
+| scène | storyboard | construit | pourquoi |
+|---|---|---|---|
+| 7 | portes `rise` en cascade ; `o.night` 0 → 1 | les portes font partie du dessin du mur (D.corridor04) : la cascade passe par les appliques (`drop`), l'horloge (`grow`) et les voyants (`pop`) ; la nuit = un second tracé identique du couloir, `night: 1`, en fondu sur toute la scène | redessiner tout le couloir à chaque valeur de `night` coûterait cher ; deux tracés de même graine se superposent exactement |
+| 7 | elle s'arrête à x 620 | x 690, entre les portes 2 et 3 (portes x 480–630 et 760–910) | à 620 elle était devant la porte 2 |
+| 8 | caméra à `b10` : ×1,12, cy 990 | ×1,05, cx 565, cy 940 | à ×1,12 le haut du tableau (sa fiche, sa photo) passait dans la bande des pastilles, sous `Blutführerschein` / « « رخصة » ديال الدم » |
+| 8 | en-tête `TEAM` | écrit à part, effacé à b10 − 0,2 | voir le tableau des placements (étape décors 2) |
+| 8 | elle à x 205 | x 235 | après la poussée de caméra son bras gauche sortait dans la marge (écran x < 90) |
+| 8 | étiquette `Schulung: Transfusion` à (640, 940) ; cercle autour de la pochette | étiquette à y 925 ; cercle centré (640, 1046), 182 × 102 | le cercle coupait l'étiquette |
+| 9 | ouverture du passe-plat y 660–920, tablette y 920, lits à y 1160 | tout le passe-plat 100 px plus bas : ouverture y 760–1020, tablette y 1020 ; portoir et poches suivent ; lits à y 1215 | à y 920 la tablette était à la hauteur de SON VISAGE (échelle 1,05, tête y 846–990) : le bras tendu vers la poignée barrait le visage. À 1020 la poignée est à hauteur de poitrine, à ≈ 95 px de l'épaule |
+| 9 | elle marche de x −80 à 345 entre b11 + 0,05 et `b11@عطاها` | de x 180 à 345 | 425 px en 0,38 s (minutage provisoire) = 1 100 px/s : course impossible ; 165 px = un pas et demi |
+| 10 | feuille à l'échelle 1 (x 400–900, y 500–1330) | échelle 0,83, coin (420, 560) : x 420–835, y 560–1249 | à l'échelle 1 le haut passait sous la pastille et le bas sur la bande des citations ; le bord droit touchait la colonne des boutons |
+| 10 | « le cadre en pointillés vide (o.ghost) pulse une fois » | un petit cercle jaune se trace autour du cadre vide de chaque poche (0,2 s), puis s'efface | le cadre est minuscule (19 × 18) : sa pulsation ne se voyait pas |
+| 11 | pose `holdHandOut` puis mélange vers `wave` ; pas en arrière x 835 → 858 à `b13@عام` | elle se tient à x 850 toute la scène ; sa main suit des cibles par IK (la poche tenue devant elle à hauteur de poitrine → le crochet → la roulette → bras le long du corps), la poche suit l'ancre de la main | avec `holdHandOut` la poche traînait presque au sol ; pendant le mélange vers `wave` elle passait devant son visage ; à 858 elle entrait dans la colonne des boutons (écran x > 915) |
+| 12 | loupe centrée (345, 690) ; liaison (470, 775) | loupe centrée (345, 712) ; liaison (478, 802) | marge avec la bande des pastilles (arabe de `Hämolyse`) |
+| 12 | caméra : cx 520 → 540 ; à `b15@بدا` ×1,12, cx 520, cy 990 | cx 545 → 555 ; à `b15@بدا` ×1,04, cx 572, cy 940 | à ×1,12 la loupe et l'horloge passaient sous le compteur du HUD, l'arabe de la pastille sur la loupe, et l'héroïne (x 850) entrait dans la colonne des boutons ; cy 940 garde le lit au-dessus de la bande des citations. L'horloge (son secteur est fini à `b15@دقايق+0.3`) est en partie dans la marge gauche après le zoom |
+| 12 | étiquette « autre patiente » à (600, 800) ; pictogramme à gauche | texte centré x 650, pictogramme à droite (812, 826), pointillé du pictogramme à la poche | à x 600 le trait de liaison de la loupe traversait l'arabe « ديال مريضة أخرى » |
+| 12 | — | il a des haut-le-cœur (le buste se penche par à-coups, 2 Hz, qui s'amortissent) | fin de b15 trop calme (mouvement.mjs : 2,9 %) |
+| 7–12 | pastilles enchaînées au même repère | la pastille sortante s'efface 0,12 s avant l'arrivée de la suivante | deux pastilles se superposaient pendant 0,1 s |
