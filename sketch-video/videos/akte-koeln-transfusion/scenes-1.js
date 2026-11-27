@@ -86,11 +86,11 @@
     D.typedCard(el("g", {}, holder), {});
     m.build(card, t0 + 0.1, "drop", { dist: 420, dur: 0.45 });
     card.on((t, s) => { s.y -= 420 * E.in(prog(t, R + 0.3, 0.35)); s.o *= 1 - prog(t, R + 0.55, 0.1); });
-    const L1 = t0 + 0.25, L2 = L1 + 0.38, tHl = Math.max(tMat, L2 + 0.45);
+    const L1 = t0 + 0.45, L2 = L1 + 0.32, tHl = Math.max(tMat, L2 + 0.4);
     card.on((t, s) => { [L1, L2, tLa, tLa + 0.25].forEach((a) => { const p = prog(t, a, 0.12); if (p > 0 && p < 1) s.y += 2 * Math.sin(Math.PI * p); }); });
     A.marker(c, -192, -29, 252, tHl, { parent: holder, h: 22, rot: 0 }).hide(R + 0.1, 0.2);
-    tape(c, "Die Angeklagte ist einer", 0, -56, 22, L1, 0.36, R + 0.1, 0.4, { parent: holder });
-    tape(c, "fahrlässigen Tötung schuldig.", 0, -22, 22, L2, 0.42, R + 0.1, 0.4, { parent: holder });
+    tape(c, "Die Angeklagte ist einer", 0, -56, 22, L1, 0.3, R + 0.1, 0.4, { parent: holder });
+    tape(c, "fahrlässigen Tötung schuldig.", 0, -22, 22, L2, 0.36, R + 0.1, 0.4, { parent: holder });
     tape(c, "laut Urteil", 192, -84, 15, L2 + 0.4, 0.3, R + 0.1, 0.3, { parent: holder, anchor: "end" });
     tape(c, "Von einer Bestrafung", 0, 14, 22, tLa, 0.3, R + 0.1, 0.4, { parent: holder });
     tape(c, "wird abgesehen.", 0, 46, 22, tLa + 0.25, 0.25, R + 0.1, 0.4, { parent: holder });
@@ -102,8 +102,8 @@
     A.chip(c, "§ 60 StGB · Absehen von Strafe", "الإعفاء من العقوبة", 28, tLa + 0.1, tWhy, { yellow: true });
     A.quote(c, "»Die Angeklagte trägt die Kosten des Verfahrens« — laut Urteil", "مصاريف المحاكمة عليها", "b2@غرامة", { until: tWhy });
     // « علاش؟ » sur un trait de surligneur ; l'image retient son souffle (X.aides.calm) ; il reste pendant le rembobinage
-    A.marker(c, 418, 500, 244, tWhy, { parent: c.hud, h: 46, dur: 0.18 });
-    A.halo(c.text("علاش؟", 540, 535, 120, "ttl", "middle", c.hud), 8).pop(tWhy, 0.35);
+    A.marker(c, 418, 478, 244, tWhy, { parent: c.hud, h: 46, dur: 0.18 });
+    A.halo(c.text("علاش؟", 540, 510, 120, "ttl", "middle", c.hud), 8).pop(tWhy, 0.35);
     c.kick(tWhy, 0.07);
     A.scan(c, "b3@نرجعو");
   } });
@@ -263,7 +263,7 @@
     const strip = c.sk((g, p) => D.magnetStrip(g, p), (t) => ({ pop: rnd(1 + 0.2 * Math.sin(Math.PI * prog(t, t24, 0.3)), 20) }), 1526, 640, 1);
     const grid = m.obj(D.hourGrid, 1250, 690, 1, { cols: 12, rows: 2 });
     const date = A.halo(c.text("Sa 30.07.2011", 1526, 838, 24, "tw", "middle"), 5);
-    [strip, grid, date].forEach((n, i) => m.build(n, tZ + i * 0.04, "drop", { dist: 320, dur: 0.5 }));
+    [strip, grid, date].forEach((n) => m.build(n, tZ, "drop", { dist: 320, dur: 0.5 }));
     c.shake(tZ + 0.45, 6, 0.3); c.kick(t24, 0.05);
     c.sk((g, p) => D.feltPen(g, p), (t) => ({ yellow: true, roll: rnd(prog(t, tZ + 0.45, 0.7) * 2, 20) }), 1518, 1051, 1).on((t, s) => { s.x += 64 * E.out(prog(t, tZ + 0.45, 0.7)); });
     // elle : entre par la gauche (60 → 300), suit la caméra (x = cx − 180), s'arrête sous le bloc (x 1420) ; jamais de glissade

@@ -1501,3 +1501,18 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 12 | zoom ×1,12 (cy 990) à `b15@بدا` ; horloge (165, 500), `≈ 10 min` (255, 470) | descendre le zoom (cy ≥ 1040) ou effacer `≈ 10 min` avant | après le zoom ils passent à l'écran y ≈ 300–330, sous le compteur du HUD ; le bord de la loupe touche aussi l'horloge |
 | 15 | fauteuil x 690–910, y 1060–1470 | décaler la mise en place d'≈ 30 px vers la gauche | en fin de scène (×1,03 + respiration) son bord droit arrive à l'écran x ≈ 935 (colonne des boutons) ; son piètement passe sous y 1470 (décor sans importance) |
 | 16 | patère : pied (160, 1300) | pied à x ≥ 240 | la blouse (± 70) sortait par le bord gauche rogné (écran x ≈ 40) |
+
+**Scènes 1 à 6 (étape « scènes, partie 1 », 27.11)** :
+
+| scène | storyboard | construit | pourquoi |
+|---|---|---|---|
+| 1 | pastilles `schuldig` et `Strafe: 0` à y 452 (écran) | à y 398 | fléau penché de 13°, son bout droit (écran y ≈ 529) touchait « العقوبة: صفر » |
+| 1 | ligne de la bande HUD en `.tw` 22 | `.tw` 21, 0,032 s par signe | à 22 px les 45 signes finissaient à x 706, sur l'onglet du jour (x 700) |
+| 2 | carte tapée centrée (530, 1175) ; tampon à (130, 88) dans la carte | carte centrée (530, 1130) ; tampon à (142, 98) | avec la poussée ×1,03 le bas de la carte arrivait à l'écran y ≈ 1363, sur la bande des citations ; le tampon touchait « wird abgesehen. » |
+| 2 | frappe à b2 + 0,25 ; surligneur à `b2@مات` | frappe à b2 + 0,45 (la carte a fini de tomber) ; surligneur à max(`b2@مات`, fin de la ligne 2) | dans le minutage provisoire `b2@مات` tombe avant que la ligne 2 soit tapée : le surligneur aurait souligné du vide |
+| 2 | « علاش؟ » à (540, 490) | ligne de base y 510 (le mot occupe ≈ 420–520), surligneur centré y 478 | au coup de zoom de `b3@علاش`, le haut de la plaque « § » touchait le mot |
+| 3 | cœur `pop("i3")`, bouton `pop("i3+0.1")` | cœur à i3 + 0,05, bouton à i3 + 0,15, entrée en « aimant » (chute de 60 px + petit rebond) | la pastille 2 s'efface à i3 (0,15 s), son arabe est à la hauteur du cœur |
+| 4 | cathédrale (760, 1130), feuille centrée (500, 1010), caméra finale cx 500 | cathédrale (720, 1130), feuille (440, 1010), caméra finale cx 530 | en fin de travelling la cathédrale entrait dans la colonne des boutons (écran x ≈ 957) ; à 680 elle cachait « Berlin » |
+| 5 | « ؟ » à (540, 720) | même place, ficelle de 123 px : il pend de la barre | avec la ficelle par défaut il flottait dans le vide |
+| 5 | niveaux non précisés pour la poche de gauche | gauche 1 ; droite 0,67 → 1 | à la fin les deux poches sont strictement identiques |
+| 6 | gouttière du tableau non placée | gouttière sous le bloc de garde (x ≈ 1376–1676) ; le feutre jaune y roule quand le bloc claque | sinon le feutre roulait hors du cadre ; bandeau, grille et date tombent ENSEMBLE (décalés, ils se chevauchaient pendant la chute) ; deux notes épinglées ajoutées au tableau (vie : un coin qui se soulève) |

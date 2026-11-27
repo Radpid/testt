@@ -124,3 +124,14 @@ Où en était l'agent (sa liste de tâches au moment de l'arrêt) :
 1) Lieux : X.lieux.balance(c, o) (scènes 1, 18–20), X.lieux.salle(c, o) (2, 17), X.lieux.chambre(c, o) (11–13), X.lieux.regle(c, o) (22–24) ; paramètres décrits en tête de chaque fonction dans story.js. Les personnages de la scène se posent dans lieu.actors.g (bonne profondeur).
 2) Aides (X.aides) : halo, fat/tired (fatigue), ppC/phC (Persona + cernes), ppBed (assis dans un lit, sans jambes), stride/walker (marche sans glissade), colStart/hours (frise et compteur), tilt/calm/geomAt (balance), toScreen/sceneAt, typed (machine à écrire), quote (bande des citations), chip (UNE pastille centrée 540,450 dans c.hud), rekon (mention Rekonstruktion), marker, ring, snip, scan (lignes de rembobinage), grey, stamp, cartCounter.
 3) Points fragiles vus sur les planches d'essai : scène 17, l'expert assis (x ≈ 805 + chaise) entre dans la colonne des boutons en fin de scène ; scènes 22–24, le bord droit de la carte jaune frôle x 915 avec la poussée de caméra ; scène 11, la poche frôle le visage de l'héroïne quand son bras est levé.
+
+## Étape terminée : scènes, partie 1
+**Fait :** scenes-1.js réécrit : scènes 1 à 6 du storyboard (accroche balance ; salle + rembobinage ; intro de Yassine sur la fiche du tableau de garde, summary: false ; Köln → la feuille ; les deux poches ; la frise des 63 heures + la garde). Les scènes d'ESSAI des lieux (11, 13, 17, 18, 21, 22, 25) ont été retirées de scenes-1.js : les lieux restent dans story.js (X.lieux). Contrôles : errcheck sans erreur ; planches --entre b1,b7 (avec et sans --ig) regardées ; image par image 0 → 1,1 s (accroche) et 21,9 → 23 s (frise, marche) ; overlapscan 0 → 27,4 : seulement des chevauchements de passage (chute de la carte, coup du tampon, balancier de la fiche, transitions, rouleaux du compteur) ; mouvement : aucun beat de b1 à b7 figé (le plus calme : i1 9,6 %). Écarts : storyboard.md, « Écarts de construction ».
+
+**Reste à faire :** scènes 7 à 25 (scenes-2.js à scenes-4.js). Tant qu'elles n'existent pas, la scène 6 dure jusqu'à la fin (beats b8+ « FIGÉ » dans mouvement.mjs : normal).
+
+**Notes pour la suite :**
+1) Aides locales de scenes-1.js (à recopier si besoin) : tape() = texte .tw tapé puis « dé-tapé » (rembobinage) ; pendA() = angle d'un pendule amorti, pour les dessins qui dépendent de l'angle (surface du sang : bloodBag o.slope = l'angle de la poche).
+2) La classe .ar est en direction rtl : pour aligner un arabe à DROITE sur x, text-anchor "start".
+3) Une pastille posée à y 450 passe sous le bout du fléau quand la balance penche (scènes 18–20) : vérifier l'arabe des pastilles.
+4) Scène 6 : la marcheuse suit la caméra par une copie de la courbe de caméra SANS secousse (cx(t)) ; phase de marche = distance ÷ foulée (X.aides.stride).
