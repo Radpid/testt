@@ -35,7 +35,8 @@
     const phase = (t) => { let v = 0; for (let u = t0 + 0.3; u < t; u += 0.02) v += speed(u) * Math.min(0.02, t - u); return v; };
     const jolt = (t) => [tW + 0.22, tW + 0.4].reduce((a, b) => a + (t >= b && t < b + 0.09 ? -4 * Math.sin(Math.PI * (t - b) / 0.09) : 0), 0);
     const FX = 540, FY = 800;
-    const file = c.group(); m.build(file, t0, "drop", { dist: 300, dur: 0.45 });
+    // contre-revue : le dossier et la lampe partent avant la coupe (entrée cut) : la 1re image n'est plus un mur vide
+    const file = c.group(); m.build(file, t0 - 0.2, "drop", { dist: 300, dur: 0.45 });
     c.sk((g, p) => D.caseFile(g, p), () => ({ part: "cover" }), FX, FY, 1, 0, file.g);
     c.sk((g, p) => D.caseFile(g, p), (t) => ({ part: "roll", streak: rnd(-phase(t), 20), tick: Math.round(phase(t) * 140) % 360 }), FX, FY, 1, 0, file.g).on((t, s) => { s.y += jolt(t); });
     // le « ؟ » tombe au bout de sa ficelle sur la sangle et se balance : la seule boucle que les ciseaux ne coupent pas
@@ -45,7 +46,7 @@
     const LX = 200;   // revue : 150 → 200 (le pied de la lampe sortait par le bord gauche)
     const lamp = m.obj(D.deskLamp, LX, 1060, 1, { part: "lamp", k: 1.25 }); m.sway(lamp, 1, 3, [LX, 1060]);
     const cone = m.obj(D.deskLamp, LX, 1060, 1, { part: "cone", k: 1.25, on: 1 }); m.sway(cone, 1, 3, [LX, 1060]);
-    [lamp, cone].forEach((n) => m.build(n, t0 + 0.12, "rise", { dist: 200, dur: 0.4 }));
+    [lamp, cone].forEach((n) => m.build(n, t0 - 0.08, "rise", { dist: 200, dur: 0.4 }));
     m.dust({ x: 350, y: 600, w: 300, h: 330 }, 12, { seed: 21, op: 0.8, speed: 8, cone: true });
     A.chip(c, "Rechtskraft nicht veröffentlicht", "ما معروفش واش نهائي", 30, tL, null);
   } });

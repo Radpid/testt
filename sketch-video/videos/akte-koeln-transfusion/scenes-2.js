@@ -175,12 +175,13 @@
     c.camera([{ at: "b12", s: 1, cx: 520, cy: 920 }, { at: "b12+0.1", s: 1.03, cx: 565, cy: 920, d: 3.2, ease: "lin" }]);
     m.shapes({ seed: 12, pts: [[150, 440], [340, 900], [930, 440]] });
     // les deux poches sur leur barre (×0,7), à gauche ; elles se balancent (1°)
-    const bar = m.obj(D.wallBar, 245, 560, 1, { w: 260, hooks: [-55, 55] }); m.build(bar, t0 + 0.05, "drop", { dist: 200, dur: 0.4 });
-    [190, 300].forEach((x, i) => { const b = m.obj(D.bloodBag, x, 566, 0.7, { level: 0.95 }); m.build(b, t0 + 0.05, "drop", { dist: 200, dur: 0.4 }); m.sway(b, 1, 2.4, [x, 566], i * 1.7);
+    const bar = m.obj(D.wallBar, 245, 560, 1, { w: 260, hooks: [-55, 55] }); m.build(bar, t0 - 0.1, "drop", { dist: 200, dur: 0.4 });
+    [190, 300].forEach((x, i) => { const b = m.obj(D.bloodBag, x, 566, 0.7, { level: 0.95 }); m.build(b, t0 - 0.1, "drop", { dist: 200, dur: 0.4 }); m.sway(b, 1, 2.4, [x, 566], i * 1.7);
       A.ring(c, x + 15, 620, 18, 17, tG + i * 0.08, { sw: 4, dur: 0.2 }).hide(tG + 0.7, 0.2); });
     // la feuille (×0,85, −1,5°) : x 420–845, y 560–1265 ; elle flotte ; elle se brouille deux fois
     const S = 0.83, SX = 420, SY = 560, holder = el("g", { transform: `translate(${SX} ${SY}) rotate(-1.5) scale(${S})` }), sheet = c.node(holder);
-    m.build(sheet, t0, "drop", { dist: 500, dur: 0.45 }); sheet.float(4, 3);
+    // contre-revue : la cascade commence 0,15 s AVANT la coupe (entrée cut) : la 1re image n'est plus une page vide
+    m.build(sheet, t0 - 0.15, "drop", { dist: 500, dur: 0.45 }); sheet.float(4, 3);
     const pulse = (t, a) => Math.sin(Math.PI * prog(t, a, 0.5));
     const ds = c.sk((g, p) => D.docSheet(g, p), (t) => ({ blur: rnd(Math.max(pulse(t, tA1), pulse(t, tA2)), 10) }), 0, 0, 1, 0, holder);
     const LN = ds.out.lines, FD = ds.out.field;
@@ -200,7 +201,7 @@
       const longBlink = (t >= tA1 && t < tA1 + 0.25) || (t >= tA2 && t < tA2 + 0.25);
       return A.tired(t, Object.assign({}, CAST.DOC, { view: "three-quarter", facing: 1, expr: "focused", talk: 0, headTilt: 3, look2: [rnd(sweep, 10), 0.15], blink: longBlink ? 1 : rnd(blinkAt(t, 1.1), 10) }));
     }, { outfit: "coat", badge: true, w: 58, bottom: 160 });   // revue : buste (la tête seule flottait, cou coupé net)
-    m.build(head, t0 + 0.1, "rise", { dist: 160, dur: 0.4 }); head.on(breathe(1.1));
+    m.build(head, t0 - 0.05, "rise", { dist: 160, dur: 0.4 }); head.on(breathe(1.1));
     A.chip(c, "Begleitdokument", "الورقة اللي مع الكيس", 32, t0 + 0.2, tGh);
     A.chip(c, "Blutgruppe", "فصيلة الدم", 36, tF, null, { yellow: true });
     A.quote(c, "laut Urteil: Blutgruppe »an der Konserve selbst … nicht gekennzeichnet«", "حسب الحكم", "b12@وحسب");
@@ -281,7 +282,8 @@
     A.chip(c, "Hämolyse", "تكسر كريات الدم الحمراء", 36, tDq, tLi - 0.12, { yellow: true });
     A.chip(c, "1/3", "الثلث", 40, tLi, null);
     c.shake(tDq, 5, 0.4); c.kick(tV, 0.04);
-    A.quote(c, "»schwerst vorgeschädigt« (Leberzirrhose, Anämie) — laut Urteil", "كان مريض بزاف من قبل", T("b15@الدم") + 0.2);
+    // contre-revue : dès qu'il vomit (b15@كيتقيا) et non à b15@الدم + 0,2 : elle ne restait que 0,5 s lisible avant le balayage
+    A.quote(c, "»schwerst vorgeschädigt« (Leberzirrhose, Anämie) — laut Urteil", "كان مريض بزاف من قبل", tV + 0.15);
     void k;
   } });
 

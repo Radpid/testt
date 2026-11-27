@@ -65,7 +65,8 @@
   st.scene({ from: "b2", in: "cut", inDur: 0, build(c) {
     X.use(c); const m = M.of(c), k = kit(c);
     const t0 = T("b2"), tMat = T("b2@مات"), tLa = T("b2@لا"), tWhy = T("b3@علاش"), R = T("b3@نرجعو");
-    const S = L.salle(c, { at: "b2",
+    // contre-revue : la cascade de la salle part 0,2 s AVANT la coupe (entrée cut) : à la 1re image, plus de mur vide avec elle seule
+    const S = L.salle(c, { at: "b2-0.2",
       judges: { SCF: (t) => ({ expr: t > tMat ? "sad" : "calm" }),
         JUG: (t) => ({ look2: t > tLa && t < R ? [-0.7, 0.15] : [0, 0.6] }),
         SCM: (t) => (t > t0 + 1.6 && t < t0 + 2.1 ? { reachR: [12, -330], bendR: -1 } : {}) },
@@ -74,7 +75,8 @@
     c.camera([{ at: "b2", s: 1, cx: 520, cy: 920 }, { at: "b2+0.1", s: 1.03, cx: 545, cy: 920, d: 2.2, ease: "lin" }, { at: "b3@نرجعو", s: 1, cx: 500, cy: 920, d: 1.0 }]);
     // rembobinage du décor : le bloc de la petite balance remonte et disparaît, les juges redescendent derrière le banc, le rayon recule
     if (S.block) S.block.on((t, s) => { s.o *= 1 - prog(t, R + 0.42, 0.12); });
-    Object.values(S.judges).forEach((n, i) => n.on((t, s) => { s.y += 230 * E.in(prog(t, R + 0.45 + i * 0.04, 0.35)); }));
+    // (contre-revue : ils s'effacent pendant qu'ils descendent — sinon leurs jambes sortaient sous le banc, 7,6 → 8,3 s)
+    Object.values(S.judges).forEach((n, i) => n.on((t, s) => { const a = R + 0.45 + i * 0.04; s.y += 230 * E.in(prog(t, a, 0.35)); s.o *= 1 - prog(t, a + 0.1, 0.1); }));
     S.shaft.on((t, s) => { s.x -= 80 * E.inOut(prog(t, R + 0.2, 0.6)); s.o *= 1 - prog(t, R + 0.2, 0.6); });
     // elle : pleure, tête baissée ; épaules qui tressautent à b2@مات ; marche à reculons (toujours tournée vers la droite) à b3@نرجعو
     const her = A.walker({ keys: [[R + 0.1, 205], ["i1", -140]], y: 1300, s: 1, facing: 1, parent: S.actors.g,
@@ -100,7 +102,8 @@
     // pastilles (une à la fois) et la bande des citations
     A.chip(c, "fahrlässige Tötung", "القتل غير العمدي", 34, tMat, tLa);
     A.chip(c, "§ 60 StGB · Absehen von Strafe", "الإعفاء من العقوبة", 28, tLa + 0.1, tWhy, { yellow: true });
-    A.quote(c, "»Die Angeklagte trägt die Kosten des Verfahrens« — laut Urteil", "مصاريف المحاكمة عليها", "b2@غرامة", { until: tWhy });
+    // contre-revue : posée dès « لا حبس » et gardée jusqu'au rembobinage (de b2@غرامة à b3@علاش, 0,45 s, elle n'avait pas le temps de se taper)
+    A.quote(c, "»Die Angeklagte trägt die Kosten des Verfahrens« — laut Urteil", "مصاريف المحاكمة عليها", tLa + 0.6, { until: R - 0.15 });   // après le coup du tampon (qui, en claquant, passait sur la bande)
     // « علاش؟ » sur un trait de surligneur ; l'image retient son souffle (X.aides.calm) ; il reste pendant le rembobinage
     A.marker(c, 418, 478, 244, tWhy, { parent: c.hud, h: 46, dur: 0.18 });
     A.halo(c.text("علاش؟", 540, 510, 120, "ttl", "middle", c.hud), 8).pop(tWhy, 0.35);

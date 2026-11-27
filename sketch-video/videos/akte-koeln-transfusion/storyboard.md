@@ -1601,3 +1601,16 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 23 | sa tête seule `ph(235, 720, 1.2)` | + buste `D.bust04`, posé avant le tube | même raison que la scène 10 ; le tube passe devant le buste |
 | 25 | zoom final cy 960 ; tableau x 700 | cy 815 ; tableau x 680 | le haut de la poche passait sous la barre de progression (y < 250) |
 | — | glossaire : Blutführerschein « « رخصة » ديال الدم » | même texte entre deux marques U+200F (invisibles) | dans le sous-titre, la traduction s'affichait dans le désordre |
+
+**Contre-revue (27.11)** — détail dans `revue.md` :
+
+| scène | storyboard / étape précédente | après la contre-revue | pourquoi |
+|---|---|---|---|
+| 2 | cascade de la salle à `b2` | à `b2 − 0,2` | entrée `cut` : la 1re image montrait un mur vide |
+| 2 | les juges redescendent derrière le banc | + ils s'effacent en descendant | leurs jambes sortaient sous le banc |
+| 2 | ligne des frais à `b2@غرامة`, jusqu'à `b3@علاش` | de `b2@لا + 0,6` à `b3@نرجعو − 0,15` | 0,45 s : elle ne finissait pas de se taper |
+| 10 | feuille `drop` à b12, poches b12 + 0,05, tête + 0,1 | 0,1 à 0,15 s avant b12 | entrée `cut` : 1re image vide |
+| 12 | « schwerst vorgeschädigt » à `b15@الدم + 0,2` | à `b15@كيتقيا + 0,15` | lisible 0,5 s seulement |
+| 15 | citation `überzubürden` à `b19@ماشي` | à `b19@وهادشي` | + 0,4 s de lecture |
+| 17 | « 1 Tagessatz ≈ … » à `b21@Tagessätze` | à `b21@7 + 0,1` | lisible 0,4 s seulement |
+| 21 | dossier `drop` à b25, lampe + 0,12 | − 0,2 / − 0,08 s | entrée `cut` : 1re image vide |

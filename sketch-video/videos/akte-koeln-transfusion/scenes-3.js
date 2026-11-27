@@ -170,7 +170,7 @@
     A.snip(c, CO[0], CO[1] + 6, tX, { parent: IG });
     A.stamp(c, 0, 72, 0.55 / IS, { text: "UNZUTREFFEND", sub: "laut Urteil", size: 44, rot: -10 }, tX, { parent: IG, shake: 8 });
     A.chip(c, "unzutreffende Erklärung", "ورقة ماشي صحيحة", 30, tX, null, { yellow: true, x: 496 });   // à gauche de la mention « Rekonstruktion »
-    A.quote(c, "»ihr organisatorisches Versagen … überzubürden« — laut Urteil", "المسؤولية", tM);
+    A.quote(c, "»ihr organisatorisches Versagen … überzubürden« — laut Urteil", "المسؤولية", tX);   // contre-revue : tM → tX (0,4 s de lecture en plus)
     A.rekon(c, t0 + 0.3);
   } });
 
@@ -234,7 +234,7 @@
     A.chip(c, "Staatsanwaltschaft", "النيابة العامة", 32, tN, t90 - 0.12);
     A.chip(c, "90 Tagessätze · beantragt", "غرامة بالأيام · طلب، ماشي حكم", 28, t90, null);
     c.kick(t90, 0.06);
-    A.quote(c, "1 Tagessatz ≈ 1 Tag Nettoeinkommen", "نهار = الدخل ديال نهار", tTs);
+    A.quote(c, "1 Tagessatz ≈ 1 Tag Nettoeinkommen", "نهار = الدخل ديال نهار", t90 + 0.1);   // contre-revue : tTs → b21@7 + 0,1 (elle n'était lisible que 0,4 s)
   } });
 
   /* ═══════ 18 · 19 · 20 — LA BALANCE (b22 · b23 · b24) : l'explication juridique en image ═══════

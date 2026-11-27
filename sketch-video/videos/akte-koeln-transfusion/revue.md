@@ -47,3 +47,90 @@ scenario.md et recherche.md est faite dans la contre-revue.
 - scenes-1.js (scène 1), scenes-2.js (scènes 7, 8, 10, 11, 12), scenes-3.js (14, 15, 17), scenes-4.js (21, 23, 25).
 - decor-3.js : `D.bust04` (bloc « ajouts revue visuelle », essayé seul avec essai_decor).
 - glossaire-episode.js : Blutführerschein (marques U+200F).
+
+---
+
+# Contre-revue (débuts de scène, moments forts, textes) — 27.11.2026
+
+Contrôles faits et regardés : la première seconde de CHAQUE scène image par image (pas 0,2 s, `out/planches/debuts/`) ;
+l'accroche sur toute sa durée (0 → 3,6 s, pas 0,2), le rembobinage (7,0 → 7,93), l'intro (8 → 17), la carte (17,3 → 19,8),
+la loupe et l'arrêt du sang (45,9 → 51,2), la mort et la glissade (51,4 → 59,2), la balance (68,1 → 80), la règle (82,2 → 90,4),
+le sang qui ne revient pas et l'affiche (90,5 → 98,8) (`out/planches/forts1/`, `forts2/`, `forts3/`) ; relecture de tous les
+textes à l'écran contre scenario.md (« Mots allemands à l'écran », « Ce qui n'est PAS dit mais montré », « Fin ») et des
+citations contre recherche.md (S1, numéros de paragraphe) ; glossaire contre les mots allemands DITS.
+
+| # | scène | instant (s) | défaut | gravité | correction | état |
+|---|---|---|---|---|---|---|
+| 23 | 2 | 5,54 → 5,98 | La ligne « »Die Angeklagte trägt die Kosten des Verfahrens« — laut Urteil » (pour que « zéro » ne veuille pas dire « rien à payer », scenario.md) ne restait que 0,45 s : elle n'avait pas fini de se taper quand elle s'effaçait. | 2 | Posée à `b2@لا` + 0,6 (après le coup du tampon), effacée à `b3@نرجعو` − 0,15 (avant que le tampon s'envole) : ≈ 1,6 s lisible, plus aucun chevauchement. | corrigé |
+| 24 | 12 | 50,8 → 51,3 | « »schwerst vorgeschädigt« (Leberzirrhose, Anämie) » (garde-fou : « pour ne pas faire croire qu'un tiers de poche tue toujours ») ne restait lisible que 0,5 s avant le balayage. | 2 | Posée dès `b15@كيتقيا` + 0,15 (il vomit) : ≈ 1,6 s. | corrigé |
+| 25 | 17 | 67,3 → 68,0 | « 1 Tagessatz ≈ 1 Tag Nettoeinkommen » lisible 0,4 s. | 8 | Posée à `b21@7` + 0,1 (« 90 ») : ≈ 0,9 s. | corrigé (court par nature : la scène finit sur « Tagessätze ») |
+| 26 | 15 | 62,1 → 62,8 | La citation « »ihr organisatorisches Versagen … überzubürden« » lisible 0,7 s. | 8 | Posée à `b19@وهادشي` au lieu de `b19@ماشي` (+ 0,4 s). | corrigé |
+| 27 | 2 | 3,66 | 1re image de la scène (entrée `cut`) : elle seule devant un mur vide ; banc, fenêtre et juges arrivent 0,2 s plus tard. | 1 | La cascade de la salle part 0,2 s avant la coupe (`at: "b2-0.2"`). | corrigé |
+| 28 | 10 | 40,11 | 1re image (entrée `cut`) : page vide, la feuille encore hors champ. | 1 | Feuille, barre, poches et tête partent 0,1–0,15 s avant la coupe. | corrigé |
+| 29 | 21 | 80,13 | 1re image (entrée `cut`) : mur et banc vides, dossier et lampe absents. | 1 | Dossier et lampe partent 0,2 / 0,08 s avant la coupe. | corrigé |
+| 30 | 2 | 7,6 → 8,3 | Au rembobinage, les juges « descendent » derrière le banc : leurs jambes sortent dessous et restent visibles jusqu'au balayage de l'intro. | 5 | Ils s'effacent pendant qu'ils descendent. | corrigé |
+| 31 | 4 | 17,6 → 19,8 | La flèche en pointillés de l'épingle (Köln) à la cathédrale passe au-dessus de Berlin et la cathédrale couvre l'est de la carte. | 9 | — | reste : voulu par le storyboard (carte → Rhin → cathédrale) ; Köln, Berlin et l'épingle restent lisibles. |
+| 32 | 11 | 43,5 → 44,0 | La poche (rouge) est déjà au crochet dans les premières images de la scène 11 (le niveau baisse ensuite). | 9 | — | reste : la scène commence quand elle l'accroche ; aucun texte ne dit le contraire. |
+| 33 | 13 | 51,7 → 52,1 | L'onglet du jour se retape « So · 31.07.2011 » pendant que « 13:37 » se tape : deux frappes en même temps. | 8 | — | reste : storyboard § 3.2 (onglet à `b16@الأحد`) ; les deux restent lisibles. |
+
+Textes : toutes les pastilles sont celles du tableau « Mots allemands à l'écran » (lettre pour lettre) ou de l'annexe B/C du
+storyboard ; toutes les citations « laut Urteil » sont verbatim dans recherche.md (S1 Rn. 12, 15, 16, 21, 22, 28, 29, 34,
+41, 50, 55, Tenor) ; « 1/3 » = « etwa 1/3 » (S1 Rn. 32) ; dates : Mi 16.05.2012, Sa 30.07.2011, So 31.07.2011 (jours de la
+semaine justes), « seit 15.10.2010 », « 13:37 », « gegen 21.50 Uhr ». Mentions : `laut Urteil` dans les scènes 2, 7, 8, 10,
+12, 14, 15, 16, 18, 19, 20 ; `Rekonstruktion` / « مشهد تمثيلي » dans 9, 14 (dès b18), 15 ; statut
+`Rechtskraft nicht veröffentlicht` dans 21 (jamais « rechtskräftig ») ; aucun nom de personne ni d'hôpital (fiche vierge,
+badge vierge) ; « Yassine » sans « Dr. ». Sous-titres : glossaire-episode.js + serie/glossaire.js couvrent tous les mots
+allemands dits (Köln, Assistenzärztin, Blutführerschein, Tagessätze, Organisationsverschulden, genug bestraft,
+Bedside-Test), vérifié sur les planches (traduction sous le mot).
+
+Bilan de la contre-revue : 11 points, 8 corrigés, 3 restants (voulus ou sans gravité).
+Bilan des deux passes : 33 points, 22 corrigés, 11 restants (aucun de gravité 1 à 5 sur un personnage, un texte ou une
+information de l'histoire).
+
+Planches finales (regardées) : `out/planches/finales/planche_01.png … planche_06.png` et `planche_01_ig.png … planche_06_ig.png`.
+Contrôles finaux : errcheck toutes les 3 s (SV.error=undefined) ; overlapscan 0 → 99 s : seulement des chevauchements de passage
+(transitions, tampons qui claquent, compteur qui vole, cases de l'affiche) ; mouvement : « tout bouge (≥ 3 %) ».
+
+# État de l'épisode et suite
+
+## Ce qui est prêt
+- Les 25 scènes + l'affiche, sur le minutage PROVISOIRE (timings.js, 98,9 s avec l'affiche) : décors complets qui se
+  construisent et vivent, personnages vivants, aucun texte recouvert à l'arrêt, zones Instagram respectées pour tout ce qui
+  porte une information (restent seulement des bords de décor, voir le tableau).
+- Tous les repères sont des « bN@mot » (ou des rangs pour les nombres) : ils suivront la vraie voix.
+- `instagram.md` : BROUILLON de description (phrases darija reprises du scénario, le reste en [FR] à dire avec tes mots,
+  sources avec Az., réserves de vérité en commentaire).
+
+## Quand la voix arrivera
+1. Montage de la voix sur le modèle de `videos/akte-koeln-schweigen/montage_voix.py` (Scribe, Audio Isolation, FIX darija,
+   coupes par phrase, `atempo` 1,3, pauses : `SCENE_START` = i1, b4, b11, b13, b16, b21, b26 ; `EXTRA` b16 ≈ 3,2 s pour
+   la scène muette), puis remplacer `beats.js` (si l'auteur a changé un mot) et `timings.js`.
+2. Revérifier les repères fragiles (storyboard § 6, « Repères qui dépendent d'un choix de l'auteur ») :
+   `b1@مذنبة`, `b23@مذنبة`, `b1@صفر`, `b2@غرامة`, `b2@لا`, `b4@5` (si « في 2012 » est coupé), `b4@سنات`, `b19@تسني`,
+   `b28@تسني`, `b11@فدقة`, `b12@عامرة` / `b12@بالمعلومات`, `b17@انهيار`, `b19@وخلاتها`, `b20@شهور`, `b26@السمية` ; et les
+   rangs des nombres (`b6@2`, `b7@7`, `b8@6`, `b9@6`, `b13@6`, `b14@2`, `b15@3`, `b21@7`, `b4@5`, `b28@1`, `b29@7`).
+   Outil : `node tools/cuetimes.mjs …` (aucun « absent ») puis `errcheck`.
+3. Durée de la scène muette : `b16@end` → `b16@end + 1,9` (scène 13 : « المريض ما عاشش » lisible ≥ 1,2 s), puis la glissade
+   de la scène 14 jusqu'à b17. Si l'`EXTRA` change, la glissade (`b16@end + 2,3`) et la pastille (`+ 3,2`) sont des décalages
+   FIXES à recaler.
+4. Décalages fixes à revérifier : scène 15, la manche attend b19 + 0,35 ; scène 18, la pastille `Organisationsverschulden`
+   attend `b22@Organisationsverschulden` + 0,42 (vol du compteur) ; scène 2, la ligne des frais (`b2@لا` + 0,6 → `b3@نرجعو`
+   − 0,15) ; les cascades qui partent avant une coupe (scènes 2, 10, 21 : − 0,1 à − 0,2 s).
+5. Scènes courtes à revoir en premier : 16 (≈ 1,9 s), 21 (≈ 2,0 s), 5 (≈ 2,0 s) ; storyboard R13 dit quoi alléger si elles
+   descendent sous 1,6 s.
+6. Son : reprendre `son/plan_son.md` (son en-tête liste ce qui doit être refait après le contrôle des ressemblances : scènes
+   8, 16, 21) ; bruitages calés sur les mêmes repères ; musique (piano seul) recomposée sur la durée finale.
+7. Refaire une planche `--ig` + overlapscan + mouvement après le montage, puis le rendu.
+
+## Points faibles qui restent (du plus visible au moins visible)
+1. Scène 22 : les trois liens en pointillés jaunes passent devant le buste de « toi » (annotations voulues ; à revoir si
+   l'auteur trouve l'image chargée).
+2. Intro (scène 3) : le cadre du tableau de garde déborde (x 55–1010) ; aimants et feutre du bord droit dans la colonne des
+   boutons (rien d'écrit).
+3. Bords de décor dans la colonne des boutons ou la marge : porte 3 (scène 7), tiroirs du bureau (15), bout du banc (2, 17).
+4. Scène 17 : la carte du parquet couvre le bas de la table des juges et une partie de l'expert pendant 1,5 s (c'est le sujet
+   de la scène ; l'expert reste visible).
+5. Chips sur un décor : l'arabe de « Blutführerschein » (scène 8) touche le haut du tableau ; lisible grâce au contour papier.
+6. Scène 12 : 4 % de mouvement dans la 2e moitié de b15 (seuil du storyboard : 5 %).
+7. À faire valider par l'auteur (storyboard annexe B) : les chaînes arabes nouvelles (« مصاريف المحاكمة عليها », « كان مريض
+   بزاف من قبل », « المسؤولية », « حتى فالاستعجال », « درس من هاد القصة », etc.) et la tête de l'héroïne (R1).
