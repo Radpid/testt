@@ -1,7 +1,7 @@
 /* scenes-1.js — PARTIE 1 (storyboard.md § 4, scènes 1 à 6) : l'accroche (la balance), la salle et le rembobinage, l'intro de Yassine
  * sur le tableau de garde, puis les trois pages qui reviennent en arrière (Köln → la feuille, les deux poches, la frise des 63 heures).
  * Mises en place fixes : X.lieux.balance (scène 1), X.lieux.salle (scène 2). Aides : X.aides (story.js). Décors : decor.js.
- * Repères numériques par RANG (b4@5 = « 2012 », b6@2 = « 63 », b7@7 = « 24 ») : storyboard § 6.
+ * Repères numériques par RANG (voix de l'auteur, 28.11.2026 : b4@7 = « 2012 », b6@3 = « 63 », b7@5 = « 24 ») : storyboard § 6.
  */
 (window.EP_PARTS = window.EP_PARTS || []).push(function (X) {
   "use strict";
@@ -30,7 +30,7 @@
    * La 1re image est complète : le bloc SCHULDIG est déjà en train de tomber ; il frappe le plateau gauche à b1@مذنبة+0.02. */
   st.scene({ from: 0, in: "cut", inDur: 0, build(c) {
     X.use(c); const m = M.of(c);
-    const tHit = T("b1@مذنبة") + 0.02, S = T("b1@صفر"), tAla = T("b1@على"), tDoc = T("b1@طبيبة");
+    const tHit = T("b1@بالغلطة") + 0.02, S = T("b1@حبس"), tAla = T("b1@غرامة"), tDoc = T("b1@غرامة+0.4");
     const B = L.balance(c, { at: null, strafe: (t) => ({ strafe: t < S ? rnd(3 + Math.max(0, S - t) * 8, 20) : 0, blur: t > 0.3 && t < S - 0.06 ? 1 : 0, streak: rnd(t * 3, 20) }) });
     c.camera([{ at: 0, s: 1, cx: 540, cy: 900 }, { at: 0.2, s: 1.04, cx: 548, cy: 900, d: 3.3, ease: "lin" }]);
     // le bloc tombe de 420 px en accélérant, puis suit le plateau gauche
@@ -57,14 +57,14 @@
     A.chip(c, "schuldig", "مذنبة", 40, tHit, null, { x: 312, y: 398 });
     A.chip(c, "Strafe: 0", "العقوبة: صفر", 40, S, null, { x: 768, y: 398, yellow: true });
     // la référence du jugement, tapée dans la bande HUD (le compteur n'est pas encore là) ; elle finit avant x 690 (l'onglet du jour)
-    A.strip(A.typed(c, "Amtsgericht Köln · 16.05.2012 · 613 Ls 3/12", 112, 318, 21, "b1@محكمة", { parent: c.hud, anchor: "start", per: 0.032, halo: 5 }), 8, 2);
-    A.strip(A.halo(c.text("المحكمة الابتدائية ديال Köln", 680, 356, 28, "ar strong", "start", c.hud), 6), 10, 0).wipe(T("b1@محكمة") + 0.5, 0.45, "rtl");   // revue : bande de papier (la corniche traversait l'arabe)
+    A.strip(A.typed(c, "Amtsgericht Köln · 16.05.2012 · 613 Ls 3/12", 112, 318, 21, "b1@مات", { parent: c.hud, anchor: "start", per: 0.032, halo: 5 }), 8, 2);
+    A.strip(A.halo(c.text("المحكمة الابتدائية ديال Köln", 680, 356, 28, "ar strong", "start", c.hud), 6), 10, 0).wipe(T("b1@مات") + 0.5, 0.45, "rtl");   // revue : bande de papier (la corniche traversait l'arabe)
   } });
 
   /* ═══════ 2 · LA SALLE D'AUDIENCE, puis tout repart en arrière (b2–b3) ═══════ */
   st.scene({ from: "b2", in: "cut", inDur: 0, build(c) {
     X.use(c); const m = M.of(c), k = kit(c);
-    const t0 = T("b2"), tMat = T("b2@مات"), tLa = T("b2@لا"), tWhy = T("b3@علاش"), R = T("b3@نرجعو");
+    const t0 = T("b2"), tMat = T("b2@حكمت"), tLa = T("b2@طبيبة"), tWhy = T("b3@علاش"), R = T("b3@نرجعو");
     // contre-revue : la cascade de la salle part 0,2 s AVANT la coupe (entrée cut) : à la 1re image, plus de mur vide avec elle seule
     const S = L.salle(c, { at: "b2-0.2",
       judges: { SCF: (t) => ({ expr: t > tMat ? "sad" : "calm" }),
@@ -190,8 +190,8 @@
     c.sk((g, p) => D.riverWaves(g, p), (t) => ({ w: 320, phase: rnd(((t * 0.0625) % 1 + 1) % 1, 40) }), 720, 1140, 1).fade(tK + 0.3, 0.3);
     pinAt(c, kx, ky, "b4@Köln"); m.ripple(kx, ky, tK + 0.35, { R: 90 });
     A.chip(c, "Köln", "كولونيا", 40, tK, tW, { yellow: true });
-    A.quote(c, "Amtsgericht Köln · 16.05.2012", "المحكمة الابتدائية ديال Köln", "b4@الحكم");
-    c.kick("b4@5", 0.05);
+    A.quote(c, "Amtsgericht Köln · 16.05.2012", "المحكمة الابتدائية ديال Köln", "b4@يتحكم");
+    c.kick("b4@7", 0.05);
     // la feuille (grande, ×0,72, −4°) arrive par la droite ; la signature SE DÉFAIT, le stylo recule le long du trait puis se lève
     const sg = c.group(); sg.slide(tW, 500, 0, 0.35);
     const SX = 440, SY = 1010, SS = 0.72, RA = (-4 * Math.PI) / 180;
@@ -242,7 +242,7 @@
    * Le monde va de x −60 à 1980. À b6@كلشي le rembobinage s'arrête : tout va maintenant de gauche à droite. */
   st.scene({ from: "b6", in: "swipeR", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b6"), tK = T("b6@كلشي"), tW = T("b6@وحدة"), tAd = T("b7@الإدارة"), tZ = T("b7@زادت"), tG = T("b7@garde"), t24 = T("b7@7");
+    const t0 = T("b6"), tK = T("b6@شي"), tW = T("b6@وحدة"), tAd = T("b7@service"), tZ = T("b7@زاد"), tG = T("b7@garde"), t24 = T("b7@5");
     const CAM = [{ at: t0, s: 1, cx: 560, cy: 900 }, { at: tK + 0.4, s: 1, cx: 1040, cy: 900, d: T("b7") - tK - 0.4 }, { at: T("b7"), s: 1, cx: 1500, cy: 900, d: 2.0 }, { at: t24, s: 1.03, cx: 1526, cy: 900, d: 0.6 }];
     c.camera(CAM);
     // la même caméra, sans secousse (pour la marcheuse) : cx(t)
@@ -258,7 +258,7 @@
     A.halo(c.text("1 Woche", 613, 640, 28, "tw", "middle"), 5);
     for (let i = 0; i < 21; i++) c.sk((g, p) => D.hourCol(g, p), () => ({ seed: i + 1 }), 130 + i * 46, 660, 1).wipe(A.colStart(i), 0.07, "down");
     c.kick(tW, 0.07);
-    A.chip(c, "63-Stunden-Woche", "سيمانة ديال 63 ساعة", 34, "b6@2", tAd, { yellow: true });
+    A.chip(c, "63-Stunden-Woche", "سيمانة ديال 63 ساعة", 34, "b6@3", tAd, { yellow: true });
     // la Klinikverwaltung : le tampon claque sur le tableau
     A.stamp(c, 1180, 570, 0.5, { text: "KLINIKVERWALTUNG", size: 30, rot: -6 }, tAd, { shake: 8 });
     A.chip(c, "Klinikverwaltung", "الإدارة ديال السبيطار", 32, tAd, tG);

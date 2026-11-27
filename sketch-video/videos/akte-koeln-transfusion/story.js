@@ -211,18 +211,18 @@
       return n;
     };
     // les 21 colonnes de la frise (scène 6) et le compteur du HUD : même horloge (intervalle = durée ÷ 21, 0,07 s par colonne)
-    const COL_A = T("b6@كلشي") + 0.05, COL_E = T("b6@وحدة") - 0.05, COL_STEP = (COL_E - COL_A) / 21;
+    const COL_A = T("b6@شي") + 0.05, COL_E = T("b6@وحدة") - 0.05, COL_STEP = (COL_E - COL_A) / 21;
     const colStart = (i) => COL_A + i * COL_STEP;
     const hours = (t) => { let v = 0; for (let i = 0; i < 21; i++) v += 3 * clamp((t - colStart(i)) / 0.07, 0, 1); return v; };   // 0 → 63
     /* la balance (scènes 1, 2 et 17 en petit, 18, 19, 20) : inclinaison = cible(t) − Σ Δᵢ·e^(−3,2 u)·cos(9 u) + 0,5·sin(1,3 t)
      * (le rebond part de l'ancienne valeur : 0 → 13 culmine vers 17) ; les plateaux : 1,5·sin(1,7 t + φ) + 0,3 × le rebond (+ sursaut du
      * plateau droit à b1@صفر) ; tout s'immobilise entre b24@يعني et b24@كافي (fléau à l'horizontale). */
     const TILT = [
-      { a: T("b1@مذنبة") + 0.02, v: 13, k: "bounce" }, { a: T("b3@نرجعو") + 0.2, v: 0, k: "ease" }, { a: T("b21"), v: 13, k: "set" },
+      { a: T("b1@بالغلطة") + 0.02, v: 13, k: "bounce" }, { a: T("b3@نرجعو") + 0.2, v: 0, k: "ease" }, { a: T("b21"), v: 13, k: "set" },
       { a: T("b22@يعني"), v: 10.5, k: "bounce" }, { a: T("b22@غلطة"), v: 8, k: "bounce" }, { a: T("b22@كبيرة"), v: 5.5, k: "bounce" },
-      { a: T("b22@فالتنظيم"), v: 3, k: "bounce" }, { a: T("b24@كتبات"), v: 2, k: "bounce" }, { a: T("b24@genug"), v: 1, k: "bounce" },
+      { a: T("b22@التنظيم"), v: 3, k: "bounce" }, { a: T("b24@كتبت"), v: 2, k: "bounce" }, { a: T("b24@genug"), v: 1, k: "bounce" },
       { a: T("b24@bestraft"), v: 0, k: "bounce" }];
-    const SETTLE_A = T("b24@يعني"), SETTLE_B = T("b24@كافي"), STRAFE_KICK = T("b1@صفر"), HOLD_A = T("b3@علاش");
+    const SETTLE_A = T("b24@يعني"), SETTLE_B = T("b24@كافي"), STRAFE_KICK = T("b1@حبس"), HOLD_A = T("b3@علاش");
     // amplitude de la « vie » du décor (b3@علاش : l'image retient son souffle 0,3 s)
     const calm = (t) => 1 - 0.8 * (t >= HOLD_A && t < HOLD_A + 0.45 ? Math.sin(Math.PI * clamp((t - HOLD_A) / 0.45, 0, 1)) : 0);
     const tilt = (t) => {
@@ -513,9 +513,9 @@
         if (tr !== P.tr) { P.o.setAttribute("transform", tr); P.tr = tr; }
         const o = clamp(op == null ? 1 : op, 0, 1).toFixed(3); if (o !== P.op) { P.o.style.opacity = o; P.o.style.display = +o <= 0.001 ? "none" : ""; P.op = o; }
       };
-      const H = { tR: T("b3@نرجعو"), tI: T("i1") - 0.1, tB: T(AFTER_INTRO) - 0.1, tK: T("b6@كلشي"), tW: T("b6@وحدة"), tG: T("b7@garde"), tD8: T("b8@دازت"), t12: T("b8@6"),
-        t63: T("b13@6"), tDie: T("b16@end") + 0.2, tDim: T("b16@end") + 1.9, tOrg: T("b22@Organisationsverschulden"), tEnd: T(LAST + "@end") + 0.15,
-        t5: T("b4@5"), tb5: T("b5"), tb6: T("b6"), tSun: T("b16@الأحد"), t21: T("b21"), t26: T("b26") };
+      const H = { tR: T("b3@نرجعو"), tI: T("i1") - 0.1, tB: T(AFTER_INTRO) - 0.1, tK: T("b6@شي"), tW: T("b6@وحدة"), tG: T("b7@garde"), tD8: T("b8@دوزات"), t12: T("b8@7"),
+        t63: T("b13@9"), tDie: T("b16@end") + 0.2, tDim: T("b16@end") + 1.9, tOrg: T("b22@Organisationsverschulden"), tEnd: T(LAST + "@end") + 0.15,
+        t5: T("b4@7"), tb5: T("b5"), tb6: T("b6"), tSun: T("b16@الأحد"), t21: T("b21"), t26: T("b26") };
       const tLand = COUNTER_LAND, tFly = H.tOrg + 0.12;
       const odo = (v) => { const u = ((v % 10) + 10) % 10; return [rnd(Math.floor(v / 10) + Math.max(0, u - 9), 20), rnd(u, 20)]; };   // compteur kilométrique : la dizaine tourne avec 9 → 0
       const clac = (t, a) => (t >= a && t < a + 0.15 ? -4 * Math.sin((Math.PI * (t - a)) / 0.15) : 0);
@@ -588,7 +588,7 @@
      * cols / top / side selon le nombre de scènes (AKTE 02 : 18 cases, 6 colonnes) ; la grille finit avant la carte « commentaire ». */
     st.flash(LAST + "@end+0.15", 0.35, 0.85);
     // AKTE 04 (storyboard, scène 26) : 24 cases, image figée choisie par case (rang de la case, l'intro ne compte pas ; null = fin de scène)
-    const FREEZE = ["b1@طبيبة", "b2@end", "b4@سنات", null, null, null, null, null, "b12@بالمعلومات", null, "b15@ليه", "b16@end+1.4", "b17@end", "b19@end",
+    const FREEZE = ["b1@غرامة+0.4", "b2@end", "b4@سنات", null, null, null, null, null, "b12@بالمعلومات", null, "b15@ليه", "b16@end+1.4", "b17@end", "b19@end",
       null, null, null, null, null, null, null, null, null, null];
     st.summary({ at: LAST + "@end+0.15", in: "cut", dezoomAt: LAST + "@end+0.5", cols: 6, crop: [230, 1310], top: 372, gap: 10, side: 92, freezeAt: FREEZE,
       below(c, cells) {

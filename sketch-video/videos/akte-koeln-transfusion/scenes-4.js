@@ -26,7 +26,7 @@
   /* ═══════ 21 · LE DOSSIER : définitif ? on ne sait pas (b25) — le rouleau « Rechtskraft » ne s'arrête jamais ═══════ */
   st.scene({ from: "b25", in: "cut", inDur: 0, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b25"), tL = T("b25@لقيناش"), tW = T("b25@واش"), tN = T("b25@نهائي");
+    const t0 = T("b25"), tL = T("b25@عرفناش"), tW = T("b25@واش"), tN = T("b25@نهائي");
     c.camera([{ at: "b25", s: 1, cx: 540, cy: 900 }, { at: "b25+0.1", s: 1.03, cx: 540, cy: 900, d: 1.8, ease: "lin" }]);
     m.obj(D.courtRoom, 0, 0, 1, {});
     m.obj(D.benchTop, -140, 1020, 1, { shadowX: 300 });
@@ -53,7 +53,7 @@
 
   /* ═══════ 22 · 23 · 24 — LA RÈGLE (b26–b28) : une même page ; à droite la carte qui se remplit, à gauche « toi » (pas l'héroïne) ═══════ */
   const RULE = () => {
-    const tP = T("b26@poche"), tSee = T("b26@شوف"), tB = T("b26@براسك"), tN = T("b26@السمية"), tG = T("b26@groupe"), tNr = T("b26@والنمرة"),
+    const tP = T("b26@poche"), tSee = T("b26@شوف"), tB = T("b26@ضروري"), tN = T("b26@السمية"), tG = T("b26@groupe"), tNr = T("b26@والنمرة"),
       tD = T("b27@ودير"), tR = T("b27@groupe"), tPat = T("b27@المريض"), tX = T("b28@درتيهاش");
     return { tP, tSee, tB, tN, tG, tNr, tD, tR, tPat, tX,
       rows: (t) => (t < tP ? 0 : t < tSee ? prog(t, tP, 0.3) : t < tB ? 1 + prog(t, tSee, 0.3) : t < tD ? 2 + prog(t, tB, 0.3) : 3 + prog(t, tD + 0.1, 0.3)),
@@ -172,7 +172,7 @@
   /* ═══════ 25 · LE SANG NE REVIENT PAS (b29) — gros plan de la tubulure ; aucun texte à l'écran (la phrase est dans le sous-titre) ═══════ */
   st.scene({ from: "b29", in: "swipeR", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b29"), tQ = T("b29@القصة"), tL = T("b29@اللور"), tB = T("b29@الدم"), tIn = T("b29@دخل"), t7 = T("b29@7"), tK = T("b29@كيرجعش");
+    const t0 = T("b29"), tQ = T("b29@القصة"), tL = T("b29@لور"), tB = T("b29@transfusion"), tIn = T("b29@دارت"), t7 = T("b29@12"), tK = T("b29@ترجعها");
     c.camera([{ at: "b29", s: 1, cx: 580, cy: 900 }, { at: "b29+0.1", s: 1, cx: 520, cy: 900, d: 1.0, ease: "lin" }, { at: tB, s: 1.1, cx: 540, cy: 815, d: 1.2 }]);   // revue : cy 960 → 815 (le haut de la poche passait dans la zone y < 250)
     const grid = m.obj(D.hourGrid, -110, 290, 1, { cols: 10, rows: 9, cell: 140, paper: false, col: "#9A9A94", sw: 2.4 }).on((t, s) => { s.o *= 0.18; }); m.par(grid, 0.6);
     // les pages du planning (elles reviennent pendant le « ◀◀ »)

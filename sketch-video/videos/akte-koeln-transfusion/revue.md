@@ -148,3 +148,20 @@ travelling du tableau de service image par image, sous-titres mesurés mot par m
 Vérifié sans correction : la scène muette (pas de moniteur ni de famille, voulu par le storyboard : rien ne dit qu'ils
 étaient là ; le temps s'arrête, gris, « المريض ما عاشش ») ; les chevauchements restants de l'overlapscan sont des
 passages (volets, compteurs qui roulent, cases de l'affiche) ; mouvement ≥ 3,6 % partout ; aucune erreur de page.
+
+## Voix de l'auteur (28.11.2026)
+
+Enregistrement principal (5 min 07, avec reprises) + reprise de 36 s (accroche, b20, b22). ElevenLabs : Voice Isolator sur
+les deux, Scribe v2 + Scribe v1 (v1 garde mieux la darija ; les deux comparés sur les mots douteux). Montage :
+`montage_voix.py` (une phrase par beat, meilleure prise, reprise et intro commune égalisées sur l'enregistrement,
+×1,3, mastering −15 LUFS) → `voice.wav`, `beats.js`, `timings.js` (104,4 s de voix ; silence de 3,3 s après b16).
+
+Retiré (avec l'accord de l'auteur : « découpe comme tu veux ») : l'ancienne accroche « كان خاصها تدخل الحبس، ولكن خرجت
+براءة » (faux : coupable, sans peine ; remplacée par sa reprise) ; « والطبيبة كملات الخدمة ديالها normal » (contraire au
+jugement ; remplacée par sa reprise « ما بقاتش قادرة تخدم، دوزات شهور وهي كتداوى ») ; la redite de b10 (« اللي هي la
+formation ديال كيفاش دير la transfusion ديال الدم ») ; « المهم » ; « يعني » (b29) ; les faux départs.
+
+Repères : 47 repères qui visaient des mots du script recalés sur ses mots (`scenes-*.js`) ; aucun repère manquant.
+Sous-titres : une seule ligne garantie (`index.html` : rétrécit jusqu'à 76 % si besoin ; b10 et b15 à 92 %).
+Mots à faire confirmer à l'auteur : b13 « مع العشرة إلا قسمين، علقات » (Scribe : « العشرة القسمين، لقاتو ») ;
+b26 « حدا المريض » (Scribe entend « هذا/هاد ») ; b7 « 24 heures » ou « 24 ساعة ».

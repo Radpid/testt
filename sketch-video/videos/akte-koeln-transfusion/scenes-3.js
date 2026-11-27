@@ -34,7 +34,7 @@
    * Autre lieu, autre moment, SANS date ni heure (onglet masqué par le HUD, aucune horloge). Une seule scène, sans coupe. */
   st.scene({ from: "b16@end+1.9", in: "fade", inDur: 0.4, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const tE = T("b16@end"), t0 = tE + 1.9, tS = tE + 2.3, tC = tE + 3.2, tI = T("b17@انهيار"), tW = T("b18@وهي"), tA = T("b18@الإدارة"), tCall = T("b18@عيطات"), tU = T("b18@عليها");
+    const tE = T("b16@end"), t0 = tE + 1.9, tS = tE + 2.3, tC = tE + 3.2, tI = T("b17@انهيار"), tW = T("b18@وفي"), tA = T("b18@الإدارة"), tCall = T("b18@عيطات"), tU = T("b18@ليها");
     c.camera([{ at: t0, s: 1, cx: 520, cy: 930 }, { at: "b17", s: 1.1, cx: 490, cy: 1010, d: 0.6 }, { at: tA, s: 1, cx: 560, cy: 950, d: 0.8 }]);   // revue : cx 450 → 490
     m.obj(D.corridor04, 0, 0, 1, { doors: [], night: 0 });
     m.obj(D.pillar, 150, 380, 1, {});
@@ -86,7 +86,7 @@
   st.scene({ from: "b19", in: "swipe", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
     const t0 = T("b19"), tOff = Math.max(T("b19@وخلاتها"), t0 + 0.35), tTake = Math.max(T("b19@تسني"), tOff + 0.42), tGot = tTake + 0.3, tP = T("b19@ورقة"), tB = T("b19@بلي"),
-      tF = T("b19@formation"), tSg = tF + 0.3, tX = T("b19@وهادشي"), tM = T("b19@ماشي");
+      tF = T("b19@formation"), tSg = tF + 0.3, tX = T("b19@هادشي"), tM = T("b19@صحيحش");
     c.camera([{ at: "b19", s: 1, cx: 510, cy: 920 }, { at: "b19+0.1", s: 1.03, cx: 552, cy: 920, d: 3.2, ease: "lin" }]);
     m.obj(D.officeBack, 0, 0, 1, {});
     // le store (cadre fixe, lames qui respirent), la plante sur l'appui, les raies de lumière sur le mur
@@ -248,8 +248,8 @@
   const CAM_B = (b) => [{ at: b, s: 0.94, cx: 552, cy: 954 }, { at: b + "+0.1", s: 0.94, cx: 558, cy: 954, d: Math.max(1, T(X.BEAT_IDS[X.BEAT_IDS.indexOf(b) + 1]) - T(b) - 0.1), ease: "lin" }];
   const balance3 = (c, no) => {
     const m = M.of(c);
-    const tD = ["b22@يعني", "b22@غلطة", "b22@كبيرة", "b22@فالتنظيم"].map(T), tSaw = T("b22@شافت"), tSwap = tSaw + 0.34, tOrg = T("b22@Organisationsverschulden"),
-      t23 = T("b23"), tSch = T("b23@مذنبة"), t24 = T("b24"), tGone = T("b24@عاقباتهاش"), tPeb = ["b24@كتبات", "b24@genug", "b24@bestraft"].map(T), tGen = T("b24@genug"), t60 = T("b24@كافي");
+    const tD = ["b22@يعني", "b22@غلطة", "b22@كبيرة", "b22@التنظيم"].map(T), tSaw = T("b22@شافت"), tSwap = tSaw + 0.34, tOrg = T("b22@Organisationsverschulden"),
+      t23 = T("b23"), tSch = T("b23@المسؤولية"), t24 = T("b24"), tGone = T("b24@عقبتهاش"), tPeb = ["b24@كتبت", "b24@genug", "b24@bestraft"].map(T), tGen = T("b24@genug"), t60 = T("b24@كافي");
     const B = L.balance(c, { at: null, extras: true, weight: { drop: "b22", gone: (t) => E.inOut(prog(t, tGone, 0.5)) }, cart: { arrive: "b22@المحكمة" }, counter: A.COUNTER_LAND });
     const G = (t) => B.geom(t), sw = (t, side) => A.tilt(t)[side === "L" ? "swL" : "swR"];
     // un point posé sur un plateau, décalé de (dx, dy) dans le repère du plateau (qui se balance)
@@ -332,19 +332,19 @@
     // la pastille attend que le compteur du HUD soit passé (il vole de la bande du haut jusqu'au chariot, à travers sa place)
     A.chip(c, "Organisationsverschulden", "غلطة فالتنظيم", 34, tOrg + 0.42, null, { yellow: true, y: 398 });
     c.kick(tOrg, 0.06); c.kick("b22@الإدارة", 0.05);
-    A.quote(c, "»gravierendes Organisationsverschulden der Krankenhausverwaltung« — laut Urteil", "غلطة كبيرة فالتنظيم، ديال الإدارة", "b22@فالتنظيم");
+    A.quote(c, "»gravierendes Organisationsverschulden der Krankenhausverwaltung« — laut Urteil", "غلطة كبيرة فالتنظيم، ديال الإدارة", "b22@التنظيم");
   } });
 
   /* ═══════ 19 · LA BALANCE 2 : sa faute, petite — et pourtant coupable (b23) ═══════ */
   st.scene({ from: "b23", in: "cut", inDur: 0, build(c) {
     X.use(c); const m = M.of(c);
-    const tS = T("b23@صغيرة"), tT = T("b23@تأكداتش"), tDk = T("b23@داكشي"), tSch = T("b23@مذنبة");
+    const tS = T("b23@صغيرة"), tT = T("b23@تأكداتش"), tDk = T("b23@داكشي"), tSch = T("b23@المسؤولية");
     const R = balance3(c, 19);
     c.camera(CAM_B("b23"));
     const follow = (n, dx, dy) => n.on((t, s) => { const q = R.onPan(t, "L", dx, dy); s.x += q[0]; s.y += q[1]; });
     // un cercle jaune se trace autour du petit poids resté seul ; il pulse une fois
-    follow(A.ring(c, 0, 0, 44, 36, "b23@وغلطة", { dur: 0.35 }), 0, -24);
-    R.core.pulse(T("b23@وغلطة") + 0.3, 0.45, 0.22);
+    follow(A.ring(c, 0, 0, 44, 36, "b23@والغلطة", { dur: 0.35 }), 0, -24);
+    R.core.pulse(T("b23@والغلطة") + 0.3, 0.45, 0.22);
     // le contour en pointillés de l'ancien bloc : on mesure ce qui a été retiré
     const ghost = el("g"); el("path", { d: "M-75 -104 L75 -104 L75 0 L-75 0 Z M-75 -104 L-65 -113 L85 -113 L85 -9 L75 0 M75 -104 L85 -113", fill: "none", stroke: INK, "stroke-width": 3, "stroke-dasharray": "9 8", "stroke-linecap": "round", "stroke-linejoin": "round" }, ghost);
     follow(c.node(ghost), 0, 0).on((t, s) => { s.o *= t < tS ? 0 : Math.min(1, (t - tS) / 0.15) * (1 - prog(t, tS + 0.2, 0.8)); });

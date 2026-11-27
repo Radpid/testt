@@ -1,7 +1,7 @@
 /* scenes-2.js — PARTIE 2 (storyboard.md § 4, scènes 7 à 13) : le samedi soir dans le couloir (> 12 h), le tableau du personnel
  * (débutante, 9 mois, pas de Blutführerschein), le passe-plat du labo (deux poches pareilles), le Begleitdokument, puis la chambre
  * (21:50 · 0 contre A · dimanche 13:37, muette). Mise en place fixe : X.lieux.chambre (scènes 11–13). Aides : X.aides (story.js).
- * Repères numériques par RANG : b8@6 = « 12 », b9@6 = « 9 », b13@6 = « 63 », b14@2 = « 0 », b14@4 = « A », b15@3 = « 10 ».
+ * Repères numériques par RANG (voix de l'auteur, 28.11.2026) : b8@7 = « 12 », b9@7 = « 9 », b13@9 = « 63 », b14@2 = « O », b14@6 = « A », b15@3 = « 10 ».
  */
 (window.EP_PARTS = window.EP_PARTS || []).push(function (X) {
   "use strict";
@@ -36,7 +36,7 @@
   /* ═══════ 7 · SAMEDI SOIR, LE COULOIR : plus de 12 heures (b8) ═══════ */
   st.scene({ from: "b8", in: "swipe", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b8"), t1 = T("b9"), t5 = T("b8@5"), tD = T("b8@دازت"), tK = T("b8@كثر");
+    const t0 = T("b8"), t1 = T("b9"), t5 = T("b8@6"), tD = T("b8@دوزات"), tK = T("b8@الطبيبة");
     // revue : cy 905 et citation 40 px plus bas (o.dy) : ses pieds restent au-dessus de la citation, le voyant de la porte 2 sous l'arabe de la pastille
     c.camera([{ at: "b8", s: 1, cx: 500, cy: 905 }, { at: "b8+0.1", s: 1.03, cx: 580, cy: 905, d: 2.1, ease: "lin" }]);
     // le couloir ; la nuit monte dans les angles (deuxième tracé identique, « nuit », en fondu)
@@ -60,13 +60,13 @@
     }).on((t, s) => { s.x += xAt(t); s.y += 1300; }).on(breathe(0.7));
     A.quote(c, "»mit Notfallpatienten mehr oder weniger allein« — laut Urteil", "تقريبا بوحدها", "b8@بالليل", { dy: 40 });
     A.chip(c, "mehr als 12 Stunden", "كثر من 12 ساعة", 32, tK, null, { yellow: true });
-    c.kick("b8@6", 0.06);
+    c.kick("b8@7", 0.06);
   } });
 
   /* ═══════ 8 · LE TABLEAU DU PERSONNEL : débutante, 9 mois, pas de Blutführerschein (b9–b10) ═══════ */
   st.scene({ from: "b9", in: "swipe", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b9"), t10 = T("b10"), t9 = T("b9@6"), tAs = T("b9@Assistenzärztin"), tB = T("b10@Blutführerschein"), tY = T("b9@شهور");
+    const t0 = T("b9"), t10 = T("b10"), t9 = T("b9@7"), tAs = T("b9@Assistenzärztin"), tB = T("b10@Blutführerschein"), tY = T("b9@شهور");
     c.camera([{ at: "b9", s: 1, cx: 520, cy: 920 }, { at: "b9+0.1", s: 1.02, cx: 560, cy: 920, d: 3.0, ease: "lin" }, { at: "b10", s: 1.05, cx: 565, cy: 940, d: 0.5 }]);
     m.obj(D.corridor04, 0, 0, 1, { doors: [], night: 1 });
     c.sk((g, p) => D.sconce(g, p), (t) => ({ on: rnd(0.94 + 0.06 * Math.sin(t * 9), 20) }), 180, 600, 1);
@@ -89,7 +89,7 @@
     tape(c, "Schulung: Transfusion", 640, 925, 18, "b10@formation", 0.4, { parent: BG, halo: 4 });
     const nn = el("g", { transform: "translate(640 1052) rotate(-4)" }, BG);
     tape(c, "noch nicht erhalten", 0, 0, 24, tB + 0.35, 0.45, { parent: nn, halo: 6 });
-    A.ring(c, 640, 1046, 182, 102, "b10@ناقصاها", { dur: 0.35 });
+    A.ring(c, 640, 1046, 182, 102, "b10@ناقصها", { dur: 0.35 });
     // sa fiche du personnel sur la punaise (470, 620) : sa tête en photo, bande jaune VIERGE, deux lignes tapées ; elle se balance
     const card = c.group(BG); m.build(card, t0 + 0.5, "swing", { pivot: [470, 620], deg: -30, dur: 0.5 }); m.pend(card, t0 + 0.9, 3, [470, 620], { idle: 0.5 });
     c.sk((g, p) => D.staffCard(g, p), () => ({}), 470, 620, 1, 0, card.g);
@@ -108,17 +108,17 @@
       const yawn = t >= tY && t < tY + 0.5;
       return A.tired(t, doc(Object.assign(p, { expr: t >= tB ? "worried" : "calm", talk: 0, mouth: yawn ? "o" : undefined, blink: yawn ? 1 : rnd(blinkAt(t, 2.3), 10) })));
     }).on((t, s) => { s.x += xAt(t); s.y += 1300; }).on(breathe(2.3));
-    A.chip(c, "Assistenzärztin", "طبيبة مقيمة", 34, tAs, T("b9@عاد") - 0.12);
-    A.chip(c, "Berufsanfängerin", "عاد بدات", 32, "b9@عاد", t10);
+    A.chip(c, "Assistenzärztin", "طبيبة مقيمة", 34, tAs, T("b9@بدات") - 0.12);
+    A.chip(c, "Berufsanfängerin", "عاد بدات", 32, "b9@بدات", t10);
     A.chip(c, "Blutführerschein", "« رخصة » ديال الدم", 34, tB, null, { yellow: true });
-    A.quote(c, "»Diese Schulung hatte die Angeklagte … noch nicht erhalten« — laut Urteil", "مازال ناقصاها", "b10@ناقصاها");
+    A.quote(c, "»Diese Schulung hatte die Angeklagte … noch nicht erhalten« — laut Urteil", "مازال ناقصاها", "b10@ناقصها");
     c.kick(tB, 0.06);
   } });
 
   /* ═══════ 9 · LE PASSE-PLAT DU LABO : deux poches pareilles, en une fois (b11) — Rekonstruktion ═══════ */
   st.scene({ from: "b11", in: "swipe", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b11"), tG = T("b11@عطاها"), tP = T("b11@poches"), tI = T("b11@بحال"), tF = T("b11@فدقة"), tL = T("b11@لجوج");
+    const t0 = T("b11"), tG = T("b11@عطاها"), tP = T("b11@poche"), tI = T("b11@بحال"), tF = T("b11@فدقة"), tL = T("b11@لجوج");
     c.camera([{ at: "b11", s: 1, cx: 500, cy: 920 }, { at: "b11+0.1", s: 1.03, cx: 570, cy: 920, d: 3.0, ease: "lin" }]);
     m.obj(D.corridor04, 0, 0, 1, { doors: [], night: 1 });
     // le passe-plat (ouverture x 440–860, y 660–920) : l'intérieur (vitre dépolie, ombre, frigo à diode), le volet qui remonte, la façade
@@ -141,7 +141,7 @@
     const [px, py] = [580 + rack.out.post[0], RY + rack.out.post[1]];
     const tag = c.sk((g, p) => D.loopTag(g, p), () => ({ len: 34 }), px, py + 61, 1, 0, RK.g);
     tag.on((t, s) => { s.px = px; s.py = py; s.r += pendA(t, t0 + 0.3, 10, 3); const q = prog(t, tP + 0.05, 0.45); s.y += 420 * q * q; s.o *= 1 - prog(t, tP + 0.3, 0.2); });
-    A.snip(c, px, py + 10, "b11@poches", { parent: RK.g });
+    A.snip(c, px, py + 10, "b11@poche", { parent: RK.g });
     // bien pareilles : un cercle autour de chaque poche, puis « = »
     A.ring(c, 530, 952, 44, 70, tI, { dur: 0.2 }).hide(tF, 0.2);
     A.ring(c, 630, 952, 44, 70, tI + 0.2, { dur: 0.2 }).hide(tF, 0.2);
@@ -171,7 +171,7 @@
   /* ═══════ 10 · LE BEGLEITDOKUMENT (b12) ═══════ */
   st.scene({ from: "b12", in: "cut", inDur: 0, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
-    const t0 = T("b12"), tG = T("b12@groupe"), tGh = T("b12@غير"), tF = T("b12@فورقة"), tA1 = T("b12@عامرة"), tA2 = T("b12@بالمعلومات");
+    const t0 = T("b12"), tG = T("b12@groupe"), tGh = T("b12@غير"), tF = T("b12@ورقة"), tA1 = T("b12@عامرة"), tA2 = T("b12@بالمعلومات");
     c.camera([{ at: "b12", s: 1, cx: 520, cy: 920 }, { at: "b12+0.1", s: 1.03, cx: 565, cy: 920, d: 3.2, ease: "lin" }]);
     m.shapes({ seed: 12, pts: [[150, 440], [340, 900], [930, 440]] });
     // les deux poches sur leur barre (×0,7), à gauche ; elles se balancent (1°)
@@ -204,13 +204,13 @@
     m.build(head, t0 - 0.05, "rise", { dist: 160, dur: 0.4 }); head.on(breathe(1.1));
     A.chip(c, "Begleitdokument", "الورقة اللي مع الكيس", 32, t0 + 0.2, tGh);
     A.chip(c, "Blutgruppe", "فصيلة الدم", 36, tF, null, { yellow: true });
-    A.quote(c, "laut Urteil: Blutgruppe »an der Konserve selbst … nicht gekennzeichnet«", "حسب الحكم", "b12@وحسب");
+    A.quote(c, "laut Urteil: Blutgruppe »an der Konserve selbst … nicht gekennzeichnet«", "حسب الحكم", "b12@حسب");
   } });
 
   /* ═══════ 11 · 21:50, LA CHAMBRE : elle accroche la poche (b13) ═══════ */
   st.scene({ from: "b13", in: "swipe", inDur: 0.42, build(c) {
     X.use(c); const m = M.of(c);
-    const tC = T("b13@21:50"), tH = T("b13@علقات"), tHook = tH + 0.4, tO = OPEN(), tM = T("b13@لمريض"), t63 = T("b13@6"), tA = T("b13@عام");
+    const tC = T("b13@العشرة"), tH = T("b13@علقات"), tHook = tH + 0.4, tO = OPEN(), tM = T("b13@لمريض"), t63 = T("b13@9"), tA = T("b13@عام");
     const R = L.chambre(c, { at: "b13", bag: { level: bagLevel, hang: false },
       tube: (t) => ({ fill: rnd(tubeFill(t), 50), clamp: rnd(1 - prog(t, tO, 0.3), 20) }),
       pat: (t) => ({ look2: [0.45, -0.05], expr: t >= tM ? "smile" : "calm" }) });
@@ -240,7 +240,7 @@
   /* ═══════ 12 · 0 CONTRE A : la loupe · dix minutes · on arrête (b14–b15) — l'explication médicale ═══════ */
   st.scene({ from: "b14", in: "cut", inDur: 0, build(c) {
     const k = X.use(c), m = M.of(c);
-    const tG = T("b14@groupe"), t0g = T("b14@2"), tP = T("b14@poche"), tA = T("b14@4"), tW = T("b14@مريضة"), tMin = T("b15@من"), tBa = T("b15@بعد"), t10 = T("b15@3"),
+    const tG = T("b14@groupe"), t0g = T("b14@2"), tP = T("b14@poche"), tA = T("b14@6"), tW = T("b14@مريض"), tMin = T("b15@من"), tBa = T("b15@بعد"), t10 = T("b15@3"),
       tDq = T("b15@دقايق"), tBd = T("b15@بدا"), tV = T("b15@كيتقيا"), tS = STOP(), tLi = T("b15@ليه");
     const sector = (t) => E.inOut(prog(t, tMin, tDq + 0.3 - tMin));
     // il a des haut-le-cœur : le buste se penche par à-coups, de moins en moins (2 Hz)
@@ -291,7 +291,7 @@
    * Elle n'est PAS là. Pas de moniteur : ce qui « bat », c'est la roue du compteur (HUD), la trotteuse, la goutte, la couette. */
   st.scene({ from: "b16", in: "swipe", inDur: 0.42, build(c) {
     X.use(c); const m = M.of(c);
-    const t37 = T("b16@13:37"), calme = T("b16@end") + 0.2, vie = (t) => 1 - E.inOut(prog(t, calme, 0.8));
+    const t37 = T("b16@لواحدة"), calme = T("b16@end") + 0.2, vie = (t) => 1 - E.inOut(prog(t, calme, 0.8));
     const R = L.chambre(c, { at: "b16", day: true, vie,
       pat: (t) => ({ expr: "sleep", talk: 0, headTilt: rnd(lerp(6, 14, E.inOut(prog(t, calme, 0.8))), 4), look2: [0, 0.3], reachR: [rnd(lerp(105, 118, prog(t, calme, 0.8)), 2), -212] }),
       clock: (t) => ({ time: 13 + (t < t37 ? 36 : 37) / 60, s: Math.round(Math.min(t, calme + 0.3) * 10) * 36 % 360 }) });
@@ -299,7 +299,7 @@
     m.dust({ x: 520, y: 770, w: 190, h: 230 }, 9, { seed: 13, op: 0.7, speed: 6, to: calme + 0.6 });
     void R;
     A.grey(c, calme + 0.2, 1, 0.85);
-    A.typed(c, "13:37", 540, 480, 96, "b16@13:37", { parent: c.hud, dur: 0.25, halo: 8 });
+    A.typed(c, "13:37", 540, 480, 96, "b16@لواحدة", { parent: c.hud, dur: 0.25, halo: 8 });
     A.halo(c.text("المريض ما عاشش", 540, 1440, 72, "ttl", "middle", c.hud), 8).wipe(T("b16@end") + 0.6, 0.5, "rtl");
   } });
 });

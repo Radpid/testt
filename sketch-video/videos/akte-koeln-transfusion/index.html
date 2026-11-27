@@ -96,9 +96,19 @@
 <script src="../../engine/runtime.js"></script>
 <script>
 /* Sous-titres : un mot latin très long (« Organisationsverschulden », b22) est rétréci pour rester entre x 90 et 915. */
-new MutationObserver(() => document.querySelectorAll("#captions .lat .rb").forEach((e) => {
-  if (e.textContent.trim().length > 18 && !e.style.fontSize) e.style.fontSize = "0.82em";
-})).observe(document.documentElement, { childList: true, subtree: true });
+/* Et UNE seule ligne par sous-titre (voix de l'auteur : « ووقفو ليه la transfusion » passait sur deux lignes) : si la ligne
+   dépasse le cadre (720 px), elle rétrécit par pas de 4 % jusqu'à 76 %. */
+const natW = (k) => { let a = 1e9, b = -1e9; for (const e of k.children) { a = Math.min(a, e.offsetLeft); b = Math.max(b, e.offsetLeft + e.offsetWidth); } return b - a; };   // largeur de mise en page (sans les animations)
+new MutationObserver(() => {
+  document.querySelectorAll("#captions .lat .rb").forEach((e) => {
+    if (e.textContent.trim().length > 18 && !e.style.fontSize) e.style.fontSize = "0.82em";
+  });
+  document.querySelectorAll("#captions .kline").forEach((k) => {
+    if (k.dataset.fit === k.textContent) return;
+    k.dataset.fit = k.textContent; k.style.whiteSpace = "nowrap"; k.style.fontSize = "";
+    for (let f = 96; natW(k) > k.clientWidth + 1 && f >= 76; f -= 4) k.style.fontSize = f + "%";
+  });
+}).observe(document.documentElement, { childList: true, subtree: true });
 </script>
 </body>
 </html>
