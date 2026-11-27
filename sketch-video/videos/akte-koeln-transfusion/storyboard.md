@@ -1537,3 +1537,29 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 12 | étiquette « autre patiente » à (600, 800) ; pictogramme à gauche | texte centré x 650, pictogramme à droite (812, 826), pointillé du pictogramme à la poche | à x 600 le trait de liaison de la loupe traversait l'arabe « ديال مريضة أخرى » |
 | 12 | — | il a des haut-le-cœur (le buste se penche par à-coups, 2 Hz, qui s'amortissent) | fin de b15 trop calme (mouvement.mjs : 2,9 %) |
 | 7–12 | pastilles enchaînées au même repère | la pastille sortante s'efface 0,12 s avant l'arrivée de la suivante | deux pastilles se superposaient pendant 0,1 s |
+
+**Scènes 14 à 20 (étape « scènes, partie 3 », 27.11)** :
+
+| scène | storyboard | construit | pourquoi |
+|---|---|---|---|
+| 14 | caméra à `b17` : ×1,1, cx 440 | cx 450 | un peu moins de marge perdue à gauche ; la porte (décor, fermée à ce moment) reste en partie dans la colonne des boutons pendant ce zoom (voir défauts) |
+| 14 | stéthoscope qui tombe de (290, 1020) | il est d'abord autour de son cou (vertical, il suit sa poitrine), puis tombe à mi-glissade vers (455, 1292) et rebondit | en `scrubs`, Persona ne dessine pas de stéthoscope : sans cela il apparaissait dans le vide |
+| 14 | `laut Urteil` « à droite » de la pastille | `.tw` 15 à (790, 457) | la pastille fait 466 px de large (x 307–773) |
+| 15 | plateau du bureau à y 1105 | plateau à y 1150 (`front: 60`), petite feuille (450, 1142), classeur sur le plateau | à 1105 le plateau était à la hauteur de son menton (Persona assise, grosse tête) : sa main et le stylo arrivaient devant son visage |
+| 15 | manche : épaule (705, 1150), main vers (585, 1092), `o.len` 115 → 190 | épaule cachée (705, 1165) ; longueur et angle calculés vers la cible : le stylo arrive à (452, 1112), à ≈ 90 px de son épaule (elle se penche, `torsoLean` 16) ; puis la main se pose sur le classeur et le pousse (x 590 → 480) | avec les valeurs du storyboard le stylo restait à > 120 px de sa main ; pousser le classeur par son bout droit était impossible (le bout est à côté de l'épaule cachée) |
+| 15 | fauteuil x 690–910, y 1060–1470 | bas centre (750, 1400) | colonne des boutons en fin de scène ; à y 1470 son assise passait sous la bande des citations |
+| 15 | store y 440–780 ; classeurs y 470–640 | store y 540–880 ; classeurs à (620, 560) | le haut du store et des classeurs était dans la bande des pastilles et sous « مشهد تمثيلي » |
+| 15 | insert centré (650, 800), ×1 | centré (668, 815), ×0,92 ; il monte de (520, 1142), en x d'abord | à ×1 son haut touchait l'arabe de la pastille ; en montant de (495, 1095) il passait sur son visage |
+| 15 | ligne `☑ Schulung »Transfusion« erhalten` en `.tw` 22 | la ligne de `D.formSheet` (`.tw` 16) se révèle lettre par lettre (cache papier), la case se coche à `b19@بلي` | 31 signes à 22 px = 409 px, plus large que la feuille (400) |
+| 15 | pastille centrée x 540 | x 496 | elle touchait la mention « مشهد تمثيلي » (x ≥ 735) |
+| 15 | caméra finale cx 560 | cx 552 | le store sortait du cadre à gauche |
+| 16 | fenêtre x 460–780, y 470–830 | 300 × 330 à (500, 590) | son haut était dans la bande des pastilles (derrière `über Monate …`) |
+| 16 | patère (160, 1300) ; elle à x 330 | patère à x 240 ; elle à x 390 | la blouse sortait par le bord gauche ; à 330 le dossier de sa chaise touchait le trépied |
+| 17 | carte tapée (520, 1175), 400 × 240 | (495, 1120), 390 × 240 | son bas passait sur la bande des citations ; son bord droit touchait les genoux de l'expert |
+| 18–20 | caméra ×1 → ×1,03 (×1,05), cy 900 | ×0,94 constant, cx 552 → 558, cy 954 (seule la respiration du cadrage pousse) | entre le fleuron du fléau (monde y 519) et la barre de la sellette (y 1328) il y a 809 px : à ×1,03 ils ne tiennent pas entre l'arabe des pastilles et la bande des citations (859 px d'écran) ; le fleuron passait sous l'arabe, la barre et ses mains sous la citation |
+| 18–20 | pastilles à y 450 | y 398 (comme dans la scène 1) | même raison (fléau) |
+| 18 | pastille `Organisationsverschulden` à `b22@Organisationsverschulden` | à + 0,42 s | le compteur du HUD vole de la bande du haut jusqu'au chariot à travers sa place |
+| 18 | tranches qui « se soulèvent » ; petit poids « 1 » sur la pile | la tranche du BAS sort, la pile retombe (rebond), la tranche glisse vers le chariot par un trajet bas | le petit poids est au sommet de la pile (storyboard) : on ne pouvait pas enlever les tranches par le haut ; trajet haut = la tranche passait sur « العقوبة » |
+| 19 | caméra décalée à gauche (cx 500 → 520) | même cadre que 18 et 20 | à cx 520 le chariot (compteur, tranches) entrait dans la colonne des boutons |
+| 20 | tampon `§ 60 StGB` centré sur la plaquette | décalé de 26 px à gauche ; « الإعفاء من العقوبة » 8 px plus bas, « مذنبة » apparaît 0,15 s plus tard | la fenêtre du rouleau (« 0 ») reste visible ; l'arabe ne touche pas le tampon pendant son rebond |
+| 20 | pastille `genug bestraft` seule | + `laut Urteil` (`.tw` 15) à sa droite | c'est une citation exacte (annexe C) ; même forme que la scène 14 |

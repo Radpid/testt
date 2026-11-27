@@ -146,3 +146,14 @@ Où en était l'agent (sa liste de tâches au moment de l'arrêt) :
 2) Scène 14 (muette 2) : le HUD est déjà gris et l'onglet masqué après `b16@end+1.9` (story.js) ; aucune horloge.
 3) scenes-2.js : bagLevel / tubeFill (niveau de la poche, sang dans la tubulure) sont des fonctions du temps partagées entre les scènes 11 et 12 ; pour une main sur un objet, viser l'objet en IK (reachR + bendR) depuis la position du personnage, et vérifier que la cible est à < 105 px × échelle de l'épaule.
 4) Points à surveiller : scène 12, après le zoom l'horloge est en partie dans la marge gauche (son rôle est fini) ; scène 11–12, le dos de l'héroïne (x 850) est à 0–5 px de la colonne des boutons.
+
+## Étape terminée : scènes, partie 3
+**Fait :** scenes-3.js : scènes 14 à 20 du storyboard (muette 2 : elle glisse le long du pilier, le stéthoscope tombe, « nervlich zusammengebrochen », la porte « Verwaltung » s'ouvre, Rekonstruktion ; le bureau : la manche tend le stylo, elle le prend, l'insert « Erklärung » monte, la ligne se tape, elle signe, tampon UNZUTREFFEND, le « ؟ » coupé, le classeur « Verantwortung » poussé vers elle ; les mois : la fenêtre des saisons, la blouse pendue ; retour au tribunal : carte en pointillés « 90 Tagessätze — beantragt — », pastille grise ; la balance en trois scènes : bloc → quatre tranches vers le chariot, vol du compteur, petit poids « 1 », SCHULDIG / مذنبة, poids « 90 » dissous, trois cailloux, § 60 StGB / الإعفاء من العقوبة, fléau immobile à l'horizontale). Contrôles : errcheck sur 22 instants (SV.error=undefined) ; planches --entre b17,b24 avec et sans --ig regardées ; image par image 54,6 → 55,7 (glissade), 59,9 → 61,0 (stylo, insert), 68,9 → 70,0 (vol du compteur, tranches) ; images de fin des scènes 19 et 20 en grand ; overlapscan 54,2 → 80,1 : seulement des chevauchements de passage (transitions, tampons qui claquent, fondu croisé du compteur à l'atterrissage, compteur qui vole) ; mouvement : b17 à b24 entre 5,5 et 32 %. Écarts : storyboard.md, « Écarts de construction ».
+
+**Reste à faire :** scènes 21 à 25 et l'affiche (scenes-4.js, story.js). Tant qu'elles n'existent pas, la scène 20 dure jusqu'à la fin (b25+ « FIGÉ » : normal).
+
+**Notes pour la suite :**
+1) scenes-3.js : `balance3(c, no)` construit la balance complète (scènes 18–20) en fonction du temps ; la caméra de ces scènes est `CAM_B(beat)` (×0,94, cy 954) : la garder si une autre scène reprend la balance.
+2) Scène 20 se termine à b25 (cut) : l'image de l'affiche est prise à la fin (tampon § 60 posé, fléau droit).
+3) Pastilles près d'une mention « Rekonstruktion » (x ≥ 735, y 404–455) : décaler la pastille (o.x) ; pastilles sur un décor haut : o.y 398.
+4) Défaut connu : scène 14, pendant le zoom de b17 (×1,1), la porte fermée (décor) est en partie dans la colonne des boutons.
