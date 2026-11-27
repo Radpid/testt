@@ -451,4 +451,56 @@
     return { top: [0, 0], bottom: [0, 190], surface: ys, orifice: [0, orif], w: 110, h: 190 };
   };
   D.dripBig.essais = [{}, { drop: 0.7 }, { drop: -1, ripple: 0.4, level: 0.34 }, { part: "front" }];
+
+  /* ═════════════════════════ ajouts partie 4 (étape « scènes, partie 4 ») ═════════════════════════ */
+
+  /* plateau du banc des juges vu de face (scène 21 : le dossier y est posé) — ancrage : coin haut gauche du plateau ; o.w × o.h ;
+   * chant arrondi, façade à panneaux en creux, ombre du dossier sur le bois (o.shadowX, o.shadowW) */
+  D.benchTop = (g, o = {}) => {
+    o = Object.assign({ w: 1360, h: 420, panel: 220, shadowX: null, shadowW: 560, seed: 4701 }, o);
+    const { w, h } = o, C = U.ctx(g, o.seed, false, 1);
+    U.shape(C, "front", `M0 26 L${w} 26 L${w} ${h} L0 ${h} Z`, MAT.wood, { sw: 2.6 });
+    for (let x = 40, i = 0; x + o.panel - 40 < w; x += o.panel, i++) U.stroke(C, "pn" + i, U.rrect(x, 62, o.panel - 40, h - 100, 4), { sw: 1.8, stroke: "#8A7F68", r: 0.6 });
+    if (o.shadowX != null) el("path", { d: `M${o.shadowX} 26 L${o.shadowX + o.shadowW} 26 L${o.shadowX + o.shadowW - 30} 60 L${o.shadowX - 30} 60 Z`, fill: "rgba(28,26,28,.14)" }, g);
+    U.shape(C, "edge", U.rrect(-6, 0, w + 12, 28, 10), MAT.mid, { sw: 2.8 });
+    ln(g, `M8 7 L${w - 8} 7`, 2, "#F4F4EF");
+    return { top: 0, w, h };
+  };
+  D.benchTop.essais = [{ w: 900, h: 300, shadowX: 200 }];
+
+  /* coin de lit d'hôpital (scène 22) d'où sort l'avant-bras du patient avec son bracelet d'identité — ancrage : bas gauche (sol) ;
+   * 125 × 180 ; couette (pli qui recouvre le bras à droite), cadre métallique, un pied à roulette. Ancres : band (le bracelet), hand */
+  D.bedCorner = (g, o = {}) => {
+    o = Object.assign({ w: 125, seed: 4711 }, o);
+    const w = o.w, C = U.ctx(g, o.seed, false, 1);
+    el("ellipse", { cx: 22, cy: 2, rx: 26, ry: 4, fill: "rgba(28,26,28,.15)" }, g);
+    U.shape(C, "leg", U.rrect(12, -66, 14, 56, 3), MAT.alu, { sw: 2 });
+    el("circle", { cx: 19, cy: -8, r: 8, fill: "#4A4A46", stroke: INK, "stroke-width": 2 }, g); el("circle", { cx: 19, cy: -8, r: 2.6, fill: "#DADAD4" }, g);
+    U.shape(C, "frame", U.rrect(0, -76, w + 12, 18, 4), MAT.grey, { sw: 2.4 });
+    shadow(g, `M0 -70 Q-4 -160 30 -168 L${w + 12} -170 L${w + 12} -66 Q60 -58 0 -70 Z`, 6, 7);
+    U.shape(C, "duvet", `M0 -70 Q-4 -160 30 -168 L${w + 12} -170 L${w + 12} -66 Q60 -58 0 -70 Z`, MAT.milk, { sw: 2.8 });
+    ln(g, "M14 -96 Q40 -104 70 -98 M8 -128 Q22 -150 44 -156", 1.6, "#A9A9A2");
+    // l'avant-bras posé sur la couette (même peau blanche que Persona), la main en moufle à gauche, le bracelet au poignet
+    U.shape(C, "arm", `M44 -156 L${w + 12} -160 L${w + 12} -134 L46 -134 Q38 -145 44 -156 Z`, MAT.white, { sw: 2.4 });
+    U.shape(C, "hand", U.blob([[46, -157], [30, -160], [16, -154], [10, -145], [14, -135], [28, -131], [46, -134]]), MAT.white, { sw: 2.4 });
+    ln(g, "M18 -146 Q26 -142 34 -147", 1.4, "#8A8A84");
+    D.wristband(el("g", { transform: "translate(60 -145)" }, g), { angle: 180, len: 30 });
+    // le pli de la couette retombe sur le bras, à droite
+    U.shape(C, "fold", `M${w - 22} -174 Q${w - 34} -146 ${w - 20} -120 L${w + 12} -118 L${w + 12} -174 Z`, MAT.milk, { sw: 2.4 });
+    return { band: [60, -145], hand: [28, -145], w: w + 12, h: 180 };
+  };
+  D.bedCorner.essais = [{}];
+
+  /* coin de table (scène 24 : la feuille y glisse) — ancrage : coin haut gauche du plateau ; o.w × 150 (sol à y 150) */
+  D.tableCorner = (g, o = {}) => {
+    o = Object.assign({ w: 125, seed: 4721 }, o);
+    const w = o.w, C = U.ctx(g, o.seed, false, 1);
+    el("ellipse", { cx: 22, cy: 150, rx: 24, ry: 4, fill: "rgba(28,26,28,.15)" }, g);
+    U.shape(C, "leg", U.rrect(10, 40, 16, 110, 3), MAT.wood, { sw: 2.2 });
+    U.shape(C, "apron", U.rrect(0, 16, w + 12, 30, 3), MAT.wood, { sw: 2.4 });
+    U.shape(C, "top", U.rrect(-6, 0, w + 18, 18, 5), MAT.mid, { sw: 2.6 });
+    ln(g, `M6 5 L${w + 6} 5`, 1.8, "#F4F4EF");
+    return { top: 0, w: w + 12 };
+  };
+  D.tableCorner.essais = [{}];
 })();

@@ -1563,3 +1563,23 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 19 | caméra décalée à gauche (cx 500 → 520) | même cadre que 18 et 20 | à cx 520 le chariot (compteur, tranches) entrait dans la colonne des boutons |
 | 20 | tampon `§ 60 StGB` centré sur la plaquette | décalé de 26 px à gauche ; « الإعفاء من العقوبة » 8 px plus bas, « مذنبة » apparaît 0,15 s plus tard | la fenêtre du rouleau (« 0 ») reste visible ; l'arabe ne touche pas le tampon pendant son rebond |
 | 20 | pastille `genug bestraft` seule | + `laut Urteil` (`.tw` 15) à sa droite | c'est une citation exacte (annexe C) ; même forme que la scène 14 |
+
+**Scènes 21 à 25 et affiche (étape « scènes, partie 4 », 27.11)** :
+
+| scène | storyboard | construit | pourquoi |
+|---|---|---|---|
+| 21 | « plateau du banc (bois) à partir de y 1020 » | nouveau dessin `D.benchTop` (decor-3.js, « ajouts partie 4 ») : chant arrondi + façade à panneaux, ombre du dossier | aucun dessin existant pour ce plan |
+| 21 | « ؟ » : attache (770, 640), rond (770, 720) | attache = l'anneau de la sangle (771, 640), ficelle de 53 | même place, sur l'ancre du dessin |
+| 22 | carte de la règle x 500–930, y 430–980 | celle de `X.lieux.regle` : x 432–862, y 565–1093 ; carte jaune y 1110–1356 | mise en place fixe de l'étape précédente (colonne des boutons, bande des pastilles) |
+| 22 | coin de lit x 330–480 (`D.bedFront04` partiel) | nouveau dessin `D.bedCorner` x 300–437, posé DERRIÈRE les cartes (il en sort par la droite) | les cartes commencent à x 432 : le lit les recouvrait ; un lit entier découpé aurait demandé un clipPath (id recopié par l'affiche) |
+| 22 | poche vers (150, 1040), document ×0,2 vers (300, 1060) | poche tenue à (138, 1080) ; document ×0,16, coin (290, 985) | à (150, 1040) la main était collée à l'épaule (bras replié) ; à ×0,2 le document descendait sur le coin de lit |
+| 22 | l'en-tête se tape à `b26@كل` | à max(`b26@كل`, b26 + 0,55) | la carte rebondissait encore : le texte tapé ne la suivait pas |
+| 22 | — | les lignes ① ② ③ de la carte apparaissent l'une après l'autre (`b26@poche`, `@شوف`, `@براسك`), ④ à `b27@ودير`, le pied à `b27@groupe` ; ⑤ se coche à `b26@poche` + 0,3 (un cercle jaune l'entoure) | « la carte se remplit ligne après ligne » ; le storyboard ne dit pas quand ⑤ se coche |
+| 22–24 | la ligne ⑥ de la carte jaune n'apparaît qu'à la fin | ⑤ et ⑥ sont visibles dès que la carte arrive (seule la coche de ⑥ attend `b28@درتيهاش`) | les deux lignes font partie du dessin `D.lessonCard` |
+| 23 | carte de test centrée (300, 1080), 340 × 220 | ×0,75, centrée (292, 1085) | la colonne de l'illustration va de x 165 à 420 |
+| 23 | tube au repos à (300, 890) | au repos à (385, 905) | à (300, 890) il touchait le menton de la grosse tête |
+| 24 | coin de table x 330–480 ; feuille ×0,42 en (400, 1020), elle glisse de x 620 à 400 | `D.tableCorner` x 294–431 ; feuille ×0,36 qui sort de DERRIÈRE les cartes (x 570 → 375) | la feuille passait sur la carte de la règle et finissait sur son bord |
+| 24 | stylo « en travers » ; main levée vers (330, 1010) | stylo posé en travers de la feuille, pointe vers le bas ; main levée à (305, 945), au-dessus de la feuille | pointé vers lui, le stylo semblait dans sa main ; à (330, 1010) sa paume était sur le stylo : on croyait qu'il le prenait |
+| 25 | poche : œillet (540, 120) ; chambre y 560–750 ; tubulure de 750 à 1440 ; zoom final cy 820 | tout 180 px plus bas : œillet (540, 300), chambre y 740–930, tubulure de 930 à 1620 ; zoom final cy 960 | la barre de progression du haut traversait l'étiquette de la poche |
+| 25 | icônes de x 640 / 760 / 880 vers 150 / 270 / 390 | de x 600 / 700 / 800 | au départ, le compteur était dans la colonne des boutons |
+| 26 | ruban `AKTE 04 · 63 ساعة` | texte logique `63 ساعة · AKTE 04` (story.js) | dans le ruban (RTL) le premier ordre s'affichait « ساعة AKTE 04 · 63 » : « 63 » loin de « ساعة » ; il s'affiche maintenant « AKTE 04 · ساعة 63 » (lu : 63 ساعة) |

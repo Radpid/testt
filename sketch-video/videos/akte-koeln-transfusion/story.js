@@ -566,7 +566,8 @@
       below(c, cells) {
         SketchUI.dots(c);
         const k = kit(c);
-        k.ribbon("AKTE " + AKTE_NO + " · " + TITRE, 540, 312, { size: 36, w: 470 });
+        // ordre logique « TITRE · AKTE NN » : dans le ruban RTL, « AKTE 04 · 63 ساعة » s'affichait « ساعة AKTE 04 · 63 » (le 63 collé à AKTE, loin de ساعة)
+        k.ribbon(TITRE + " · AKTE " + AKTE_NO, 540, 312, { size: 36, w: 470 });
         k.chip("@dr.aguilo", null, 180, 312, 20);
         k.chip("AKTE " + AKTE_NEXT + " · قريبا", null, 885, 312, 18, { yellow: true });
         cells.forEach((cell) => {
