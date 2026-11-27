@@ -52,12 +52,22 @@
           SC.util.shape(C, "chip", SC.util.rrect(-w / 2, -h / 2, w, h, 14), o.yellow ? SC.MAT.yellow : SC.MAT.grey, { sw: 2.8 });
           const arab = /[؀-ۿ]/.test(de);
           SC.util.text(g, de, 0, size * 0.36, size, arab ? { rtl: true, font: "'Plex Arabic', Kalam, sans-serif", weight: 700 } : {});
+          let tx = null, band = null;
           if (ar) {   // traduction arabe : bien détachée de la pastille (et de son ombre), avec un contour papier pour rester lisible
             const gs = Math.max(26, Math.round(size * 0.82));
-            const tx = SC.util.text(g, ar, 0, h / 2 + 7 + 13 + gs * 0.95, gs, { font: "'Plex Arabic', sans-serif", weight: 700, fill: "#2E2C28", rtl: true });
+            tx = SC.util.text(g, ar, 0, h / 2 + 7 + 13 + gs * 0.95, gs, { font: "'Plex Arabic', sans-serif", weight: 700, fill: "#2E2C28", rtl: true });
             tx.setAttribute("stroke", "#F7F7F1"); tx.setAttribute("stroke-width", "7"); tx.setAttribute("stroke-linejoin", "round"); tx.setAttribute("paint-order", "stroke");
+            // pastille du HUD : bande de papier derrière l'arabe (ma revue : le bord du tableau de service traversait « الإدارة ديال السبيطار »)
+            if (o.parent && o.parent === c.hud && o.band !== false) { band = el("rect", { fill: "#F7F7F1", opacity: 0.92, rx: 8, width: 0, height: 0 }); g.insertBefore(band, tx); }
           }
-          return c.node(g, o.parent);
+          const n = c.node(g, o.parent);
+          if (band) { let done = false; n.add(() => {
+            if (done || (document.fonts && document.fonts.status !== "loaded")) return;
+            let b = null; try { b = tx.getBBox(); } catch (e) { return; }
+            if (!b || b.width < 2) return;
+            band.setAttribute("x", (b.x - 10).toFixed(1)); band.setAttribute("y", (b.y - 1).toFixed(1)); band.setAttribute("width", (b.width + 20).toFixed(1)); band.setAttribute("height", (b.height + 4).toFixed(1)); done = true;
+          }); }
+          return n;
         },
         // carte (rectangle à main levée + ombre)
         card(x, y, w, h, o = {}) {

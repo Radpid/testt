@@ -134,3 +134,17 @@ Contrôles finaux : errcheck toutes les 3 s (SV.error=undefined) ; overlapscan 0
 6. Scène 12 : 4 % de mouvement dans la 2e moitié de b15 (seuil du storyboard : 5 %).
 7. À faire valider par l'auteur (storyboard annexe B) : les chaînes arabes nouvelles (« مصاريف المحاكمة عليها », « كان مريض
    بزاف من قبل », « المسؤولية », « حتى فالاستعجال », « درس من هاد القصة », etc.) et la tête de l'héroïne (R1).
+
+## Revue de Claude (passe finale, 27.11.2026)
+
+Planches complètes et avec zones Instagram regardées une à une, scène muette image par image (52,3 → 56,2 s),
+travelling du tableau de service image par image, sous-titres mesurés mot par mot (257 mots), overlapscan, mouvement.
+
+| Défaut | Correction |
+|---|---|
+| b22 : « Organisationsverschulden » dans le sous-titre allait de x 103 à 936 à son apparition (bord rogné + colonne des boutons) | `index.html` : un mot latin de plus de 18 lettres est rétréci (0,82 em) → x 206–895 au pire moment |
+| Scène 7 : le bord haut du tableau de service passait sur le bas de « الإدارة ديال السبيطار » (et frôlait « سيمانة ديال 63 ساعة ») | `story.js`, `kit.chip` : bande de papier derrière l'arabe de toute pastille du HUD (même principe que les citations) |
+
+Vérifié sans correction : la scène muette (pas de moniteur ni de famille, voulu par le storyboard : rien ne dit qu'ils
+étaient là ; le temps s'arrête, gris, « المريض ما عاشش ») ; les chevauchements restants de l'overlapscan sont des
+passages (volets, compteurs qui roulent, cases de l'affiche) ; mouvement ≥ 3,6 % partout ; aucune erreur de page.

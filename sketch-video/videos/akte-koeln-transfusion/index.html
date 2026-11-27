@@ -94,5 +94,11 @@
 <script src="scenes-4.js"></script>
 <script src="story.js"></script>
 <script src="../../engine/runtime.js"></script>
+<script>
+/* Sous-titres : un mot latin très long (« Organisationsverschulden », b22) est rétréci pour rester entre x 90 et 915. */
+new MutationObserver(() => document.querySelectorAll("#captions .lat .rb").forEach((e) => {
+  if (e.textContent.trim().length > 18 && !e.style.fontSize) e.style.fontSize = "0.82em";
+})).observe(document.documentElement, { childList: true, subtree: true });
+</script>
 </body>
 </html>
