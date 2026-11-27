@@ -167,7 +167,9 @@
     };
     // Persona + cernes (D.cernes sur les yeux, opacité p.cernes) dans le MÊME groupe : elles suivent la tête quoi qu'il arrive
     const ppC = (x, y, s, fn, parent) => c_.sk((g, p) => { const a = PE.person(g, p); if (p.cernes > 0.02 && a && a.eyes) D.cernes(g, { eyes: a.eyes, k: p.cernes }); return a; }, fn, x, y, s, 0, parent);
-    const phC = (x, y, s, fn) => c_.sk((g, p) => { const a = PE.head(g, p); if (p.cernes > 0.02 && a && a.eyes) D.cernes(g, { eyes: a.eyes, k: p.cernes }); return a; }, fn, x, y, s, 0);
+    // o.bust (revue visuelle) : D.bust04 dessiné par-dessus le bas du cou — la tête en gros plan ne flotte plus sur le papier (scènes 10, 23)
+    const phC = (x, y, s, fn, bust) => c_.sk((g, p) => { const h = bust ? el("g", {}, g) : g; const a = PE.head(h, p); if (p.cernes > 0.02 && a && a.eyes) D.cernes(h, { eyes: a.eyes, k: p.cernes });
+      if (bust) D.bust04(el("g", {}, g), bust); return a; }, fn, x, y, s, 0);
     /* personnage ASSIS DANS LE LIT (le patient, vue de face) : Persona n'a pas d'option pour cacher les jambes ; sans elles, ses pieds
      * dépassaient sous le lit entre les roulettes. On retire du dessin les deux jambes (aplat + trait + chaussure, dessinées en premier
      * en vue de face : les deux groupes « chaussure » portent un transform rotate(…) scale(…)). Si la structure change, rien n'est retiré. */
@@ -256,12 +258,26 @@
     };
     /* bande des citations (écran, c.hud) : allemand .tw 20 à y 1372 (deux lignes 1352 / 1376 s'il dépasse 800 px) + arabe gras 28 à y 1412,
      * centrés x 520, contour papier ; l'allemand se tape (≤ 0,6 s), l'arabe se révèle de droite à gauche. o.until : effacement. → { de, ar } */
+    /* bande de papier (opacité 0,9) derrière un texte posé sur le décor (revue visuelle) : les traits du sol, des plinthes, des corniches
+     * ne traversent plus les lettres. Mesurée une fois, quand les polices sont chargées ; elle suit le nœud (frappe, révélation rtl). */
+    const strip = (n, px, py) => {
+      const t = n.textEl; if (!t || !t.parentNode) return n;
+      const r = el("rect", { fill: PAPER_, opacity: 0.9, rx: 8, width: 0, height: 0 }); t.parentNode.insertBefore(r, t);
+      let done = false;
+      n.add(() => {
+        if (done || (document.fonts && document.fonts.status !== "loaded")) return;
+        let b = null; try { b = t.getBBox(); } catch (e) { return; }
+        if (!b || b.width < 2) return;
+        const q = (v) => v.toFixed(1); r.setAttribute("x", q(b.x - px)); r.setAttribute("y", q(b.y - py)); r.setAttribute("width", q(b.width + 2 * px)); r.setAttribute("height", q(b.height + 2 * py)); done = true;
+      });
+      return n;
+    };
     const quote = (c, de, ar, at, o) => {
       o = o || {};
       const lines = de.length * 12 > 800 ? (() => { const mid = de.length / 2; let best = -1; for (let i = 0; i < de.length; i++) if (de[i] === " " && (best < 0 || Math.abs(i - mid) < Math.abs(best - mid))) best = i; return [de.slice(0, best), de.slice(best + 1)]; })() : [de];
-      const dur = Math.min(0.6, 0.02 * de.length), ys = lines.length > 1 ? [1352, 1376] : [1372];
-      const nodes = lines.map((s, i) => typed(c, s, 520, ys[i], 20, T(at) + (i ? dur * (lines[0].length / de.length) : 0), { parent: c.hud, halo: 6, dur: dur * (s.length / de.length) }));
-      const arN = ar ? halo(c.text(ar, 520, lines.length > 1 ? 1414 : 1412, 28, "ar strong", "middle", c.hud), 7).wipe(T(at) + dur * 0.6, 0.4, "rtl") : null;
+      const dy = o.dy || 0, dur = Math.min(0.6, 0.02 * de.length), ys = (lines.length > 1 ? [1352, 1376] : [1372]).map((y) => y + dy);   // o.dy : bande décalée (scène 7)
+      const nodes = lines.map((s, i) => strip(typed(c, s, 520, ys[i], 20, T(at) + (i ? dur * (lines[0].length / de.length) : 0), { parent: c.hud, halo: 6, dur: dur * (s.length / de.length) }), 8, 1));
+      const arN = ar ? strip(halo(c.text(ar, 520, (lines.length > 1 ? 1414 : 1412) + dy, 28, "ar strong", "middle", c.hud), 7), 10, 0).wipe(T(at) + dur * 0.6, 0.4, "rtl") : null;
       if (o.until != null) { nodes.forEach((n) => n.hide(o.until, 0.15)); if (arN) arN.hide(o.until, 0.15); }
       return { de: nodes, ar: arN };
     };
@@ -314,7 +330,7 @@
       return at == null ? n : n.fade(T(at) - 0.05, 0.1);
     };
     const aides = { INK: INK_, YEL: YEL_, PAPER: PAPER_, halo, fat, tired, ppC, phC, ppBed, noLegs, stride, walker, colStart, hours, tilt, calm, geomAt, toScreen, sceneAt,
-      typed, quote, chip, rekon, marker, ring, snip, scan, grey, stamp, cartCounter, COUNTER_AT, COUNTER_S, COUNTER_LAND };
+      typed, quote, strip, chip, rekon, marker, ring, snip, scan, grey, stamp, cartCounter, COUNTER_AT, COUNTER_S, COUNTER_LAND };
 
     /* ───────── AKTE 04 : MISES EN PLACE FIXES (storyboard « Mise en place fixe ») — X.lieux ─────────
      * Chaque lieu pose le décor COMPLET aux coordonnées du storyboard, le construit en cascade à o.at (null = déjà construit), le fait vivre,
@@ -387,12 +403,13 @@
         if (block) bd(m, block, o.at, 0.2, "grow", { pivot: [695, 900] });
         const out = { m, k, win, shaft, dust, plaque, judges: J, bench, carafe, folder, small, block };
         if (o.expert) {
-          out.chair = m.obj(D.chair04, 805, 1300, 1, { flip: true });
+          const EX = 790;   // revue visuelle : 805 → 790 (avec le travelling de la scène 17, la chaise entrait dans la colonne des boutons)
+          out.chair = m.obj(D.chair04, EX, 1300, 1, { flip: true });
           // l'expert de profil, le dossier « Gutachten » debout sur ses cuisses, ses mains PAR-DESSUS (corps sans bras, dossier, puis les bras)
           const ex = (t) => Object.assign({}, CAST.EXP, PP.sitEdge, { facing: -1, expr: "focused", blink: rnd(blinkAt(t, 2.2), 10), talk: 0, look2: [0.6, 0.1] }, o.exp ? o.exp(t) : {});
-          out.exp = pp(805, 1300, 0.85, (t) => Object.assign(ex(t), { hide: ["armL", "armR"] })).on(breathe(4));
-          out.gutachten = m.obj(D.folder, 762, 1180, 0.72, { text: "Gutachten", yellow: true }).on(breathe(4));
-          out.expArms = pp(805, 1300, 0.85, (t) => Object.assign(ex(t), { only: "arms" })).on(breathe(4));
+          out.exp = pp(EX, 1300, 0.85, (t) => Object.assign(ex(t), { hide: ["armL", "armR"] })).on(breathe(4));
+          out.gutachten = m.obj(D.folder, EX - 43, 1180, 0.72, { text: "Gutachten", yellow: true }).on(breathe(4));
+          out.expArms = pp(EX, 1300, 0.85, (t) => Object.assign(ex(t), { only: "arms" })).on(breathe(4));
         }
         out.actors = c.group();
         out.table = m.obj(D.dockTable, 210, 1300, 1, {}); bd(m, out.table, o.at, 0.1, "rise", { dist: 80 });
@@ -411,9 +428,10 @@
         let patch = null;
         if (o.day) { patch = m.obj(D.lightPatch, 520, 760, 1, { w: 150, h: 240, skew: 20 }).on((t, s) => { s.x += 5 * Math.sin((t / 3) * 3.14) * vie(t); }); if (o.at != null) patch.fade(o.at, 0.4); }
         const clockFn = o.clock || ((t) => ({ time: o.day ? 13 + 36 / 60 : 21 + 50 / 60, s: Math.round(t * 60) * 6 }));
-        const face = c.sk((g, p) => D.clock04(g, p), (t) => { const q = clockFn(t); return { part: "face", sector: q.sector || 0 }; }, 165, 500, 1);
-        const hands = c.sk((g, p) => D.clock04(g, p), (t) => Object.assign({ part: "hands" }, clockFn(t)), 165, 500, 1);
-        [face, hands].forEach((n) => bd(m, n, o.at, 0.08, "grow", { pivot: [165, 500] }));
+        const CKX = 240;   // revue visuelle : 165 → 240 (avec la poussée de caméra, l'horloge sortait par le bord gauche, scènes 11–12)
+        const face = c.sk((g, p) => D.clock04(g, p), (t) => { const q = clockFn(t); return { part: "face", sector: q.sector || 0 }; }, CKX, 500, 1);
+        const hands = c.sk((g, p) => D.clock04(g, p), (t) => Object.assign({ part: "hands" }, clockFn(t)), CKX, 500, 1);
+        [face, hands].forEach((n) => bd(m, n, o.at, 0.08, "grow", { pivot: [CKX, 500] }));
         const sky = c.sk((g, p) => D.nightWindow(g, p), (t) => ({ part: "sky", p: o.day ? 0 : 1, cloud: rnd((t * 0.045) % 1, 100) }), 710, 520, 1);
         const frame = m.obj(D.nightWindow, 710, 520, 1, { part: "frame" });
         [sky, frame].forEach((n) => bd(m, n, o.at, 0.03, "grow", { pivot: [800, 620] }));

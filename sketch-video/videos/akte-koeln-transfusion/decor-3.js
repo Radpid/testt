@@ -503,4 +503,35 @@
     return { top: 0, w: w + 12 };
   };
   D.tableCorner.essais = [{}];
+
+  /* ═════════════════════════ ajouts revue visuelle ═════════════════════════ */
+
+  /* buste sous une tête Persona en gros plan (scènes 10 et 23 : la tête seule « flottait » sur le papier, cou coupé net) — repère =
+   * celui de Persona.head (origine = centre de la tête, à la même échelle) ; dessiné PAR-DESSUS la tête : le col (y ≈ 76) recouvre le bas
+   * du cou (y 84–90), le menton (y 66) reste libre. Épaules arrondies, bas du buste coupé en arrondi (« avatar »).
+   * o.outfit "coat" (blouse blanche ouverte sur un haut gris, revers) | "scrubs" (haut gris, col en V) ; o.badge (badge jaune VIERGE) ;
+   * o.w : demi-largeur aux épaules (66) ; o.bottom : bas du buste (196). */
+  D.bust04 = (g, o = {}) => {
+    o = Object.assign({ outfit: "coat", badge: false, w: 66, bottom: 196, seed: 4731 }, o);
+    const w = o.w, b = o.bottom, C = U.ctx(g, o.seed, false, 1);
+    const body = `M-15 74 Q-44 74 ${-w} 100 Q${-w - 9} 118 ${-w - 8} 150 L${-w - 6} ${b - 8} Q0 ${b + 14} ${w + 6} ${b - 8} L${w + 8} 150 Q${w + 9} 118 ${w} 100 Q44 74 15 74 Z`;
+    el("path", { d: body, fill: "rgba(28,26,28,.10)", transform: "translate(6 7)" }, g);
+    if (o.outfit === "coat") {
+      U.shape(C, "coat", body, MAT.white, { sw: 2.6 });
+      // le haut gris entre les revers, le col en V (peau), les deux revers
+      U.shape(C, "top", `M-17 76 L-30 118 L-12 ${b + 2} L12 ${b + 2} L30 118 L17 76 Q0 82 -17 76 Z`, MAT.grey, { sw: 2.2 });
+      U.shape(C, "vneck", "M-12 77 L0 104 L12 77 Q0 83 -12 77 Z", MAT.skin, { sw: 2 });
+      U.stroke(C, "lapL", `M-17 76 L-34 116 L-22 124 L-14 ${b + 3}`, { sw: 2.2 });
+      U.stroke(C, "lapR", `M17 76 L34 116 L22 124 L14 ${b + 3}`, { sw: 2.2 });
+      ln(g, `M${-w + 12} 112 Q${-w + 8} 150 ${-w + 12} ${b - 12} M${w - 12} 112 Q${w - 8} 150 ${w - 12} ${b - 12}`, 1.5, "#A9A9A2");   // plis des manches
+      el("rect", { x: -w + 22, y: 140, width: 26, height: 4, rx: 2, fill: "#A9A9A2" }, g);                                               // poche de poitrine
+      if (o.badge) { el("path", { d: U.rrect(w - 52, 132, 28, 36, 4), fill: YEL, stroke: INK, "stroke-width": 2 }, g); el("rect", { x: w - 44, y: 128, width: 12, height: 8, rx: 2, fill: "#DADAD4", stroke: INK, "stroke-width": 1.6 }, g); }
+    } else {
+      U.shape(C, "top", body, MAT.grey, { sw: 2.6 });
+      U.shape(C, "vneck", "M-14 75 L0 112 L14 75 Q0 82 -14 75 Z", MAT.skin, { sw: 2 });
+      ln(g, `M${-w + 10} 110 Q${-w + 6} 150 ${-w + 10} ${b - 12} M${w - 10} 110 Q${w - 6} 150 ${w - 10} ${b - 12}`, 1.5, "#8A8A84");
+    }
+    return { neck: [0, 76], bottom: b, w };
+  };
+  D.bust04.essais = [{}, { badge: true }, { outfit: "scrubs" }];
 })();

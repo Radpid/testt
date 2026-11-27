@@ -37,7 +37,8 @@
   st.scene({ from: "b8", in: "swipe", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
     const t0 = T("b8"), t1 = T("b9"), t5 = T("b8@5"), tD = T("b8@دازت"), tK = T("b8@كثر");
-    c.camera([{ at: "b8", s: 1, cx: 500, cy: 920 }, { at: "b8+0.1", s: 1.03, cx: 580, cy: 920, d: 2.1, ease: "lin" }]);
+    // revue : cy 905 et citation 40 px plus bas (o.dy) : ses pieds restent au-dessus de la citation, le voyant de la porte 2 sous l'arabe de la pastille
+    c.camera([{ at: "b8", s: 1, cx: 500, cy: 905 }, { at: "b8+0.1", s: 1.03, cx: 580, cy: 905, d: 2.1, ease: "lin" }]);
     // le couloir ; la nuit monte dans les angles (deuxième tracé identique, « nuit », en fondu)
     const DOORS = [{ x: 200, num: 1 }, { x: 480, num: 2 }, { x: 760, num: 3 }];
     const wall = m.obj(D.corridor04, 0, 0, 1, { doors: DOORS, night: 0 });
@@ -57,7 +58,7 @@
         : Object.assign({}, PP.stand, { view: "front", facing: 1, look2: [rnd(t < t5 ? 0.4 : -0.8 + 1.6 * E.inOut(prog(t, t5 + 0.1, 0.5)), 10), -0.2] });
       return A.tired(t, doc(Object.assign(p, { expr: t < tK ? "focused" : "worried", talk: 0, blink: rnd(blinkAt(t, 0.7), 10) })));
     }).on((t, s) => { s.x += xAt(t); s.y += 1300; }).on(breathe(0.7));
-    A.quote(c, "»mit Notfallpatienten mehr oder weniger allein« — laut Urteil", "تقريبا بوحدها", "b8@بالليل");
+    A.quote(c, "»mit Notfallpatienten mehr oder weniger allein« — laut Urteil", "تقريبا بوحدها", "b8@بالليل", { dy: 40 });
     A.chip(c, "mehr als 12 Stunden", "كثر من 12 ساعة", 32, tK, null, { yellow: true });
     c.kick("b8@6", 0.06);
   } });
@@ -97,7 +98,7 @@
     tape(c, "seit 15.10.2010", 470, 872, 18, tAs + 0.5, 0.4, { parent: card.g });
     A.marker(c, 386, 866, 168, "b9@السبيطار", { parent: card.g, h: 16, rot: 0 });
     // elle entre (x −80 → 235), puis trois quarts : bâille à b9@شهور ; à b10@Blutführerschein elle baisse les yeux et tâte sa poche
-    const XA = t0 + 0.05, XB = t0 + 0.85, xAt = (t) => lerp(-80, 235, clamp((t - XA) / (XB - XA), 0, 1)), S8 = 1;
+    const XA = t0 + 0.05, XB = t0 + 0.85, xAt = (t) => lerp(-80, 255, clamp((t - XA) / (XB - XA), 0, 1)), S8 = 1;   // revue : 255 (coude dans la marge à 235)
     const st0 = Object.assign({}, CAST.DOC, TENUE.hopital, PP.stand, { view: "three-quarter", facing: 1 }), R0 = PE.util.rig(st0);
     const pocket = [rnd(R0.belly[0] + 30, 2), rnd(R0.hip[1] + 14, 2)];
     A.ppC(0, 0, S8, (t) => {
@@ -194,11 +195,11 @@
     const lp = c.sk((g, p) => D.loupeSmall(g, p), () => ({ r: 70, handle: 135 }), FD[0] + 62, FD[1] - 8, 1 / S, 0, holder);
     lp.pop(tF + 0.1, 0.35);
     // sa tête (×1,25) : focused, paupières lourdes, sueur ; ses yeux suivent le surligneur, clignement long quand la feuille se brouille
-    const head = A.phC(240, 1085, 1.25, (t) => {
+    const head = A.phC(262, 1060, 1.25, (t) => {
       const sweep = t >= tG && t < tGh ? -0.5 + ((t - tG) % 0.14) / 0.14 : t >= tF ? 0.3 : 0.2;
       const longBlink = (t >= tA1 && t < tA1 + 0.25) || (t >= tA2 && t < tA2 + 0.25);
       return A.tired(t, Object.assign({}, CAST.DOC, { view: "three-quarter", facing: 1, expr: "focused", talk: 0, headTilt: 3, look2: [rnd(sweep, 10), 0.15], blink: longBlink ? 1 : rnd(blinkAt(t, 1.1), 10) }));
-    });
+    }, { outfit: "coat", badge: true, w: 58, bottom: 160 });   // revue : buste (la tête seule flottait, cou coupé net)
     m.build(head, t0 + 0.1, "rise", { dist: 160, dur: 0.4 }); head.on(breathe(1.1));
     A.chip(c, "Begleitdokument", "الورقة اللي مع الكيس", 32, t0 + 0.2, tGh);
     A.chip(c, "Blutgruppe", "فصيلة الدم", 36, tF, null, { yellow: true });
@@ -212,7 +213,7 @@
     const R = L.chambre(c, { at: "b13", bag: { level: bagLevel, hang: false },
       tube: (t) => ({ fill: rnd(tubeFill(t), 50), clamp: rnd(1 - prog(t, tO, 0.3), 20) }),
       pat: (t) => ({ look2: [0.45, -0.05], expr: t >= tM ? "smile" : "calm" }) });
-    c.camera([{ at: "b13", s: 1, cx: 510, cy: 920 }, { at: "b13+0.1", s: 1.03, cx: 560, cy: 920, d: 2.1, ease: "lin" }]);
+    c.camera([{ at: "b13", s: 1, cx: 545, cy: 920 }, { at: "b13+0.1", s: 1.03, cx: 572, cy: 920, d: 2.1, ease: "lin" }]);   // revue : 545 → 572 (dos ≤ x 912, horloge ≥ x 95)
     R.face.pulse(tC, 0.45, 0.14);
     // elle (×0,95, trois quarts, facing −1) : la poche dans la main tendue → bras levé jusqu'au crochet → la main descend ouvrir la roulette
     // elle se tient à x 850 (pas de pas en arrière : à 850 la poche, au crochet, ne passe plus devant son visage) ; la main suit des cibles
@@ -248,7 +249,7 @@
       clock: (t) => ({ time: 21 + (50 + 10 * sector(t)) / 60, sector: rnd(sector(t), 20), s: Math.round(t * 10) * 36 % 360 }),
       pat: (t) => t < tBd ? { expr: "calm", look2: [0.3, 0.1] } : t < tV ? { expr: "worried", look2: [0.1, 0.3] }
         : Object.assign({}, PP.handOnBelly, { view: "front", expr: "pain", torsoLean: rnd(10 * E.out(prog(t, tV, 0.3)) + retch(t), 2), headTilt: rnd(12 * E.out(prog(t, tV, 0.3)) + 1.5 * retch(t), 2), reachR: undefined, armL: [-10, 12] }) });
-    c.camera([{ at: "b14", s: 1, cx: 545, cy: 910 }, { at: "b14+0.1", s: 1.02, cx: 555, cy: 910, d: 2.2, ease: "lin" }, { at: "b15@بدا", s: 1.04, cx: 572, cy: 940, d: 0.4 }]);
+    c.camera([{ at: "b14", s: 1, cx: 545, cy: 910 }, { at: "b14+0.1", s: 1.02, cx: 562, cy: 910, d: 2.2, ease: "lin" }, { at: "b15@بدا", s: 1.04, cx: 572, cy: 940, d: 0.4 }]);
     // elle, toujours là (x 858) : calm → worried → shock ; sa main ferme la roulette à b15@ووقفو
     const S12 = 0.95, X12 = 850, wheel = R.tubeGeom.wheel;
     A.ppC(X12, 1300, S12, (t) => {
@@ -273,7 +274,7 @@
       wig: rnd((t * 1.5) % 1, 20), drift: rnd((t * 0.25) % 1, 20) }), 345, 712, 1);
     m.build(lp, tP, "grow", { pivot: [640, 1172], dur: 0.45 });
     // dix minutes : secteur de l'horloge (dans le lieu) + « ≈ 10 min » ; le haricot ; trois petits traits ondulés près de sa bouche
-    tape(c, "≈ 10 min", 232, 478, 22, tMin, 0.35, { halo: 5, anchor: "start" });
+    tape(c, "≈ 10 min", 307, 478, 22, tMin, 0.35, { halo: 5, anchor: "start" });   // revue : suit l'horloge (x 240)
     const dish = c.sk((g, p) => D.kidneyDish(g, p), () => ({}), 430, 1108, 1); dish.pop(tV, 0.3);
     const wv = el("g"); [0, 1, 2].forEach((i) => el("path", { d: `M${470 + i * 4} ${985 + i * 16} q 8 -6 16 0 t 16 0`, fill: "none", stroke: "#6E6E68", "stroke-width": 3, "stroke-linecap": "round" }, wv));
     c.node(wv).on((t, s) => { const p = prog(t, tV + 0.1, 1.2); s.o *= p > 0 && p < 1 ? Math.sin(Math.PI * p) : 0; s.x += 6 * p; });

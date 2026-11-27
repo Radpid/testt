@@ -35,15 +35,15 @@
   st.scene({ from: "b16@end+1.9", in: "fade", inDur: 0.4, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
     const tE = T("b16@end"), t0 = tE + 1.9, tS = tE + 2.3, tC = tE + 3.2, tI = T("b17@انهيار"), tW = T("b18@وهي"), tA = T("b18@الإدارة"), tCall = T("b18@عيطات"), tU = T("b18@عليها");
-    c.camera([{ at: t0, s: 1, cx: 520, cy: 930 }, { at: "b17", s: 1.1, cx: 450, cy: 1010, d: 0.6 }, { at: tA, s: 1, cx: 560, cy: 950, d: 0.8 }]);
+    c.camera([{ at: t0, s: 1, cx: 520, cy: 930 }, { at: "b17", s: 1.1, cx: 490, cy: 1010, d: 0.6 }, { at: tA, s: 1, cx: 560, cy: 950, d: 0.8 }]);   // revue : cx 450 → 490
     m.obj(D.corridor04, 0, 0, 1, { doors: [], night: 0 });
     m.obj(D.pillar, 150, 380, 1, {});
     // le petit cadre, un peu de travers, qui oscille (± 0,5°) ; il arrive en balancier
-    const fr = m.obj(D.frame04, 520, 760, 1, {}); fr.on((t, s) => { s.px = 520; s.py = 760; s.r += 2.5 + 0.5 * Math.sin((t / 3.2) * 6.283); });
-    m.build(fr, t0 + 0.15, "swing", { pivot: [520, 760], deg: -16, dur: 0.6 });
+    const fr = m.obj(D.frame04, 470, 760, 1, {}); fr.on((t, s) => { s.px = 470; s.py = 760; s.r += 2.5 + 0.5 * Math.sin((t / 3.2) * 6.283); });
+    m.build(fr, t0 + 0.15, "swing", { pivot: [470, 760], deg: -16, dur: 0.6 });
     // la porte « Verwaltung » (fermée), sa plaque à part (elle pulse à b18@عيطات) ; à b18@الإدارة elle s'ouvre, la lumière vacille (± 5 %)
-    c.sk((g, p) => D.adminDoor(g, p), (t) => ({ open: rnd(E.inOut(prog(t, tA, 0.5)), 20), plate: false, reach: t < tA + 0.5 ? 1 : rnd(0.95 + 0.05 * Math.sin(t * 7.3) * Math.sin(t * 2.1 + 1), 50) }), 700, 720, 1);
-    const plate = m.obj(D.doorPlate, 775, 684, 1, { text: "Verwaltung" }); m.build(plate, t0 + 0.3, "drop", { dist: 60, dur: 0.4 }); plate.pulse(tCall, 0.3, 0.15);
+    c.sk((g, p) => D.adminDoor(g, p), (t) => ({ open: rnd(E.inOut(prog(t, tA, 0.5)), 20), plate: false, reach: t < tA + 0.5 ? 1 : rnd(0.95 + 0.05 * Math.sin(t * 7.3) * Math.sin(t * 2.1 + 1), 50) }), 600, 720, 1);   // revue : 700 → 600 (pendant le zoom de b17, la porte et sa plaque sortaient par la droite)
+    const plate = m.obj(D.doorPlate, 675, 684, 1, { text: "Verwaltung" }); m.build(plate, t0 + 0.3, "drop", { dist: 60, dur: 0.4 }); plate.pulse(tCall, 0.3, 0.15);
     // elle (scrubs, de profil), le dos contre le pilier : la hanche ne bouge pas en x, les pieds glissent vers l'avant (storyboard R2)
     const DEBOUT = { view: "side", armL: [-4, 10], armR: [4, 8], legL: [-1, 0], legR: [1, 0], torsoLean: 0, headTilt: 0, look2: [0.3, 0.2] };
     const AU_SOL = { view: "side", armL: [58, 62], armR: [66, 56], legL: [132, -92], legR: [138, -96], torsoLean: -5, headTilt: 24, look2: [0, 0.9] };
@@ -90,7 +90,7 @@
     c.camera([{ at: "b19", s: 1, cx: 510, cy: 920 }, { at: "b19+0.1", s: 1.03, cx: 552, cy: 920, d: 3.2, ease: "lin" }]);
     m.obj(D.officeBack, 0, 0, 1, {});
     // le store (cadre fixe, lames qui respirent), la plante sur l'appui, les raies de lumière sur le mur
-    const BX = 130, BY = 540;
+    const BX = 130, BY = 568;   // revue : 540 → 568 (le haut du store touchait « ورقة ماشي صحيحة »)
     const blF = m.obj(D.blinds, BX, BY, 1, { part: "frame" });
     const blS = c.sk((g, p) => D.blinds(g, p), (t) => ({ part: "slats", open: rnd(0.5 + 0.06 * Math.sin((t / 5) * 6.283), 50) }), BX, BY, 1);
     [blF, blS].forEach((n) => m.build(n, t0 + 0.03, "drop", { dist: 220, dur: 0.45 }));
@@ -211,7 +211,7 @@
       exp: (t) => ({ headTilt: rnd(3 + 9 * Math.sin(Math.PI * prog(t, tC + 0.4, 0.5)), 2) }),
       judges: { SCM: (t) => (t > tN + 0.1 && t < tN + 0.9 ? { reachR: [12, -330], bendR: -1, look2: [0.1, 0.9] } : {}),
         JUG: (t) => ({ look2: t > tN && t < t90 + 0.6 ? [-0.6, 0.15] : [0, 0.6] }), SCF: (t) => ({ expr: t > t90 ? "sad" : "calm" }) } });
-    c.camera([{ at: "b21", s: 1, cx: 500, cy: 920 }, { at: "b21+0.1", s: 1.03, cx: 570, cy: 920, d: 3.0, ease: "lin" }]);
+    c.camera([{ at: "b21", s: 1, cx: 538, cy: 920 }, { at: "b21+0.1", s: 1, cx: 552, cy: 920, d: 3.0, ease: "lin" }]);   // revue : travelling sans poussée (s 1), cx 570 → 552 : la salle (elle à gauche, la chaise de l’expert à droite) tient entre x 92 et 912
     // elle, derrière sa table : elle pleure (épaules secouées) ; à b21 + 0,5 elle s'essuie les yeux
     const base = doc(Object.assign({}, TENUE.tribunal, PP.stand, { view: "three-quarter", facing: 1, headTilt: 10 })), eye = PE.util.rig(base).eyes[1];
     const W0 = t0 + 0.5, wipe = (t) => Math.sin(Math.PI * prog(t, W0, 0.7));

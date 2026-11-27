@@ -8,7 +8,9 @@
 window.GLOSSARY = Object.assign(window.GLOSSARY || {}, {
   // mots DITS (sous-titres)
   "Köln": "كولونيا",
-  "Blutführerschein": "« رخصة » ديال الدم",
+  // \u200F (marque droite-à-gauche, invisible) aux deux bouts : dans le sous-titre, la traduction est dans un bloc gauche-à-droite et les
+  // guillemets mettaient « رخصة » à l'envers ; les lettres sont inchangées (revue visuelle)
+  "Blutführerschein": "\u200F« رخصة » ديال الدم\u200F",
   "Organisationsverschulden": "غلطة فالتنظيم",
   "genug bestraft": "اللي داز عليها كافي",
   "Bedside-Test": "اختبار الفصيلة حدا الفراش",

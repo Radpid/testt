@@ -57,8 +57,8 @@
     A.chip(c, "schuldig", "مذنبة", 40, tHit, null, { x: 312, y: 398 });
     A.chip(c, "Strafe: 0", "العقوبة: صفر", 40, S, null, { x: 768, y: 398, yellow: true });
     // la référence du jugement, tapée dans la bande HUD (le compteur n'est pas encore là) ; elle finit avant x 690 (l'onglet du jour)
-    A.typed(c, "Amtsgericht Köln · 16.05.2012 · 613 Ls 3/12", 112, 318, 21, "b1@محكمة", { parent: c.hud, anchor: "start", per: 0.032, halo: 5 });
-    A.halo(c.text("المحكمة الابتدائية ديال Köln", 680, 356, 28, "ar strong", "start", c.hud), 6).wipe(T("b1@محكمة") + 0.5, 0.45, "rtl");
+    A.strip(A.typed(c, "Amtsgericht Köln · 16.05.2012 · 613 Ls 3/12", 112, 318, 21, "b1@محكمة", { parent: c.hud, anchor: "start", per: 0.032, halo: 5 }), 8, 2);
+    A.strip(A.halo(c.text("المحكمة الابتدائية ديال Köln", 680, 356, 28, "ar strong", "start", c.hud), 6), 10, 0).wipe(T("b1@محكمة") + 0.5, 0.45, "rtl");   // revue : bande de papier (la corniche traversait l'arabe)
   } });
 
   /* ═══════ 2 · LA SALLE D'AUDIENCE, puis tout repart en arrière (b2–b3) ═══════ */

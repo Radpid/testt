@@ -169,3 +169,14 @@ Contrôles : errcheck toutes les 3 s de 0 à 99 + 93,6 / 95 / 97 / 98,9 (SV.erro
 2) Scènes 22–24 : les objets qui doivent passer DERRIÈRE les cartes (coin de lit, feuille) sont insérés avant le nœud de la carte : `R.card.g.parentNode.insertBefore(node.g, R.card.g)`.
 3) scenes-4.js `RULE()` : toutes les fonctions du temps de la carte (lignes, coches, surligneurs, leçons) partagées par les scènes 22, 23, 24.
 4) Le minutage est PROVISOIRE : après la voix, revérifier en priorité les scènes courtes (21 : 2,0 s ; 16 : 1,9 s) et les décalages fixes (scène 15 : la manche attend b19 + 0,35 ; scène 18 : la pastille attend + 0,42 s après b22@Organisationsverschulden).
+
+## Étape terminée : revue visuelle et corrections
+**Fait :** revue indépendante de tout l'épisode sur captures : errcheck toutes les 3 s, planches 2 images par beat normales et `--ig` (`out/planches/revue1/` avant, `out/planches/revue/` après), images en grand des instants suspects avec les zones Instagram, overlapscan 0 → 99, mouvement. 22 points relevés dans `revue.md` (tableau scène · instant · défaut · gravité · correction · état), 14 corrigés : horloge de la chambre (x 240) et caméras des scènes 11–12 ; porte de la scène 14 (x 600) et zoom de b17 ; zoom final de la scène 25 (cy 815) ; lampe de la scène 21 (x 200) ; salle de la scène 17 (travelling sans poussée, expert x 790) ; coude de la scène 8 ; citation de la scène 7 (cy 905 + bande 40 px plus bas) ; bande de papier derrière toutes les citations et la ligne tapée de la scène 1 (`X.aides.strip`) ; store de la scène 15 ; buste dédié `D.bust04` sous les têtes en gros plan (scènes 10 et 23) ; bidi de la traduction de Blutführerschein dans les sous-titres (U+200F). Contrôles finaux : errcheck sans erreur, mouvement « tout bouge », overlapscan : seulement des chevauchements de passage. storyboard.md : tableau « Revue visuelle » ajouté aux « Écarts de construction ».
+
+**Reste à faire :** contre-revue (débuts de scène image par image, moments forts, textes contre scenario/recherche), instagram.md, section « État de l'épisode et suite » de revue.md.
+
+**Notes pour la suite :**
+1) `A.phC(x, y, s, fn, bust)` : bust = options de `D.bust04` (outfit "coat" | "scrubs", badge, w, bottom) ; le buste est dessiné PAR-DESSUS le bas du cou.
+2) `A.strip(n, px, py)` : bande de papier derrière un nœud texte (mesurée quand les polices sont chargées) ; `quote` l'applique toujours ; `quote(…, { dy })` décale la bande des citations.
+3) Restent (décor en bord de cadre, voulus ou sans information) : tableau de l'intro, porte 3 (scène 7), tiroirs du bureau (15), banc (2, 17), tubulure sous les sous-titres (25), liens jaunes devant « toi » (22).
+4) Outils de capture de cette étape (scratchpad akte04-revue) : snap.mjs (images pleine taille à des instants donnés), montage.py (planche avec zones Instagram et repères x 90 / 990, y 1470).

@@ -42,10 +42,11 @@
     const at = [FX + 231, FY - 160], tag = m.obj(D.loopTag, at[0], at[1] + 27 + 53, 1, { len: 53 });
     m.build(tag, tN, "drop", { dist: 140, dur: 0.45 }); m.pend(tag, tN + 0.35, 12, at, { idle: 3 });
     // la lampe (devant le dossier), son cône pâle par-dessus, la poussière dans la lumière
-    const lamp = m.obj(D.deskLamp, 150, 1060, 1, { part: "lamp", k: 1.25 }); m.sway(lamp, 1, 3, [150, 1060]);
-    const cone = m.obj(D.deskLamp, 150, 1060, 1, { part: "cone", k: 1.25, on: 1 }); m.sway(cone, 1, 3, [150, 1060]);
+    const LX = 200;   // revue : 150 → 200 (le pied de la lampe sortait par le bord gauche)
+    const lamp = m.obj(D.deskLamp, LX, 1060, 1, { part: "lamp", k: 1.25 }); m.sway(lamp, 1, 3, [LX, 1060]);
+    const cone = m.obj(D.deskLamp, LX, 1060, 1, { part: "cone", k: 1.25, on: 1 }); m.sway(cone, 1, 3, [LX, 1060]);
     [lamp, cone].forEach((n) => m.build(n, t0 + 0.12, "rise", { dist: 200, dur: 0.4 }));
-    m.dust({ x: 300, y: 600, w: 300, h: 330 }, 12, { seed: 21, op: 0.8, speed: 8, cone: true });
+    m.dust({ x: 350, y: 600, w: 300, h: 330 }, 12, { seed: 21, op: 0.8, speed: 8, cone: true });
     A.chip(c, "Rechtskraft nicht veröffentlicht", "ما معروفش واش نهائي", 30, tL, null);
   } });
 
@@ -115,6 +116,12 @@
     // le tube (pointe en bas) arrive, s'incline de 35°, verse une goutte dans chaque champ ; son bracelet pulse à b27@المريض
     const tipAt = (t) => { const u = E.inOut(prog(t, tBd + 0.05, 0.25)), v = E.inOut(prog(t, tBd + 0.45, 0.2)), w = E.inOut(prog(t, tBd + 0.9, 0.35)); return [lerp(lerp(lerp(385, FL[0][0], u), FL[1][0], v), 385, w), lerp(lerp(lerp(905, 990, u), 990, v), 905, w)]; };   // au repos à droite de sa tête
     const ang = (t) => 35 * E.inOut(prog(t, tBd, 0.2)) * (1 - E.inOut(prog(t, tBd + 0.9, 0.3)));
+    // sa tête (gros plan) + buste (revue : la tête seule flottait, cou coupé net) ; posée AVANT le tube, qui passe devant le buste
+    // ses yeux suivent les gouttes ; focused → calm
+    A.phC(235, 720, 1.2, (t) => {
+      const q = tipAt(t), dx = clamp((q[0] - 235) / 160, -1, 1);
+      return toi({ view: "three-quarter", facing: 1, expr: t < tR ? "focused" : "calm", look2: [rnd(0.3 + 0.5 * dx, 10), 0.8], blink: rnd(blinkAt(t, 1.4), 10), headTilt: 4 });
+    }, { outfit: "coat", badge: true, w: 58, bottom: 180 }).on(breathe(1.4));
     const dropK = (t) => { const a = prog(t, tBd + 0.12, 0.2) * (1 - prog(t, tBd + 0.3, 0.03)), b = prog(t, tBd + 0.42, 0.2) * (1 - prog(t, tBd + 0.6, 0.03)); return Math.max(a, b); };
     const tube = c.sk((g, p) => D.sampleTube(g, p), (t) => ({ level: rnd(lerp(0.75, 0.6, prog(t, tBd, 0.7)), 20), slope: rnd(ang(t), 2), drop: rnd(dropK(t), 10) }), 0, 0, 1.2);
     tube.on((t, s) => { const q = tipAt(t); s.x += q[0]; s.y += q[1]; s.px = 0; s.py = 0; s.r += ang(t); });
@@ -124,11 +131,6 @@
       const a = tBd + 0.3 + i * 0.3, gd = el("g"); el("path", { d: "M0 -9 Q6 -1 5 3 Q4 8 0 8 Q-4 8 -5 3 Q-6 -1 0 -9 Z", fill: "#B5332D", stroke: "#8E1F1C", "stroke-width": 1.4 }, gd);
       c.node(gd).on((t, s) => { const p = prog(t, a, 0.16); s.o *= p > 0 && p < 1 ? 1 : 0; s.x += FL[i][0]; s.y += lerp(1000, FL[i][1], p * p); });
     });
-    // sa tête (gros plan) : ses yeux suivent les gouttes ; focused → calm
-    ph(235, 720, 1.2, (t) => {
-      const q = tipAt(t), dx = clamp((q[0] - 235) / 160, -1, 1);
-      return toi({ view: "three-quarter", facing: 1, expr: t < tR ? "focused" : "calm", look2: [rnd(0.3 + 0.5 * dx, 10), 0.8], blink: rnd(blinkAt(t, 1.4), 10), headTilt: 4 });
-    }).on(breathe(1.4));
     A.chip(c, "Bedside-Test", "اختبار الفصيلة حدا الفراش", 36, tBd, null, { yellow: true });
   } });
 
@@ -170,10 +172,10 @@
   st.scene({ from: "b29", in: "swipeR", inDur: 0.42, build(c) {
     const k = X.use(c), m = M.of(c); k.bg();
     const t0 = T("b29"), tQ = T("b29@القصة"), tL = T("b29@اللور"), tB = T("b29@الدم"), tIn = T("b29@دخل"), t7 = T("b29@7"), tK = T("b29@كيرجعش");
-    c.camera([{ at: "b29", s: 1, cx: 580, cy: 900 }, { at: "b29+0.1", s: 1, cx: 520, cy: 900, d: 1.0, ease: "lin" }, { at: tB, s: 1.1, cx: 540, cy: 960, d: 1.2 }]);
+    c.camera([{ at: "b29", s: 1, cx: 580, cy: 900 }, { at: "b29+0.1", s: 1, cx: 520, cy: 900, d: 1.0, ease: "lin" }, { at: tB, s: 1.1, cx: 540, cy: 815, d: 1.2 }]);   // revue : cy 960 → 815 (le haut de la poche passait dans la zone y < 250)
     const grid = m.obj(D.hourGrid, -110, 290, 1, { cols: 10, rows: 9, cell: 140, paper: false, col: "#9A9A94", sw: 2.4 }).on((t, s) => { s.o *= 0.18; }); m.par(grid, 0.6);
     // les pages du planning (elles reviennent pendant le « ◀◀ »)
-    const PF = [700, 590], pq = (t) => E.inOut(prog(t, tQ + 0.05, tL - tQ - 0.1));
+    const PF = [680, 590], pq = (t) => E.inOut(prog(t, tQ + 0.05, tL - tQ - 0.1));
     m.obj(D.pageFlip, PF[0], PF[1], 1, { part: "board", clip: false });
     c.sk((g, p) => D.pageFlip(g, p), (t) => ({ part: "pages", p: rnd(pq(t), 40) }), PF[0], PF[1], 1);
     m.obj(D.pageFlip, PF[0], PF[1], 1, { part: "clip" });

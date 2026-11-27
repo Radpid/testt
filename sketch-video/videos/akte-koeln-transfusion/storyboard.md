@@ -1583,3 +1583,21 @@ ci-dessus, caméra de la scène × 1,06 ; à revérifier sur les planches `--ig`
 | 25 | poche : œillet (540, 120) ; chambre y 560–750 ; tubulure de 750 à 1440 ; zoom final cy 820 | tout 180 px plus bas : œillet (540, 300), chambre y 740–930, tubulure de 930 à 1620 ; zoom final cy 960 | la barre de progression du haut traversait l'étiquette de la poche |
 | 25 | icônes de x 640 / 760 / 880 vers 150 / 270 / 390 | de x 600 / 700 / 800 | au départ, le compteur était dans la colonne des boutons |
 | 26 | ruban `AKTE 04 · 63 ساعة` | texte logique `63 ساعة · AKTE 04` (story.js) | dans le ruban (RTL) le premier ordre s'affichait « ساعة AKTE 04 · 63 » : « 63 » loin de « ساعة » ; il s'affiche maintenant « AKTE 04 · ساعة 63 » (lu : 63 ساعة) |
+
+**Revue visuelle (27.11)** — détail et raisons dans `revue.md` :
+
+| scène | storyboard / étape précédente | après la revue | pourquoi |
+|---|---|---|---|
+| 1 | ligne tapée du tribunal + arabe dans la bande HUD | même texte, posé sur une bande de papier (opacité 0,9) | la corniche traversait l'arabe |
+| 7 | caméra cy 920 ; citations à y 1372 / 1412 | cy 905 ; citations à y 1412 / 1452 (`quote` o.dy 40, cette scène seulement) | la citation passait sur ses chaussures ; avec cy 945 le voyant de la porte 2 passait sous l'arabe de la pastille |
+| 7–19 | citations « contour papier » | + bande de papier derrière l'allemand et l'arabe (`X.aides.strip`) | les traits du sol et des façades traversaient les lettres |
+| 8 | elle s'arrête à x 235 | x 255 | son coude sortait dans la marge quand elle tâte sa poche |
+| 10 | sa tête seule `ph(240, 1085, 1.25)` | tête (262, 1060) + buste dédié `D.bust04` (blouse, badge vierge) | la tête flottait, cou coupé net, sur le papier |
+| 11–13 | horloge de la chambre en haut à gauche (x 165) | x 240 (« ≈ 10 min » x 307) ; scène 11 : travelling cx 545 → 572 ; scène 12 : palier cx 562 | l'horloge sortait par le bord gauche, son dos entrait dans la colonne des boutons |
+| 14 | porte x 700–850, plaque (775, 690), cadre (520, 760) ; zoom b17 cx 440 | porte à 600, plaque (675, 684), cadre (470, 760) ; zoom b17 cx 490 | à ×1,1 (× 1,06 du cadrage global) la porte et sa plaque sortaient par la droite |
+| 15 | store en haut (BY 540) | BY 568 (et la plante) | le coin du store touchait « ورقة ماشي صحيحة » |
+| 17 | poussée s 1 → 1,03, cx 500 → 570 ; expert x 805 | travelling sans poussée, cx 538 → 552 ; expert, chaise, dossier x 790 | la salle (elle à gauche, la chaise de l'expert à droite) ne tenait pas entre x 90 et 915 |
+| 21 | lampe : pied (150, 1060) | (200, 1060), poussière x 350 | le pied sortait par le bord gauche |
+| 23 | sa tête seule `ph(235, 720, 1.2)` | + buste `D.bust04`, posé avant le tube | même raison que la scène 10 ; le tube passe devant le buste |
+| 25 | zoom final cy 960 ; tableau x 700 | cy 815 ; tableau x 680 | le haut de la poche passait sous la barre de progression (y < 250) |
+| — | glossaire : Blutführerschein « « رخصة » ديال الدم » | même texte entre deux marques U+200F (invisibles) | dans le sous-titre, la traduction s'affichait dans le désordre |
