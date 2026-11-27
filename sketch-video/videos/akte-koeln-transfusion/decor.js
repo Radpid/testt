@@ -37,7 +37,7 @@
  *    22 D.folder ................. fait (decor.js)
  *    23 D.pebble ................. fait (decor-2.js)   crack | leaf (feuille d'arbre, pas de calendrier) | coat
  *    24 D.cart ................... fait (decor-2.js)   part body | wheels
- *    25 D.loupeSmall ............. fait (decor-2.js)   ·  D.caseFile, D.deskLamp ........... à faire (decor-3.js)
+ *    25 D.loupeSmall ............. fait (decor-2.js)   ·  D.caseFile, D.deskLamp ........... fait (decor-3.js)
  *    25b D.typedCard ............. fait (decor.js)
  * C. Hôpital
  *    26 D.labHatch ............... fait (decor-2.js)   part inside | shutter | front ; + D.labSign (enseigne qui grésille) ; voyant = D.callLight
@@ -56,11 +56,11 @@
  *    39 D.formSheet, D.pen ....... fait (decor.js)   ·  D.binderLying ........... fait (decor-2.js)
  *    40 D.chair04, D.coatRack, D.seasonWindow  fait (decor-2.js)   (+ D.coatHung : la blouse, à part pour m.sway)
  *    41 D.staffCard, D.monthCell, D.licenceCard  fait (decor-2.js)
- *    42 D.bedIcon ................ fait (decor-2.js)   ·  D.ruleCard, D.lessonCard, D.bedsideCard, D.sampleTube ... à faire (decor-3.js)
+ *    42 D.bedIcon ................ fait (decor-2.js)   ·  D.ruleCard, D.lessonCard, D.bedsideCard, D.sampleTube ... fait (decor-3.js)
  *    43 D.cernes ................. fait (decor.js)
  *    44 D.pillar, D.stetho, D.adminDoor, D.frame04  fait (decor-2.js)   (+ D.doorPlate, à part pour pulser)
  *    45 D.rhine, D.dom, D.riverWaves  fait (decor.js)
- *    46 D.rewKey, D.pageFlip, D.dripBig  à faire (decor-3.js)
+ *    46 D.rewKey, D.pageFlip, D.dripBig  fait (decor-3.js)
  * Hors inventaire, demandés par les scènes 3 et 5 : D.note04 (note épinglée), D.hookKey (clé au crochet), D.markerString (feutre
  *    sur ficelle), D.magnet, D.feltPen, D.wallBar (barre murale à deux crochets), D.glint (reflet qui glisse sur le cadre alu du tableau,
  *    scènes 3 et 6) ........ fait (decor.js)
@@ -73,7 +73,10 @@
  * Étape « décors 2 » (26.11) : decor-2.js = tout ce que demandent les scènes 7 à 20 (voir son en-tête : pièces animées o.part, pièces à
  *    part pour m.pend / m.sway) ; kit + segX et floorFade ; décors à l'échelle contrôlés avec Persona (lit + patient assis, chaise + sitEdge,
  *    potence + main levée, fauteuil + manche, balance + chariot) ; écarts et placements à revoir : storyboard.md, « Écarts de construction ».
- * D.exemple : dessin d'exemple du gabarit, encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles.
+ * Étape « décors 3, HUD, mises en place » (27.11) : decor-3.js complet (scènes 21–25 ; l'affiche réutilise D.rollCounter) ; grep des D.xxx
+ *    du storyboard : TOUS définis (D.scaleGeom est une fonction non énumérable de decor.js ; « D.nom » n'est qu'un exemple de syntaxe).
+ *    Le patient assis dans le lit : X.aides.ppBed (Persona sans les jambes, sinon ses pieds dépassaient sous le lit).
+ * D.exemple (dessin d'exemple du gabarit) ......... abandonné : supprimé, plus aucune scène ne l'utilise.
  */
 (function () {
   "use strict";
@@ -1056,16 +1059,6 @@
     return { w: o.w, h: 36 };
   };
   D.riverWaves.essais = [{}, { phase: 0.5 }];
-
-  /* EXEMPLE du gabarit (suspension + cône de lumière) : encore utilisé par les scènes d'exemple de scenes-1.js — à supprimer avec elles */
-  D.exemple = (g, o = {}) => {
-    const C = U.ctx(g, 611, false, 1), L = o.len || 110;
-    el("path", { d: `M-40 ${L + 34} L40 ${L + 34} L240 ${L + 900} L-240 ${L + 900} Z`, fill: "#F8CE4E", opacity: 0.13 }, g);
-    U.stroke(C, "fil", `M0 0 L0 ${L}`, { sw: 3 });
-    U.shape(C, "abat", `M-16 ${L} L16 ${L} L46 ${L + 34} L-46 ${L + 34} Z`, MAT.grey, { sw: 2.6 });
-    el("ellipse", { cx: 0, cy: L + 36, rx: 22, ry: 8, fill: "#FFF6C9", stroke: INK, "stroke-width": 2 }, g);
-    return { ampoule: [0, L + 36] };
-  };
 
   // aides partagées avec decor-2.js et decor-3.js (un objet, pas une fonction : la planche d'essai l'ignore)
   D.kit = { el, ln, tw, TW, MAT, f, clamp, lerp, hs, mixc, circ, poly, sample, lens, at, cut, pin, gear, rollWindow, segX, floorFade, INK, YEL, SH, PAPER, RED, RED2 };

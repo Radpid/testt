@@ -168,6 +168,18 @@
     // Persona + cernes (D.cernes sur les yeux, opacité p.cernes) dans le MÊME groupe : elles suivent la tête quoi qu'il arrive
     const ppC = (x, y, s, fn, parent) => c_.sk((g, p) => { const a = PE.person(g, p); if (p.cernes > 0.02 && a && a.eyes) D.cernes(g, { eyes: a.eyes, k: p.cernes }); return a; }, fn, x, y, s, 0, parent);
     const phC = (x, y, s, fn) => c_.sk((g, p) => { const a = PE.head(g, p); if (p.cernes > 0.02 && a && a.eyes) D.cernes(g, { eyes: a.eyes, k: p.cernes }); return a; }, fn, x, y, s, 0);
+    /* personnage ASSIS DANS LE LIT (le patient, vue de face) : Persona n'a pas d'option pour cacher les jambes ; sans elles, ses pieds
+     * dépassaient sous le lit entre les roulettes. On retire du dessin les deux jambes (aplat + trait + chaussure, dessinées en premier
+     * en vue de face : les deux groupes « chaussure » portent un transform rotate(…) scale(…)). Si la structure change, rien n'est retiré. */
+    const noLegs = (g) => {
+      const root = g.firstElementChild; if (!root) return;
+      const kids = Array.from(root.children), shoe = kids.map((n, i) => (n.tagName === "g" && /rotate\(.*scale\(/.test(n.getAttribute("transform") || "") ? i : -1)).filter((i) => i >= 0);
+      if (shoe.length < 2) return;
+      const per = shoe[1] - shoe[0], a = shoe[0] - (per - 1);
+      if (a < 0 || per < 2 || per > 3) return;
+      for (let i = shoe[1]; i >= a; i--) root.removeChild(kids[i]);
+    };
+    const ppBed = (x, y, s, fn, parent) => c_.sk((g, p) => { const a = PE.person(g, p); noLegs(g); return a; }, fn, x, y, s, 0, parent);
     // marche sans glissade : phase = distance ÷ foulée (292 px à l'échelle 1) ; elle décroît quand on recule (marche à reculons, scène 2)
     const stride = (dx, s, facing) => ((((facing || 1) * dx) / (292 * (s || 1))) % 1 + 1) % 1;
     /* personnage qui suit un trajet keys = [[repère, x], …] (vitesse constante entre deux clés), cycle Pose.walk calé sur la distance.
@@ -301,7 +313,7 @@
         D.rollCounter(g, { digits: [6, 3], tick: 0 }); }, () => ({}), COUNTER_AT[0], COUNTER_AT[1], COUNTER_S, 0, parent);
       return at == null ? n : n.fade(T(at) - 0.05, 0.1);
     };
-    const aides = { INK: INK_, YEL: YEL_, PAPER: PAPER_, halo, fat, tired, ppC, phC, stride, walker, colStart, hours, tilt, calm, geomAt, toScreen, sceneAt,
+    const aides = { INK: INK_, YEL: YEL_, PAPER: PAPER_, halo, fat, tired, ppC, phC, ppBed, noLegs, stride, walker, colStart, hours, tilt, calm, geomAt, toScreen, sceneAt,
       typed, quote, chip, rekon, marker, ring, snip, scan, grey, stamp, cartCounter, COUNTER_AT, COUNTER_S, COUNTER_LAND };
 
     /* ───────── AKTE 04 : MISES EN PLACE FIXES (storyboard « Mise en place fixe ») — X.lieux ─────────
@@ -407,7 +419,7 @@
         [sky, frame].forEach((n) => bd(m, n, o.at, 0.03, "grow", { pivot: [800, 620] }));
         const stand = m.obj(D.nightstand04, 155, 1300, 1, o.day ? { bags: false, glass: true } : {}); bd(m, stand, o.at, 0.1, "left", { dist: 160 });
         const back = m.obj(D.bedBack04, 400, 1300, 1, {});
-        const patient = pp(400, 1335, 1, (t) => Object.assign({}, CAST.PAT, { view: "front", expr: "calm", blink: rnd(Math.max(0.25, blinkAt(t, 3.1)), 10), talk: 0, look2: [0.35, -0.05],
+        const patient = ppBed(400, 1335, 1, (t) => Object.assign({}, CAST.PAT, { view: "front", expr: "calm", blink: rnd(Math.max(0.25, blinkAt(t, 3.1)), 10), talk: 0, look2: [0.35, -0.05],
           reachR: [105, -215], armL: [-10, 12] }, o.pat ? o.pat(t) : {})).on((t, s) => { s.y += Math.sin(t * 1.85) * 1.5 * vie(t); });
         const brf = o.breath || ((t) => 0.5 + 0.5 * Math.sin(t * 1.85));
         const duvet = c.sk((g, p) => D.bedFront04(g, p), (t) => ({ part: "duvet", breath: rnd(brf(t) * vie(t), 10) }), 400, 1300, 1);

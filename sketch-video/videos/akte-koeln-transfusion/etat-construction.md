@@ -106,3 +106,21 @@ Où en était l'agent (sa liste de tâches au moment de l'arrêt) :
 - fait : decor-3.js (scènes 21–25 + affiche)
 - en cours : story.js (HUD, X.aides, X.lieux)
 - pas commencé : contrôles, dessins délicats, liste d'état, sauvegarde
+
+## Étape terminée : décors 3, HUD, mises en place
+(reprise de l'étape interrompue ci-dessus : decor-3.js, le HUD, X.aides et X.lieux étaient déjà écrits ; j'ai contrôlé, corrigé et fini)
+
+**Fait :**
+- decor-3.js : D.caseFile, D.deskLamp, D.ruleCard, D.lessonCard, D.bedsideCard, D.sampleTube, D.rewKey, D.pageFlip, D.dripBig : tous dessinent, planches d'essai regardées (rien à reprendre). L'affiche (scène 26) réutilise D.rollCounter (story.js, bloc « affiche »).
+- grep des noms D.xxx du storyboard contre les fonctions définies : TOUS existent (D.scaleGeom = fonction non énumérable de decor.js ; « D.nom » n'est qu'un exemple de syntaxe dans le storyboard). D.exemple supprimé (plus utilisé).
+- story.js : HUD propre (bloc #hud04 : compteur A/B, onglet du jour, vol vers le chariot) ; X.aides ; X.lieux = balance, salle, chambre, regle. Le HUD du socle n'est pas touché.
+- Dessins délicats contrôlés à grande taille : lit + patient assis (chambre, nuit et jour), fauteuil de dos, manche de costume, loupe (5 états). Défaut trouvé et corrigé : les PIEDS du patient dépassaient sous le lit (Persona n'a pas d'option pour cacher les jambes) → nouvelle aide X.aides.ppBed (Persona sans les jambes, via X.aides.noLegs), utilisée par X.lieux.chambre.
+- Planches des quatre lieux (scènes d'essai de scenes-1.js) regardées avec --ig : décors complets, cascade, vie ; errcheck sur 27 instants : SV.error=undefined ; essai_decor complet : toutes les fonctions dessinent.
+- En-tête de decor.js : tout est « fait » (ou « abandonné » pour D.exemple).
+
+**Reste à faire :** les scènes (scenes-1.js … scenes-4.js). scenes-1.js contient encore les scènes d'ESSAI des lieux : l'étape « scènes, partie 1 » les remplace.
+
+**Notes pour la suite :**
+1) Lieux : X.lieux.balance(c, o) (scènes 1, 18–20), X.lieux.salle(c, o) (2, 17), X.lieux.chambre(c, o) (11–13), X.lieux.regle(c, o) (22–24) ; paramètres décrits en tête de chaque fonction dans story.js. Les personnages de la scène se posent dans lieu.actors.g (bonne profondeur).
+2) Aides (X.aides) : halo, fat/tired (fatigue), ppC/phC (Persona + cernes), ppBed (assis dans un lit, sans jambes), stride/walker (marche sans glissade), colStart/hours (frise et compteur), tilt/calm/geomAt (balance), toScreen/sceneAt, typed (machine à écrire), quote (bande des citations), chip (UNE pastille centrée 540,450 dans c.hud), rekon (mention Rekonstruktion), marker, ring, snip, scan (lignes de rembobinage), grey, stamp, cartCounter.
+3) Points fragiles vus sur les planches d'essai : scène 17, l'expert assis (x ≈ 805 + chaise) entre dans la colonne des boutons en fin de scène ; scènes 22–24, le bord droit de la carte jaune frôle x 915 avec la poussée de caméra ; scène 11, la poche frôle le visage de l'héroïne quand son bras est levé.
