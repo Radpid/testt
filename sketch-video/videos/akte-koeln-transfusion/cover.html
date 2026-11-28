@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>AKTE 04 – couverture Instagram</title>
+<!-- Couverture du Reel (image à importer dans Instagram : « Modifier la couverture » → « Ajouter depuis la pellicule »).
+     1080 × 1920 ; tout l'important dans le carré 3:4 du profil (y 240–1680, x 90–990). Rendu : node videos/akte-koeln-transfusion/cover.mjs -->
+<link rel="stylesheet" href="../../engine/sketch.css">
+<style>
+  html, body { margin: 0; background: #F7F7F1; }
+  svg { display: block; }
+  .ttl { font-family: Lalezar; }
+  .ar { font-family: "Plex Arabic"; font-weight: 700; }
+  .de { font-family: Kalam; font-weight: 700; }
+</style>
+</head>
+<body>
+<svg id="c" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="../../engine/vendor/rough.js"></script>
+<script src="../../serie/lib/cast.js"></script>
+<script src="../../serie/lib/sketch-cast.js"></script>
+<script src="../../serie/lib/persona.js"></script>
+<script src="decor.js"></script>
+<script src="decor-2.js"></script>
+<script src="decor-3.js"></script>
+<script>
+(async function () {
+  await document.fonts.ready;
+  const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("c"), D = window.EpDecor, SC = SketchCast, U = SC.util;
+  const INK = "#1C1A1C", YEL = "#F8CE4E", PAPER = "#F7F7F1";
+  const el = (tag, at, p) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); (p || svg).appendChild(n); return n; };
+  const grp = (x, y, s, r, p) => el("g", { transform: `translate(${x} ${y}) rotate(${r || 0}) scale(${s || 1})` }, p);
+  const text = (s, x, y, size, cls, o = {}) => { const t = el("text", Object.assign({ x, y, "font-size": size, class: cls, "text-anchor": "middle", fill: INK }, o.attr || {}), o.parent);
+    t.textContent = s; if (o.halo) { t.setAttribute("stroke", PAPER); t.setAttribute("stroke-width", o.halo); t.setAttribute("stroke-linejoin", "round"); t.setAttribute("paint-order", "stroke"); } return t; };
+
+  // fond : papier, grand halo jaune derrière elle, cases du planning en filigrane
+  el("rect", { x: 0, y: 0, width: 1080, height: 1920, fill: PAPER });
+  const defs = el("defs", {}); const rg = el("radialGradient", { id: "glow", cx: "50%", cy: "50%", r: "50%" }, defs);
+  el("stop", { offset: "0%", "stop-color": YEL, "stop-opacity": 0.55 }, rg); el("stop", { offset: "100%", "stop-color": YEL, "stop-opacity": 0 }, rg);
+  const grid = el("g", { opacity: 0.12 });
+  for (let x = 60; x < 1080; x += 120) el("line", { x1: x, y1: 0, x2: x, y2: 1920, stroke: INK, "stroke-width": 2 }, grid);
+  for (let y = 60; y < 1920; y += 120) el("line", { x1: 0, y1: y, x2: 1080, y2: y, stroke: INK, "stroke-width": 2 }, grid);
+  el("ellipse", { cx: 540, cy: 1060, rx: 520, ry: 560, fill: "url(#glow)" });
+
+
+  // la barre de perfusion et les deux poches IDENTIQUES, étiquettes « 0 » et « A », un « ≠ » jaune entre elles
+  const BY = 640, BX0 = 215, BX1 = 865, BS = 1.6, bagX = [345, 735];
+  el("path", { d: `M${BX0} ${BY} L${BX1} ${BY}`, stroke: INK, "stroke-width": 12, "stroke-linecap": "round" });
+  el("path", { d: `M${BX0} ${BY} L${BX1} ${BY}`, stroke: "#D9D9D2", "stroke-width": 5, "stroke-linecap": "round" });
+  [[BX0, 0], [BX1, 0]].forEach(([x]) => el("circle", { cx: x, cy: BY, r: 10, fill: "#FFFFFF", stroke: INK, "stroke-width": 4 }));
+  [[bagX[0], "0", -3, 211], [bagX[1], "A", 3, 212]].forEach(([x, lab, rot, seed]) => {
+    el("path", { d: `M${x} ${BY} l0 14`, stroke: INK, "stroke-width": 5 });
+    const g = grp(x, BY + 22, BS, rot); D.bloodBag(g, { level: 0.95, tint: 1, seed, sway: 0 });
+    const tag = grp(x + rot * 2, BY + 22 + 100 * BS, 1, rot);
+    el("circle", { cx: 0, cy: 0, r: 50, fill: "#FFFFFF", stroke: INK, "stroke-width": 5 }, tag);
+    text(lab, 0, 24, 74, "de", { parent: tag });
+  });
+  const ne = grp(540, BY + 22 + 100 * BS, 1);
+  el("circle", { cx: 0, cy: 0, r: 56, fill: YEL, stroke: INK, "stroke-width": 5 }, ne);
+  text("≠", 0, 28, 96, "de", { parent: ne });
+
+  // elle : la jeune Assistenzärztin, épuisée (blouse, badge), qui lève les yeux vers les poches
+  const DOC = { look: "woman", hair: "short", hairTone: "brown", beard: "none", glasses: false, seed: 401, outfit: "coat", badge: " " };
+  const P = Object.assign({}, DOC, { view: "front", expr: "worried", sweat: 1, blink: 0, talk: 0, look2: [0, -0.75], headTilt: 0 });
+  Persona.person(grp(540, 1985, 2.35), P);
+
+  // titre : « 63 ساعة », surligneur jaune derrière « 63 »
+  el("path", { d: "M610 300 L905 286 L912 420 L600 432 Z", fill: YEL, opacity: 0.95 });
+  text("63 ساعة", 540, 420, 210, "ttl", { halo: 0, attr: { direction: "rtl" } });
+  // petite marque de la série
+  const tagS = grp(540, 520, 1);
+  el("rect", { x: -120, y: -36, width: 240, height: 64, rx: 14, fill: INK }, tagS);
+  text("AKTE 04", 0, 13, 40, "de", { parent: tagS, attr: { fill: "#FFFFFF" } });
+
+  // une seule phrase, sur une étiquette scotchée (comme les sous-titres)
+  const lab = grp(540, 1590, 1, -2);
+  el("rect", { x: -330, y: -66, width: 660, height: 132, rx: 18, fill: "#1C1A1C", opacity: 0.18, transform: "translate(9 11)" }, lab);
+  el("rect", { x: -330, y: -66, width: 660, height: 132, rx: 18, fill: "#FFFFFF", stroke: INK, "stroke-width": 5 }, lab);
+  el("rect", { x: -350, y: -86, width: 120, height: 42, fill: "#BEBEB6", opacity: 0.92, transform: "rotate(-8 -290 -65)" }, lab);
+  text("مذنبة… بلا عقوبة", 0, 30, 84, "ar", { parent: lab, attr: { direction: "rtl" } });
+
+  window.COVER_READY = true;
+})().catch((e) => { document.title = "ERREUR " + e.message; window.COVER_ERROR = e.message; });
+</script>
+</body>
+</html>
