@@ -23,7 +23,7 @@ Les comptes rendus détaillés de chaque étape sont dans `videos/<épisode>/eta
 | 04 | `akte-koeln-transfusion` | **fini** : voix montée, son, rendu final, description (28.11.2026) | à publier (la vidéo est dans `out/`, hors git : la refaire avec `engine/render.mjs` + `son/mixage.py` si le conteneur est neuf) |
 | 05 | `akte-krefeld-nacht` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js fait, story.js en cours) |
 | 06 | `akte-lehrte-mtx` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js et dessins délicats faits, story.js en cours) |
-| 07 | `akte-siegburg-whatsapp` | décors 1, 2 et 3 (+ HUD, lieux) | étape 4 : scènes, partie 1 (scenes-1.js commencé) |
+| 07 | `akte-siegburg-whatsapp` | **construction finie** (chantier léger + revue de Claude, 28.11.2026) : planches dans `out/planches/final/`, `revue.md`, `instagram.md` (brouillon) | voix de l'auteur → montage (modèle AKTE 04), b10 et mots à l'écran dans ses mots, son, rendu, couverture |
 | 08 | `akte-duesseldorf-titel` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js fait, story.js en cours) |
 | 09 | `akte-friedrichshafen-nacht` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js en cours) |
 
