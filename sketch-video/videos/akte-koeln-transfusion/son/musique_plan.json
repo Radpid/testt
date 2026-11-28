@@ -1,0 +1,224 @@
+{
+ "composition_plan": {
+  "positive_global_styles": [
+   "emotional cinematic documentary underscore for a true story",
+   "felt piano lead recorded close",
+   "warm solo cello and soft low strings",
+   "very soft sustained pads in the background",
+   "slow, around 62 bpm",
+   "D minor, ending in F major",
+   "intimate and moving, restrained",
+   "clean mix with lots of space for a voice-over"
+  ],
+  "negative_global_styles": [
+   "vocals",
+   "choir",
+   "drums",
+   "percussion",
+   "impacts",
+   "whooshes",
+   "risers",
+   "booms",
+   "beeps",
+   "reversed sounds",
+   "cinematic hits",
+   "trailer music",
+   "EDM",
+   "electric guitar",
+   "happy upbeat pop",
+   "loud brass"
+  ],
+  "sections": [
+   {
+    "section_name": "Hook",
+    "positive_local_styles": [
+     "two low piano notes far apart",
+     "sustain pedal held",
+     "suspended, grave",
+     "a short rest in the middle",
+     "low cello drone under two low piano notes"
+    ],
+    "negative_local_styles": [
+     "melody",
+     "fast notes"
+    ],
+    "duration_ms": 7200,
+    "lines": []
+   },
+   {
+    "section_name": "Author intro",
+    "positive_local_styles": [
+     "simple warm motif in the middle register",
+     "relative major",
+     "close and friendly"
+    ],
+    "negative_local_styles": [
+     "dark",
+     "dramatic"
+    ],
+    "duration_ms": 7580,
+    "lines": []
+   },
+   {
+    "section_name": "Going back in time",
+    "positive_local_styles": [
+     "quick descending detached arpeggios",
+     "light, moving backwards",
+     "ends cleanly on one note"
+    ],
+    "negative_local_styles": [
+     "reversed audio",
+     "heavy"
+    ],
+    "duration_ms": 5570,
+    "lines": []
+   },
+   {
+    "section_name": "The hours",
+    "positive_local_styles": [
+     "steady left-hand eighth-note ostinato like a clock",
+     "a few high notes",
+     "tired, regular",
+     "bass steps down one degree halfway",
+     "cello pizzicato doubling the clock-like ostinato"
+    ],
+    "negative_local_styles": [
+     "drama",
+     "loud"
+    ],
+    "duration_ms": 17000,
+    "lines": []
+   },
+   {
+    "section_name": "Two identical bags",
+    "positive_local_styles": [
+     "the ostinato doubled by a second identical voice",
+     "the two voices drift one eighth note apart",
+     "troubled"
+    ],
+    "negative_local_styles": [
+     "loud"
+    ],
+    "duration_ms": 6590,
+    "lines": []
+   },
+   {
+    "section_name": "Night shift 21:50",
+    "positive_local_styles": [
+     "one low note repeated, more and more spaced out",
+     "contained tension",
+     "a soft minor second near the end",
+     "low string tremolo very quiet"
+    ],
+    "negative_local_styles": [
+     "loud",
+     "fast"
+    ],
+    "duration_ms": 10830,
+    "lines": []
+   },
+   {
+    "section_name": "13:37",
+    "positive_local_styles": [
+     "a single low note held and slowly dying away",
+     "then complete silence",
+     "the strings drop out, only the piano note remains"
+    ],
+    "negative_local_styles": [
+     "melody",
+     "new notes"
+    ],
+    "duration_ms": 5260,
+    "lines": []
+   },
+   {
+    "section_name": "After",
+    "positive_local_styles": [
+     "isolated high notes, very slow",
+     "minor",
+     "fragile",
+     "a clearer suspended chord near the end",
+     "solo cello melody, slow and sad"
+    ],
+    "negative_local_styles": [
+     "loud"
+    ],
+    "duration_ms": 8940,
+    "lines": []
+   },
+   {
+    "section_name": "Court",
+    "positive_local_styles": [
+     "slow half-note chords in the low register",
+     "grave and steady",
+     "the bass rises one degree four times",
+     "low strings sustain the half-note chords"
+    ],
+    "negative_local_styles": [
+     "drama",
+     "fast"
+    ],
+    "duration_ms": 16030,
+    "lines": []
+   },
+   {
+    "section_name": "Relief",
+    "positive_local_styles": [
+     "resolution to F major",
+     "slow wide arpeggio",
+     "relief without joy",
+     "strings open warmly"
+    ],
+    "negative_local_styles": [
+     "happy",
+     "loud"
+    ],
+    "duration_ms": 4340,
+    "lines": []
+   },
+   {
+    "section_name": "The rule",
+    "positive_local_styles": [
+     "clear regular motif in the middle register",
+     "major key",
+     "sober and confident",
+     "light cello counter-melody"
+    ],
+    "negative_local_styles": [
+     "dark",
+     "loud"
+    ],
+    "duration_ms": 10070,
+    "lines": []
+   },
+   {
+    "section_name": "Last sentence",
+    "positive_local_styles": [
+     "the two low notes of the opening return",
+     "a pause",
+     "then one single high note alone"
+    ],
+    "negative_local_styles": [
+     "melody",
+     "loud"
+    ],
+    "duration_ms": 5090,
+    "lines": []
+   },
+   {
+    "section_name": "Poster",
+    "positive_local_styles": [
+     "final chord held",
+     "gentle reminder of the relief motif",
+     "fade out to silence",
+     "piano and strings together, warm"
+    ],
+    "negative_local_styles": [
+     "new themes"
+    ],
+    "duration_ms": 5770,
+    "lines": []
+   }
+  ]
+ }
+}
