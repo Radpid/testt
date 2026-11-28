@@ -57,7 +57,7 @@ Ordre de publication conseillé (éloigner les histoires voisines) : 04, 07, 06,
 
 | # | Titre | Source et statut de vérité | Dossier |
 |---|---|---|---|
-| 04 | « 63 ساعة » (transfusion, Köln 2011) | AG Köln 16.05.2012, 613 Ls 3/12, lu en entier ; coupable sans peine (§ 60 StGB) ; Rechtskraft non publiée | `videos/akte-koeln-transfusion/` |
+| 04 | « 63 ساعة » (transfusion, Köln 2011) | AG Köln 16.05.2012, 613 Ls 3/12, lu en entier ; coupable sans peine (§ 60 StGB) ; Rechtskraft non publiée | `videos/akte-koeln-transfusion/` — **rendu final 28.11.2026** (voix de l'auteur, son, `instagram.md`) ; à publier |
 | 05 | « بوحدهم فالليل » (nuit de garde, Krefeld 2008) | UNE brève de presse (Ärzte Zeitung 01.10.2010) ; 7 500 €, collègue acquitté ; tribunal et statut inconnus → « حسب الصحافة » obligatoire | `videos/akte-krefeld-nacht/` |
 | 06 | « كلمة وحدة » (Methotrexat, Lehrte 2013) | presse (Ärzte Zeitung, dpa) ; Strafbefehle 9 000–13 500 € refusés, classement le 24.01.2017 contre 2 000–6 000 € à une association : PERSONNE condamné | `videos/akte-lehrte-mtx/` |
 | 07 | « الگروپ » (WhatsApp, Siegburg 2026) | ArbG Siegburg 22.05.2026, 1 Ca 1741/25, lu en entier ; 1 000 € + interdiction ; pas définitif en juillet 2026, rien trouvé depuis | `videos/akte-siegburg-whatsapp/` |

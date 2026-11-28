@@ -20,7 +20,7 @@ Les comptes rendus détaillés de chaque étape sont dans `videos/<épisode>/eta
 
 | Épisode | Dossier | Étapes finies | Reprendre à |
 |---|---|---|---|
-| 04 | `akte-koeln-transfusion` | **tout (1 à 9) + revue finale de Claude** | attend l'audio de l'auteur (voir « Après la construction ») |
+| 04 | `akte-koeln-transfusion` | **fini** : voix montée, son, rendu final, description (28.11.2026) | à publier (la vidéo est dans `out/`, hors git : la refaire avec `engine/render.mjs` + `son/mixage.py` si le conteneur est neuf) |
 | 05 | `akte-krefeld-nacht` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js fait, story.js en cours) |
 | 06 | `akte-lehrte-mtx` | décors 1, décors 2 | étape 3 : décors 3 + HUD (decor-3.js et dessins délicats faits, story.js en cours) |
 | 07 | `akte-siegburg-whatsapp` | décors 1, 2 et 3 (+ HUD, lieux) | étape 4 : scènes, partie 1 (scenes-1.js commencé) |
