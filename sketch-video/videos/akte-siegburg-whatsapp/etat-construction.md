@@ -245,3 +245,30 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
   aide : un `punch` doux sur un mot fort, un `buzz`, une bannière qui remonte, un objet assez grand qui tressaute.
 - TRAD_B10 (scenes-2.js, scène 10) est provisoire : à remplacer par les mots de l'auteur en b10 (taille calculée : 46 px jusqu'à 26 signes,
   40 au-delà, rétrécie pour tenir dans 600 px).
+
+## Étape terminée : scènes, partie 3 (scènes 12 à 16, scenes-3.js)
+**Fait :**
+- scenes-3.js : 12 la lettre de l'été (PAPIER : le téléphone posé sort, widget JULI 25, soleil, enveloppe, lettre qui monte et se déplie,
+  titre et date tapés, bloc signature vide, stylo, tampon « erfolglos ») ; 13 « Plans » (montée, recherche tapée, fiche du lieu, épingle
+  sur Siegburg, ondes, carte-légende « المحكمة ») ; 14 il part (glissement, ligne du système sans date, roue de la date → 31 DEZ 2025, ses
+  aimants tombent, il marche avec son carton, la porte s'ouvre, sa blouse se balance) ; 15 appel vidéo (montée, bannière d'appel, tuiles,
+  liseré, elle parle et explique, sa bulle avec le camembert 70 %) ; 16 la réponse du tribunal (liseré sur le tribunal, le camembert sort
+  de la bulle, part de 30 % jaune, icône Dienst, « privat » rayé, la juge lève la main et parle, « uneinsichtig »).
+- Aucun dessin ajouté (decor-3.js inchangé : tout existait).
+- Contrôles : errcheck (41,1 → 54,6 : aucune erreur) ; planches de 29 instants + `--beats --entre b11,b15` avec et sans `--ig` ;
+  image par image des entrées 12 (b11 → +0,8), 13 (b12@فمشى → +0,6), 15 (b14 → +0,8) ; gros plans (ELLE, la juge, LUI et son carton,
+  la marche pas à pas) ; overlapscan 41 → 54,8 ; mouvement b11–b15 (tous ≥ 4,8 %).
+- storyboard.md : « Écarts de construction », section « Étape scènes, partie 3 ».
+
+**Reste à faire :** scènes 17 à 21 (partie 4), contrôle de l'affiche (scène 22, story.js).
+
+**Notes pour la suite :**
+- Fin de la scène 16 (état à reprendre si besoin) : camembert en (730, 905), r 90, part de 30 % jaune écartée, icône Dienst à l'ancre
+  `ico` ; ELLE en colère dans la tuile B ; plaque « uneinsichtig » (380 px) ; pastille « nicht ausschließlich … » dans la bande (y 392).
+- Marche sans glissement (scène 14) : corps mené par le recul du pied posé (table `cum` de 32 phases calculée avec Persona.util.rig au
+  début de la scène) — à reprendre pour toute autre marche.
+- Scène ÉCRAN avec bannière d'appel et montée : déplacer `P.notif` dans `P.tel.g` (sinon la bannière reste en place pendant que le
+  téléphone monte).
+- Avatar r 34 sur papier et c.sk dont la position change par s.x : le pivot d'un « pop » est alors (0, 0), pas la position monde.
+- Scripts hors dépôt (scratchpad, peuvent disparaître) : a07p3/probe.mjs (évaluer du JS dans la page : rig, mesures), a07p3/crop.mjs
+  (gros plans recadrés côte à côte).

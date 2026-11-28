@@ -1946,3 +1946,35 @@ Les cinq scènes avaient été écrites par l'agent précédent (arrêté avant 
 - Contrôles : aucune erreur JS ; mouvement b5 18 %, b6 17 %, b7 3,4 %, b8 4 %, b9 16 %, b10 3,2 % ; la scène 11 (entre deux beats) se fige
   comme voulu ; chevauchements restants : seulement pendant les transitions (glissement, plongée), les tampons qui frappent et les boîtes
   de police de textes empilés (certificat, post-it, loupe), lettres distinctes sur les captures.
+
+### Étape « scènes, partie 3 » (scènes 12 à 16, `scenes-3.js`, 28.11.2026)
+
+- Scène 12 — widget date en (240, 556) et soleil en (200, 506), 10 à 14 px plus à droite et plus bas que le § 4 : le soleil touchait le coin
+  de la pastille. Caméra finale ×1,06 centrée sur (570, 990) et non (590, 1010) : à cx 590 le widget et le soleil passaient dans le bord
+  rogné ; à cy 1010 le haut de la lettre touchait l'arabe de la pastille « erfolglos ». Avant elle, une poussée lente (×1,015). La lettre
+  part 540 px plus bas (son haut caché derrière le devant de l'enveloppe) et est découpée sous le bas de l'enveloppe ; elle se déplie en
+  montant (`plie` 1 → 0). Le titre et la date se tapent ancrés à gauche (la frappe avance). Tampon `k.prop("stamp")` à l'échelle 0,62 (à
+  0,5, « erfolglos » faisait 24 px). Le stylo tombe à `b11@تكتب+0.12`, oscille à « تعاودهاش », roule et sort à droite à « كتباتش ».
+- Scène 13 — la fiche du lieu « dépasse » du bas (poignée + titre) dès la fin de la frappe (le résultat de la recherche) puis monte en entier
+  à « فمدينة » : sinon le bas de l'écran restait blanc 2 s. (Ajout) la carte se rapproche déjà de ×1,08 vers l'ouest à « فمدينة », puis
+  ×1,2 : le beat b12 était « figé » (2,1 %). Ondes relancées une seule fois (la scène finit 0,6 s après l'épingle). Vibreur de la montée :
+  celui du lieu (`b12@فمشى+0.2`, 8 px).
+- Scène 14 — trois emplacements seulement sur le tableau (Fr, Sa, So) pour « deux aimants de LUI + deux gris » : un gris en Sa dès le
+  début, et le 2e gris claque dans la case du vendredi à `b13@وفآخر+0.45`, quand la date se cale (le planning continue sans lui). Pas de
+  trois post-it : le widget date est à leur place (comme en scène 7). La marche est menée par les PIEDS : le corps avance exactement du
+  recul du pied posé (mesuré sur `Persona.util.rig`, 32 phases), 1,1 cycle/s (R22 proposait 1,7 : les pieds glissaient de 30 à 50 px) ;
+  il continue de marcher pendant qu'il s'efface. Carton : 12 px plus bas que le § 1.2 (hand + (−25, −3)). Pastille « mitursächlich » :
+  largeur 400 pour que le micro « laut Urteil » ne touche pas l'arabe.
+- Scène 15 — la bannière d'appel est DANS le nœud du téléphone (elle monte avec lui). ELLE explique de la main GAUCHE levée sur le côté
+  (main en (291, 1199)) : avec « elle explique » (armR [40, −112]), sa main était sous la plaque de nom, et à droite le bras croisait la
+  queue de la bulle. Le bras se lève à « الگروپ » et redescend à la fin du beat. (Ajouts) `punch` 0,02 à « هي », le camembert pulse quand
+  la part de 70 % se remplit.
+- Scène 16 — camembert posé en (730, 905), r 90 (§ 4 : (690, 888), r 96) : il cachait « 1. Kammer » sur la plaque de la table. La présidente
+  lève la main à côté de son visage (armR [165, −120], main en (600, 691)) : à [40, −112] la main restait sur la table, à [150, −100] elle
+  touchait l'épaule d'AS2. ELLE : PAS de poings sur les hanches — la tuile la coupe sous la poitrine, on ne voyait que deux avant-bras qui
+  se rejoignaient en V sous son menton ; bras le long du corps, sursaut, colère (tête détournée) et une marque de colère (`D.colere`) à
+  côté de sa tête. Micro « laut Gericht » à DROITE de la plaque « uneinsichtig » (dessous, il tombait sur le bord de la tuile). (Ajout)
+  `punch` 0,025 à « ماشي ».
+- Contrôles : aucune erreur JS ; mouvement b11 5,8 / 4,8 %, b12 8,3 / 6,7 %, b13 16 / 21 %, b14 19 / 23 %, b15 24 / 16 % ; chevauchements
+  restants : seulement pendant les transitions (montée, glissement), les « pops » (widget, carte-légende), et des boîtes de police (« 70 % »
+  / « privat » dans le petit camembert, « 31 » / « 2025 » au rebond du widget) — lettres distinctes sur les captures.
