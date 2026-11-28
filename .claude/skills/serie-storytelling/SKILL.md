@@ -10,9 +10,10 @@ La darija et l'allemand seulement dans le contenu de la vidéo (script à enregi
 **Réponses courtes, sans redites** : ce qui a changé, ce qu'il doit valider, rien de plus.
 
 Lis d'abord `sketch-video/serie/SERIE.md` : format, règles de vérité, épisodes (statut, sources).
-**Modèle le plus récent : AKTE 02, `sketch-video/videos/akte-unna-geburt/`** (Persona, `decor.js`, intro avec
-photo, chambre vue de face, pauses ciblées, sons naturels). AKTE 01 (`videos/ep01-spritze/`, publié nov. 2026)
-reste la référence pour la carte, le moniteur et l'affiche finale.
+**Modèle le plus récent et le plus complet : AKTE 04, `sketch-video/videos/akte-koeln-transfusion/`** (fichiers en
+plusieurs parties, voix improvisée remontée, moniteur + ligne plate, son stéréo, rembobinage, couverture Instagram :
+copier ses scripts `montage_voix.py`, `son/*.py`, `son/ecg_times.mjs`, `cover.html`, `cover.mjs`). AKTE 02
+(`videos/akte-unna-geburt/`) : chambre vue de face, pauses ciblées. AKTE 01 (`videos/ep01-spritze/`) : carte, affiche finale.
 Nouvel épisode : copier **`sketch-video/videos/_gabarit/`** (socle du skill : pastilles, carte, intro, HUD, affiche
 finale, glossaire de l'épisode) et écrire le reste ; ne pas repartir de zéro, ne pas recopier les décors d'un autre.
 
@@ -40,6 +41,10 @@ de décor seul, avec son ancrage), `tools/mouvement.mjs` (décor figé), `tools/
    personne allongée, mains, dos — validés seuls à grande taille) → HUD et mises en place fixes (`X.lieux`) →
    scènes en quatre parties → revue visuelle indépendante → contre-revue (débuts de scène image par image) ;
 3. *après la voix* : montage de la voix, synchronisation, son, rendu.
+**Version économique** (demande de l'auteur : « pas un grand workflow pour rien, mais complet et vraiment revu ») :
+`serie/workflows/construction-legere.js` — 3 agents à la suite (décors restants + scènes 1–2 ; scènes 3–4 +
+affiche ; revue + contre-revue + `instagram.md`), puis **revue de Claude lui-même** : planches complètes et `--ig`
+regardées une à une, scène muette image par image, `tools/soustitres.mjs`, `overlapscan`, `mouvement`.
 Chaque agent n'écrit que dans le dossier de son épisode et sauvegarde avec `tools/sauvegarde.sh videos/<épisode>
 "message"` (commit + envoi sous verrou). Le texte dit (`scenario.md`, `beats.js`) est figé pendant la construction.
 La machine n'a que 4 cœurs : 2 agents à la fois par workflow → lancer plusieurs workflows de 2 épisodes.
@@ -61,8 +66,9 @@ videos/<episode>/
   glossaire-episode.js   mots allemands de l'épisode pour les sous-titres
   revue.md            défauts trouvés par captures, corrections, état de l'épisode et suite (saison 2)
   assets/portrait.png photo de l'auteur pour l'intro — JAMAIS dans git (.gitignore)
-  son/                musique_plan.json, plan_bruitages.py, bip_moniteur.py, mixage.py
-  instagram.md        description prête à coller
+  son/                sons.py (bruitages ElevenLabs), plan_bruitages.py, musique_plan.json, ecg_times.mjs, mixage.py
+  cover.html, cover.mjs   couverture Instagram (image à part, 1080 × 1920)
+  instagram.md        description prête à coller (darija, SES mots)
 ```
 
 ## Étapes (une validation de l'auteur à chaque étape — « tu me dis avant qu'on se lance »)
@@ -78,11 +84,13 @@ videos/<episode>/
    **Chaque étape doit se comprendre seule** : pourquoi, qui, où (AKTE 02 : il a demandé « pourquoi accoucher à
    l'hôtel ? », « comment une médecin à l'hôtel ? », « je n'ai pas compris cet extrait »). Si l'auteur ne comprend
    pas une phrase, le public non plus : la réécrire, expliquer le lien logique.
-4. **Enregistrement** par l'auteur (+ courtes reprises pour corriger une phrase ou ajouter un mot).
+4. **Enregistrement** par l'auteur (+ courtes reprises pour corriger une phrase ou ajouter un mot). Il ne lit PAS
+   le script mot pour mot : il reformule, se reprend, relit un passage après une erreur (AKTE 04 : 5 min pour 1 min 45).
 5. **Montage voix** (§ Voix) → `beats.js` + `timings.js`. Lui signaler ce qui a été retiré/corrigé et les mots incertains.
 6. **Scènes** (§ Image) → planches contact AVEC la maquette Instagram (§ Zones) + scan des chevauchements → validation.
 7. **Son** (§ Son) : musique composée sur la frise de l'épisode, sons naturels, mixage.
-8. **Rendu final** + `instagram.md` + statut dans `SERIE.md`. Livrer la vidéo ET la description.
+8. **Rendu final** + `instagram.md` + **couverture** (§ Couverture) + statut dans `SERIE.md`. Livrer la vidéo, la
+   description et la couverture.
 
 ## Écrire une histoire qui retient
 
@@ -104,18 +112,37 @@ videos/<episode>/
 - **Boucle ouverte** possible (« والحل كان غير في جملة واحدة » → réponse à la fin), sans question au public.
 - Détails concrets et vrais (date, âge, heure, montant, ville). Pas de détail inventé.
 - Le retournement juridique + **la règle** finale, courte et actionnable.
-- **La mort ne se dit pas, elle se montre** : scène muette (~3 s, `EXTRA` dans le montage) — moniteur qui
-  ralentit puis ligne plate (bip synthétisé), la personne décédée MONTRÉE (AKTE 02 : la petite dans les bras de
+- **La mort ne se dit pas, elle se montre** : scène muette (~3,5–4 s, `EXTRA` dans le montage) — **TOUJOURS un
+  moniteur « bip bip »** (retour AKTE 04 : « il n'y a pas le bip bip… un truc qui montre que vraiment le patient
+  était mort ») dès que la personne est hospitalisée, même si le jugement ne le cite pas : moniteur au mur
+  (AKTE 04 `D.monitor04` : écran sombre, tracé jaune qui balaie, FC, cœur qui bat), battements PARTAGÉS par l'image
+  et le son (`window.ECG04` → `son/ecg_times.mjs`), le rythme ralentit et s'affaiblit (bip de plus en plus grave),
+  puis LIGNE PLATE (FC 0, cadre rouge) + bip continu ; la phrase écrite et le gris arrivent SUR la ligne plate ;
+  l'horloge, la goutte et le compteur s'arrêtent avec elle ; la personne décédée MONTRÉE (AKTE 02 : la petite dans les bras de
   sa maman), la famille qui s'enlace en pleurant, le soignant à genoux, la phrase écrite (« البنت ما عاشتش »), la
   couleur s'éteint (grayscale). Jamais seulement suggérée par un objet (couverture vide).
 - Fin : affiche-résumé avec dézoom + appel à commenter écrit + teaser « AKTE NN+1 · قريبا ».
 - Écriture de l'auteur : « Bébé » (pas بيبي), mots français/allemands tels qu'il les dit.
+- **Pas d'arabe standard à l'écran ni dans la description** (AKTE 04 : « مذنبة n'existe pas en darija ») : pour une
+  accroche, une pastille, la description, reprendre en priorité SES mots de l'audio (« مريض مات… لا حبس، لا غرامة ») ;
+  sinon [FR] et lui demander son mot.
 - Dialogue reconstitué → « Rekonstruktion » ; citation réelle → « laut Urteil ».
 
 ## Voix (sa voix ; outils ElevenLabs, c'est son choix)
 
-1. **Scribe** (`scribe_v2`, horodatage par mot) sur l'enregistrement et chaque reprise. Re-transcrire aussi le
-   résultat monté. Signaler à l'auteur les mots incertains au lieu de deviner.
+0. **On monte SES mots, pas le script** : `beats.js` et les sous-titres = ce qu'il a dit (`montage_voix.py` les
+   régénère). Garder les identifiants du storyboard (b1…) en rattachant chaque phrase dite à son beat ; meilleure
+   prise par phrase, faux départs et phrases relues retirés ; une phrase peut mêler deux prises (AKTE 04 b22).
+   Puis recaler les repères des scènes : copier l'ancien `beats.js`, lancer le montage, puis
+   `python3 tools/reperes_voix.py videos/<ep> <ancien_beats.js>` (ABSENT = la page planterait ; CHANGE = repère par
+   rang). Un repère tout en chiffres est un RANG (« b21@90 » échoue → « b21@7 »).
+   **Vérité** : une phrase improvisée fausse est retirée et une courte reprise demandée, avec la phrase proposée
+   (AKTE 04 : « خرجت براءة » alors qu'elle est coupable sans peine ; « كملات الخدمة normal » alors qu'elle n'a plus
+   pu exercer). Les mots que Scribe hésite à entendre : les lui lister, il confirme.
+1. **Scribe** (horodatage par mot) sur l'enregistrement et chaque reprise, en **v2 ET v1** : v2 écrit parfois
+   l'arabe standard (reprises courtes : « امرأة انتبهت لخطأها »), v1 garde mieux la darija ; comparer les deux sur
+   les mots douteux (`language_code` « ary » est refusé : laisser vide). Re-transcrire aussi le résultat monté.
+   Signaler à l'auteur les mots incertains au lieu de deviner.
 2. **Sous-titres dans SA darija** : quand Scribe écrit un mot faux ou en arabe standard, le corriger via `FIX`
    (ex. intro transcrite en MSA → texte darija du script ; « زازت » → « دازت »). `""` fusionne, `"a|b"` coupe ;
    « الـ » collé au mot suivant.
@@ -128,6 +155,8 @@ videos/<episode>/
    le lui dire.
 6. **Montage par phrase, jamais mot par mot** (saccadé, refusé). Coupes au point le plus silencieux, fondus 20 ms.
 7. **Vitesse : `atempo=1.3`** (hauteur conservée). AKTE 02 : ×1,5 jugé TROP rapide par l'auteur → retour à ×1,3.
+   **L'accroche à ×1,1** (AKTE 04 : « au début je parle trop vite ») : deux vitesses, coupe dans la pause entre
+   l'accroche et la suite (`TEMPO_HEAD`, `HEAD`, `SPLIT` dans `montage_voix.py` d'AKTE 04).
 8. **Rythme enchaîné, pauses ciblées** (retours AKTE 02 : « pas de longues pauses, pas de pauses à l'improviste »)
    — valeurs AVANT ×1,3 dans `montage_voix.py` :
    - même contexte : `beat` 0,09–0,20 s (cible 0,14 → ≈ 0,1 s à l'écoute) ;
@@ -136,8 +165,14 @@ videos/<episode>/
    - `PAUSE_BEFORE` là où deux idées se mélangent (AKTE 02 : après « بغينا ولادة طبيعية »  0,45) ;
    - `EXTRA` pour la scène muette (AKTE 02 : 4,2 → ≈ 3,2 s). Jamais de pause à chaque scène « par principe ».
 9. **Durée** : AKTE 01 1 min 32 (×1,3) ; AKTE 02 ≈ 1 min 41 avec l'intro (×1,3). Court, mais rien de supprimé sans accord.
-10. **Mastering « voice-off »** : `highpass 80, EQ +2 dB@120, −2,5 dB@300, +3 dB@3,5 kHz, high-shelf +1,5 dB@9,5 kHz,
-    deesser 0,45, compresseur 3:1 (6/90 ms)` → −15 LUFS voix, `alimiter 0.8`. Jamais de gate.
+10. **Mastering « voice-off » v2** (AKTE 04, « voix plus attirante ») : `highpass 70, +2,5 dB@140, −3 dB@320,
+    +1,5 dB@2,8 kHz, +2 dB@5,2 kHz, high-shelf +2 dB@10 kHz, deesser 0,5, compresseur 3,5:1 (5/80 ms, makeup 3),
+    aexciter léger (0,8 au-dessus de 7 kHz)` → −15 LUFS en deux passes, `alimiter=limit=0.8:level=0` (sans
+    `level=0`, le limiteur remonte tout à 0 dB). Jamais de gate.
+    **Voice Changer d'ElevenLabs (son clone « yassine ») : NON** — essayé sur AKTE 04, il déforme la darija
+    (« مريض مات » → « بريك بات », « لا حبس » disparaît) ; l'auteur a dit d'oublier. Ne pas le reproposer.
+    **Intro commune** (« أنا ياسين… », AKTE 02) : `intro.iso.mp3` + `intro.scribe2.json`, hors git (avec les voix) ;
+    la recopier d'un épisode qui l'a, sinon la redemander à l'auteur.
     Puis régénérer `beats.js` / `timings.js` depuis `edl3.json`, et tout ce qui dépend du minutage (bip du
     moniteur, repères des bruitages, sections de la musique).
 
@@ -238,6 +273,10 @@ videos/<episode>/
 - **Sous-titres karaoké** : étiquette blanche + scotch, Plex Arabic Bold, UNE ligne (≤ 4 mots), mot en cours
   surligné (le surligneur sur le BON mot, celui qu'il dit) ; `capTr: false` quand la traduction est déjà à l'écran.
 - **Repères** calés sur les mots (`"b7@الدم"`, `"b21@end"`, `"b4@جملة+0.2"`) ; vérifier qu'aucun ne manque.
+- **Sous-titre = UNE ligne, toujours** (AKTE 04 : « ووقفو ليه la transfusion » passait sur deux lignes et cachait une
+  citation) : `index.html` d'AKTE 04 rétrécit la ligne (jusqu'à 76 %) si elle dépasse, et un mot latin > 18 lettres
+  (« Organisationsverschulden ») à 0,82 em. Contrôle : `node tools/soustitres.mjs videos/<ep>` (zones + débordement).
+- **Pastilles du HUD** : bande de papier derrière l'arabe (`kit.chip` d'AKTE 04) — un bord de décor passait dessous.
 
 ## Zones Instagram (mesurées sur une capture réelle du Reel publié, iPhone, novembre 2026)
 
@@ -257,19 +296,38 @@ videos/<episode>/
 - Contrôles obligatoires : `python3 sketch-video/tools/ig_overlay.py capture.png` sur une planche, et
   `node tools/overlapscan.mjs videos/<ep>/index.html 0 <fin> 0.1` (textes qui se recouvrent).
 
-## Son (sons NATURELS seulement)
+## Son (sons NATURELS seulement, mais qui « attirent » — retour AKTE 04)
 
-- **Bruitages = vrais bruits de la scène** (barreaux, papier déchiré, tampon, valise, oiseaux, téléphone,
-  horloge, on frappe à la porte, pas, cœur du bébé, chambre la nuit, salle d'audience, marteau, billets, balance).
-  **JAMAIS** de pop, whoosh, ding/chime, buzzer, « reveal », swell, boom, souffles de transition (= « sons typiques
-  IA »). ElevenLabs `sound-generation` (max 4 requêtes en parallèle, `duration_seconds` ≥ 0,5), placés sur les
-  mots (`plan_bruitages.py`), 10–25 dB sous la voix.
-- **Moniteur** (bips qui ralentissent puis ligne plate) : synthétisé (`son/bip_moniteur.py`, sinus 1 kHz), calé
-  sur l'image — le son généré par ElevenLabs n'avait pas de bips nets.
-- **Musique** ElevenLabs Music (`/v1/music`, `composition_plan`) par sections calées sur la frise réelle (accroche,
-  intro, histoire, amour, tension, silence quasi muet, expert, tribunal, leçon) ; négatifs : impacts, whooshes,
-  risers, beeps. La RECOMPOSER à chaque changement de durée. ~ −25 dBFS, −7 dB de ducking sous la voix.
-- Mixage (`mix.py`) → loudnorm deux passes −14 LUFS, crête −1,5 dB ; remuxer sur la vidéo rendue (`-c:v copy`).
+- **Bruitages = vrais bruits de la scène** (barreaux, papier, tampon, poches de sang, pas sur linoléum, porte,
+  machine à écrire, balance, horloge…). **JAMAIS** de pop, whoosh, ding/chime, buzzer, « reveal », swell, boom,
+  souffles de transition (= « sons typiques IA »). ElevenLabs `sound-generation` avec la fin de description d'AKTE 04
+  (`son/sons.py` : « Realistic foley recording, close microphone… No music, no whoosh, no synth… »), 4 requêtes en
+  parallèle au plus, `duration_seconds` ≥ 0,5. **Contrôle sans oreille** : tous les sons bout à bout passés dans
+  Scribe avec `tag_audio_events=true` → refaire tout son où il entend voix, musique ou « whoosh ».
+- **« Bien fait, ça doit attirer »** : mixage **STÉRÉO** (voix au centre ; chaque son placé à gauche/droite d'après
+  l'image ; les pages qui tournent TRAVERSENT l'image ; ambiances larges) ; accents (tampons, chutes, touches) + 3 dB ;
+  chaque son calé sur le geste à l'image. Voix toujours ≥ 9 dB au-dessus du fond dans chaque phrase (mesure d'AKTE 04).
+- **Retours en arrière = vrai rembobinage** (demande de l'auteur) : touche de magnétophone qui claque, cassette qui
+  rembobine (bande qui siffle), et la MUSIQUE elle-même qui repart à l'envers en accélérant (`REWIND` de
+  `son/mixage.py`), touche stop à l'arrivée.
+- **Moniteur** : synthétisé (sinus + harmoniques), un bip par battement dessiné (`window.ECG04`), hauteur qui baisse
+  quand il s'éteint, bip continu sur la ligne plate puis silence ; le son généré par ElevenLabs n'a pas de bips nets.
+  Compteur, horloge, déclics : synthétisés aussi (calés exactement).
+- **Musique** ElevenLabs Music (`/v1/music`, `composition_plan`, sections ≥ 3 s) calée sur la frise réelle ; « bonne
+  musique de fond » : piano feutré + violoncelle + cordes graves douces (AKTE 04), sans percussions ni effets ;
+  ≈ −23 dBFS, −7 dB sous la voix, SILENCE complet à la mort. La RECOMPOSER à chaque changement de durée. Formats :
+  `mp3_44100_128` (le 192 kb/s exige un abonnement supérieur).
+- Mixage (`son/mixage.py` d'AKTE 04) → loudnorm deux passes −14 LUFS, crête −1,5 dB ; remuxer sur la vidéo rendue
+  (`-c:v copy`), AAC 256 kb/s stéréo.
+
+## Couverture Instagram (demande de l'auteur, AKTE 04)
+
+- Une image À PART (pas dans la vidéo : l'accroche doit rester la 1re seconde), 1080 × 1920, importée dans Instagram
+  (« Modifier la couverture » → « Ajouter depuis la pellicule ») : `cover.html` + `node videos/<ep>/cover.mjs`.
+- Peu d'écriture : le titre de l'épisode en très grand (surligneur jaune), UNE accroche courte en darija dans SES
+  mots (AKTE 04 : « مريض مات… / لا حبس، لا غرامة »), « AKTE NN ». Une image qui raconte l'histoire d'un coup d'œil
+  (AKTE 04 : la jeune médecin épuisée sous deux poches identiques « 0 ≠ A »), mêmes personnages et dessins que
+  l'épisode, halo jaune. Tout l'important dans le recadrage 3:4 de la grille du profil (y 240–1680) : le vérifier.
 
 ## Vérité
 
@@ -285,8 +343,12 @@ videos/<episode>/
 - [ ] Accroche travaillée avec la sanction ; intro « Yassine » + photo + j'aime/abonne ; pas de question au milieu.
 - [ ] Personnages nouveaux et vivants, aucun chevauchement de corps, aucune animation amateur ; le décès montré.
 - [ ] Planche avec maquette Instagram + `overlapscan` : rien sous les zones rouges, aucun texte arabe recouvert.
-- [ ] Sons naturels seulement ; musique recomposée sur la durée finale ; −14 LUFS.
-- [ ] `instagram.md` livré avec la vidéo ; `SERIE.md` à jour ; photo et clé hors de git.
+- [ ] Sous-titres = ses mots, une ligne, dans les zones (`tools/soustitres.mjs`) ; repères recalés (`reperes_voix.py`).
+- [ ] Accroche à ×1,1 ; décès avec moniteur (ralentit, ligne plate, bip continu) et silence.
+- [ ] Sons naturels seulement (contrôle Scribe), stéréo, rembobinage aux retours en arrière ; musique recomposée sur
+      la durée finale ; voix ≥ 9 dB au-dessus du fond ; −14 LUFS.
+- [ ] `instagram.md` (darija, ses mots, pas d'arabe standard) + couverture livrés avec la vidéo ; `SERIE.md` à jour ;
+      photo, voix et clé hors de git.
 
 ## Clé ElevenLabs
 
