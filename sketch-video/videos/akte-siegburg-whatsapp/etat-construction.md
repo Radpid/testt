@@ -197,10 +197,23 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
 - Dans c.hud, une classe CSS « de » écrase un `fill` donné en attribut : utiliser `D.outils.tx`.
 - La mesure du vert (R11) reste à faire sur la vraie scène 11.
 
-## Étape interrompue
+## Étape terminée : scènes, partie 1 (scènes 1 à 5, scenes-1.js)
+**Fait :**
+- Reprise de l'étape interrompue : les cinq scènes étaient écrites (accroche 1–3, intro 4, le groupe 5), sans contrôles. D.exemple et les
+  scènes d'exemple étaient déjà retirés. L'étape « décors 3, HUD, mises en place » était complète (grep des D.xxx du storyboard : rien ne
+  manque ; errcheck sans erreur) : rien refait.
+- Contrôles sur captures : planches --entre b1,b4 avec et sans --ig, accroche image par image (0 → 1,4 s), transitions sortie du
+  téléphone (b2), plongée (b3), T-NOTIF (i1, b4), gros plans des scènes 2, 3, 5 ; overlapscan 0 → 22 s ; mouvement ; soustitres.
+- Corrections : frappe de la somme (×1,45 au lieu de ×1,9 : la bulle sortait de l'écran) ; scène 2, caméra cy 930 et coups de zoom plus
+  doux (ses pieds touchaient l'étiquette de mention), fantôme et départ de la plongée recalés ; scène 3, vibreur avec la croix ; scène 5,
+  bannière 1,15 s et titre écrit après elle (il s'écrivait caché sous la bannière).
+- storyboard.md : « Écarts de construction », section « Étape scènes, partie 1 ».
 
-« scènes, partie 1 sur 4 » avait commencé quand le chantier a été mis en pause : ses fichiers sont sauvegardés tels quels (travail partiel). La reprise relance cette étape ; l'agent regarde ce qui existe et complète.
+**Reste à faire :** scènes 6 à 21 (parties 2 à 4).
 
-Où en était l'agent (sa liste de tâches au moment de l'arrêt) :
-- les trois étapes de décors sont finies (decor-3.js, HUD, X.aides, X.lieux, affiche, contrôles)
-- en cours : scènes, partie 1 (scenes-1.js commencé)
+**Notes pour la suite :**
+- Mouvement (tools/mouvement.mjs) : une scène ÉCRAN avec seulement des avatars r 30 qui apparaissent reste sous 3 % (b4 : 2,4 % avant
+  correction) ; le semis à 6 px/s ne compte presque pas. Ce qui fait passer le seuil : un saut du fil, une bannière qui remonte, le vibreur
+  (buzz) sur un événement, une bulle qui jaillit.
+- Script de mesure limité à quelques beats (hors dépôt) : ONLY=b5,b6 node <scratchpad>/mvt.mjs videos/akte-siegburg-whatsapp.
+- tools/soustitres.mjs : le sous-titre de b9 (« وزادت: Vielleicht sitzt aber… ») déborde même rétréci à 76 % (partie 2).

@@ -64,7 +64,7 @@
     c.text("1.000,00 EUR", 502, 1150, 76, "de", "middle", b1.g);
     c.text("verurteilt, … zu zahlen", 470, 1204, 22, "de light", "middle", b1.g);
     D.outils.tx(b1.g, "laut Urteil", 724, 1210, 17, "light", "end", { fill: "#55524B" });
-    frappe(b1, aS, 502, 1142, 0.28, 1.9);
+    frappe(b1, aS, 502, 1142, 0.28, 1.45);   // 1,45 : à 1,9 la bulle débordait de l'écran pendant la frappe
     A.buzz(P.tel, aS + 0.25, 12, 0.4); A.punch(P.tel, aS + 0.25, 0.05);
 
     H.pastille(c, "Schadensersatz", "تعويض", { at: "b1@أورو", yellow: true, size: 30, parent: P.bande });
@@ -85,8 +85,10 @@
     const k = X.use(c); k.bg();
     const m = M.of(c), t0 = T("b2");
     const aW = T("b2@والمحكمة"), aH = T("b2@حكمات"), aK = T("b2@تخلصهم"), aJ = T("b2@جيبها");
-    c.camera([{ at: "b2", s: 1.0, cx: 540, cy: 920 }, { at: "b2+0.1", s: 1.03, cx: 540, cy: 920, d: 3.1, ease: "lin" }]);   // pas de zoom (le tableau passerait sous la pastille)
-    c.kick("b2@حكمات", 0.05); c.kick("b2@تخلصهم", 0.04); c.kick("b2@جيبها", 0.04);   // un peu moins que le § 4 : le tableau monterait sous la pastille
+    // pas de zoom (le tableau passerait sous la pastille) ; cy 930 au lieu de 920 et coups de zoom plus doux que le § 4 : avec la poussée
+    // du cadrage global (+4 %), ses pieds touchaient l'étiquette de mention (y 1404) au coup de pied, et le tableau montait sous la pastille
+    c.camera([{ at: "b2", s: 1.0, cx: 540, cy: 930 }, { at: "b2+0.1", s: 1.03, cx: 540, cy: 930, d: 3.1, ease: "lin" }]);
+    c.kick("b2@حكمات", 0.05); c.kick("b2@تخلصهم", 0.04); c.kick("b2@جيبها", 0.025);
     L.salle(c, {});
 
     // ELLE (pieds (530, 1320), échelle 1,04), « téléphone levé d'une main », trois-quarts vers la droite ; corps, téléphone et ticket
@@ -115,7 +117,7 @@
     m.obj(D.colere, 662, 880, 1.1).pop(aJ + 0.05, 0.3).wobble(aJ + 0.35, 0.6, 10);
 
     // c.hud : fantôme du téléphone, bannière du tribunal, pastilles, étiquette de mention
-    H.fantome(c, { at: "b2", vers: [541, 1094], rot: 8 });
+    H.fantome(c, { at: "b2", vers: [541, 1083], rot: 8 });   // sa main au début de la scène (caméra cy 930)
     H.banniere(c, { at: "b2@والمحكمة", until: "b2@جيبها", y: 284, sceau: true, titre: "Arbeitsgericht Siegburg" });
     H.pastille(c, "Stationsärztin", "طبيبة القسم", { at: "b2@طبيبة", until: "b2@والمحكمة-0.05", x: 520, y: 402, size: 30 });
     H.pastille(c, "« verurteilt, … zu zahlen »", "المحكمة حكمات: تخلص", { at: "b2@حكمات+0.15", x: 520, y: 402, size: 28, yellow: true, micro: "laut Urteil" });
@@ -127,7 +129,7 @@
     X.use(c);
     const m = M.of(c);
     const aP = T("b3@كتباتش"), aM = T("b3@مريض"), a4 = T("b3@4"), aZ = T("b3@زميل");
-    const P = L.fil(c, { entree: "plongee", depuis: [541, 1105, 0.08], titre: "Ärzte-AC", sous: "WhatsApp-Chatgruppe · 9 Mitglieder", date: "22.05.2026", batt: 0.7, mention: STATUT });
+    const P = L.fil(c, { entree: "plongee", depuis: [541, 1094, 0.08], titre: "Ärzte-AC", sous: "WhatsApp-Chatgruppe · 9 Mitglieder", date: "22.05.2026", batt: 0.7, mention: STATUT });
     const F = P.fil.g, Cn = P.contenu;
     // le même message, réduit
     A.bulleFil(c, F, 342, 600, 440, 190, [806, 820], { mat: "vert" });
@@ -150,7 +152,7 @@
     A.jaillit(pat, aP, 330, 1000, 0.3);
     pat.on((t, s) => { const p = E.out(prog(t, aM + 0.12, 0.3)); if (p > 0) { s.o *= 1 - 0.65 * p; s.px = 330; s.py = 1000; s.s *= 1 - 0.15 * p; } });
     frappe(pose(c, pb.g, "croix", { w: 150, h: 150, sw: 10 }, 330, 1000), aM + 0.12, 330, 1000, 0.22, 2.2);
-    A.buzz(P.tel, aM + 0.32, 5, 0.3);
+    A.buzz(P.tel, aM + 0.16, 6, 0.32);   // le vibreur avec la croix qui frappe (« slam, buzz 5 »)
     c.text("مريض", 330, 1146, 52, "ttl", "middle", Cn).wipe(aM, 0.25, "rtl");
 
     // un collègue : LUI, entouré de jaune
@@ -219,12 +221,13 @@
     X.use(c);
     const t0 = T("b4"), a9 = T("b4@3"), aA = T("b4@les"), aB = T("b4@الكونجيات"), aC = T("b4@الكادوات");
     const defile = (t) => -336 + 168 * E.back(prog(t, aB, 0.3)) + 168 * E.back(prog(t, aC, 0.3));   // A arrive à y 1056, puis le fil monte deux fois
-    const P = L.fil(c, { entree: "notif", banniere: { titre: "Ärzte-AC", ligne: "WhatsApp-Chatgruppe" }, dateAvant: "", date: "Mai 2025", batt: 0.9,
+    const P = L.fil(c, { entree: "notif", banniere: { titre: "Ärzte-AC", ligne: "WhatsApp-Chatgruppe", until: t0 + 1.15 }, dateAvant: "", date: "Mai 2025", batt: 0.9,
       filY: 690, filH: 610, defile, mention: [{ at: "b4", de: "laut Urteil", ar: "حسب الحكم" }, { at: "b4@les", de: "Rekonstruktion", ar: "مشهد تمثيلي" }] });
     const F = P.fil.g;
     // l'en-tête s'écrit ; le sous-titre compte les membres
-    A.tape(c, P.tete, "Ärzte-AC", 294, 390, 36, "de", t0 + 0.3, 0.35);
-    const sous = c.text("WhatsApp-Chatgruppe", 294, 422, 21, "de light", "start", P.tete).fade(t0 + 0.45, 0.3);
+    // la bannière reste 1,15 s (§ « Pastilles, mentions, bannière » : 0,9 à 1,2 s) et couvre l'en-tête : le titre s'écrit après sa remontée
+    A.tape(c, P.tete, "Ärzte-AC", 294, 390, 36, "de", t0 + 1.3, 0.35);
+    const sous = c.text("WhatsApp-Chatgruppe", 294, 422, 21, "de light", "start", P.tete).fade(t0 + 1.32, 0.25);
     sous.on((t) => { const n = t < a9 ? 0 : Math.round(lerp(1, 9, E.out(prog(t, a9, 0.55)))), s = n ? `WhatsApp-Chatgruppe · ${n} Mitglieder` : "WhatsApp-Chatgruppe";
       if (sous.textEl.textContent !== s) sous.textEl.textContent = s; });
     H.pastille(c, "Ärzte-AC", "گروپ أطباء الجراحة", { at: "b4@الجراحة", until: "b4@3-0.04", size: 30, parent: P.bande });

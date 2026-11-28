@@ -1897,3 +1897,22 @@ sans pictogramme de la scène 14).
 contact, règle), plongée et montée, sortie du téléphone vers une main, salle en cascade, salon (LUI assis derrière le plaid), salle de la
 scène 14 (deux blouses, machine éteinte, aimants, LUI qui marche avec son carton : le carton suit `out.handR`), appel vidéo (juge main
 levée : la manche ne cache pas AS2), brouillon L9 mot à mot + envoi (la mesure du vert, R11, reste à faire sur la vraie scène 11), page du jugement, coffre ouvert / fermé.
+
+### Étape « scènes, partie 1 » (scènes 1 à 5, `scenes-1.js`, 28.11.2026)
+
+Les cinq scènes avaient été écrites par l'agent précédent (arrêté avant ses contrôles) ; elles ont été contrôlées sur captures
+(planches `--entre b1,b4` avec et sans `--ig`, accroche image par image, transitions sortie / plongée / T-NOTIF), puis corrigées.
+- Scène 1 — la réponse du tribunal « frappe » (aide `frappe` : `Node.slam` appelle `scene.shake`, sans effet dans `c.hud`) depuis
+  ×1,45 et non ×2,6 : plus grande, la bulle débordait de l'écran du téléphone. Anneau jaune 600 × 288 (le § 4 disait 520 × 290) :
+  il doit entourer toute la bulle B0, large de 482 px. Séparateur et lignes de B0 remontés de 6 à 10 px (place du contenu).
+- Scène 2 — bannière en y 284 et pastilles en (520, 402) (§ 4 : 300 et 420) : l'arabe de la pastille reste au-dessus du tableau des
+  gardes. Caméra `cy: 930` (et non 920) et coups de zoom 0,05 / 0,04 / 0,025 (et non 0,06 / 0,05 / 0,05) : avec la poussée du
+  cadrage global, ses pieds touchaient l'étiquette de mention (y 1404) au coup de pied. En conséquence, cible du fantôme (541, 1083) et
+  départ de la plongée de la scène 3 (541, 1094). Ajouts : le pied se lève avant de frapper, une marque de colère à sa tempe.
+- Scène 3 — le vibreur part avec la croix (`b3@مريض+0.16`, 6 px), pas après elle.
+- Scène 5 — la bannière T-NOTIF reste 1,15 s (dans la plage 0,9–1,2 s des Conventions) et le titre « Ärzte-AC » s'écrit à `b4+1.3` (§ 4 :
+  `b4+0.3`) : la bannière couvre l'en-tête, le titre s'écrivait caché dessous. Deux anciens messages illisibles (K6, K2) en haut du fil :
+  le fil n'est pas vide avant les trois sujets.
+- Contrôles : aucune erreur JS ; mouvement b1 4,4 %, b2 18 %, b3 11 %, b4 3,4 % (l'intro, calme par nature, est signalée « FIGÉ ») ;
+  chevauchements restants : seulement la bulle de la somme pendant sa frappe (0,15 s) et les boîtes de police titre / sous-titre de l'en-tête
+  (9 px de marge de police, les lettres ne se touchent pas).
