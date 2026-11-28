@@ -42,7 +42,7 @@
      "melody",
      "fast notes"
     ],
-    "duration_ms": 7200,
+    "duration_ms": 8096,
     "lines": []
    },
    {
@@ -56,7 +56,7 @@
      "dark",
      "dramatic"
     ],
-    "duration_ms": 7580,
+    "duration_ms": 7573,
     "lines": []
    },
    {
@@ -86,7 +86,7 @@
      "drama",
      "loud"
     ],
-    "duration_ms": 17000,
+    "duration_ms": 16999,
     "lines": []
    },
    {
@@ -99,7 +99,7 @@
     "negative_local_styles": [
      "loud"
     ],
-    "duration_ms": 6590,
+    "duration_ms": 6592,
     "lines": []
    },
    {
@@ -108,7 +108,8 @@
      "one low note repeated, more and more spaced out",
      "contained tension",
      "a soft minor second near the end",
-     "low string tremolo very quiet"
+     "low string tremolo very quiet",
+     "leave space for a bedside monitor beeping"
     ],
     "negative_local_styles": [
      "loud",
@@ -120,15 +121,14 @@
    {
     "section_name": "13:37",
     "positive_local_styles": [
-     "a single low note held and slowly dying away",
-     "then complete silence",
-     "the strings drop out, only the piano note remains"
+     "a single low piano note held and slowly dying away",
+     "then complete silence for the rest of the section"
     ],
     "negative_local_styles": [
      "melody",
      "new notes"
     ],
-    "duration_ms": 5260,
+    "duration_ms": 5882,
     "lines": []
    },
    {
@@ -143,7 +143,7 @@
     "negative_local_styles": [
      "loud"
     ],
-    "duration_ms": 8940,
+    "duration_ms": 8938,
     "lines": []
    },
    {
@@ -158,7 +158,7 @@
      "drama",
      "fast"
     ],
-    "duration_ms": 16030,
+    "duration_ms": 16024,
     "lines": []
    },
    {
@@ -173,7 +173,7 @@
      "happy",
      "loud"
     ],
-    "duration_ms": 4340,
+    "duration_ms": 4343,
     "lines": []
    },
    {
@@ -188,7 +188,7 @@
      "dark",
      "loud"
     ],
-    "duration_ms": 10070,
+    "duration_ms": 10069,
     "lines": []
    },
    {
@@ -202,7 +202,7 @@
      "melody",
      "loud"
     ],
-    "duration_ms": 5090,
+    "duration_ms": 5094,
     "lines": []
    },
    {
@@ -216,7 +216,7 @@
     "negative_local_styles": [
      "new themes"
     ],
-    "duration_ms": 5770,
+    "duration_ms": 5750,
     "lines": []
    }
   ]

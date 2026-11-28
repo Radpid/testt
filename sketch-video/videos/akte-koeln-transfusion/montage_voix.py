@@ -11,6 +11,7 @@ D = sys.argv[1]                 # prises de l'épisode (raw.iso.mp3 + scribe.jso
 D_INTRO = D                     # intro commune à la série (copiée depuis AKTE 02)
 SR = 48000
 TEMPO = float(os.environ.get("TEMPO", "1.3"))
+TEMPO_HEAD, HEAD = 1.1, ("b1", "b2")   # retour de l'auteur (28.11.2026) : l'accroche (sa reprise) était trop rapide → ×1,1, le reste ×1,3
 
 def load(path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
@@ -90,7 +91,7 @@ FIX.update({("t2", k): v for k, v in {3: "ديالها،", 7: "حبس،", 25: "�
 FIX.update({("intro", k): v for k, v in FIX_INTRO.items()})
 # Rythme : enchaîné ; pause seulement quand le contexte change complètement (valeurs AVANT ×1,3).
 SCENE_START = {"i1", "b4", "b11", "b13", "b16", "b21", "b26"}
-EXTRA = {"b16": 4.2}   # scène muette après « ونهار الأحد، تقريبا مع لواحدة ونص… » ≈ 3,2 s à l'écoute
+EXTRA = {"b16": 5.0}   # scène muette après « ونهار الأحد، تقريبا مع لواحدة ونص… » ≈ 3,85 s à l'écoute (moniteur : ralentit, ligne plate, bip continu)
 RANGE = {"inner": (0.0, 0.22), "beat": (0.09, 0.2), "scene": (0.48, 0.6)}
 TARGET = {"inner": 0.07, "beat": 0.14, "scene": 0.55}
 XF = 0.02
@@ -161,6 +162,12 @@ def piece_of(src, t):
         if m[0] == src and m[1] - 1e-3 <= t <= m[2] + 1e-3: return m
     raise ValueError(f"mot hors des morceaux : {src} {t}")
 
+# point de coupe des deux vitesses : au milieu de la pause entre la fin de l'accroche (b2) et b3 (temps du montage ×1)
+def t1x(src, i, key):
+    w = SRC[src][1][i]; _, pa, pb, po = piece_of(src, w["start"]); return po + min(w[key], pb) - pa
+_lastH = [x for x in BEATS if x[0] == HEAD[-1]][0][1][-1]; _first = [x for x in BEATS if x[0] == "b3"][0][1][0]
+SPLIT = (t1x(_lastH[0], _lastH[1][-1], "end") + t1x(_first[0], _first[1][0], "start")) / 2
+tmap = lambda x: x / TEMPO_HEAD if x < SPLIT else SPLIT / TEMPO_HEAD + (x - SPLIT) / TEMPO
 out_beats = []
 for bid, parts in BEATS:
     toks = []
@@ -168,7 +175,7 @@ for bid, parts in BEATS:
         for i in idx:
             w = SRC[src][1][i]
             _, pa, pb, po = piece_of(src, w["start"])
-            s0 = (po + w["start"] - pa) / TEMPO; e0 = (po + min(w["end"], pb) - pa) / TEMPO
+            s0 = tmap(po + w["start"] - pa); e0 = tmap(po + min(w["end"], pb) - pa)
             text = FIX.get((src, i), w["text"].strip('"'))
             if text == "" and toks: toks[-1][2] = e0
             elif "|" in text:
@@ -185,17 +192,26 @@ for bid, parts in BEATS:
 tmp = os.path.join(D, "edited_1x.wav")
 with wave.open(tmp, "wb") as wf:
     wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR); wf.writeframes((np.clip(out, -1, 1) * 32767).astype("<i2").tobytes())
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp, "-af", f"atempo={TEMPO}", "-ar", str(SR), "-ac", "1", os.path.join(D, "edited.wav")], check=True)
-dur = len(out) / SR / TEMPO
+ns = int(SPLIT * SR)   # deux vitesses : tête ×1,1, suite ×1,3 (coupe dans un silence), puis recollées
+for nm, seg, tp in (("_tete", out[:ns], TEMPO_HEAD), ("_suite", out[ns:], TEMPO)):
+    with wave.open(os.path.join(D, nm + "_1x.wav"), "wb") as wf:
+        wf.setnchannels(1); wf.setsampwidth(2); wf.setframerate(SR); wf.writeframes((np.clip(seg, -1, 1) * 32767).astype("<i2").tobytes())
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(D, nm + "_1x.wav"), "-af", f"atempo={tp}", "-ar", str(SR), "-ac", "1", os.path.join(D, nm + ".wav")], check=True)
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(D, "_tete.wav"), "-i", os.path.join(D, "_suite.wav"), "-filter_complex", "[0:a][1:a]concat=n=2:v=0:a=1",
+                "-ar", str(SR), "-ac", "1", os.path.join(D, "edited.wav")], check=True)
+dur = tmap(len(out) / SR)
 json.dump({"duration": round(dur, 3), "tempo": TEMPO, "beats": out_beats}, open(os.path.join(D, "edl.json"), "w"), ensure_ascii=False, indent=1)
-print(f"edited.wav : {dur:.1f} s (tempo x{TEMPO}), {len(pieces)} morceaux")
+print(f"edited.wav : {dur:.1f} s (tempo x{TEMPO_HEAD} jusqu'à {SPLIT / TEMPO_HEAD:.2f} s, puis x{TEMPO}), {len(pieces)} morceaux")
 for b in out_beats: print(f"{b['id']:>5} {b['start']:6.2f}-{b['end']:6.2f}  {b['text']}")
 
 
 # --- mastering « voice-off » (SKILL : Voix § 10) -> voice.wav, puis beats.js / timings.js
 EP = os.path.dirname(os.path.abspath(__file__))
-CH = ("highpass=f=80,equalizer=f=120:t=q:w=1:g=2,equalizer=f=300:t=q:w=1:g=-2.5,equalizer=f=3500:t=q:w=1:g=3,"
-      "highshelf=f=9500:g=1.5,deesser=i=0.45,acompressor=threshold=-22dB:ratio=3:attack=6:release=90:makeup=2")
+# v2 (28.11.2026, « rendre la voix plus attirante ») : plus de chaleur (140 Hz), moins de carton (320 Hz), présence 2,8 / 5,2 kHz,
+# un peu d'air, compression « radio » un peu plus serrée, léger excitateur d'harmoniques au-dessus de 7 kHz.
+CH = ("highpass=f=70,equalizer=f=140:t=q:w=0.9:g=2.5,equalizer=f=320:t=q:w=1.2:g=-3,equalizer=f=2800:t=q:w=1.5:g=1.5,"
+      "equalizer=f=5200:t=q:w=1.2:g=2,highshelf=f=10000:g=2,deesser=i=0.5,"
+      "acompressor=threshold=-24dB:ratio=3.5:attack=5:release=80:knee=4:makeup=3,aexciter=amount=0.8:drive=6:freq=7000:ceil=16000")
 m = subprocess.run(["ffmpeg", "-hide_banner", "-i", os.path.join(D, "edited.wav"), "-af", CH + ",loudnorm=I=-15:TP=-1.5:LRA=11:print_format=json",
                     "-f", "null", "-"], capture_output=True, text=True).stderr
 ln = json.loads(m[m.rindex("{"):m.rindex("}") + 1])

@@ -291,15 +291,15 @@
    * Elle n'est PAS là. Pas de moniteur : ce qui « bat », c'est la roue du compteur (HUD), la trotteuse, la goutte, la couette. */
   st.scene({ from: "b16", in: "swipe", inDur: 0.42, build(c) {
     X.use(c); const m = M.of(c);
-    const t37 = T("b16@لواحدة"), calme = T("b16@end") + 0.2, vie = (t) => 1 - E.inOut(prog(t, calme, 0.8));
+    const t37 = T("b16@لواحدة"), FLAT = X.aides.ecg04().flat, calme = FLAT - 0.15, vie = (t) => 1 - E.inOut(prog(t, calme, 0.8));   // retour auteur : la ligne plate du moniteur décide
     const R = L.chambre(c, { at: "b16", day: true, vie,
       pat: (t) => ({ expr: "sleep", talk: 0, headTilt: rnd(lerp(6, 14, E.inOut(prog(t, calme, 0.8))), 4), look2: [0, 0.3], reachR: [rnd(lerp(105, 118, prog(t, calme, 0.8)), 2), -212] }),
       clock: (t) => ({ time: 13 + (t < t37 ? 36 : 37) / 60, s: Math.round(Math.min(t, calme + 0.3) * 10) * 36 % 360 }) });
     c.camera([{ at: "b16", s: 1, cx: 520, cy: 930 }, { at: "b16+0.1", s: 1.04, cx: 520, cy: 930, d: 2.9, ease: "lin" }]);
     m.dust({ x: 520, y: 770, w: 190, h: 230 }, 9, { seed: 13, op: 0.7, speed: 6, to: calme + 0.6 });
     void R;
-    A.grey(c, calme + 0.2, 1, 0.85);
+    A.grey(c, FLAT, 1, 0.85);
     A.typed(c, "13:37", 540, 480, 96, "b16@لواحدة", { parent: c.hud, dur: 0.25, halo: 8 });
-    A.halo(c.text("المريض ما عاشش", 540, 1440, 72, "ttl", "middle", c.hud), 8).wipe(T("b16@end") + 0.6, 0.5, "rtl");
+    A.halo(c.text("المريض ما عاشش", 540, 1440, 72, "ttl", "middle", c.hud), 8).wipe(FLAT + 0.05, 0.5, "rtl");
   } });
 });

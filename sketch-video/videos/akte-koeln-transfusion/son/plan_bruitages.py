@@ -55,7 +55,7 @@ P = [
  E("marker_hatch", "b12@الـgroupe", -24, dur=0.6, src=1.0, fade=0.1),
  # 21:50, la chambre
  E("page_turn", "b13", -18, off=-0.05),
- E("hosp_night", "b13", -34, until="b16@end+0.9", fade=0.8),
+ E("hosp_night", "b13", -34, until="FLAT+0.6", fade=0.8),
  E("iv_hook", "b13@علقات", -16, off=0.4),
  E("drop", "b13@poche", -28, off=0.4, every=1.0, until="b15@ووقفو"),
  E("pencil_tick", "b14@2", -22), E("pencil_tick", "b14@6", -22),
@@ -64,10 +64,10 @@ P = [
  E("iv_hook", "b15@ووقفو", -18, off=0.3),
  # dimanche : la goutte, puis plus rien
  E("page_turn", "b16", -18, off=-0.05),
- E("drop", "b16", -26, off=0.3, every=1.2, until="b16@end+0.2"),
+ E("drop", "b16", -26, off=0.3, every=1.2, until="FLAT-0.25"),
  # muette 2 : elle glisse le long du mur
- E("cloth_wall", "b16@end+2.3", -16),
- E("steth_drop", "b16@end+2.75", -14),
+ E("cloth_wall", "b16@end+2.9", -14),
+ E("steth_drop", "b16@end+3.35", -12),
  E("door_open", "b18@الإدارة", -14),
  # le bureau
  E("page_turn", "b19", -18, off=-0.05),
@@ -130,14 +130,25 @@ C = [
  ("idle",  "b6@وحدة", "b9", 2, -30),
  ("relay", "b8+0.35", None, 1, -24), ("relay", "b8@دوزات", None, 1, -24), ("relay", "b8@الطبيبة", None, 1, -24),
  ("count", "b8@دوزات", "b8@7-0.05", 12, -18), ("clac", "b8@7", None, 1, -12),
- ("idle",  "b13", "b16", 2, -30), ("idle", "b16", "b16@end+0.2", 2, -25),
- ("last",  "b16@end+0.2", None, 1, -25),             # les intervalles s'allongent, dernier clic à + 0,8
- ("tick",  "b13", "b16@end+0.5", 1, -27),            # la trotteuse de l'horloge, s'arrête à + 0,5
+ ("idle",  "b13", "b16", 2, -30), ("idle", "b16", "FLAT-0.9", 2, -25),
+ ("last",  "FLAT-0.9", None, 1, -25),                # les intervalles s'allongent, dernier clic juste avant la ligne plate
+ ("tick",  "b13", "FLAT+0.15", 1, -27),              # la trotteuse s'arrête avec la ligne plate
  ("relay", "b22@Organisationsverschulden", None, 1, -16), ("clac", "b22@Organisationsverschulden+0.6", None, 1, -12),
  ("roll",  "b29@القصة", "b29@لور", 40, -22),
 ]
-SILENCE = ("b16@end+0.9", "b17-0.25")   # aucune musique (la mort)
+SILENCE = ("FLAT-0.3", "b17-0.25")   # aucune musique (la mort) ; FLAT = ligne plate du moniteur (window.ECG04, son/ecg_times.mjs)
 
 # Retours en arrière (demande de l'auteur) : la musique elle-même est « rembobinée » comme une cassette —
 # les secondes qui précèdent, jouées à l'envers et accélérées (×3 → ×5, la hauteur monte), puis la touche stop.
 REWIND = [("b3@نرجعو", "i1-0.1"), ("b29@القصة", "b29@لور")]
+
+# Stéréo (v2) : position gauche (−1) / droite (+1) de chaque son, d'après l'endroit de l'image ; « sweep » = il traverse l'image.
+PAN = {"weight_drop": -0.4, "pin_cork": -0.45, "church_bell": 0.35, "roller_shutter": 0.2, "tray_slide": 0.25, "iv_hook": 0.35, "bed_creak": -0.2,
+       "steth_drop": -0.45, "cloth_wall": -0.45, "door_open": 0.3, "leather_chair": 0.35, "pen_sign": -0.1, "cart": 0.4, "stone_set": 0.4,
+       "brass_clink": -0.3, "pencil_tick": 0.12, "marker_x": 0.1, "iv_bags": 0.05, "marker_hatch": 0.1, "paper_slide": -0.05}
+SWEEP = {"page_turn": (0.7, -0.7), "page_back": (-0.7, 0.7), "footsteps": (-0.35, 0.35)}
+WIDE = {"court_room", "hosp_night", "wind_window", "tape_rewind", "tape_rewind_l"}     # ambiances et bande : larges (G et D décorrélés)
+# Moniteur (v2) : un bip par battement de window.ECG04 (synthèse, 930 Hz × hauteur), puis le bip CONTINU de la ligne plate
+MONITOR = dict(f0=930, night=-23, react=-20, sunday=-16, flat_g=-15, flat_end="b16@end+2.95", pan=0.12)
+# Accents plus forts (retour de l'auteur : « ça doit attirer ») : + 3 dB pour les sons au-dessus de −20 dB, + 1 dB pour les autres
+BOOST = (3.0, 1.0)

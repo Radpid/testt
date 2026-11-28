@@ -32,9 +32,9 @@
 
   /* ═══════ 14 · MUETTE 2 : elle glisse le long du pilier · l'effondrement · la convocation (silence + b17–b18) ═══════
    * Autre lieu, autre moment, SANS date ni heure (onglet masqué par le HUD, aucune horloge). Une seule scène, sans coupe. */
-  st.scene({ from: "b16@end+1.9", in: "fade", inDur: 0.4, build(c) {
+  st.scene({ from: "b16@end+2.5", in: "fade", inDur: 0.4, build(c) {   // +0,6 s (retour auteur : moniteur, ligne plate, bip continu)
     const k = X.use(c), m = M.of(c); k.bg();
-    const tE = T("b16@end"), t0 = tE + 1.9, tS = tE + 2.3, tC = tE + 3.2, tI = T("b17@انهيار"), tW = T("b18@وفي"), tA = T("b18@الإدارة"), tCall = T("b18@عيطات"), tU = T("b18@ليها");
+    const tE = T("b16@end"), t0 = tE + 2.5, tS = tE + 2.9, tC = tE + 3.8, tI = T("b17@انهيار"), tW = T("b18@وفي"), tA = T("b18@الإدارة"), tCall = T("b18@عيطات"), tU = T("b18@ليها");
     c.camera([{ at: t0, s: 1, cx: 520, cy: 930 }, { at: "b17", s: 1.1, cx: 490, cy: 1010, d: 0.6 }, { at: tA, s: 1, cx: 560, cy: 950, d: 0.8 }]);   // revue : cx 450 → 490
     m.obj(D.corridor04, 0, 0, 1, { doors: [], night: 0 });
     m.obj(D.pillar, 150, 380, 1, {});

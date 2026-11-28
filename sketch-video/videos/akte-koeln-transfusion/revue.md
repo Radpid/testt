@@ -165,3 +165,14 @@ Repères : 47 repères qui visaient des mots du script recalés sur ses mots (`s
 Sous-titres : une seule ligne garantie (`index.html` : rétrécit jusqu'à 76 % si besoin ; b10 et b15 à 92 %).
 Mots à faire confirmer à l'auteur : b13 « مع العشرة إلا قسمين، علقات » (Scribe : « العشرة القسمين، لقاتو ») ;
 b26 « حدا المريض » (Scribe entend « هذا/هاد ») ; b7 « 24 heures » ou « 24 ساعة ».
+
+## Version 2 (28.11.2026, retours de l'auteur)
+
+- Mort : moniteur au mur de la chambre (D.monitor04, scènes 11–13) ; battements partagés image/son (window.ECG04) : 77/min la nuit,
+  s'emballe à « كيتقيا », 71/min le dimanche puis deux battements lents et faibles, LIGNE PLATE (cadre rouge, FC 0), bip continu ;
+  « المريض ما عاشش » et le gris arrivent sur la ligne plate ; silence porté à 3,9 s (EXTRA b16 5,0) ; scène 14 décalée de 0,6 s.
+- Voix : accroche (b1–b2) à ×1,1, le reste ×1,3 ; mastering plus chaud et présent (montage_voix.py, CH v2).
+- Son : mixage STÉRÉO (sons placés selon l'image, pages qui traversent, ambiances larges), accents + 3 dB, musique recomposée sur
+  le nouveau minutage (piano, violoncelle, cordes douces) à −23 dBFS ; voix ≥ 9 dB au-dessus du fond dans chaque phrase.
+- Voice Changer (clone « yassine ») essayé sur 25 s : abîme des mots de darija (« مريض مات » → « بريك بات ») ; non utilisé, à l'auteur
+  de juger à l'oreille (out/AKTE04_voix_comparaison_1-2-3.m4a).

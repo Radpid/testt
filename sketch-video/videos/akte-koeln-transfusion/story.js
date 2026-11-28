@@ -339,7 +339,21 @@
         D.rollCounter(g, { digits: [6, 3], tick: 0 }); }, () => ({}), COUNTER_AT[0], COUNTER_AT[1], COUNTER_S, 0, parent);
       return at == null ? n : n.fade(T(at) - 0.05, 0.1);
     };
-    const aides = { INK: INK_, YEL: YEL_, PAPER: PAPER_, halo, fat, tired, ppC, phC, ppBed, noLegs, stride, walker, colStart, hours, tilt, calm, geomAt, toScreen, sceneAt,
+    /* Moniteur de la chambre (retour de l'auteur, 28.11.2026 : « le bip bip », que la mort se voie) : battements PARTAGÉS par l'image
+     * (D.monitor04) et le son (son/mixage.py lit window.ECG04). [instant, amplitude, hauteur du bip]. Nuit : 77/min ; à « كيتقيا » il
+     * s'emballe ; dimanche : 71/min, puis deux battements lents et faibles, puis LIGNE PLATE (flat). */
+    const ecg04 = () => {
+      if (ecg04.v) return ecg04.v;
+      const B = [], add = (t, a, h) => B.push([+t.toFixed(3), a == null ? 1 : a, h == null ? 1 : h]);
+      const s13 = T("b13") - 0.3, tq = T("b15@كيتقيا"), e12 = T("b16") - 0.05, s16 = T("b16"), E16 = T("b16@end");
+      for (let x = s13; x < tq; x += 0.78) add(x);
+      for (let x = tq, per = 0.72; x < e12; per = Math.max(0.46, per * 0.93), x += per) add(x);
+      const sun = []; for (let x = s16 + 0.15; x < E16 - 0.35; x += 0.84) sun.push(x);
+      sun.forEach((x, i) => add(x, 1, 1 - 0.04 * i));
+      const L = sun[sun.length - 1]; add(L + 0.95, 0.75, 0.86); add(L + 1.95, 0.5, 0.76);
+      return (ecg04.v = window.ECG04 = { beats: B, flat: +(L + 2.3).toFixed(3) });
+    };
+    const aides = { INK: INK_, YEL: YEL_, PAPER: PAPER_, halo, ecg04, fat, tired, ppC, phC, ppBed, noLegs, stride, walker, colStart, hours, tilt, calm, geomAt, toScreen, sceneAt,
       typed, quote, strip, chip, rekon, marker, ring, snip, scan, grey, stamp, cartCounter, COUNTER_AT, COUNTER_S, COUNTER_LAND };
 
     /* ───────── AKTE 04 : MISES EN PLACE FIXES (storyboard « Mise en place fixe ») — X.lieux ─────────
@@ -445,6 +459,9 @@
         const sky = c.sk((g, p) => D.nightWindow(g, p), (t) => ({ part: "sky", p: o.day ? 0 : 1, cloud: rnd((t * 0.045) % 1, 100) }), 710, 520, 1);
         const frame = m.obj(D.nightWindow, 710, 520, 1, { part: "frame" });
         [sky, frame].forEach((n) => bd(m, n, o.at, 0.03, "grow", { pivot: [800, 620] }));
+        const ecgP = ecg04();
+        const monitor = c.sk((g, p) => D.monitor04(g, p), (t) => ({ t: rnd(t, 100), beats: ecgP.beats, flat: ecgP.flat }), 600, 642, 1);
+        bd(m, monitor, o.at, 0.06, "grow", { pivot: [600, 530] });
         const stand = m.obj(D.nightstand04, 155, 1300, 1, o.day ? { bags: false, glass: true } : {}); bd(m, stand, o.at, 0.1, "left", { dist: 160 });
         const back = m.obj(D.bedBack04, 400, 1300, 1, {});
         const patient = ppBed(400, 1335, 1, (t) => Object.assign({}, CAST.PAT, { view: "front", expr: "calm", blink: rnd(Math.max(0.25, blinkAt(t, 3.1)), 10), talk: 0, look2: [0.35, -0.05],
@@ -456,7 +473,7 @@
         const pole = m.obj(D.ivPole, 700, 1300, 1, { sHook: false }); bd(m, pole, o.at, 0.12, "rise", { dist: 160 });
         const h2 = pole.out.hook2, hook2 = m.obj(D.ivHook, 700 + h2[0], 1300 + h2[1], 1, {}); m.pend(hook2, o.at == null ? -1 : T(o.at) + 0.5, 8, [700 + h2[0], 1300 + h2[1]], { idle: 2.4 });
         bd(m, hook2, o.at, 0.12, "rise", { dist: 160 });
-        const out = { m, k, patch, face, hands, sky, frame, stand, back, patient, duvet, bedF, pole, hook2, hook: [756, 915] };
+        const out = { m, k, patch, face, hands, sky, frame, monitor, ecg: ecgP, stand, back, patient, duvet, bedF, pole, hook2, hook: [756, 915] };
         if (o.bag) {
           const b = o.bag, tint = b.tint == null ? (o.day ? 0 : 1) : b.tint;
           out.bag = c.sk((g, p) => D.bloodBag(g, p), (t) => ({ level: rnd(b.level ? b.level(t) : (o.day ? 0.8 : 1), 50), tint, sway: rnd(t * 1.6 * vie(t), 10), ghost: 1 }), 756, 921, 0.8);
@@ -514,7 +531,7 @@
         const o = clamp(op == null ? 1 : op, 0, 1).toFixed(3); if (o !== P.op) { P.o.style.opacity = o; P.o.style.display = +o <= 0.001 ? "none" : ""; P.op = o; }
       };
       const H = { tR: T("b3@نرجعو"), tI: T("i1") - 0.1, tB: T(AFTER_INTRO) - 0.1, tK: T("b6@شي"), tW: T("b6@وحدة"), tG: T("b7@garde"), tD8: T("b8@دوزات"), t12: T("b8@7"),
-        t63: T("b13@9"), tDie: T("b16@end") + 0.2, tDim: T("b16@end") + 1.9, tOrg: T("b22@Organisationsverschulden"), tEnd: T(LAST + "@end") + 0.15,
+        t63: T("b13@9"), tDie: ecg04().flat - 0.15, tDim: T("b16@end") + 2.5, tOrg: T("b22@Organisationsverschulden"), tEnd: T(LAST + "@end") + 0.15,
         t5: T("b4@7"), tb5: T("b5"), tb6: T("b6"), tSun: T("b16@الأحد"), t21: T("b21"), t26: T("b26") };
       const tLand = COUNTER_LAND, tFly = H.tOrg + 0.12;
       const odo = (v) => { const u = ((v % 10) + 10) % 10; return [rnd(Math.floor(v / 10) + Math.max(0, u - 9), 20), rnd(u, 20)]; };   // compteur kilométrique : la dizaine tourne avec 9 → 0
@@ -588,7 +605,7 @@
      * cols / top / side selon le nombre de scènes (AKTE 02 : 18 cases, 6 colonnes) ; la grille finit avant la carte « commentaire ». */
     st.flash(LAST + "@end+0.15", 0.35, 0.85);
     // AKTE 04 (storyboard, scène 26) : 24 cases, image figée choisie par case (rang de la case, l'intro ne compte pas ; null = fin de scène)
-    const FREEZE = ["b1@غرامة+0.4", "b2@end", "b4@سنات", null, null, null, null, null, "b12@بالمعلومات", null, "b15@ليه", "b16@end+1.4", "b17@end", "b19@end",
+    const FREEZE = ["b1@غرامة+0.4", "b2@end", "b4@سنات", null, null, null, null, null, "b12@بالمعلومات", null, "b15@ليه", "b16@end+2.1", "b17@end", "b19@end",
       null, null, null, null, null, null, null, null, null, null];
     st.summary({ at: LAST + "@end+0.15", in: "cut", dezoomAt: LAST + "@end+0.5", cols: 6, crop: [230, 1310], top: 372, gap: 10, side: 92, freezeAt: FREEZE,
       below(c, cells) {

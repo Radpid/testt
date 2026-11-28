@@ -534,4 +534,51 @@
     return { neck: [0, 76], bottom: b, w };
   };
   D.bust04.essais = [{}, { badge: true }, { outfit: "scrubs" }];
+
+  /* ───────── moniteur de chevet AU MUR (retour de l'auteur, 28.11.2026 : « le bip bip », la mort qui se voit) — origine : centre du boîtier.
+   * Écran sombre, tracé ECG jaune qui BALAIE de gauche à droite comme un vrai moniteur (barre d'effacement devant le stylet), FC à droite,
+   * petit cœur qui bat. o.t (s), o.beats = [[instant, amplitude], …] (les mêmes que le son), o.flat = instant de la ligne plate (null = jamais).
+   * Boîtier 176 × 124 + bras et platine au-dessus (≈ y −112). */
+  D.monitor04 = (g, o) => {
+    g.innerHTML = ""; o = Object.assign({ t: 0, beats: [], flat: null, W: 2.0, seed: 404 }, o);
+    const C = U.ctx(g, o.seed, false, 1), t = o.t, dead = o.flat != null && t >= o.flat;
+    // bras articulé + platine murale
+    U.shape(C, "plate", U.rrect(-26, -118, 52, 14, 4), MAT.grey, { sw: 2.2 });
+    ln(g, "M0 -104 L0 -86 M-10 -86 L10 -86", 6, INK); el("circle", { cx: 0, cy: -95, r: 5, fill: "#FFFFFF", stroke: INK, "stroke-width": 2 }, g);
+    shadow(g, U.rrect(-88, -62, 176, 124, 14));
+    U.shape(C, "case", U.rrect(-88, -62, 176, 124, 14), MAT.grey, { sw: 2.8 });
+    const SX = -78, SY = -52, SW = 122, SH = 92;                          // écran (tracé) ; colonne des chiffres à droite
+    el("rect", { x: SX, y: SY, width: 156, height: SH, rx: 6, fill: "#26282A", stroke: INK, "stroke-width": 2.2 }, g);
+    if (dead) el("rect", { x: SX + 2, y: SY + 2, width: 152, height: SH - 4, rx: 5, fill: "none", stroke: "#E0574A", "stroke-width": 3, opacity: 0.55 + 0.45 * Math.round((t * 2) % 1) }, g);
+    // ECG à l'instant tau : somme des complexes P-QRS-T des battements passés (rien après la ligne plate)
+    const ecg = (tau) => {
+      if (o.flat != null && tau >= o.flat) return 0;
+      let v = 0;
+      for (const [b, a] of o.beats) { const d = tau - b; if (d < -0.25 || d > 0.4) continue;
+        v += a * (0.13 * Math.exp(-(((d + 0.16) / 0.04) ** 2)) - 0.16 * Math.exp(-(((d + 0.03) / 0.014) ** 2)) + Math.exp(-((d / 0.018) ** 2))
+          - 0.32 * Math.exp(-(((d - 0.035) / 0.016) ** 2)) + 0.26 * Math.exp(-(((d - 0.23) / 0.055) ** 2))); }
+      return v;
+    };
+    const pen = ((t % o.W) / o.W) * SW, gap = 10, base = SY + SH * 0.62;
+    let d = "", prevOn = false;
+    for (let x = 0; x <= SW; x += 1.5) {
+      const back = (pen - x + SW) % SW; if (back < gap && back > 0.01) { prevOn = false; continue; }   // barre d'effacement devant le stylet
+      const tau = t - (back / SW) * o.W, y = base - 46 * ecg(tau);
+      d += (prevOn ? " L" : " M") + `${f(SX + 4 + x * (SW - 8) / SW)} ${f(y)}`; prevOn = true;
+    }
+    if (d) el("path", { d: d.trim(), fill: "none", stroke: dead ? "#F0F0EA" : "#F8CE4E", "stroke-width": 2.6, "stroke-linejoin": "round", "stroke-linecap": "round" }, g);
+    // fréquence : 60 / dernier intervalle
+    const past = o.beats.filter(([b]) => b <= t).map(([b]) => b);
+    const hr = dead ? "0" : past.length > 1 ? String(Math.round(60 / (past[past.length - 1] - past[past.length - 2]))) : "78";
+    U.text(g, "HR", 60, SY + 18, 13, { weight: 700, fill: "#BFC3BC" });
+    U.text(g, hr, 60, SY + 50, 30, { weight: 700, fill: dead ? "#FF8A7E" : "#F8CE4E" });
+    // petit cœur : il bat (0,13 s) à chaque battement ; vide après la ligne plate
+    const last = past.length ? past[past.length - 1] : -9, k = !dead && t - last < 0.13 ? 1.3 : 1;
+    el("path", { d: "M0 0 c -5 -7 -14 0 -7 7 l 7 7 l 7 -7 c 7 -7 -2 -14 -7 -7 z", fill: dead ? "none" : "#E0574A", stroke: dead ? "#BFC3BC" : "#1C1A1C", "stroke-width": 1.4,
+      transform: `translate(60 ${SY + 66}) scale(${k})` }, g);
+    // boutons du boîtier ; voyant d'alarme qui clignote après la ligne plate
+    [-50, -26, -2].forEach((x, i) => el("circle", { cx: x, cy: 50, r: 5, fill: i === 0 ? YEL : "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g));
+    el("circle", { cx: 70, cy: 50, r: 6, fill: dead && (t * 2) % 1 < 0.5 ? "#E0574A" : "#FFFFFF", stroke: INK, "stroke-width": 1.6 }, g);
+  };
+  D.monitor04.essais = [{ t: 1.2, beats: [[0.3, 1], [1.08, 1]] }, { t: 3, beats: [[1, 1], [1.9, 0.6]], flat: 2.4 }];
 })();
