@@ -72,12 +72,14 @@
   el("rect", { x: -120, y: -36, width: 240, height: 64, rx: 14, fill: INK }, tagS);
   text("AKTE 04", 0, 13, 40, "de", { parent: tagS, attr: { fill: "#FFFFFF" } });
 
-  // une seule phrase, sur une étiquette scotchée (comme les sous-titres)
-  const lab = grp(540, 1590, 1, -2);
-  el("rect", { x: -330, y: -66, width: 660, height: 132, rx: 18, fill: "#1C1A1C", opacity: 0.18, transform: "translate(9 11)" }, lab);
-  el("rect", { x: -330, y: -66, width: 660, height: 132, rx: 18, fill: "#FFFFFF", stroke: INK, "stroke-width": 5 }, lab);
-  el("rect", { x: -350, y: -86, width: 120, height: 42, fill: "#BEBEB6", opacity: 0.92, transform: "rotate(-8 -290 -65)" }, lab);
-  text("مذنبة… بلا عقوبة", 0, 30, 84, "ar", { parent: lab, attr: { direction: "rtl" } });
+  // l'accroche, dans SES mots (voix de l'auteur, b1) : « مريض مات… » / « لا حبس، لا غرامة » — étiquette scotchée, deux lignes
+  const lab = grp(540, 1545, 1, -2);
+  el("rect", { x: -360, y: -112, width: 720, height: 224, rx: 20, fill: "#1C1A1C", opacity: 0.18, transform: "translate(9 11)" }, lab);
+  el("rect", { x: -360, y: -112, width: 720, height: 224, rx: 20, fill: "#FFFFFF", stroke: INK, "stroke-width": 5 }, lab);
+  el("rect", { x: -385, y: -134, width: 130, height: 44, fill: "#BEBEB6", opacity: 0.92, transform: "rotate(-8 -320 -112)" }, lab);
+  text("مريض مات…", 0, -14, 92, "ar", { parent: lab, attr: { direction: "rtl" } });
+  el("path", { d: "M-262 26 L262 18 L266 92 L-258 98 Z", fill: YEL, opacity: 0.95 }, lab);
+  text("لا حبس، لا غرامة", 0, 82, 80, "ar", { parent: lab, attr: { direction: "rtl" } });
 
   window.COVER_READY = true;
 })().catch((e) => { document.title = "ERREUR " + e.message; window.COVER_ERROR = e.message; });

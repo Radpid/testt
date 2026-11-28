@@ -13,7 +13,7 @@
 
 ⚖️ Amtsgericht Köln، 16.05.2012:
 „Die Angeklagte ist einer fahrlässigen Tötung schuldig. Von einer Bestrafung wird abgesehen.“ (§ 60 StGB)
-يعني: مذنبة فالقتل غير العمدي… ولكن بلا عقوبة، وخلصات مصاريف المحكمة.
+يعني: حتى هي عندها part من المسؤولية… ولكن لا حبس، لا غرامة، وخلصات غير مصاريف المحكمة.
 النيابة طلبات غرامة ديال 90 Tagessätze. ولكن المحكمة شافت „gravierendes Organisationsverschulden“: غلطة كبيرة فالتنظيم ديال الإدارة.
 وغلطة الطبيبة صغيرة („am untersten Rand des Denkbaren“): ما تأكداتش مزيان من الـpoche. داكشي علاش حتى هي عندها part من المسؤولية.
 والمحكمة كتبات بلي هي „genug bestraft“: اللي داز عليها كافي.
