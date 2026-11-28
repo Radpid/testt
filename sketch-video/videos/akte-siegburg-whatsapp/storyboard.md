@@ -2028,3 +2028,6 @@ Détail et raisons : `revue.md`, tableau de la tâche 1.
 - Scène 21 : téléphone rangé en (320, 965) au lieu de (300, 900) ; page en (680, 945), ×1,08 ; passage de la bulle par (480, 760) ;
   citation de `D.bulleJugement` en 19 px au lieu de 17 px. La composition laissait 170 px de papier vide en bas et la citation
   était illisible ; la page reste avant la colonne des boutons Instagram.
+- Scène 15 (contre-revue) : l'écran d'appel entrant n'est plus vide de `b14` à `b14+0.4` : sceau du tribunal (r 70) en (525, 800),
+  « Arbeitsgericht Siegburg » (30 px) en (525, 930), deux ondes de sonnerie ; le tout s'efface quand les tuiles s'ouvrent.
+- Scène 19 (contre-revue) : les deux lignes de la règle à y 1140 et 1222 (au lieu de 1090 et 1160) : le bas de la page était vide.

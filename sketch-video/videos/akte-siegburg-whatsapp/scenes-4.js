@@ -161,8 +161,9 @@
     const toi = pose(c, Cn, "avatarToi", { r: 30 }, 804, 1004);
     A.jaillit(toi, aL + 0.05, 804, 1004, 0.3); toi.on(flotte(3, 2.6));
     // la règle, mot pour mot (b18) : ligne 1 ← ; ligne 2 ← au rythme de la voix
-    c.text("فالگروپ ديال الخدمة", 525, 1090, 46, "ttl", "middle", Cn).wipe(aG + 0.3, 0.4, "rtl");
-    revele(c.text("كتب غير krank، وحتى لإمتى", 525, 1160, 46, "ttl", "middle", Cn), aK, aL + 0.3);
+    // (revue) y 1090 / 1160 → 1140 / 1222 : le bas de la page (y 1200 → 1384) restait vide ; la règle se lit mieux, détachée de « toi »
+    c.text("فالگروپ ديال الخدمة", 525, 1140, 46, "ttl", "middle", Cn).wipe(aG + 0.3, 0.4, "rtl");
+    revele(c.text("كتب غير krank، وحتى لإمتى", 525, 1222, 46, "ttl", "middle", Cn), aK, aL + 0.3);
 
     H.pastille(c, "krank", "مريض", { at: aN, until: aH + 0.08, yellow: true, size: 34, parent: P.bande });
     H.pastille(c, "krank bis Montag", "مريض حتى للإثنين", { at: aH + 0.1, size: 30, parent: P.bande });

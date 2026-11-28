@@ -321,3 +321,21 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
   bande vide au début de la scène 15, feuille de plante contre la barbe (scène 14), sous-titre « [FR] » de b10 et TRAD_B10 (voix).
 - Scripts hors dépôt (scratchpad, peuvent disparaître) : `a07rv/crop.mjs` (gros plans), `a07rv/probe.mjs` (JS dans la page),
   `a07rv/q_ar.js` (taille réelle des lignes arabes à l'écran).
+
+## Étape terminée : contre-revue, description, fiche de suite (tâche 2)
+**Fait :**
+- Tâche 1 (revue visuelle) complète et sauvegardée (3286bb4) : rien refait.
+- Débuts des 22 scènes image par image (`out/planches/contre/debuts/`) ; accroche entière, silence, carte, coffre, scène 21 et
+  affiche image par image (`out/planches/contre/`) ; 217 textes de l'écran relevés et comparés au scénario et au dossier.
+- Corrections : scène 15, l'écran d'appel entrant était vide 0,4 s → l'appelant (sceau, nom, ondes) ; scène 19, règle descendue
+  (bas de la page vide). Fichiers : scenes-3.js, scenes-4.js ; storyboard.md (« Écarts de construction »).
+- `instagram.md` : brouillon de description (darija reprise de beats.js, lignes [FR] pour l'auteur, sources avec Az. et ECLI,
+  « Stand Juli 2026: nicht rechtskräftig », mots-clés).
+- `revue.md` : sections « Contre-revue » et « État de l'épisode et suite ».
+- Rendu final : errcheck toutes les secondes (aucune erreur), planches `out/planches/final/` (normales et `_ig`), overlapscan,
+  mouvement, soustitres.
+
+**Reste à faire :** tout ce qui suit la voix (revue.md § 3) : montage, repères, TRAD_B10, son, rendu, couverture.
+
+**Notes pour la suite :** points à valider par l'auteur : TRAD_B10, GROS_MOT, coche jaune de la scène 19, et les lignes [FR] de
+`instagram.md`. Les scripts de contrôle de cette étape sont hors dépôt (scratchpad `a07rv/`).

@@ -179,6 +179,13 @@
     P.tel.g.appendChild(P.notif);   // la bannière d'appel monte AVEC le téléphone (sa découpe est celle de l'écran, au repos)
     H.banniere(c, { at: t0, until: t0 + 0.45, parent: P.notif, x: 215, y: 316, w: 620, h: 88, sceau: true, titre: "Arbeitsgericht Siegburg", appel: true,
       appui: (t) => clamp((t - t0 - 0.3) / 0.1, 0, 1) });
+    // (revue) l'écran d'appel entrant : il était VIDE jusqu'à l'ouverture des tuiles (b14+0,4). L'appelant en grand (le sceau du
+    // tribunal, sans armoiries, et son nom), qui pulse comme une sonnerie ; il s'efface quand les tuiles grandissent
+    const ent = c.group(P.contenu).on((t, s) => { s.o *= 1 - prog(t, t0 + 0.38, 0.12); s.px = 525; s.py = 840; s.s *= 1 + 0.03 * Math.sin((t - t0) * 18); });
+    c.sk((g, p) => D.sceau(g, p), (t) => ({ r: 70, a: Math.round(6 * Math.sin(t * 9)) }), 525, 800, 1, 0, ent.g);
+    D.outils.tx(ent.g, "Arbeitsgericht Siegburg", 525, 930, 30, "de", "middle");
+    [92, 118].forEach((r, i) => { const o = el("g"); el("circle", { cx: 525, cy: 800, r, fill: "none", stroke: "#D2D2CB", "stroke-width": 3 }, o);
+      c.node(o, ent.g).on((t, s) => { const u = ((t - t0) * 2.2 + i * 0.5) % 1; s.px = 525; s.py = 800; s.s *= 1 + 0.25 * u; s.o *= 1 - u; }); });
 
     // ELLE en buste (tuile B) : elle écoute, puis explique ; main levée sur le côté qui souligne (2 Hz) pendant qu'elle parle.
     // § 1.1 « elle explique » (armR [40, −112]) : sa main passait sous la plaque de nom ; à droite, le bras croisait la queue de la bulle
