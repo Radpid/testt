@@ -217,3 +217,31 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
   (buzz) sur un événement, une bulle qui jaillit.
 - Script de mesure limité à quelques beats (hors dépôt) : ONLY=b5,b6 node <scratchpad>/mvt.mjs videos/akte-siegburg-whatsapp.
 - tools/soustitres.mjs : le sous-titre de b9 (« وزادت: Vielleicht sitzt aber… ») déborde même rétréci à 76 % (partie 2).
+
+## Étape terminée : scènes, partie 2 (scènes 6 à 11, scenes-2.js)
+**Fait :**
+- scenes-2.js : 6 le canapé (salon, sortie du téléphone vers ses mains, certificat, il tape, sa bulle) ; 7 la salle des médecins
+  (glissement, elle tape, aimants qui tombent / claquent, post-it du jugement) ; 8 le brouillon (plongée, L1–L6, billet 549 € qui se
+  déchire) ; 9 les diagnostics (accolade, L7–L8, LUI, carte « source » avec la silhouette, barres qui voyagent) ; 10 la dernière ligne
+  (loupe mot à mot, traduction provisoire TRAD_B10, pouce) ; 11 le silence (bulle verte, sept avatars « transmis », compteur, tout s'arrête).
+- decor-2.js : D.loupeCitation, option `marge` (lien par la marge gauche, il ne barre plus le message) ; essayée seule (essai_decor).
+- index.html : un sous-titre qui contient une suite de mots latins peut rétrécir jusqu'à 52 % (b9 débordait à 76 %).
+- Contrôles : errcheck (instants de la check-list § 8 : aucune erreur) ; planches --entre b5,b10 avec et sans --ig ; images par image des
+  entrées des scènes 6, 7, 8 et du silence (scène 11) ; gros plans des scènes 6, 7, 9, 10 ; overlapscan 21,9 → 41,1 s ; mouvement b5–b10
+  (tous ≥ 3 %) ; soustitres (plus de débordement) ; vert de la scène 11 : 2,2 % (R11).
+- storyboard.md : « Écarts de construction », section « Étape scènes, partie 2 » ; decor.js : liste d'état (ajout de l'option).
+
+**Reste à faire :** scènes 12 à 21 (parties 3 et 4), puis revue de l'affiche (scène 22, dans story.js).
+
+**Notes pour la suite :**
+- Les scènes 9, 10 et 11 passent `at: "b7"` à X.lieux.fil (semis continu entre coupes). La scène 12 (PAPIER) part du téléphone de la
+  scène 11 : fantôme `{ dur: 0, vert: true }` à reprendre en (525, 860) plein cadre ; à la fin de la scène 11, la bulle verte est en
+  (214, 644) → (798, 1066), ELLE en (832, 1112), les sept avatars en (250 + 84 i, 1196), le « 7 » en (838, 1208).
+- Scènes PIÈCE avec `in: "slideUp"` : ne pas appeler k.bg() (le papier monte à y −1500 et cache la scène d'avant pendant le glissement) ;
+  `SketchUI.dots(c, -1500, -150, 4080, 2700)`.
+- Salle des médecins (scène 14) : avec ELLE ou LUI en pied, pieds à y 1320, la poussée globale (+4 %) + un zoom font toucher l'étiquette
+  de mention (y 1404) ; garder cy ≥ 916 et ×1,03 au plus (calcul : écran y = 940 + (y − cy) × 1,06 × 1,04 × s).
+- Mouvement (tools/mouvement.mjs) : il mesure deux fenêtres de 0,4 s par beat ; une scène de fil entre deux mots tombe sous 3 % ; ce qui
+  aide : un `punch` doux sur un mot fort, un `buzz`, une bannière qui remonte, un objet assez grand qui tressaute.
+- TRAD_B10 (scenes-2.js, scène 10) est provisoire : à remplacer par les mots de l'auteur en b10 (taille calculée : 46 px jusqu'à 26 signes,
+  40 au-delà, rétrécie pour tenir dans 600 px).

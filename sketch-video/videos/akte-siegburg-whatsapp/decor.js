@@ -40,6 +40,7 @@
  *   D.telVerre  D.bande  D.mention  D.anneau  D.croix                                  faits (decor.js)
  *   D.accolade  D.fleche                                                               faits (decor-2.js)
  *   D.cle({ partie: "crochet" }) : le crochet seul (ajout, decor-3.js) ; D.pouce : contour continu ajouté (decor-2.js, étape 3)
+ *   D.loupeCitation({ marge, rAnneau }) : lien par la marge gauche de la bulle (ajout, decor-2.js, étape « scènes, partie 2 »)
  *  Scène 22 (affiche-résumé) : aucun dessin (socle, st.summary dans story.js). D.exemple (lampe du gabarit) : supprimé par
  *   l'étape « scènes, partie 1 », avec les scènes d'exemple de scenes-1.js.
  *  HUD propre à l'épisode, aides partagées et mises en place fixes : story.js (X.hud, X.aides, X.lieux).

@@ -407,13 +407,17 @@
   /* D.loupeCitation — la carte qui « grossit » la dernière ligne : carte blanche (rayon 22) tenue par deux bouts de scotch gris,
    * liseré intérieur fin, reliée par un trait courbe à une ligne du fil (o.vers, RELATIF à l'ancrage ; un petit anneau l'y marque).
    * 658 × 190 (o.w, o.h : 230 si la traduction tient sur deux lignes, R5). Ancrage = coin haut-gauche ; scène 10 : (196, 596),
-   * vers: [42, 584] (= L9 en (238, 1180)). o.j (°) : les scotchs frémissent. pop avec pivot = o.vers (absolu : ancrage + vers). */
+   * vers: [42, 584] (= L9 en (238, 1180)). o.j (°) : les scotchs frémissent. pop avec pivot = o.vers (absolu : ancrage + vers).
+   * (ajout, étape « scènes, partie 2 ») o.marge = x (relatif) d'un lien qui descend le long de la marge gauche de la bulle et ne passe sur
+   * AUCUNE ligne du message (en travers, il barrait les huit lignes) ; o.rAnneau : rayon de l'anneau (13). Scène 10 : { vers: [28, 576],
+   * marge: 6, rAnneau: 9 } → lien en x 202 (entre le bord de l'écran et la bulle), anneau en (224, 1172), juste avant le « V » de L9. */
   D.loupeCitation = (g, o = {}) => {
-    const w = o.w || 658, h = o.h || 190, v = o.vers || [42, 584], j = o.j || 0, C = U.ctx(g, 4640, false, 1);
-    const sx = clamp(v[0] + 96, 60, w - 60);
-    ln(g, `M${f(sx)} ${h - 4} C${f(sx)} ${f(h + (v[1] - h) * 0.55)} ${f(v[0] + 34)} ${f(v[1] - 44)} ${f(v[0] + 9)} ${f(v[1] - 10)}`, 2.6, INK);
-    el("circle", { cx: v[0], cy: v[1], r: 13, fill: YEL, opacity: 0.35 }, g);
-    el("circle", { cx: v[0], cy: v[1], r: 13, fill: "none", stroke: INK, "stroke-width": 2.6 }, g);
+    const w = o.w || 658, h = o.h || 190, v = o.vers || [42, 584], j = o.j || 0, ra = o.rAnneau || 13, C = U.ctx(g, 4640, false, 1);
+    const sx = clamp(v[0] + 96, 60, w - 60), mx = o.marge;
+    if (mx != null) ln(g, `M${f(Math.max(mx + 26, 30))} ${h - 4} Q${f(mx)} ${h + 4} ${f(mx)} ${h + 38} L${f(mx)} ${f(v[1] - 20)} Q${f(mx)} ${f(v[1])} ${f(v[0] - ra)} ${f(v[1])}`, 2.6, INK);
+    else ln(g, `M${f(sx)} ${h - 4} C${f(sx)} ${f(h + (v[1] - h) * 0.55)} ${f(v[0] + 34)} ${f(v[1] - 44)} ${f(v[0] + 9)} ${f(v[1] - 10)}`, 2.6, INK);
+    el("circle", { cx: v[0], cy: v[1], r: ra, fill: YEL, opacity: 0.35 }, g);
+    el("circle", { cx: v[0], cy: v[1], r: ra, fill: "none", stroke: INK, "stroke-width": 2.6 }, g);
     el("path", { d: rr(7, 9, w, h, 22), fill: OMBRE }, g);
     U.shape(C, "carte", rr(0, 0, w, h, 22), MAT.white, { sw: 3, r: 0.5 });
     ln(g, rr(10, 10, w - 20, h - 20, 15), 1.4, "#C9C9C2");
@@ -424,7 +428,7 @@
     });
     return { w, h, vers: v, centre: [w / 2, h / 2] };
   };
-  D.loupeCitation.essais = [{}, { h: 230, j: 4 }];
+  D.loupeCitation.essais = [{}, { h: 230, j: 4 }, { vers: [28, 576], marge: 6, rAnneau: 9 }];
 
   /* D.pouce — SON pouce (scènes 10–11) : main en moufle (même peau que Persona : blanc cerné d'encre, aucun doigt, aucun ongle) dont le
    * pouce pointe vers la gauche, manchette de sa blouse blanche à droite. 160 × 76. Ancrage = le BOUT du pouce (sur le bouton

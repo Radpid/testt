@@ -1916,3 +1916,33 @@ Les cinq scènes avaient été écrites par l'agent précédent (arrêté avant 
 - Contrôles : aucune erreur JS ; mouvement b1 4,4 %, b2 18 %, b3 11 %, b4 3,4 % (l'intro, calme par nature, est signalée « FIGÉ ») ;
   chevauchements restants : seulement la bulle de la somme pendant sa frappe (0,15 s) et les boîtes de police titre / sous-titre de l'en-tête
   (9 px de marge de police, les lettres ne se touchent pas).
+
+### Étape « scènes, partie 2 » (scènes 6 à 11, `scenes-2.js`, 28.11.2026)
+
+- Scène 6 — caméra finale ×1,12 centrée sur (545, 925) et non (545, 880) : à 880, le bas du canapé passait sous l'étiquette de mention.
+  Certificat en (475, 690) (§ 4 : 455) : il touchait le rideau de droite ; posé sur l'accoudoir en (738, 1032), incliné de −14°. Pastilles
+  en (520, 412) et bannière en y 284, comme la scène 2. Ajouts : le téléphone de LUI s'éclaire quand il envoie ; il relit sa bulle ensuite.
+- Scène 7 — pas de zoom ×1,08 à « خديت » (poussée ×1,03 seulement, caméra cy 916) : la pièce est trop haute, à ×1,08 le haut du tableau
+  montait sous la traduction de la pastille ET ses pieds descendaient sur l'étiquette de mention. Papier du fond limité au cadre
+  (`k.bg()` monte à y −1500 et cachait le salon pendant le glissement `slideUp`). Bulle « … » en (612, 873) (§ 4 : 598) : elle touchait ses
+  cheveux ; 2e marque de colère en (634, 846). Traduction commune en (520, 466), pastilles en (520, 404). Le post-it est DANS le tableau
+  (il suit son balancement). Les aimants de LUI tombent dans la gouttière en (455, 770) et (604, 770), à côté du feutre et de la brosse.
+- Scène 8 — plongée depuis (529, 1119) (son téléphone avec la caméra de la scène 7). L1 et L2 se tapent plus tôt et plus vite (b7+0,1 et
+  b7+0,26, 0,16 s) et L3 attend la fin de L2 : « 549 » arrive 0,33 s après b7, L3 se tapait avant L2. Ajout : le vibreur à la déchirure.
+- Scènes 9, 10, 11 — `telephone({ at: "b7" })` : même fil que la scène 8, le semis continue sans saut aux coupes et le reflet ne repasse
+  pas. Scène 11 : les petites formes du fond s'arrêtent aussi (leur temps est figé à `b10@end+0.95`).
+- Scène 9 — l'accolade suit le haut de la bulle quand elle grandit, puis s'efface à « ديالو ». La flèche « L7 → LUI » passe par la marge
+  droite (hors de la bulle) : tout droit, elle barrait six lignes. Les deux barres s'arrêtent au bord de SON avatar (pas sur son visage).
+  Ajouts pour le mouvement (le beat était « figé » à 2,4 %) : la silhouette enfle quand les barres partent, l'avatar d'ELLE quand elles
+  arrivent, les deux flottent de ±5 px, et un coup de zoom (`punch` 0,025) sur « زميلة ».
+- Scène 10 — `D.loupeCitation` a une option `marge` (decor-2.js) : le lien descend dans la marge gauche, entre l'écran et la bulle, jusqu'à un
+  petit anneau (r 9) juste avant le « V » de L9 ; en travers, il barrait les huit lignes. Le séparateur de date s'efface sous la loupe (il
+  dépassait au-dessus). La loupe « tressaute » 0,28 s (+4,5 %, en penchant de ±1,6°) au lieu de 0,14 s (+3 %), et le téléphone se penche
+  doucement au premier mot (`punch` 0,025 sur 0,9 s) : sans cela, le beat b9 était « figé » (0,5 %) entre deux mots.
+- Scène 11 — les sept traits partent tous du milieu du bas de la bulle (506, 1072) en éventail : verticaux, le dernier coupait la queue de
+  la bulle. Vert mesuré (R11) : 2,2 % de l'image (≤ 5 %) ; 0 % ailleurs dans la partie, 1,0 % en scène 1.
+- `index.html` — sous-titre de b9 : les mots latins qui se suivent restent sur une seule page (« وزادت: Vielleicht sitzt aber ein Pups
+  quer. ») ; à 76 % il débordait. Une ligne qui contient une suite de mots latins peut maintenant rétrécir jusqu'à 52 % (b9 : 60 %).
+- Contrôles : aucune erreur JS ; mouvement b5 18 %, b6 17 %, b7 3,4 %, b8 4 %, b9 16 %, b10 3,2 % ; la scène 11 (entre deux beats) se fige
+  comme voulu ; chevauchements restants : seulement pendant les transitions (glissement, plongée), les tampons qui frappent et les boîtes
+  de police de textes empilés (certificat, post-it, loupe), lettres distinctes sur les captures.
