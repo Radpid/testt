@@ -272,3 +272,29 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
 - Avatar r 34 sur papier et c.sk dont la position change par s.x : le pivot d'un « pop » est alors (0, 0), pas la position monde.
 - Scripts hors dépôt (scratchpad, peuvent disparaître) : a07p3/probe.mjs (évaluer du JS dans la page : rig, mesures), a07p3/crop.mjs
   (gros plans recadrés côte à côte).
+
+## Étape terminée : scènes, partie 4 (scènes 17 à 21, scenes-4.js) + affiche (story.js)
+**Fait :**
+- scenes-4.js : 17 le jugement dans le fil (T-NOTIF sceau, interdiction, « 1.000,00 EUR · zu zahlen » qui frappe, horloge, « gefordert »
+  rayé, « 78 % der Kosten », flèche en pointillé d'ELLE vers LUI, le ticket qui sort) ; 18 première instance (coupe : ticket à deux
+  lignes, « erste Instanz », recherche « rechtskräftig » → « 0 / 0 », « ? », « Berufung möglich · LAG Köln ») ; 19 la règle 1 (T-NOTIF
+  jaune, ruban, mauvais message barré, « krank bis Montag », coche, « toi ») ; 20 la règle 2 (coffre qui se ferme, molette, petite bulle
+  qui rebondit, clés, la clé jaune va à LUI et au patient, trois lignes de la règle) ; 21 le message dans le jugement (téléphone rangé,
+  chronomètre, « دقيقة », la bulle quitte le téléphone et devient le § 8, cercle sur le « 8 », « im Urteil zitiert · Rn. 8 »).
+- decor-3.js (« ajouts partie 4 ») : D.badgeCle, D.bulleJugement — essayés seuls (essai_decor --only) ; decor.js : liste d'état.
+- story.js : affiche `side: 168` (la case 16 passait sous la colonne des boutons Instagram).
+- Contrôles : errcheck (partie 4, puis tout l'épisode toutes les 3 s + affiche : aucune erreur) ; planches de 25 instants +
+  `--beats --entre b16,b20 --ig` ; image par image des entrées 17 (T-NOTIF), 19 (T-NOTIF), 21 ; gros plans (fil du jugement, bon
+  exemple, clés, fin de scène 20 et 21) ; affiche plein cadre + 6 dernières secondes avec `--ig` ; overlapscan 54,8 → 69,2 ;
+  mouvement b16–b20 (tous ≥ 3,8 %).
+- storyboard.md : « Écarts de construction », section « Étape scènes, partie 4 ».
+
+**Reste à faire :** revue visuelle indépendante et contre-revue (étape suivante du chantier) ; tout recaler après la voix.
+
+**Notes pour la suite :**
+- Scènes 17–18 : `filJugement(c, P)` construit le fil une fois ; changer la composition à UN endroit.
+- Scène 21 : la bulle qui voyage est dans le nœud de la page (`pg`) ; sa trajectoire part de la place de la bulle sur le téléphone rangé
+  (centre (320, 905), ×0,5, −6°) — si l'on bouge le téléphone, `dep` suit (TX, TY).
+- Faux positifs connus d'overlapscan dans cette partie : lignes L1–L8 cachées (mises à opacité 0), ticket dans sa fente, deux lignes
+  de D.bulleJugement (boîtes Kalam 17 px).
+- Repères fragiles de la partie (§ 6.3) : `b16@تعويض`, `b19@5`, `b19@الإذن` ; ils sont utilisés tels quels.

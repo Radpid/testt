@@ -1978,3 +1978,35 @@ Les cinq scènes avaient été écrites par l'agent précédent (arrêté avant 
 - Contrôles : aucune erreur JS ; mouvement b11 5,8 / 4,8 %, b12 8,3 / 6,7 %, b13 16 / 21 %, b14 19 / 23 %, b15 24 / 16 % ; chevauchements
   restants : seulement pendant les transitions (montée, glissement), les « pops » (widget, carte-légende), et des boîtes de police (« 70 % »
   / « privat » dans le petit camembert, « 31 » / « 2025 » au rebond du widget) — lettres distinctes sur les captures.
+
+### Étape « scènes, partie 4 » (scènes 17 à 21 + affiche, `scenes-4.js`, `story.js`, 28.11.2026)
+
+- Scènes 17 et 18 — le fil du jugement est construit par UNE fonction (`filJugement`) appelée par les deux scènes : en scène 18 tout
+  est déjà en place (mêmes repères de b16) ; la scène 18 reprend `telephone({ at: "b16" })` (semis continu, pas de reflet). SON message
+  du haut = le brouillon envoyé, décalé de −576 (son bas à y 640, L9 à 606, son avatar en (832, 686)) ; ses lignes L1–L8, jamais visibles,
+  sont à opacité 0. Bulle « interdiction » : les deux citations sont entre « » (annexe C) et réduites à 20 px pour tenir dans la bulle
+  (à 24 px, 389 px de texte pour 340 de place). Bulle « à payer » : « 1.000,00 EUR » en 64 px (ligne de base 1004), `D.aPayer` en
+  (284, 1030), « gefordert » et « 78 % » à droite (x 520, y 1052 / 1088) : l'horloge qui grossit (r 34) en scène 18 ne touche ni la somme
+  ni le texte. Le ticket n'apparaît qu'après la frappe de la bulle (sa fente restait seule à l'écran). Flèche en pointillé : un tracé
+  propre (M832 724 C 874 790, 876 912, 812 980) qui se dévoile vers le bas, tirets qui avancent à 30 px/s. (Ajouts) en scène 18, un
+  `punch` doux à b17+0,7 (b17 était « figé » à 1,7 %) et un autre sur « 0 / 0 ». Champ de recherche : il descend de 40 px pendant que le
+  titre et le sous-titre glissent de 14 px vers le haut (24 px : le titre passait sur la date).
+- Scène 19 — le ruban « القاعدة » se déroule à b18+1,1 (et non à b18) : avant, il était caché par la bannière jaune puis on lisait deux
+  « القاعدة » l'un sur l'autre. Menton : « § 5 EFZG · Keine Rechtsberatung » sur une ligne (pas d'arabe). La coche jaune du bon exemple
+  est gardée (prescrite par la scène) : ce n'est pas une coche de lecture (R17). (Ajout) `punch` 0,03 à « وحتى » (fin de b18 « figée »).
+- Scène 20 — 2e crochet (clé grise) en (818, 800) au lieu de (812, 760) : la clé jaune et l'anneau de la grise se chevauchaient. Point
+  d'impact de la petite bulle en (396 → 412, 742), à gauche de la molette (en (446, 790), la croix couvrait la molette et le texte de loi).
+  Lignes de la règle en y 1128 / 1194 / 1262 (§ 4 : 1136 / 1196 / 1256) : les boîtes de la police se touchaient. Ligne 3 « گروپ فيه
+  الخدمة = ماشي privé » en 40 px (§ 4 : 32) : règle des phrases arabes ≥ 40 px. La clé sur l'avatar du patient : nouveau dessin
+  `D.badgeCle` (decor-3.js, le même badge que celui de `D.avatar`). La poignée du coffre tourne de 70° après la molette (verrouillé).
+- Scène 21 — téléphone rangé en (320, 905) (§ 4 : (300, 900)) : penché de −6°, son coin gauche passait à x 86. La bulle d'origine du
+  fantôme est masquée par un pan d'écran vide ; la bulle qui voyage est un nouveau dessin, `D.bulleJugement` (decor-3.js) : posée sur
+  l'écran du téléphone (elle s'y remplit, 1 → 5 lignes), puis dans la page (même nœud que la page : elle flotte et pulse avec elle). Vol
+  raccourci (0,1 s de soulèvement + 0,36 s d'arc au lieu de 0,5 s) : « بقى » arrive 0,33 s après « وهادا » ; elle s'efface au plus tôt à
+  « بقى », une fois posée. Formes du fond en (950, 930) et (560, 1372) (§ 4 : (950, 1240), colonne des boutons ; (420, 1380), sur
+  l'étiquette). (Ajout) poussée lente ×1,04 (§ 4 : caméra fixe) : le début de b20 était « figé » (2 %).
+- Scène 22 (story.js) — `side: 168` au lieu de 92 : la case de droite de la 4e rangée (x 825 → 988, y 951 → 1134) passait sous la
+  colonne des boutons Instagram (x > 915, y ≥ 980). Cases de 133 × 149, grille x 168 → 912, y 372 → 998 ; le reste est inchangé.
+- Contrôles : aucune erreur JS (toutes les 3 s de 0 à 74,8 s) ; mouvement b16 3,8 / 22 %, b17 7,7 / 23 %, b18 16 / 14 %, b19 7,6 / 5,2 %,
+  b20 7 / 10 % ; chevauchements restants : transitions (T-NOTIF), et des faux positifs (textes découpés : lignes du message au-dessus du
+  fil, ticket encore dans sa fente) ou des boîtes de police (deux lignes de la bulle en 17 px, en-tête de la page pendant sa chute).

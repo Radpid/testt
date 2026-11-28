@@ -619,7 +619,9 @@
     /* Scène 22 (storyboard) : 20 cases (les 21 scènes de récit moins l'intro), 5 colonnes × 4 rangées (163 × 183, y 372 → 1134), lecture
      * de droite à gauche ; trois cases figées ailleurs qu'à leur fin (freezeAt : indice de case → repère) : la carte « source » (sc. 9),
      * la loupe et sa traduction (sc. 10), LUI qui marche (sc. 14). Question écrite sur deux lignes, flèche vers le bouton « commentaire ». */
-    st.summary({ at: LAST + "@end+0.15", in: "cut", dezoomAt: LAST + "@end+0.5", cols: 5, crop: [262, 1470], top: 372, gap: 10, side: 92,
+    // side 168 (storyboard : 92) : avec 92, la case de droite de la 4e rangée (x 825 → 988, y 951 → 1134) passait sous la colonne des
+    // boutons Instagram (x > 915, y 980 → 1650) ; cases de 133 × 149, grille x 168 → 912, y 372 → 998 (étape « scènes, partie 4 »)
+    st.summary({ at: LAST + "@end+0.15", in: "cut", dezoomAt: LAST + "@end+0.5", cols: 5, crop: [262, 1470], top: 372, gap: 10, side: 168,
       freezeAt: { 7: "b8@المستعجلات", 8: "b10@end-0.5", 12: "b13@خلا+0.7" },
       below(c, cells) {
         SketchUI.dots(c);

@@ -8,6 +8,7 @@
  *  A. la règle (sc. 19)        D.avatarToi
  *  C. le coffre (sc. 20)       D.coffre D.cle (+ partie « crochet ») D.feuilleDiag
  *  D. le jugement (sc. 21)     D.pageJugement D.chrono
+ *  E. ajouts partie 4          D.badgeCle (sc. 20) D.bulleJugement (sc. 21) — en fin de fichier
  *  La scène 22 (affiche-résumé) n'a besoin d'aucun dessin : elle est faite par le socle (story.js, st.summary).
  *
  * ATTENTION : tools/essai_decor.mjs charge ce fichier AVANT decor.js (ordre alphabétique) ; D.outils, D.caviar,
@@ -368,4 +369,42 @@
     return { centre: [0, 0], couronne: [0, -68] };
   };
   D.chrono.essais = [{}, { a: 130, couronne: 1 }];
+  /* ═══════════════════════════ AJOUTS PARTIE 4 (étape « scènes, partie 4 ») ═══════════════════════════ */
+
+  /* D.badgeCle — la petite clé jaune dans un rond blanc, EXACTEMENT le badge « cle » de D.avatar (scène 20) : à poser sur
+   * D.avatarPatient, qui n'a pas de badge. Rayon o.rb (18 ; pour un avatar r 46 : 18), ancrage = centre du badge
+   * (pour un avatar de rayon r : (0,72 r ; 0,72 r) depuis son centre). */
+  D.badgeCle = (g, o = {}) => {
+    const q = (o.rb || 18) / 18, b = el("g", { transform: `scale(${f(q)})` }, g);
+    el("circle", { cx: 2, cy: 2.5, r: 18, fill: OMBRE }, b); el("circle", { cx: 0, cy: 0, r: 18, fill: "#FFFFFF", stroke: INK, "stroke-width": 2.4 }, b);
+    el("circle", { cx: -5, cy: -5, r: 5.5, fill: YEL, stroke: INK, "stroke-width": 2.2 }, b); el("circle", { cx: -5, cy: -5, r: 1.6, fill: "#FFFFFF", stroke: INK, "stroke-width": 1 }, b);
+    ln(b, "M-1 -1 L9 9 M5 5 L8 2 M8 8 L11 5", 2.6);
+    return { r: 18 * q };
+  };
+  D.badgeCle.essais = [{}, { rb: 26 }];
+
+  /* D.bulleJugement — SON message, réduit, qui voyage du téléphone jusque dans la page du jugement (scène 21) : bulle VERTE (D.VERT)
+   * 290 × 116, sans queue ; dedans, deux lignes illisibles, une barre de caviar, puis la seule ligne lisible sur deux lignes :
+   * « … Vielleicht sitzt aber » / « ein Pups quer. » (Kalam 400, 17 px). Ancrage = centre.
+   * o.n 0..5 : combien d'éléments du contenu sont visibles (elle « se remplit » sur l'écran du petit téléphone)
+   * o.fond 0..1 (défaut 1) : la hachure verte, le fond et le contour s'effacent (il ne reste que le texte : un paragraphe de la page). */
+  D.bulleJugement = (g, o = {}) => {
+    const w = 290, h = 116, x0 = -w / 2, y0 = -h / 2, n = o.n == null ? 5 : clamp(o.n, 0, 5), fo = clamp(o.fond == null ? 1 : o.fond, 0, 1), V = D.VERT;
+    if (fo > 0) {
+      const b = el("g", { opacity: fo < 1 ? f(fo) : null }, g), C = U.ctx(b, 4895, false, 1), d = rr(x0, y0, w, h, 22);
+      el("path", { d, fill: "#CFCFC8", transform: "translate(5 7)" }, b);
+      U.shape(C, "bul", d, V, { sw: 3, r: 0.5 });
+    }
+    const L = [
+      () => D.gribouillis(el("g", { transform: `translate(${x0 + 20} ${y0 + 10}) scale(0.8)` }, g), { w: 300, seed: 611 }),
+      () => D.gribouillis(el("g", { transform: `translate(${x0 + 20} ${y0 + 26}) scale(0.8)` }, g), { w: 250, seed: 623 }),
+      () => D.caviar(el("g", { transform: `translate(${x0 + 20} ${y0 + 44}) scale(0.55)` }, g), { w: 280, seed: 637 }),
+      () => tx(g, "… Vielleicht sitzt aber", x0 + 20, y0 + 82, 17, "light", "start"),
+      () => tx(g, "ein Pups quer.", x0 + 20, y0 + 104, 17, "light", "start"),
+    ];
+    L.slice(0, Math.round(n)).forEach((fn) => fn());
+    return { w, h };
+  };
+  D.bulleJugement.essais = [{}, { n: 2 }, { fond: 0.4 }, { fond: 0 }];
+
 })();
