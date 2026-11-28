@@ -834,7 +834,7 @@
       if (sp) tx(g, sp, f(xL - wP / 2), yP, sP, "light", "start", halo);
       if (ba > 0) { const yb = yP - sP * 0.32, xa = xL - wP / 2 - 7; ln(g, `M${f(xa)} ${f(yb + 3)} L${f(xa + (wP + 14) * ba)} ${f(yb + 3 - 6 * ba)}`, 3.6, INK); }
       // « 30 % » dans le bas de la part (vers 18°), « mindestens » juste au-dessus ; le haut de la part reste libre pour l'icône
-      const s30 = Math.round(lerp(22, 40, clamp(o.gros || 0, 0, 1))), [qx, qy] = P(-10, 0.56 * r), b30 = f(qy + s30 * 0.36), sm = r >= 90 ? 17 : 15;
+      const s30 = Math.round(lerp(22, 34, clamp(o.gros || 0, 0, 1))), [qx, qy] = P(-14, 0.55 * r)   /* (revue) 40 px en P(−10, 0,56 r) : « % » sortait de la part */, b30 = f(qy + s30 * 0.36), sm = r >= 90 ? 17 : 15;
       if (v30 > 0) tx(p3, "30 %", qx, b30, s30, "de", "middle", Object.assign({ op: v30 < 1 ? f(v30) : null }, halo));
       if (mi > 0) tx(p3, "mindestens", f(qx - 4), f(b30 - s30 * 0.78 - 4), sm, "light", "middle", Object.assign({ op: mi < 1 ? f(mi) : null }, halo));
     }

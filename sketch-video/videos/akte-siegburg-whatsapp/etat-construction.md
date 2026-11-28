@@ -298,3 +298,26 @@ Mode d'emploi détaillé : les en-têtes de chaque fonction dans story.js. Exemp
 - Faux positifs connus d'overlapscan dans cette partie : lignes L1–L8 cachées (mises à opacité 0), ticket dans sa fente, deux lignes
   de D.bulleJugement (boîtes Kalam 17 px).
 - Repères fragiles de la partie (§ 6.3) : `b16@تعويض`, `b19@5`, `b19@الإذن` ; ils sont utilisés tels quels.
+
+## Étape terminée : revue visuelle indépendante (tâche 1 de « revue, contre-revue, description, fiche de suite »)
+**Fait :**
+- Rien d'incomplet dans l'étape précédente (scènes 17 à 21 + affiche) : rien refait.
+- Contrôles complets : errcheck toutes les 1,5 s (aucune erreur) ; planches 2 images par beat, normales et `--ig`
+  (`out/planches/revue1/`) ; planches denses toutes les 0,6 s (`out/planches/revue1/dense/`) ; gros plans recadrés ; taille réelle
+  des lignes arabes ; overlapscan 0 → 76 s ; mouvement ; soustitres ; textes comparés au scénario.
+- `revue.md` créé : 17 défauts listés (scène · instant · défaut · gravité · correction · état).
+- 10 corrigés et regardés : scène 6 (certificat sur ses cheveux, bulle « … » contre sa tête, rideau dans le bord rogné au zoom),
+  scène 7 (marque de colère sur le micro du post-it, bulle « … » sur ses cheveux), scène 12 (tampon contre l'avatar), scène 15
+  (bras cassé d'ELLE), scènes 15–16 (ordre bidi de « 70% privé · 30% خدمة »), scène 16 (« 30 % » hors de la part jaune), scène 21
+  (composition petite, citation illisible).
+- Fichiers touchés : scenes-2.js, scenes-3.js, scenes-4.js, decor-2.js (D.camembert : taille et place de « 30 % »), decor-3.js
+  (D.bulleJugement : citation 19 px) ; storyboard.md (« Écarts de construction », section « revue visuelle »).
+- Planches finales de la tâche : `out/planches/revue1-fin/` (normales et `_ig`).
+
+**Reste à faire :** contre-revue (débuts de scène image par image, moments forts, textes, instagram.md, fiche de suite).
+
+**Notes pour la suite :**
+- Non corrigés (raisons dans revue.md) : bas de l'écran vide pendant l'intro (socle), haut du fil vide au début des scènes 9 et 17,
+  bande vide au début de la scène 15, feuille de plante contre la barbe (scène 14), sous-titre « [FR] » de b10 et TRAD_B10 (voix).
+- Scripts hors dépôt (scratchpad, peuvent disparaître) : `a07rv/crop.mjs` (gros plans), `a07rv/probe.mjs` (JS dans la page),
+  `a07rv/q_ar.js` (taille réelle des lignes arabes à l'écran).

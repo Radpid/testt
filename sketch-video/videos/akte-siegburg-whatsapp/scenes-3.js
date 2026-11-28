@@ -58,7 +58,8 @@
     const av = A.avatarVif(c, lt.g, "ELLE", LX + 170, LY + 185, 34, (t) => (t < aR ? { expr: "angry", look2: [-0.5, 0.2] } : { expr: "angry", look2: [-0.9, 0], headTilt: -8 }), { k: 1 });
     A.jaillit(av, aK + 0.05, LX + 170, LY + 185, 0.3);
     // le tampon « erfolglos » (sur la lettre) : slam + secousse
-    k.prop("stamp", 590, 985, 0.62, () => ({ text: "erfolglos", size: 48, rot: -8 }), 0, lt.g).slam(aC, 0.28, 8);
+    // (revue) x 590 → 565 : posé, le coin droit du cadre touchait l'avatar d'ELLE
+    k.prop("stamp", 565, 985, 0.62, () => ({ text: "erfolglos", size: 48, rot: -8 }), 0, lt.g).slam(aC, 0.28, 8);
 
     // le stylo : il tombe sur le trait (rebond), attend (il oscille), puis roule vers la droite et tombe hors du cadre
     const sty = m.obj(D.stylo, 600, 1048, 1);
@@ -188,7 +189,7 @@
       if (t >= aH) e = { expr: "focused", look2: [0.05, -0.1], headTilt: 3 };
       const l = leve(t), osc = parle(t) ? (Math.floor(t * 4) % 2 ? 4 : -4) : 0;
       return Object.assign({}, CAST.ELLE, PP.stand, { view: "front", blink: blk(t, 1), talk: talkAt(t, aG, aE) }, e,
-        { armL: [Math.round(lerp(-8, -136, l)), Math.round(lerp(10, 116, l) + osc * l)] });
+        { armL: [Math.round(lerp(-8, -35, l)), Math.round(lerp(10, -125, l) + osc * l)] });   // (revue) [−136, 116] : avant-bras pendu sous un coude levé (bras cassé) → coude en bas, avant-bras qui monte
     }, P.elle).on(breathe(2));
 
     // sa bulle jaillit de sa bouche avec le disque vide ; la part de 70 % se remplit en balayant ; « privat », « 30 % »
@@ -198,7 +199,7 @@
       .on((t, s) => { const p = prog(t, a7, 0.3); if (p > 0 && p < 1) { s.px = 660; s.py = 996; s.s *= 1 + 0.08 * Math.sin(Math.PI * p); } });
     A.punch(P.tel, aH, 0.02);
     A.punch(P.tel, aP, 0.03);
-    H.pastille(c, "« zu 70% privat und lediglich zu 30 % dienstbezogen »", "70% privé · 30% خدمة", { at: a7 + 0.1, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
+    H.pastille(c, "« zu 70% privat und lediglich zu 30 % dienstbezogen »", "70% privé\u200F · 30% خدمة", { at: a7 + 0.1, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
   } });
 
   /* ═══════ 16 · Appel vidéo : « et 30 % de travail » (b15 → b16) — ÉCRAN (coupe) ═══════
@@ -245,7 +246,7 @@
     A.punch(P.tel, aM, 0.025);   // (ajout) le trait qui raye « privat »
 
     // pastilles : l'argument de la défense (fin de scène 15), puis les deux citations du jugement
-    H.pastille(c, "« zu 70% privat und lediglich zu 30 % dienstbezogen »", "70% privé · 30% خدمة", { until: a3 - 0.03, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
+    H.pastille(c, "« zu 70% privat und lediglich zu 30 % dienstbezogen »", "70% privé\u200F · 30% خدمة", { until: a3 - 0.03, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
     H.pastille(c, "« zu mindestens 30% arbeitsbezogene Inhalte »", "30% خدمة", { at: a3, until: aY - 0.02, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
     H.pastille(c, "« nicht ausschließlich persönlichen Zwecken »", "ماشي privé 100%", { at: aY + 0.02, y: 392, size: 22, micro: "laut Urteil", parent: P.bande });
 

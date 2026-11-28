@@ -49,7 +49,7 @@
     const m = M.of(c), t0 = T("b5");
     const aM = T("b5@مشى"), aU = T("b5@للمستعجلات"), aS = T("b5@سبيطارهم"), aK = T("b5@وكتب"), aB = T("b5@بلي");
     // § 4 : ×1,12 centré sur (545, 880) ; cy 925 : à 880, le bas du canapé passait sous l'étiquette de mention (y 1404)
-    c.camera([{ at: "b5", s: 1.0, cx: 540, cy: 920 }, { at: "b5+0.1", s: 1.03, cx: 540, cy: 920, d: 2.3, ease: "lin" }, { at: aK - 0.1, s: 1.12, cx: 545, cy: 925, d: 0.45 }]);
+    c.camera([{ at: "b5", s: 1.0, cx: 540, cy: 920 }, { at: "b5+0.1", s: 1.03, cx: 540, cy: 920, d: 2.3, ease: "lin" }, { at: aK - 0.1, s: 1.10, cx: 535, cy: 925, d: 0.45 }]);
     const tape = (t) => t >= aK && t < aB + 0.15;
     const R = L.salon(c, { lui: (t) => {
       let e = { expr: "worried", look2: [0, 0.85], headTilt: 4 };                                   // il regarde son téléphone
@@ -63,15 +63,15 @@
 
     // le certificat jaune : pop (−5°), il flotte ; tampon « Notaufnahme » qui claque ; cercle autour de la date ; puis il va sur l'accoudoir
     // (§ 4 : en (455, 690) ; 20 px plus à droite, sinon il touche le rideau de droite)
-    const CX = 475, CY = 690;
+    const CX = 475, CY = 666;   // (revue) 24 px plus haut : à 690, son bord bas mordait sur les boucles de LUI
     const cert = c.sk((g, p) => D.certificat(g, p), (t) => ({ tampon: rnd(E.out(prog(t, aU, 0.2)), 10), cercle: rnd(prog(t, aS, 0.3), 20) }), CX, CY, 1, -5);
     A.jaillit(cert, aM, CX, CY, 0.35);
     cert.on((t, s) => { const p = E.inOut(prog(t, aK, 0.4)); s.px = CX; s.py = CY; s.y += 4 * Math.sin(t * 2.2) * (1 - p);
       s.s *= lerp(1, 0.42, p); s.x += (738 - CX) * p; s.y += (1032 - CY) * p; s.r += -9 * p; });
 
     // il écrit : « … » au-dessus de son téléphone, puis SA bulle (« krank · Vertretung? » : les deux notions du jugement)
-    A.bulleFil(c, undefined, 588, 928, 104, 64, [540, 1022], { at: aK + 0.05, until: aB - 0.02 });
-    m.typing(640, 960, aK + 0.12, aB - 0.02);
+    A.bulleFil(c, undefined, 606, 928, 104, 64, [548, 1022], { at: aK + 0.05, until: aB - 0.02 });   // (revue) x 588 → 606 : elle touchait sa tête
+    m.typing(658, 960, aK + 0.12, aB - 0.02);
     const msg = c.group();
     A.bulleFil(c, msg.g, 375, 625, 370, 150, [507, 808]);
     const l1 = "krank · Vertretung?", fs1 = Math.min(38, Math.floor((38 * 318) / mes(l1, 38, "de")));
@@ -118,9 +118,11 @@
     pp(X0, Y0, S, (t) => Object.assign({}, CAST.ELLE, { view: "front", headTilt: 6, look2: [0, 0.9], expr: "angry", blink: blinkAt(t, 1) > 0.5 ? 1 : 0, talk: 0 }, frappe(t)), corps.g);
     c.sk((g, p) => D.telMini(g, p), () => ({}), X0, Y0 - 237 * S, S, 0, corps.g);
     // deux marques de colère qui tremblent ; la bulle « … » au-dessus de son téléphone, jusqu'à la fin
-    [[440, 868, t0 + 0.35], [634, 846, aH]].forEach(([x, y, a], i) => m.obj(D.colere, x, y, 1.1).pop(a, 0.3).on((t, s) => { s.px = x; s.py = y; s.r += 9 * Math.sin(t * 11 + i * 2); }));
-    A.bulleFil(c, undefined, 612, 873, 104, 64, [572, 1040], { at: aK });   // § 4 : x 598 ; 14 px plus à droite, elle touchait ses cheveux
-    m.typing(664, 905, aK + 0.08);
+    [[440, 868, t0 + 0.35], [668, 866, aH]].forEach(([x, y, a], i) => m.obj(D.colere, x, y, 1.1).pop(a, 0.3).on((t, s) => { s.px = x; s.py = y; s.r += 9 * Math.sin(t * 11 + i * 2); }));
+    // (revue) § 4 : (598, 873), pointe (566, 1040) ; la bulle touchait ses cheveux et la queue les traversait → (640, 896), pointe à côté
+    // de ses cheveux, vers le téléphone ; 2e marque de colère en (668, 866) : en (634, 846) elle cachait le micro « laut Urteil » du post-it
+    A.bulleFil(c, undefined, 640, 896, 104, 64, [614, 1002], { at: aK });
+    m.typing(692, 928, aK + 0.08);
 
     // c.hud : bannière de date, pastilles (citations : entre « »), traduction commune qui reste, étiquette
     H.banniere(c, { at: "b6", until: "b6+1.0", y: 284, titre: "Samstag, 31. Mai 2025", ar: "السبت" });

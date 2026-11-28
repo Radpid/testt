@@ -243,7 +243,9 @@
     // le téléphone se range à gauche (centre (300, 900), ×0,5, −6°) ; il penche (±1°). Sa bulle d'origine est masquée (un pan d'écran
     // vide) : c'est NOTRE bulle (D.bulleJugement) qui est sur l'écran, se remplit de lignes, puis s'en va
     // § 4 : centre (300, 900) ; (320, 905) : penché de −6°, son coin gauche passait à x 86 (bord rogné)
-    const TX = 320, TY = 905;
+    // (revue) TY 905 → 965, page (690, 880, ×1) → (680, 945, ×1,08) : la composition descend et grandit (il restait 170 px de papier vide
+    // au-dessus de l'étiquette, et la citation était trop petite) ; à droite, la page reste avant la colonne des boutons (x ≤ 911 à l'écran)
+    const TX = 320, TY = 965, PX = 680, PY = 945, PS = 1.08;
     const fan = H.fantome(c, { at: "b20", vers: [TX, TY], k: 0.5, rot: -6, dur: 0.45, reste: true, parent: c.cam, vert: true });
     fan.on((t, s) => { if (t > t0 + 0.45) s.r += Math.sin(((t - t0) / 2.6) * TAU); });
     el("rect", { x: 436, y: 1066, width: 392, height: 212, fill: "#FCFCF9" }, fan.g);
@@ -261,19 +263,19 @@
     // 0,42 s (soulèvement 0,1 s + arc 0,36 s) et la bulle s'efface / la page pulse quand elle est posée (au plus tôt à « بقى »)
     const aP = Math.max(aB, aH + 0.42);
     const pg = c.group();
-    c.sk((g, p) => D.pageJugement(g, p), (t) => ({ cercle: rnd(E.out(prog(t, aM, 0.25)), 20), brille: rnd(prog(t, aF, 0.4), 10) }), 690, 880, 1, 2, pg.g);
+    c.sk((g, p) => D.pageJugement(g, p), (t) => ({ cercle: rnd(E.out(prog(t, aM, 0.25)), 20), brille: rnd(prog(t, aF, 0.4), 10) }), PX, PY, PS, 2, pg.g);
     m.build(pg, t0 + 0.1, "drop", { dist: 260, dur: 0.45 });
-    pg.on((t, s) => { s.y += 3 * Math.sin(((t - t0) / 3.2) * TAU); const p = prog(t, aP, 0.35); if (p > 0 && p < 1) { s.px = 690; s.py = 880; s.s *= 1 + 0.04 * Math.sin(Math.PI * p); } });
+    pg.on((t, s) => { s.y += 3 * Math.sin(((t - t0) / 3.2) * TAU); const p = prog(t, aP, 0.35); if (p > 0 && p < 1) { s.px = PX; s.py = PY; s.s *= 1 + 0.04 * Math.sin(Math.PI * p); } });
     // la bulle quitte le téléphone : départ = la place de sa bulle sur l'écran rangé ; elle se soulève (×1,2), vole en arc par (480, 700)
     // jusqu'au § 8 (centre (704, 926), incliné de 2°) ; elle se pose : sa hachure verte et son contour s'effacent, il reste le paragraphe
     const r6 = (-6 * Math.PI) / 180, dep = [TX + Math.cos(r6) * 47.5 - Math.sin(r6) * 145, TY + Math.sin(r6) * 47.5 + Math.cos(r6) * 145], k0 = 0.5 * 360 / 290;
-    const arr = [690 + 13.4, 880 + 46.5], via = [480, 700];
+    const arr = [PX + 13.4 * PS, PY + 46.5 * PS], via = [480, 760];
     c.sk((g, p) => D.bulleJugement(g, p), (t) => ({ fond: rnd(1 - prog(t, aP, 0.3), 10) }), 0, 0, 1, 0, pg.g).on((t, s) => {
       if (t < aH) { s.o *= 0; return; }
       const v = E.inOut(prog(t, aH + 0.06, 0.36)), le = E.out(prog(t, aH, 0.1)), u = 1 - v;
       const x = u * u * dep[0] + 2 * u * v * via[0] + v * v * arr[0], y = u * u * dep[1] + 2 * u * v * via[1] + v * v * arr[1];
       s.px = 0; s.py = 0; s.x += x; s.y += y - 3 * Math.sin(((t - t0) / 3.2) * TAU) * (1 - v);   // en vol, elle ne suit pas le flottement de la page
-      s.s *= lerp(k0, 1, v) * (1 + 0.2 * le * (1 - v)); s.r += lerp(-6, 2, v); });
+      s.s *= lerp(k0, PS, v) * (1 + 0.2 * le * (1 - v)); s.r += lerp(-6, 2, v); });
 
     H.pastille(c, "im Urteil zitiert · Rn. 8", "مكتوب فالحكم", { at: aM, x: 520, y: 420, size: 28, yellow: true });
   } });

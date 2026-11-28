@@ -2010,3 +2010,21 @@ Les cinq scènes avaient été écrites par l'agent précédent (arrêté avant 
 - Contrôles : aucune erreur JS (toutes les 3 s de 0 à 74,8 s) ; mouvement b16 3,8 / 22 %, b17 7,7 / 23 %, b18 16 / 14 %, b19 7,6 / 5,2 %,
   b20 7 / 10 % ; chevauchements restants : transitions (T-NOTIF), et des faux positifs (textes découpés : lignes du message au-dessus du
   fil, ticket encore dans sa fente) ou des boîtes de police (deux lignes de la bulle en 17 px, en-tête de la page pendant sa chute).
+
+### Étape « revue visuelle » (corrections, 28.11.2026)
+
+Détail et raisons : `revue.md`, tableau de la tâche 1.
+- Scène 6 : certificat en (475, 666) au lieu de (475, 690) (il mordait sur les boucles de LUI) ; bulle « … » en (606, 928), pointe
+  (548, 1022) ; zoom de `b5@وكتب` ×1,10 centré sur cx 535 au lieu de ×1,12 sur 545 (le rideau gauche passait dans le bord rogné).
+- Scène 7 : bulle « … » en (640, 896), pointe (614, 1002) au lieu de (598, 873) / (566, 1040) : elle touchait ses cheveux et sa
+  queue les traversait ; 2e marque de colère en (668, 866) au lieu de (618, 846) : elle cachait le micro « laut Urteil » du post-it.
+- Scène 12 : tampon « erfolglos » en (565, 985) (posé, il touchait l'avatar d'ELLE).
+- Scène 15 : « elle explique » avec le bras gauche [−35, −125] (coude en bas, avant-bras qui monte) ; la pose précédente
+  [−136, 116] donnait un avant-bras pendu sous un coude levé.
+- Scènes 15–16 : la traduction « 70% privé · 30% خدمة » porte une marque RLM invisible après « privé » (sinon l'ordre bidi
+  affichait « خدمة privé · 30% 70% »). Les lettres sont celles du scénario.
+- Scène 16 : dans `D.camembert`, « 30 % » grossit jusqu'à 34 px (et non 40) et se place en P(−14°, 0,55 r) : à 40 px il sortait
+  de la part jaune.
+- Scène 21 : téléphone rangé en (320, 965) au lieu de (300, 900) ; page en (680, 945), ×1,08 ; passage de la bulle par (480, 760) ;
+  citation de `D.bulleJugement` en 19 px au lieu de 17 px. La composition laissait 170 px de papier vide en bas et la citation
+  était illisible ; la page reste avant la colonne des boutons Instagram.

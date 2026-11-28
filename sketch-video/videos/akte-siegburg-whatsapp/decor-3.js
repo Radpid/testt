@@ -399,8 +399,8 @@
       () => D.gribouillis(el("g", { transform: `translate(${x0 + 20} ${y0 + 10}) scale(0.8)` }, g), { w: 300, seed: 611 }),
       () => D.gribouillis(el("g", { transform: `translate(${x0 + 20} ${y0 + 26}) scale(0.8)` }, g), { w: 250, seed: 623 }),
       () => D.caviar(el("g", { transform: `translate(${x0 + 20} ${y0 + 44}) scale(0.55)` }, g), { w: 280, seed: 637 }),
-      () => tx(g, "… Vielleicht sitzt aber", x0 + 20, y0 + 82, 17, "light", "start"),
-      () => tx(g, "ein Pups quer.", x0 + 20, y0 + 104, 17, "light", "start"),
+      () => tx(g, "… Vielleicht sitzt aber", x0 + 20, y0 + 82, 19, "light", "start"),   // (revue) 17 → 19 px
+      () => tx(g, "ein Pups quer.", x0 + 20, y0 + 106, 19, "light", "start"),
     ];
     L.slice(0, Math.round(n)).forEach((fn) => fn());
     return { w, h };
